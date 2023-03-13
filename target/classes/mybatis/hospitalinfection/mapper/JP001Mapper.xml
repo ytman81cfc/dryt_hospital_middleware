@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hospital.middleware.hospitalinfection.dao.JP001DAO">
+    <select id="queryData" resultType="java.util.HashMap">
+        select
+            a.rid as "ID" ,-- 唯一主键
+            b.inhosno as "ZYID"  ,--住院号
+            b.INTIMES as "VisitId"  ,--住院次数
+            a.PATIENT_ID as "PatientId"  ,--病例号
+            a.CRTE_TIME as "EnterDate" , --记录日期
+            a.UPDT_TIME as "UpdTime"  ,--更新日期
+            '-' as "CaseClass"  ,--病历分类
+            '-' as "BcCode"  ,--病历记录编号
+            '-' as "BcName"  ,--病历记录名称
+            '-' as "CourseContent"  --病历内容
+        from EMR_INPATIENTINFO	a,ipr_inpatientinfo b
+        where a.orgcode =b.orgcode and
+            a.visit_id=b.inid
+            and a.orgcode =#{map.OrgCode}
+            <if test="map.ID!='' and map.ID!=null ">and b.inhosno=#{map.ID}</if>
+            <if test="map.StartDate!='' and map.StartDate!=null">and a.crte_time &gt;=to_date(#{map.StartDate},'yyyy-mm-dd hh24:mi:ss')</if>
+            <if test="map.EndDate!='' and map.EndDate!=null">and a.crte_time &lt;=to_date(#{map.EndDate},'yyyy-mm-dd hh24:mi:ss')</if>
+    </select>
+</mapper>

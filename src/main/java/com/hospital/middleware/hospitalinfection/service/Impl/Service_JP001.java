@@ -6,6 +6,7 @@ import com.hospital.middleware.rationaldruguse.dao.TestOracleDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -15,7 +16,7 @@ public class Service_JP001 implements IService {
     private JP001DAO jp001;
 
     @Override
-    public Map queryData(Map paramMap) {
-        return jp001.queryData();
+    public List<Map> queryData(Map paramMap) {
+        return jp001.queryData(paramMap);
     }
 }

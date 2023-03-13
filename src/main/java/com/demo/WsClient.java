@@ -10,17 +10,45 @@ public class WsClient {
 
     public static void main(String[] args) throws Exception {
         //封装参数
-        String xmlParam= "<root>\n" +
+        /*String xmlParam= "<root>\n" +
                 "\t<sHead>\n" +
                 "\t\t<sType>JP001</sType>\n" +
                 "\t\t<sTime>1528253397850</sTime>\n" +
                 "\t\t<sCooperationUnit>LQT</sCooperationUnit>\n" +
-                "\t\t<sTerminalNumber>ae7ae8aa17ad7e5d9173a3a34d900860</sTerminalNumber>  \n" +
+                "\t\t<sTerminalNumber>25bad3fbdf7b88a6976237fb25d22515 </sTerminalNumber>  \n" +
                 "\t</sHead>\n" +
                 "\t<sInfo>\n" +
-                "\t\t<DateType>0</DateType>\n" +
-                "\t\t<StartDate>2017-11-01 00:00:00</StartDate>\n" +
-                "\t\t<EndDate>2017-11-01 23:59:59</EndDate>\n" +
+                "\t\t<ID>231021</ID>\n" +
+                "\t\t<OrgCode>H37068300546</OrgCode>\n" +
+                "\t\t<StartDate>2023-03-01 00:00:00</StartDate>\n" +
+                "\t\t<EndDate>2023-03-21 23:59:59</EndDate>\n" +
+                "\t</sInfo>\n" +
+                "</root>";*/
+       /* String xmlParam= "<root>\n" +
+                "\t<sHead>\n" +
+                "\t\t<sType>JP002</sType>\n" +
+                "\t\t<sTime>1528253397850</sTime>\n" +
+                "\t\t<sCooperationUnit>LQT</sCooperationUnit>\n" +
+                "\t\t<sTerminalNumber>17370342d9e707adddf3c65fcf48b020</sTerminalNumber>  \n" +
+                "\t</sHead>\n" +
+                "\t<sInfo>\n" +
+                "\t\t<OrgCode>H37068300546</OrgCode>\n" +
+                "\t\t<StartDate>2023-03-13 13:50:00</StartDate>\n" +
+                "\t\t<EndDate>2023-03-13 14:00:00</EndDate>\n" +
+                "\t</sInfo>\n" +
+                "</root>";*/
+        String xmlParam= "<root>\n" +
+                "\t<sHead>\n" +
+                "\t\t<sType>JP003</sType>\n" +
+                "\t\t<sTime>1528253397850</sTime>\n" +
+                "\t\t<sCooperationUnit>LQT</sCooperationUnit>\n" +
+                "\t\t<sTerminalNumber>fbb24ccfbcd3d38258f69e410103717d</sTerminalNumber>  \n" +
+                "\t</sHead>\n" +
+                "\t<sInfo>\n" +
+                "\t\t<OrgCode>H37068300546</OrgCode>\n" +
+                "\t\t<ID>231021</ID>\n" +
+                "\t\t<StartDate>2023-03-01 01:50:00</StartDate>\n" +
+                "\t\t<EndDate>2023-03-13 14:00:00</EndDate>\n" +
                 "\t</sInfo>\n" +
                 "</root>";
         Object[] requestParam = new Object[]{xmlParam};
