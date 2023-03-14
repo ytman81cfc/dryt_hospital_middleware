@@ -2,7 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hospital.middleware.hospitalinfection.dao.JD001DAO">
     <select id="queryData" resultType="java.util.HashMap">
-
-        select sysdate from dual
+        select
+            a.rid as "ID"  ,--唯一主键
+            a.DEPTCODE as "DeptId"  ,--科室编号
+            a.DEPTNAME as "DeptName" ,-- 科室名称
+            a.DEPTTYPE as "DeptType"  ,--科室类型
+            b.dictname as "DeptTypeName" -- 科室类型名称
+            from COM_DEPTINFO	a
+            left join com_dictcodeinfo b on b.typecode='DEPTTYPE' and a.DEPTTYPE=b.dictcode
+        where
+        a.orgcode=#{map.OrgCode} and a.ISVALID ='1'
         </select>
 </mapper>
