@@ -51,10 +51,10 @@
         where a.orgcode =c.orgcode and
             a.inid =c.inid and
               a.orgcode=#{map.OrgCode}
-        <if test="map.StartDate!='' and map.StartDate!=null and map.DateType=0">and a.INDATE &gt;=to_date(#{map.StartDate},'yyyy-mm-dd hh24:mi:ss')</if>
-        <if test="map.EndDate!='' and map.EndDate!=null and map.DateType=0">and a.INDATE &lt;=to_date(#{map.EndDate},'yyyy-mm-dd hh24:mi:ss')</if>
-        <if test="map.StartDate!='' and map.StartDate!=null and map.DateType=1">and a.OUT_DATE &gt;=to_date(#{map.StartDate},'yyyy-mm-dd hh24:mi:ss')</if>
-        <if test="map.EndDate!='' and map.EndDate!=null and map.DateType=1">and a.OUT_DATE &lt;=to_date(#{map.EndDate},'yyyy-mm-dd hh24:mi:ss')</if>
+        <if test="map.StartDate!='' and map.StartDate!=null and map.DateType==0">and a.INDATE &gt;=to_date(#{map.StartDate},'yyyy-mm-dd hh24:mi:ss')</if>
+        <if test="map.EndDate!='' and map.EndDate!=null and map.DateType==0">and a.INDATE &lt;=to_date(#{map.EndDate},'yyyy-mm-dd hh24:mi:ss')</if>
+        <if test="map.StartDate!='' and map.StartDate!=null and map.DateType==1">and a.OUT_DATE &gt;=to_date(#{map.StartDate},'yyyy-mm-dd hh24:mi:ss')</if>
+        <if test="map.EndDate!='' and map.EndDate!=null and map.DateType==1">and a.OUT_DATE &lt;=to_date(#{map.EndDate},'yyyy-mm-dd hh24:mi:ss')</if>
 
     </select>
 </mapper>
