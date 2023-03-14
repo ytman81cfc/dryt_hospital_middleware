@@ -2,45 +2,59 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hospital.middleware.hospitalinfection.dao.JP006DAO">
     <select id="queryData" resultType="java.util.HashMap">
-        select a.RID as "MZID", --唯一主键
-        a.PATIENTNO as "PatientId",--病例号
-        m.num as "VisitId",--就诊次数
-        a.PATIENTNAME as "PatientName",--患者姓名
-        b.dictname as "Sex",--患者性别
-        a.BRDY as "BirthDate",-- 出生日期
-        regexp_substr(FN_NEWBIRTHTOAGE(a.brdy),'[0-9]+') as "Age",-- 年龄
-        replace(FN_NEWBIRTHTOAGE(a.BRDY),regexp_substr(FN_NEWBIRTHTOAGE(a.BRDY),'[0-9]+'),'') as "AgeUnit",-- 年龄单位
-        a.WEIGHT as "Weight",-- 体重
-        a.TEL as "Tel",-- 电话
-        case
-        when a.PSNCERTTYPE='01' then a.CERTNO
-        else null as "IDCard",-- 身份证号
-        a.HOME as "Address",-- 现住址
-        c.RESIHOME as "RegisterAdd",-- 户籍地址
-        c.NATY as Nation,-- 民族
-        c.LINKMANNAME as "ParentName",-- 家长姓名
-        e.dictname as "Marriage",-- 婚姻状况
-        c.WORKNAME as "WorkUnit",-- 工作地址/学校
-        null as "Education",-- 教育情况
-        o.DISE_NAME as "DiagnosisName",-- 诊断名称
-        a.DEPTCODE as "DiagnosisDeptId",-- 就诊科室编号
-        a.DEPTNAME as "DiagnosisDeptName",-- 就诊科室名称
-        a.REG_TIME as "DiagnosisDt",-- 就诊日期
-        a.DOCCODE as "DiagnosisDocId",-- 就诊医生工号
-        a.DOCNAME as "DiagnosisDocName",-- 就诊医生姓名
-        decode(a.REGLEVLNAME,'1',0,'0',1) as "IsReturnvisit",-- 复诊标识
-        null as "StartDt",-- 发病日期
-        null as "DeathDt"-- 死亡日期
-        from OPM_DIAGNOSE o,OPR_REGISTER a
-        left join com_dictcodeinfo b on b.typecode='GEND' and a.SEXCODE=b.dictcode
-        left join COM_PATIENTINFO c on a.orgcode=c.orgcode and a.patientno=c.patientno
-        left join com_dictcodeinfo e on e.typecode='MRG_STAS' and c.MARRIED=e.dictcode
-        left join OPM_DIAGNOSE o on a.orgcode =o.orgcode and a.regid =o.regid and o.MAIN_FLAG='1' and o.ISVALID='1'
-        left join (select row_number() over(partition by p.PATIENTNO order by p.crte_time asc) as num, p.* from
-        OPR_REGISTER p where p.orgcode =#{OrgCode}) m on m.orgcode=a.orgcode and m.regid=a.regid
-        where
-        orgcode=#{OrgCode}
-        <if test="StartDate!='' and StartDate!=null">and REG_TIME &gt;=to_date(StartDate,'yyyy-mm-dd hh24:mi:ss')</if>
-        <if test="EndDate!='' and EndDate!=null">and REG_TIME &lt;=to_date(EndDate,'yyyy-mm-dd hh24:mi:ss')</if>
+        select
+            a.inhosno as "ZYID" ,-- 住院号
+            a.INTIMES as "VisitId"  ,-- 住院次数
+            a.PATIENTID as "PatientId"  ,-- 病例号
+            a.PATIENTNAME as "PatientName"  ,-- 患者姓名
+            b.dictname as "Sex"  ,-- 性别
+            a.BIRTHDAY as "BirthDate"  ,-- 出生日期
+            c.WEIGHT as "Weight"  ,--  体重
+            a.Certno as "IDCard"   ,-- 身份证号
+            regexp_substr(FN_NEWBIRTHTOAGE(a.BIRTHDAY),'[0-9]+') as "Age",-- 年龄
+            replace(FN_NEWBIRTHTOAGE(a.BIRTHDAY),regexp_substr(FN_NEWBIRTHTOAGE(a.BIRTHDAY),'[0-9]+'),'') as "AgeUnit",-- 年龄单位
+            a.OUTDEPTCODE as "DeptCode"  ,--  所在科室编号
+            a.OUTDEPTNAME as "DeptName"   ,-- 所在科室名称
+            a.INDATE as "InHospAt"   ,-- 入院时间
+            a.INDEPTCODE as "InDeptId"   ,-- 入院科室编号
+            a.INDEPTNAME as "InDeptName"   ,-- 入院科室名称
+            case
+                when a.OUT_DATE is not null then
+                    a.OUTDEPTCODE
+                else '-' end as  "OutDeptId" ,--  出院科室编号
+            case
+                when a.OUT_DATE is not null then
+                    a.OUTDEPTNAME
+                else '-' end as "OutDeptName"  ,-- 出院科室名称
+            a.OUT_DATE as "OutHospAt"  ,-- 出院时间
+            c.bedno as "BedNo"  ,-- 床号
+            c.CHADR_NO as "ChargeDrId"   ,-- 主管医生工号
+            c.CHADR_NAME as  "ChargeDrName"   ,-- 主管医生姓名
+            c.DUTYNURCODE as "ChargeNrId"   ,-- 主管护师工号
+            c.DUTYNURNAME as "ChargeNrName"   ,-- 主管护师姓名
+            d.HOME as "Address"  ,-- 现住址
+            d.TEL as "Tel"  ,-- 电话
+            d.WORKHOME as "WorkAddr"   ,-- 工作地址
+            d.LINKMANNAME as "LxrName"  ,-- 联系人姓名
+            d.LINKMANTEL as "LxrPhone"   ,-- 联系人电话
+            d.NATY  as "Nation"   ,-- 民族
+            '' as "Education"  ,-- 文化程度
+            d.PROFCODE as "Job"  ,-- 职业
+            floor(a.out_date-a.indate) as "InDay"  ,-- 住院天数
+            a.TOTCOST as "Cost"   ,-- 住院总费用
+            e.dictname as "OutCome"  ,-- 转归情况
+            '0' as  "IsCancel" -- 取消住院登记
+        from inr_receiveinfo c, ipr_inpatientinfo a
+                                    left join com_dictcodeinfo b on b.typecode='GEND' and b.dictcode=a.sexcode
+                                    left join com_patientinfo d on a.orgcode=d.orgcode and a.patientid=d.patientid
+                                    left join com_dictcodeinfo e on e.typecode='OUTREASON' and e.dictcode=a.OUTREASON
+        where a.orgcode =c.orgcode and
+            a.inid =c.inid and
+              a.orgcode=#{map.OrgCode}
+        <if test="map.StartDate!='' and map.StartDate!=null and map.DateType=0">and a.INDATE &gt;=to_date(#{map.StartDate},'yyyy-mm-dd hh24:mi:ss')</if>
+        <if test="map.EndDate!='' and map.EndDate!=null and map.DateType=0">and a.INDATE &lt;=to_date(#{map.EndDate},'yyyy-mm-dd hh24:mi:ss')</if>
+        <if test="map.StartDate!='' and map.StartDate!=null and map.DateType=1">and a.OUT_DATE &gt;=to_date(#{map.StartDate},'yyyy-mm-dd hh24:mi:ss')</if>
+        <if test="map.EndDate!='' and map.EndDate!=null and map.DateType=1">and a.OUT_DATE &lt;=to_date(#{map.EndDate},'yyyy-mm-dd hh24:mi:ss')</if>
+
     </select>
 </mapper>

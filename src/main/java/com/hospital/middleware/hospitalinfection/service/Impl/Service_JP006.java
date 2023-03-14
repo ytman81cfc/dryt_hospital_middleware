@@ -14,6 +14,6 @@ public class Service_JP006 implements IService {
 
     @Override
     public List<Map> queryData(Map paramMap) {
-        return jp006.queryData();
+        return jp006.queryData(paramMap);
     }
 }

@@ -37,7 +37,7 @@ public class WsClient {
                 "\t\t<EndDate>2023-03-13 14:00:00</EndDate>\n" +
                 "\t</sInfo>\n" +
                 "</root>";*/
-        String xmlParam= "<root>\n" +
+      /*  String xmlParam= "<root>\n" +
                 "\t<sHead>\n" +
                 "\t\t<sType>JP003</sType>\n" +
                 "\t\t<sTime>1528253397850</sTime>\n" +
@@ -48,6 +48,20 @@ public class WsClient {
                 "\t\t<OrgCode>H37068300546</OrgCode>\n" +
                 "\t\t<ID>231021</ID>\n" +
                 "\t\t<StartDate>2023-03-01 01:50:00</StartDate>\n" +
+                "\t\t<EndDate>2023-03-13 14:00:00</EndDate>\n" +
+                "\t</sInfo>\n" +
+                "</root>";*/
+        String xmlParam= "<root>\n" +
+                "\t<sHead>\n" +
+                "\t\t<sType>JP006</sType>\n" +
+                "\t\t<sTime>1528253397850</sTime>\n" +
+                "\t\t<sCooperationUnit>LQT</sCooperationUnit>\n" +
+                "\t\t<sTerminalNumber>ae7ae8aa17ad7e5d9173a3a34d900860</sTerminalNumber>  \n" +
+                "\t</sHead>\n" +
+                "\t<sInfo>\n" +
+                "\t\t<OrgCode>H37068300546</OrgCode>\n" +
+                "\t\t<DateType>0</DateType>\n" +
+                "\t\t<StartDate>2023-03-09 01:50:00</StartDate>\n" +
                 "\t\t<EndDate>2023-03-13 14:00:00</EndDate>\n" +
                 "\t</sInfo>\n" +
                 "</root>";
