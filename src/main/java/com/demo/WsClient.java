@@ -51,7 +51,7 @@ public class WsClient {
                 "\t\t<EndDate>2023-03-13 14:00:00</EndDate>\n" +
                 "\t</sInfo>\n" +
                 "</root>";*/
-        String xmlParam= "<root>\n" +
+       /* String xmlParam= "<root>\n" +
                 "\t<sHead>\n" +
                 "\t\t<sType>JP006</sType>\n" +
                 "\t\t<sTime>1528253397850</sTime>\n" +
@@ -60,9 +60,60 @@ public class WsClient {
                 "\t</sHead>\n" +
                 "\t<sInfo>\n" +
                 "\t\t<OrgCode>H37068300546</OrgCode>\n" +
-                "\t\t<DateType>0</DateType>\n" +
+                "\t\t<DateType>1</DateType>\n" +
                 "\t\t<StartDate>2023-03-09 01:50:00</StartDate>\n" +
                 "\t\t<EndDate>2023-03-13 14:00:00</EndDate>\n" +
+                "\t</sInfo>\n" +
+                "</root>";*/
+       /* String xmlParam= "<root>\n" +
+                "\t<sHead>\n" +
+                "\t\t<sType>JP008</sType>\n" +
+                "\t\t<sTime>1528253397850</sTime>\n" +
+                "\t\t<sCooperationUnit>LQT</sCooperationUnit>\n" +
+                "\t\t<sTerminalNumber>f9076b44b468fcef3296702bde126d02</sTerminalNumber>  \n" +
+                "\t</sHead>\n" +
+                "\t<sInfo>\n" +
+                "\t\t<ID>231027</ID>\n" +
+                "\t\t<OrgCode>H37068300546</OrgCode>\n" +
+                "\t\t<DateType>0</DateType>\n" +
+                "\t\t<StartDate>2023-03-01 01:50:00</StartDate>\n" +
+                "\t\t<EndDate>2023-03-14 14:00:00</EndDate>\n" +
+                "\t</sInfo>\n" +
+                "</root>";*/
+       /* String xmlParam= "<root>\n" +
+                "\t<sHead>\n" +
+                "\t\t<sType>JP009</sType>\n" +
+                "\t\t<sTime>1528253397850</sTime>\n" +
+                "\t\t<sCooperationUnit>LQT</sCooperationUnit>\n" +
+                "\t\t<sTerminalNumber>961508b3f02b2196ef9ce8ae27e59f89</sTerminalNumber>  \n" +
+                "\t</sHead>\n" +
+                "\t<sInfo>\n" +
+                "\t\t<ID>231025</ID>\n" +
+                "\t\t<OrgCode>H37068300546</OrgCode>\n" +
+                "\t\t<StartDate>2023-03-01 01:50:00</StartDate>\n" +
+                "\t\t<EndDate>2023-03-14 14:00:00</EndDate>\n" +
+                "\t</sInfo>\n" +
+                "</root>";*/
+       /* String xmlParam= "<root>\n" +
+                "\t<sHead>\n" +
+                "\t\t<sType>JD001</sType>\n" +
+                "\t\t<sTime>1528253397850</sTime>\n" +
+                "\t\t<sCooperationUnit>LQT</sCooperationUnit>\n" +
+                "\t\t<sTerminalNumber>c24d62e99915e1c13ca7efcf38febc01</sTerminalNumber>  \n" +
+                "\t</sHead>\n" +
+                "\t<sInfo>\n" +
+                "\t\t<OrgCode>H37068300546</OrgCode>\n" +
+                "\t</sInfo>\n" +
+                "</root>";*/
+        String xmlParam= "<root>\n" +
+                "\t<sHead>\n" +
+                "\t\t<sType>JD002</sType>\n" +
+                "\t\t<sTime>1528253397850</sTime>\n" +
+                "\t\t<sCooperationUnit>LQT</sCooperationUnit>\n" +
+                "\t\t<sTerminalNumber>0172f5db1f03bfacdc1416bb9bd4ef3b</sTerminalNumber>  \n" +
+                "\t</sHead>\n" +
+                "\t<sInfo>\n" +
+                "\t\t<OrgCode>H37068300546</OrgCode>\n" +
                 "\t</sInfo>\n" +
                 "</root>";
         Object[] requestParam = new Object[]{xmlParam};
