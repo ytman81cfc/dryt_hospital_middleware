@@ -4,9 +4,7 @@ import com.hospital.middleware.hospitalinfection.service.Impl.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.ListResourceBundle;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class ServiceFactory {
@@ -31,38 +29,35 @@ public class ServiceFactory {
        Map rootMap = (Map)paramMap.get("root");
        Map headMap = (Map)rootMap.get("sHead");
        Map infoMap = (Map)rootMap.get("sInfo");
+       infoMap.put("OrgCode", "H37068300546");
 
        String sType = (String)headMap.get("sType");
-       List<Map> result = null;
+
+       String result = "";
        if("JP001".equals(sType)){
-           result = sjp001.queryData(infoMap);
+           result = sjp001.process(infoMap);
        }
        if("JP002".equals(sType)){
-            result = sjp002.queryData(infoMap);
+            result = sjp002.process(infoMap);
        }
         if("JP003".equals(sType)){
-            result = sjp003.queryData(infoMap);
+            result = sjp003.process(infoMap);
         }
         if("JP006".equals(sType)){
-            result = sjp006.queryData(infoMap);
+            result = sjp006.process(infoMap);
         }
         if("JP008".equals(sType)){
-            result = sjp008.queryData(infoMap);
+            result = sjp008.process(infoMap);
         }
         if("JP009".equals(sType)){
-            result = sjp009.queryData(infoMap);
+            result = sjp009.process(infoMap);
         }
         if("JD001".equals(sType)){
-            result = sjd001.queryData(infoMap);
+            result = sjd001.process(infoMap);
         }
         if("JD002".equals(sType)){
-            result = sjd002.queryData(infoMap);
+            result = sjd002.process(infoMap);
         }
-       return processResult(result);
+        return result;
     }
-
-    String processResult(List<Map> result){
-        return result.toString();
-    }
-
 }
