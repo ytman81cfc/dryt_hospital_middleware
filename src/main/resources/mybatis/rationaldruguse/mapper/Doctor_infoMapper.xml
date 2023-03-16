@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hospital.middleware.rationaldruguse.dao.Doctor_infoDAO">
+    <select id="queryDoctor_info" resultType="java.util.HashMap">
+        select doctid          as "DoctId",--系统自增加id
+               doctorcode      as "DoctorCode",--	医生编码
+               doctorname      as "DoctorName",--医生姓名
+               doctortype      as "DoctorType",--分类
+               doctortypename  as "DoctorTypeName",--类型名称
+               doctorspell     as "DoctorSpell",--医生首拼
+               stateflag       as "StateFlag",--状态标识
+               branch          as "Branch",--医院分院标识
+               ybdoct          as "YbDoct",--医保医生
+               deptcode        as "DeptCode",--科室代码
+               ispreright      as "IsPreRight",--是否有处方权
+               iskssclassright as "IsKssClassRight" --抗药三级权限
+        from SI_DOCTOR_INFO
+        where orgcode = #{map.Hoscode}
+    </select>
+</mapper>

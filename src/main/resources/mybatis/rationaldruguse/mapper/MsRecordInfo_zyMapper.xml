@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hospital.middleware.rationaldruguse.dao.MsRecordInfo_zyDAO">
+    <select id="queryMsRecordInfo_zy" resultType="java.util.HashMap">
+        select iid            as "iId",--系统自增加id
+               precode        as "PreCode",--住院号
+               createdate     as "CreateDate",--简历日期
+               creator        as "Creator",--建立人
+               deptname       as "DeptName",--科室名称
+               patname        as "PatName",--病人姓名
+               patsex         as "PatSex",--性别
+               patage         as "PatAge",--年龄
+               indate         as "InDate",--入院日期
+               outdate        as "OutDate",--出院日期
+               nativep        as "Nativep",--籍贯
+               nationals      as "Nationals",--民族
+               compay         as "Compay",--工作单位
+               contact        as "Contact",--联系方式
+               height         as "Height",--身高
+               weight         as "Weight",--体重
+               bmi            as "BMI",--体重指数
+               bloodtype      as "BloodType",--血型
+               bloodpress     as "BloodPress",--血压
+               badhabit       as "BadHabit",--不良嗜好
+               historydisease as "HistoryDisease",--既往病史
+               historydrug    as "HistoryDrug",--既往用药史
+               historyfamily  as "HistoryFamily",--家族史
+               historyallergy as "HistoryAllergy",--过敏史
+               drugreaction   as "DrugReaction",--药物不良反应
+               indiag         as "InDiag",--入院诊断
+               outdiag        as "OutDiag",--出院诊断
+               treatanalyze   as "TreatAnalyze",--治疗方案分析
+               treatmark      as "TreatMark",--治疗监护要点
+               treatresult    as "TreatResult",--药物治疗总结
+               istate         as "iState",--药历状态
+               dsavedate      as "dSaveDate",--药历保存时间
+               labinfo        as "LabInfo" --患者检验信息
+        from SI_MSRECORDINFO_ZY where orgcode =#{map.Hoscode}
+    </select>
+</mapper>

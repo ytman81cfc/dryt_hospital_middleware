@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hospital.middleware.rationaldruguse.dao.MsPatInfo_mzDAO">
+    <select id="queryMsPatInfo_mz" resultType="java.util.HashMap">
+        select patid    as "PatId",--系统自增加id
+               cardid   as "CardId",--身份证ID
+               blcode   as "BlCode",--病历号
+               name     as "Name",--病人姓名
+               typeyb   as "Typeyb",--医保类型
+               codeyb   as "Codeyb",--医保代码
+               sex      as "Sex",--	性别
+               agetype  as "AgeType",--年龄标识
+               age      as "Age",--年龄
+               birthday as "Birthday",--出生年月
+               height   as "Height",--身高（cm）
+               weight   as "Weight",--体重（kg）
+               address  as "Address",--家庭住址
+               telphone as "Telphone" --联系电话
+        from SI_MSPATINFO_MZ where orgcode =#{map.Hoscode}
+        <if test="map.beginDate!='' and map.beginDate!=null ">and reg_time&gt;=to_char(#{map.beginDate},'yyyy-mm-dd hh24:mi:ss')</if>
+        <if test="map.endDate!='' and map.endDate!=null ">and reg_time&lt;=to_char(#{map.endDate},'yyyy-mm-dd hh24:mi:ss')</if>
+
+    </select>
+</mapper>
