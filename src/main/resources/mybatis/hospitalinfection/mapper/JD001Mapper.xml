@@ -3,14 +3,13 @@
 <mapper namespace="com.hospital.middleware.hospitalinfection.dao.JD001DAO">
     <select id="queryData" resultType="java.util.HashMap">
         select
-            a.rid as "ID"  ,--唯一主键
-            a.DEPTCODE as "DeptId"  ,--科室编号
-            a.DEPTNAME as "DeptName" ,-- 科室名称
-            a.DEPTTYPE as "DeptType"  ,--科室类型
-            b.dictname as "DeptTypeName" -- 科室类型名称
-            from COM_DEPTINFO	a
-            left join com_dictcodeinfo b on b.typecode='DEPTTYPE' and a.DEPTTYPE=b.dictcode
-        where
-        a.orgcode=#{map.OrgCode} and a.ISVALID ='1'
-        </select>
+            a.rid as "ID", --唯一主键
+            a.deptcode as "DeptId", --科室编号
+            a.deptname as "DeptName", --科室名称
+            case when a.depttype = 'C' then 2 when a.depttype = 'I' then 1 else 3 end as "DeptType", --科室类型
+            case when b.dictname = '门诊' then '门诊' when b.dictname = '住院' then '住院' else '其他' end as "DeptTypeName" --科室类型名称
+                from com_deptinfo a left join com_dictcodeinfo b on b.typecode='DEPTTYPE' and a.depttype = b.dictcode
+                    where   a.orgcode = #{map.OrgCode} and
+                            a.isvalid ='1'
+    </select>
 </mapper>
