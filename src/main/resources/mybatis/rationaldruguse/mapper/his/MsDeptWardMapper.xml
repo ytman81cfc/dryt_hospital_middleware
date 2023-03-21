@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hospital.middleware.rationaldruguse.dao.his.MsDeptWardDAO">
+    <select id="queryMsDeptWard" resultType="java.util.HashMap">
+        select iid as 		"IID"	,--系统自增加id
+            deptcode as 		"DeptCode",--	科室代码
+            wardcode as  		"WardCode"	,--病区代码
+            wardname as 		"WardName"	--病区名称
+            from SI_MSDEPTWARD
+        where orgcode = #{map.Hoscode}
+    </select>
+</mapper>

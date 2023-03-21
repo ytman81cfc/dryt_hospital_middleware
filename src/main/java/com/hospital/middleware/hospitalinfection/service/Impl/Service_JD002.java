@@ -1,6 +1,6 @@
 package com.hospital.middleware.hospitalinfection.service.Impl;
 
-import com.hospital.middleware.hospitalinfection.dao.JD002DAO;
+import com.hospital.middleware.hospitalinfection.dao.his.JD002DAO;
 import com.hospital.middleware.hospitalinfection.service.IService;
 import com.hospital.middleware.hospitalinfection.service.BaseService;
 import org.springframework.beans.factory.annotation.Autowired;

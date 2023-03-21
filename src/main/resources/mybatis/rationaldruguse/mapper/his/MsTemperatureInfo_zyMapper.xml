@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hospital.middleware.rationaldruguse.dao.his.MsTemperatureInfo_zyDAO">
+    <select id="queryMsTemperatureInfo_zy" resultType="java.util.HashMap">
+        select iid      as "iId",--系统自增加id
+               syh      as "Syh",--住院唯一编号
+               temdate  as "TemDate",--测体温日期
+               temvalue as "TemValue" --体温
+        from SI_MSTEMPERATUREINFO_ZY  where orgcode =#{map.Hoscode}
+    </select>
+</mapper>
