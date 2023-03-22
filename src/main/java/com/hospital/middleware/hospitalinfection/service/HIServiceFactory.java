@@ -28,7 +28,12 @@ public class HIServiceFactory {
     public String getXMLData(Map paramMap){
        Map rootMap = (Map)paramMap.get("root");
        Map headMap = (Map)rootMap.get("sHead");
-       Map infoMap = (Map)rootMap.get("sInfo");
+       Object t_infoMap = rootMap.get("sInfo");
+       if(t_infoMap instanceof String){
+           t_infoMap = new HashMap();
+       }
+       Map infoMap = (Map)t_infoMap;
+
        infoMap.put("OrgCode", "H37068300546");
 
        String sType = (String)headMap.get("sType");
