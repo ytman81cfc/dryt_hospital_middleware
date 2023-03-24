@@ -25,8 +25,8 @@
                paydate      as "PayDate",--支付时间
                gestation    as "Gestation" --孕期（周）
         from SI_MSSYINFO_MZ where orgcode =#{map.Hoscode}
-           <if test="map.beginDate!='' and map.beginDate!=null ">and indate&gt;=to_char(#{map.beginDate},'yyyy-mm-dd hh24:mi:ss')</if>
-           <if test="map.endDate!='' and map.endDate!=null ">and indate&lt;=to_char(#{map.endDate},'yyyy-mm-dd hh24:mi:ss')</if>
+           <if test="map.beginDate!='' and map.beginDate!=null ">and gendate&gt;=to_char(#{map.beginDate},'yyyy-mm-dd hh24:mi:ss')</if>
+           <if test="map.endDate!='' and map.endDate!=null ">and gendate&lt;=to_char(#{map.endDate},'yyyy-mm-dd hh24:mi:ss')</if>
 
     </select>
 </mapper>

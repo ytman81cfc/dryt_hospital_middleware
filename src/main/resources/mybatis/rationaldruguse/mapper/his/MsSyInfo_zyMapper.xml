@@ -28,8 +28,8 @@
                isout        as IsOut,--是否出院
                gestation    as Gestation --孕期（周）
         from SI_MSSYINFO_ZY  where orgcode =#{map.Hoscode}
-           <if test="map.beginDate!='' and map.beginDate!=null ">and rectime&gt;=to_char(#{map.beginDate},'yyyy-mm-dd hh24:mi:ss')</if>
-           <if test="map.endDate!='' and map.endDate!=null ">and rectime&lt;=to_char(#{map.endDate},'yyyy-mm-dd hh24:mi:ss')</if>
+           <if test="map.beginDate!='' and map.beginDate!=null ">and gendate&gt;=to_char(#{map.beginDate},'yyyy-mm-dd hh24:mi:ss')</if>
+           <if test="map.endDate!='' and map.endDate!=null ">and gendate&lt;=to_char(#{map.endDate},'yyyy-mm-dd hh24:mi:ss')</if>
 
     </select>
 </mapper>

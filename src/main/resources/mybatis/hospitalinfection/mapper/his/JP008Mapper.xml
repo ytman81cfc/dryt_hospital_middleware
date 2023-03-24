@@ -3,7 +3,6 @@
 <mapper namespace="com.hospital.middleware.hospitalinfection.dao.his.JP008DAO">
     <select id="queryData" resultType="java.util.HashMap">
         select
-
         a.rid as "ID" ,--唯一主键
         b.inhosno as "ZYID" ,--住院号
         b.INTIMES as "VisitId" ,--住院次数
@@ -47,7 +46,7 @@
         from ipr_inpatientinfo b,IPM_ORDER_INFO a
         left join PHA_DRUGINFO c on a.orgcode =c.orgcode and a.ITEMID=c.DRUGCODE
         where
-        a.orgcode=b.orgcode and a.inid =b.inid
+        a.orgcode=b.orgcode and a.inid =b.inid and
         a.orgcode=#{map.OrgCode}
         <if test="map.ID!='' and map.ID!=null">and b.inhosno=#{map.ID}</if>
         <if test="map.StartDate!='' and map.StartDate!=null and map.DateType==0">and a.BEGINDATE &gt;=to_date(#{map.StartDate},'yyyy-mm-dd
