@@ -7,7 +7,7 @@
         b.inhosno as "ZYID"  ,-- 住院号
         b.INTIMES as "VisitId" ,-- 住院次数
         b.PATIENTID as "PatientId" ,-- 病例号
-        '-' as "DiagnosisList" ,-- 诊断信息集合
+        e.text  as "DiagnosisList" ,-- 诊断信息集合
         a.MAIN_FLAG as "DiagnosisTypeMain" ,-- 主要诊断标识
         a.DISE_TYPE as "DiagnosisType" ,-- 诊断类型编号
         d.dictname as "iagnosisTypeName" ,-- 诊断类型名称
@@ -18,6 +18,8 @@
         a.CRTER_NAME as "DocName" --诊断医生姓名
         from  IPR_INPATIENTINFO b,com_userinfo c, IPR_DIAGNOSE a
         left join com_dictcodeinfo d on d.typecode='DIAG_TYPE' and a.dise_type=d.dictcode
+        left join (select orgcode,inid,listagg(text,',') within GROUP (order by text)  as text from (
+        select orgcode ,inid,DISE_CODE||' '||DISE_NAME as text from IPR_DIAGNOSE where orgcode =#{map.OrgCode}) group by orgcode,inid ) e on e.orgcode=a.orgcode and a.inid=e.inid
         where a.orgcode =b.orgcode and
         a.inid=b.inid and
         a.orgcode =c.orgcode and

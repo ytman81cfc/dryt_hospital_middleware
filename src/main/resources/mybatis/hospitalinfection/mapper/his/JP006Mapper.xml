@@ -3,51 +3,51 @@
 <mapper namespace="com.hospital.middleware.hospitalinfection.dao.his.JP006DAO">
     <select id="queryData" resultType="java.util.HashMap">
         select
-            a.inhosno as "ZYID" ,-- 住院号
-            a.INTIMES as "VisitId"  ,-- 住院次数
-            a.PATIENTID as "PatientId"  ,-- 病例号
-            a.PATIENTNAME as "PatientName"  ,-- 患者姓名
-            b.dictname as "Sex"  ,-- 性别
-            a.BIRTHDAY as "BirthDate"  ,-- 出生日期
-            c.WEIGHT as "Weight"  ,--  体重
-            a.Certno as "IDCard"   ,-- 身份证号
-            regexp_substr(FN_NEWBIRTHTOAGE(a.BIRTHDAY),'[0-9]+') as "Age",-- 年龄
-            replace(FN_NEWBIRTHTOAGE(a.BIRTHDAY),regexp_substr(FN_NEWBIRTHTOAGE(a.BIRTHDAY),'[0-9]+'),'') as "AgeUnit",-- 年龄单位
-            a.OUTDEPTCODE as "DeptCode"  ,--  所在科室编号
-            a.OUTDEPTNAME as "DeptName"   ,-- 所在科室名称
-            a.INDATE as "InHospAt"   ,-- 入院时间
-            a.INDEPTCODE as "InDeptId"   ,-- 入院科室编号
-            a.INDEPTNAME as "InDeptName"   ,-- 入院科室名称
-            case
-                when a.OUT_DATE is not null then
-                    a.OUTDEPTCODE
-                else '-' end as  "OutDeptId" ,--  出院科室编号
-            case
-                when a.OUT_DATE is not null then
-                    a.OUTDEPTNAME
-                else '-' end as "OutDeptName"  ,-- 出院科室名称
-            a.OUT_DATE as "OutHospAt"  ,-- 出院时间
-            c.bedno as "BedNo"  ,-- 床号
-            c.CHADR_NO as "ChargeDrId"   ,-- 主管医生工号
-            c.CHADR_NAME as  "ChargeDrName"   ,-- 主管医生姓名
-            c.DUTYNURCODE as "ChargeNrId"   ,-- 主管护师工号
-            c.DUTYNURNAME as "ChargeNrName"   ,-- 主管护师姓名
-            d.HOME as "Address"  ,-- 现住址
-            d.TEL as "Tel"  ,-- 电话
-            d.WORKHOME as "WorkAddr"   ,-- 工作地址
-            d.LINKMANNAME as "LxrName"  ,-- 联系人姓名
-            d.LINKMANTEL as "LxrPhone"   ,-- 联系人电话
-            d.NATY  as "Nation"   ,-- 民族
-            '' as "Education"  ,-- 文化程度
-            d.PROFCODE as "Job"  ,-- 职业
-            floor(a.out_date-a.indate) as "InDay"  ,-- 住院天数
-            a.TOTCOST as "Cost"   ,-- 住院总费用
-            e.dictname as "OutCome"  ,-- 转归情况
-            '0' as  "IsCancel" -- 取消住院登记
+        a.inhosno as "ZYID" ,-- 住院号
+        a.INTIMES as "VisitId"  ,-- 住院次数
+        a.PATIENTID as "PatientId"  ,-- 病例号
+        a.PATIENTNAME as "PatientName"  ,-- 患者姓名
+        b.dictname as "Sex"  ,-- 性别
+        a.BIRTHDAY as "BirthDate"  ,-- 出生日期
+        c.WEIGHT as "Weight"  ,--  体重
+        a.Certno as "IDCard"   ,-- 身份证号
+        regexp_substr(FN_NEWBIRTHTOAGE(a.BIRTHDAY),'[0-9]+') as "Age",-- 年龄
+        replace(FN_NEWBIRTHTOAGE(a.BIRTHDAY),regexp_substr(FN_NEWBIRTHTOAGE(a.BIRTHDAY),'[0-9]+'),'') as "AgeUnit",-- 年龄单位
+        nvl2(a.OUT_DATE,null,a.OUTDEPTCODE) as "DeptCode"  ,--  所在科室编号
+        nvl2(a.OUT_DATE,null,a.OUTDEPTNAME) as "DeptName"   ,-- 所在科室名称
+        a.INDATE as "InHospAt"   ,-- 入院时间
+        a.INDEPTCODE as "InDeptId"   ,-- 入院科室编号
+        a.INDEPTNAME as "InDeptName"   ,-- 入院科室名称
+        case
+        when a.OUT_DATE is not null then
+        a.OUTDEPTCODE
+        else null end as  "OutDeptId" ,--  出院科室编号
+        case
+        when a.OUT_DATE is not null then
+        a.OUTDEPTNAME
+        else null end as "OutDeptName"  ,-- 出院科室名称
+        a.OUT_DATE as "OutHospAt"  ,-- 出院时间
+        c.bedno as "BedNo"  ,-- 床号
+        nvl2(a.OUT_DATE,null,c.INDR_NO) as "ChargeDrId"   ,-- 主管医生工号
+        nvl2(a.OUT_DATE,null,c.INDR_NAME) as  "ChargeDrName"   ,-- 主管医生姓名
+        nvl2(a.OUT_DATE,null,c.DUTYNURCODE) as "ChargeNrId"   ,-- 主管护师工号
+        nvl2(a.OUT_DATE,null,c.DUTYNURNAME) as "ChargeNrName"   ,-- 主管护师姓名
+        nvl(a.HOME,d.HOME) as "Address"  ,-- 现住址
+        nvl(a.TEL,d.TEL) as "Tel"  ,-- 电话
+        nvl(d.WORKHOME,a.workname) as "WorkAddr"  ,-- 工作地址
+        d.LINKMANNAME as "LxrName"  ,-- 联系人姓名
+        d.LINKMANTEL as "LxrPhone"   ,-- 联系人电话
+        d.NATY  as "Nation"   ,-- 民族
+        '' as "Education"  ,-- 文化程度
+        d.PROFCODE as "Job"  ,-- 职业
+        nvl(floor(a.out_date-a.indate),floor(sysdate-a.indate)) as "InDay"  ,-- 住院天数
+        a.TOTCOST as "Cost"   ,-- 住院总费用
+        e.dictname as "OutCome"  ,-- 转归情况
+        null as  "IsCancel" -- 取消住院登记
         from inr_receiveinfo c, ipr_inpatientinfo a
-                                    left join com_dictcodeinfo b on b.typecode='GEND' and b.dictcode=a.sexcode
-                                    left join com_patientinfo d on a.orgcode=d.orgcode and a.patientid=d.patientid
-                                    left join com_dictcodeinfo e on e.typecode='OUTREASON' and e.dictcode=a.OUTREASON
+        left join com_dictcodeinfo b on b.typecode='GEND' and b.dictcode=a.sexcode
+        left join com_patientinfo d on a.orgcode=d.orgcode and a.patientid=d.patientid
+        left join com_dictcodeinfo e on e.typecode='OUTREASON' and e.dictcode=a.OUTREASON
         where a.orgcode =c.orgcode and
             a.inid =c.inid and
               a.orgcode=#{map.OrgCode}
