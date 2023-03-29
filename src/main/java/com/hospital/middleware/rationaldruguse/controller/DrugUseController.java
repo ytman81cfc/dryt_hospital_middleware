@@ -1,6 +1,11 @@
 package com.hospital.middleware.rationaldruguse.controller;
 
-import com.hospital.middleware.rationaldruguse.dao.*;
+import com.google.gson.Gson;
+import com.hospital.middleware.hospitalinfection.webservice.HosInfApplicationRunner;
+import com.hospital.middleware.rationaldruguse.dao.his.*;
+import com.hospital.middleware.rationaldruguse.dao.lis.TestMySqlDAO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -11,6 +16,11 @@ import java.util.Map;
 @RestController
 @RequestMapping("/rational/druguse")
 public class DrugUseController {
+
+    private Logger log = LoggerFactory.getLogger(DrugUseController.class);
+
+    @Autowired
+    private TestMySqlDAO testMySqlDAO;
 
     @Autowired
     private MsDrugInfoDAO msDrugInfoDAO;
@@ -56,7 +66,9 @@ public class DrugUseController {
 
     @RequestMapping("/queryData")
     public List<Map> queryData(@RequestParam Map<String, String> map){
-        map.put("Hoscode","H37068300546");
+        Gson gson = new Gson();
+        String str = gson.toJson(map);
+        log.info("合理用药传入参数:" + str);
 
         if("msDrugInfo".equals(map.get("viewCode"))){
             return msDrugInfoDAO.queryMsDrugInfo(map);
@@ -88,7 +100,7 @@ public class DrugUseController {
         if("msSyInfo_zy".equals(map.get("viewCode"))){
             return MsSyInfo_zyDAO.queryMsSyInfo_zy(map);
         }
-        if("msdiagInfo_zy".equals(map.get("viewCode"))){
+        if("msDiagInfo_zy".equals(map.get("viewCode"))){
             return msDiagInfo_zyDAO.queryMsDiagInfo_zy(map);
         }
         if("msPresInfo_zy".equals(map.get("viewCode"))){
@@ -101,6 +113,6 @@ public class DrugUseController {
             return msRecordInfo_zyDAO.queryMsRecordInfo_zy(map);
         }
 
-        return null;
+        return testMySqlDAO.queryCurrentDateTime();
     }
 }
