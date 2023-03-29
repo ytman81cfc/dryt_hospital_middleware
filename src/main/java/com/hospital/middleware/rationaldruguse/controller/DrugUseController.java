@@ -1,7 +1,6 @@
 package com.hospital.middleware.rationaldruguse.controller;
 
 import com.google.gson.Gson;
-import com.hospital.middleware.hospitalinfection.webservice.HosInfApplicationRunner;
 import com.hospital.middleware.rationaldruguse.dao.his.*;
 import com.hospital.middleware.rationaldruguse.dao.lis.TestMySqlDAO;
 import org.slf4j.Logger;
