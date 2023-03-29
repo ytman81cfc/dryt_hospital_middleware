@@ -6,5 +6,5 @@ import javax.jws.WebService;
 @WebService
 public interface HosInfWebServer {
     @WebMethod
-    String acceptMessage(String message);
+    public String acceptMessage(String message);
 }

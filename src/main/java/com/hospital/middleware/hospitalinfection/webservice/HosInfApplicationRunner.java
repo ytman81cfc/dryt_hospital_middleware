@@ -1,5 +1,7 @@
 package com.hospital.middleware.hospitalinfection.webservice;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
@@ -12,14 +14,14 @@ import javax.xml.ws.Endpoint;
 public class HosInfApplicationRunner implements ApplicationRunner {
     @Autowired
     HosInfWebServer hosInfWebServer;
-
     @Value("${webservice.path}")
     private String path;
+    private Logger log = LoggerFactory.getLogger(HosInfApplicationRunner.class);
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        System.out.println("院感webservice服务发布地址:" + path);
+        log.info("院感webservice服务发布地址:" + path);
         Endpoint.publish(path, hosInfWebServer);
-        System.out.println("院感webservice服务发布成功, 地址:" + path);
+        log.info("院感webservice服务发布成功, 地址:" + path);
     }
 }
