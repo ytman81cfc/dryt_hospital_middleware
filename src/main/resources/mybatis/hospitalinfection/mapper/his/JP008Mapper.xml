@@ -2,28 +2,40 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hospital.middleware.hospitalinfection.dao.his.JP008DAO">
     <select id="queryData" resultType="java.util.HashMap">
-        select
-
+select * from (
+select
         a.rid as "ID" ,--唯一主键
         b.inhosno as "ZYID" ,--住院号
         b.INTIMES as "VisitId" ,--住院次数
         b.PATIENTID as "PatientId" ,--病例号
         b.PATIENTNAME as "PatientName" ,--患者姓名
-        a.ISLONG as "OrderType" ,--医嘱类型
-        a.BEGINDATE as "OrderAt" ,--开嘱日期
-        a.ENDDATE as "StopAt" ,--停嘱日期
+        decode(a.ISLONG,'1','0','2','1') as "OrderType" ,--医嘱类型
+        decode(a.ISLONG,'1',a.RECORDDATE,'2',a.BEGINDATE) as "OrderAt" ,--开嘱日期
+        decode(a.ISLONG,'1',a.RECORDDATE,'2',a.DCDATE) as "StopAt" ,--停嘱日期
         a.EXECDATE as "ExecuteTime" ,--执行时间 日期时间格式为：yyyy-MM-dd HH:mm:ss的字符串
         a.ITEMID as "OrderId" ,--医嘱编号
         a.ITEMNAME as "OrderName" ,--医嘱名称
-        a.SPECS as "DrugSpeci" ,--药品规格
-        a.DOSEONCE as "Dosage" ,--单次剂量
-        a.DOSEUNIT as "DosageUnit" ,--单次剂量单位
-        a.TOTQTY as "UseCount" ,--单次使用数量
+        decode(a.ITEMTYPE,'1',a.SPECS,null) as "DrugSpeci" ,--药品规格
+        case
+        when a.ITEMTYPE='1' and a.DRUGTYPE='3' and a.HERMEDDOSENUM is null then 400
+        when a.ITEMTYPE='1' and a.DRUGTYPE='3' and a.HERMEDDOSENUM is not null then to_number(regexp_replace(a.HERMEDDOSENUM,'[^0-9]'))
+        when a.ITEMTYPE='1' and a.DRUGTYPE&lt;&gt;'3'  then a.DOSEONCE
+        when a.ITEMTYPE&lt;&gt;'1' then 1
+        end as "Dosage" ,--单次剂量
+        case
+        when a.ITEMTYPE='1' and a.DRUGTYPE='3' then 'ml'
+        when  a.ITEMTYPE='1' and a.DRUGTYPE&lt;&gt;'3' then a.DOSEUNIT
+        else null
+        end  as "DosageUnit" ,--单次剂量单位
+        case
+        when a.ITEMTYPE='1' and a.DRUGTYPE='3' then 1
+        when  a.ITEMTYPE='1' and a.DRUGTYPE&lt;&gt;'3' then a.TOTQTY
+        end  as "UseCount" ,--单次使用数量
         a.FREQNAME as "SYPC" ,--使用频次
         a.USAGECODE as "AdminRouteId" ,--给药途径编号
         a.USAGENAME as "AdminRouteName" ,--给药途径名称
-        a.DEMAND as "UsePurpose" ,--用药目的
-        '' as "Frequency" ,--每日次数
+        d.DEMAND as "UsePurpose" ,--用药目的
+        1 as "Frequency" ,--每日次数
         a.DEPTCODE as "ExecofficeCode" ,--开嘱科室编号
         a.DEPTNAME as "ExecofficeName" ,--开嘱科室名称
         a.DOCTCODE as "BDOCId" ,-- 开嘱医生工号
@@ -32,34 +44,42 @@
         a.EXECNAME as "BNRSName" ,--执行护士姓名
         a.DCDOCCODE as "EDOCId" ,--停嘱医生工号
         a.DCDOCNAME as "EDOCName" ,--停嘱医生姓名
-        decode(a.ORDERSTATUS,'0','0','1','0','2','1','3','2','4','0','5','0') as "YZStatus" ,--医嘱状态
+        decode(a.ORDERSTATUS,'0','1','1','1','2','1','3','2','4','1','5','0') as "YZStatus" ,--医嘱状态
         a.DOCTNOTE as "Memo" ,--备注
         case
         when
-        a.ITEMTYPE='1' and a.ENDDATE is not null then (a.ENDDATE-a.BEGINDATE )
-        when a.ITEMTYPE='1' and a.ENDDATE is null then (sysdate-a.BEGINDATE )
-        else null end as "UseDrugDays" ,--用药天数
-        a.ITEMTYPE as "OrderClass" ,--医嘱项目分类
-        c.SALEPRICE as "YPDJ" ,--药品单价
+        a.ITEMTYPE='1' and a.islong='2' and  a.DCDATE is not null then floor(a.DCDATE-a.BEGINDATE)+1
+        when a.ITEMTYPE='1' and a.islong='2' and  a.DCDATE is null then floor(sysdate-a.BEGINDATE)+1
+        else 1 end as "UseDrugDays" ,--用药天数
+        case
+        when a.ITEMTYPE='1' then decode(a.DRUGTYPE,'1','西药','3','草药')
+        when a.ITEMTYPE&lt;&gt;'1' then decode(a.APPLYTYPE,'1','检验申请','2','检查申请')
+        else null end as "OrderClass" ,--医嘱项目分类
+        decode(a.ITEMTYPE,'1',c.SALEPRICE)as "YPDJ" ,--药品单价
         '' as "QTYDay" ,--每日用量
         '' as "TotalQTY" ,--总用量
-        '' as "IsKJYW" --抗菌药物标识
+        case
+        when c.ANTITYPE is null then '0'
+        when  c.ANTITYPE is  not null then '1'
+        end as "IsKJYW" --抗菌药物标识
         from ipr_inpatientinfo b,IPM_ORDER_INFO a
         left join PHA_DRUGINFO c on a.orgcode =c.orgcode and a.ITEMID=c.DRUGCODE
+        left join (select a.* from IPM_ORDER_INFO a,PHA_DRUGINFO	b where a.orgcode =b.orgcode and a.ITEMID=b.DRUGCODE and b.ISVALID='1' and b.ANTITYPE is not null) d
+        on a.orgcode=d.orgcode and a.itemid=d.itemid
         where
-        a.orgcode=b.orgcode and a.inid =b.inid
-        a.orgcode=#{map.OrgCode}
-        <if test="map.ID!='' and map.ID!=null">and b.inhosno=#{map.ID}</if>
-        <if test="map.StartDate!='' and map.StartDate!=null and map.DateType==0">and a.BEGINDATE &gt;=to_date(#{map.StartDate},'yyyy-mm-dd
+        a.orgcode=b.orgcode and a.inid =b.inid and
+        a.orgcode=#{map.OrgCode})where
+        <if test="map.ID!='' and map.ID!=null">and "ZYID"=#{map.ID}</if>
+        <if test="map.StartDate!='' and map.StartDate!=null and map.DateType==0">and "OrderAt" &gt;=to_date(#{map.StartDate},'yyyy-mm-dd
             hh24:mi:ss')
         </if>
-        <if test="map.EndDate!='' and map.EndDate!=null and map.DateType==0">and a.BEGINDATE &lt;=to_date(#{map.EndDate},'yyyy-mm-dd
+        <if test="map.EndDate!='' and map.EndDate!=null and map.DateType==0">and "OrderAt" &lt;=to_date(#{map.EndDate},'yyyy-mm-dd
             hh24:mi:ss')
         </if>
-        <if test="map.StartDate!='' and map.StartDate!=null and map.DateType==1">and a.ENDDATE &gt;=to_date(#{map.StartDate},'yyyy-mm-dd
+        <if test="map.StartDate!='' and map.StartDate!=null and map.DateType==1">and "StopAt" &gt;=to_date(#{map.StartDate},'yyyy-mm-dd
             hh24:mi:ss')
         </if>
-        <if test="map.EndDate!='' and map.EndDate!=null and map.DateType==1">and a.ENDDATE &lt;=to_date(#{map.EndDate},'yyyy-mm-dd
+        <if test="map.EndDate!='' and map.EndDate!=null and map.DateType==1">and "StopAt" &lt;=to_date(#{map.EndDate},'yyyy-mm-dd
             hh24:mi:ss')
         </if>
 

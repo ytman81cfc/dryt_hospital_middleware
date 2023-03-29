@@ -27,9 +27,11 @@
                predate       as "PreDate",--处方日期
                totalday      as "TotalDay",--单日总量
                drugmoney     as "DrugMoney" --药品金额
-        from SI_MSPRESINFO_MZ where orgcode =#{map.Hoscode}
-           <if test="map.beginDate!='' and map.beginDate!=null ">and predate&gt;=to_char(#{map.beginDate},'yyyy-mm-dd hh24:mi:ss')</if>
-           <if test="map.endDate!='' and map.endDate!=null ">and predate&lt;=to_char(#{map.endDate},'yyyy-mm-dd hh24:mi:ss')</if>
+        from SI_MSPRESINFO_MZ a,SI_MSSYINFO_MZ b where a.orgcode=b.orgcode and
+                                                       a.syh=b.syh and
+                                                       a.orgcode =#{map.Hoscode}
+           <if test="map.beginDate!='' and map.beginDate!=null ">and b.gendate&gt;=to_char(#{map.beginDate},'yyyy-mm-dd hh24:mi:ss')</if>
+           <if test="map.endDate!='' and map.endDate!=null ">and b.gendate&lt;=to_char(#{map.endDate},'yyyy-mm-dd hh24:mi:ss')</if>
 
     </select>
 </mapper>

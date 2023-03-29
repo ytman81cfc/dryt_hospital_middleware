@@ -9,9 +9,9 @@
                diagdate as "DiagDate",--诊断时间
                diagdoct as "DiagDoct",--诊断医生代码
                remark   as "Remark" --备注
-        from SI_MSDIAGINFO_ZY where orgcode =#{map.Hoscode}
-        <if test="map.beginDate!='' and map.beginDate!=null ">and diagdate&gt;=to_char(#{map.beginDate},'yyyy-mm-dd hh24:mi:ss')</if>
-        <if test="map.endDate!='' and map.endDate!=null ">and diagdate&lt;=to_char(#{map.endDate},'yyyy-mm-dd hh24:mi:ss')</if>
+        from SI_MSDIAGINFO_ZY a,SI_MSRECORDINFO_ZY b  where a.orgcode=b.orgcode and a.syh=b.syh and  a.orgcode =#{map.Hoscode}
+        <if test="map.beginDate!='' and map.beginDate!=null ">and b.gendate&gt;=to_char(#{map.beginDate},'yyyy-mm-dd hh24:mi:ss')</if>
+        <if test="map.endDate!='' and map.endDate!=null ">and b.gendate&lt;=to_char(#{map.endDate},'yyyy-mm-dd hh24:mi:ss')</if>
 
     </select>
 </mapper>
