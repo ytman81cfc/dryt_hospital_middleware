@@ -2,10 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hospital.middleware.rationaldruguse.dao.his.MsTemperatureInfo_zyDAO">
     <select id="queryMsTemperatureInfo_zy" resultType="java.util.HashMap">
-        select iid      as "iId",--系统自增加id
-               syh      as "Syh",--住院唯一编号
-               temdate  as "TemDate",--测体温日期
-               temvalue as "TemValue" --体温
+        select a.iid      as "iId",--系统自增加id
+        a.syh      as "Syh",--住院唯一编号
+        a.temdate  as "TemDate",--测体温日期
+        a.temvalue as "TemValue" --体温
         from SI_MSTEMPERATUREINFO_ZY a,SI_MSSYINFO_ZY b where a.orgcode=b.orgcode and a.syh=b.syh and  a.orgcode =#{map.Hoscode}
         <if test="map.beginDate!='' and map.beginDate!=null ">and b.gendate&gt;=to_char(#{map.beginDate},'yyyy-mm-dd hh24:mi:ss')</if>
         <if test="map.endDate!='' and map.endDate!=null ">and b.gendate&lt;=to_char(#{map.endDate},'yyyy-mm-dd hh24:mi:ss')</if>

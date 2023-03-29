@@ -2,13 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hospital.middleware.rationaldruguse.dao.his.MsDiagInfo_mzDAO">
     <select id="queryMsDiagInfo_mz" resultType="java.util.HashMap">
-        select id       as "Id",--系统自增加id
-               syh      as "Syh",--就诊唯一编号
-               icdcode  as "IcdCode",--诊断代码
-               icdname  as "IcdName",--诊断名称
-               diagdate as "DiagDate",--诊断日期
-               diagdoct as "DiagDoct",--诊断医生代码
-               remark   as "Remark" --备注
+        select a.id       as "Id",--系统自增加id
+        a.syh      as "Syh",--就诊唯一编号
+        a.icdcode  as "IcdCode",--诊断代码
+        a.icdname  as "IcdName",--诊断名称
+        a.diagdate as "DiagDate",--诊断日期
+        a.diagdoct as "DiagDoct",--诊断医生代码
+        a.remark   as "Remark" --备注
         from SI_MSDIAGINFO_MZ a,SI_MSSYINFO_MZ b  where a.orgcode=b.orgcode and a.syh=b.syh and a.orgcode =#{map.Hoscode}
         <if test="map.beginDate!='' and map.beginDate!=null ">and b.gendate&gt;=to_char(#{map.beginDate},'yyyy-mm-dd hh24:mi:ss')</if>
         <if test="map.endDate!='' and map.endDate!=null ">and b.gendate&lt;=to_char(#{map.endDate},'yyyy-mm-dd hh24:mi:ss')</if>
