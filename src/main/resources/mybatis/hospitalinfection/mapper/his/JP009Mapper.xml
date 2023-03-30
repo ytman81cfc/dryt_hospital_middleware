@@ -4,7 +4,7 @@
     <select id="queryData" resultType="java.util.HashMap">
         select
         a.rid as "ID" ,-- 记录编号
-        b.inhosno as "ZYID"  ,--住院号
+        b.inhosno||'_'||b.INTIMES as "ZYID"  ,--住院号
         b.patientid as "PatientId",-- 病例号
         a.NEWSUBJECTCODE as "InDeptId" ,-- 转入科室编号
         a.CONFIRM_DATE as "InDeptAt"  ,--入科时间

@@ -5,7 +5,7 @@
 select * from (
 select
         a.rid as "ID" ,--唯一主键
-        b.inhosno as "ZYID" ,--住院号
+        b.inhosno||'_'||b.INTIMES as "ZYID" ,--住院号
         b.INTIMES as "VisitId" ,--住院次数
         b.PATIENTID as "PatientId" ,--病例号
         b.PATIENTNAME as "PatientName" ,--患者姓名
