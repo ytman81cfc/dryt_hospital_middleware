@@ -5,9 +5,9 @@
 select * from (
 select
         a.rid as "ID" ,--唯一主键
-        b.inhosno as "ZYID" ,--住院号
+        b.inid as "ZYID" ,--住院号
         b.INTIMES as "VisitId" ,--住院次数
-        b.PATIENTID as "PatientId" ,--病例号
+        b.inhosno as "PatientId" ,--病例号
         b.PATIENTNAME as "PatientName" ,--患者姓名
         decode(a.ISLONG,'1','0','2','1') as "OrderType" ,--医嘱类型
         decode(a.ISLONG,'1',a.RECORDDATE,'2',a.BEGINDATE) as "OrderAt" ,--开嘱日期

@@ -4,9 +4,9 @@
     <select id="queryData" resultType="java.util.HashMap">
         select
         a.DOCNUMBER as "ID" ,-- 唯一主键
-        b.inhosno as "ZYID"  ,--住院号
+        b.inid as "ZYID"  ,--住院号   住院唯一标识流水号
         b.INTIMES as "VisitId"  ,--住院次数
-        b.PATIENTID as "PatientId"  ,--病例号
+        b.inhosno as "PatientId"  ,--病例号  住院号
         a.CREATETIME as "EnterDate" , --记录日期
         a.UPDATETIME as "UpdTime"  ,--更新日期
         decode(a.DTYPE,'1','住院病历','2','门诊病历','3','门诊留观病历') as "CaseClass"  ,--病历分类
@@ -20,7 +20,7 @@
         where a.orgcode =b.orgcode and
         a.REGISTERNO=b.inid
         and a.orgcode =#{map.OrgCode}
-        <if test="map.ID!='' and map.ID!=null ">and b.inhosno=#{map.ID}</if>
+        <if test="map.ID!='' and map.ID!=null ">and b.inid=#{map.ID}</if>
         <if test="map.StartDate!='' and map.StartDate!=null">and a.CREATETIME &gt;=to_date(#{map.StartDate},'yyyy-mm-dd
             hh24:mi:ss')
         </if>

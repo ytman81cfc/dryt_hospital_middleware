@@ -2,31 +2,31 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hospital.middleware.rationaldruguse.dao.his.MsPresInfo_mzDAO">
     <select id="queryMsPresInfo_mz" resultType="java.util.HashMap">
-        select pre_id        as "pre_id",--系统自增加id
-               syh           as "Syh",--就诊唯一编号
-               precode       as "PreCode",--处方号
-               precodeitem   as "PreCodeItem",--处方序号
-               drugcode      as "DrugCode",--药品代码
-               drugname      as "DrugName",--药品名称
-               drugspec      as "DrugSpec",--药品规格
-               dcl           as "Dcl",--单次剂量
-               dclunit       as "DclUnit",--剂量单位
-               price         as "Price",--药品单价
-               qnty          as "Qnty",--药品数量
-               qntyunit      as "QntyUnit",--数量单位
-               frequency     as "Frequency",--频次
-               frequencycode as "FrequencyCode",--频次代码
-               frequencyname as "FrequencyName",--频次名称
-               useway        as "UseWay",--给药途径
-               usewayname    as "UseWayName",--	给药途径名称
-               usegroupno    as "UseGroupNo",--用药组号
-               begindate     as "BeginDate",--起用时间
-               enddate       as "EndDate",--停用时间
-               drugreason    as "DrugReason",--用药指征
-               drugaim       as "DrugAim",--用药目的
-               predate       as "PreDate",--处方日期
-               totalday      as "TotalDay",--单日总量
-               drugmoney     as "DrugMoney" --药品金额
+        select a.pre_id        as "pre_id",--系统自增加id
+        a.syh           as "Syh",--就诊唯一编号
+        a.precode       as "PreCode",--处方号
+        a.precodeitem   as "PreCodeItem",--处方序号
+        a.drugcode      as "DrugCode",--药品代码
+        a.drugname      as "DrugName",--药品名称
+        a.drugspec      as "DrugSpec",--药品规格
+        a.dcl           as "Dcl",--单次剂量
+        a.dclunit       as "DclUnit",--剂量单位
+        a.price         as "Price",--药品单价
+        a.qnty          as "Qnty",--药品数量
+        a.qntyunit      as "QntyUnit",--数量单位
+        a.frequency     as "Frequency",--频次
+        a.frequencycode as "FrequencyCode",--频次代码
+        a.frequencyname as "FrequencyName",--频次名称
+        a.useway        as "UseWay",--给药途径
+        a.usewayname    as "UseWayName",--	给药途径名称
+        a.usegroupno    as "UseGroupNo",--用药组号
+        a.begindate     as "BeginDate",--起用时间
+        a.enddate       as "EndDate",--停用时间
+        a.drugreason    as "DrugReason",--用药指征
+        a.drugaim       as "DrugAim",--用药目的
+        a.predate       as "PreDate",--处方日期
+        a.totalday      as "TotalDay",--单日总量
+        a.drugmoney     as "DrugMoney" --药品金额
         from SI_MSPRESINFO_MZ a,SI_MSSYINFO_MZ b where a.orgcode=b.orgcode and
                                                        a.syh=b.syh and
                                                        a.orgcode =#{map.Hoscode}
