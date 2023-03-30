@@ -3,9 +3,9 @@
 <mapper namespace="com.hospital.middleware.hospitalinfection.dao.his.JP006DAO">
     <select id="queryData" resultType="java.util.HashMap">
         select
-        a.inhosno||'_'||a.INTIMES as "ZYID" ,-- 住院号
+        a.inid as "ZYID" ,-- 住院号
         a.INTIMES as "VisitId"  ,-- 住院次数
-        a.PATIENTID as "PatientId"  ,-- 病例号
+        a.inhosno as "PatientId"  ,-- 病例号
         a.PATIENTNAME as "PatientName"  ,-- 患者姓名
         b.dictname as "Sex"  ,-- 性别
         a.BIRTHDAY as "BirthDate"  ,-- 出生日期
