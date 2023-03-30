@@ -7,7 +7,6 @@
         b.inid as "ZYID"  ,-- 住院号
         b.INTIMES as "VisitId" ,-- 住院次数
         b.inhosno as "PatientId" ,-- 病例号
-        e.text  as "DiagnosisList" ,-- 诊断信息集合
         a.MAIN_FLAG as "DiagnosisTypeMain" ,-- 主要诊断标识
         a.DISE_TYPE as "DiagnosisType" ,-- 诊断类型编号
         d.dictname as "iagnosisTypeName" ,-- 诊断类型名称
