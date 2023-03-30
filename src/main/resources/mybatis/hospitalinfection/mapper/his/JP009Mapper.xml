@@ -16,7 +16,7 @@
         where a.orgcode =b.orgcode and a.inid=b.inid
         and a.shifttype='RD'
           and a.orgcode =#{map.OrgCode}
-  <if test="map.ID!='' and map.ID!=null">and b.inhosno=#{map.ID}</if>
+  <if test="map.ID!='' and map.ID!=null">and b.inid=#{map.ID}</if>
         <if test="map.StartDate!='' and map.StartDate!=null">and a.crte_time &gt;=to_date(#{map.StartDate},'yyyy-mm-dd hh24:mi:ss')</if>
         <if test="map.EndDate!='' and map.EndDate!=null">and a.crte_time &lt;=to_date(#{map.EndDate},'yyyy-mm-dd hh24:mi:ss')</if>
 
