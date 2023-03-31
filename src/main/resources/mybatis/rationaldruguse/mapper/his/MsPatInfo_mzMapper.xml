@@ -19,8 +19,8 @@
         from SI_MSPATINFO_MZ a,SI_MSSYINFO_MZ b where a.orgcode=b.orgcode and
                                                       a.blcode=b.blcode and
                                                       a.orgcode =#{map.Hoscode}
-        <if test="map.beginDate!='' and map.beginDate!=null ">and b.gendate&gt;=to_char(#{map.beginDate},'yyyy-mm-dd hh24:mi:ss')</if>
-        <if test="map.endDate!='' and map.endDate!=null ">and b.gendate&lt;=to_char(#{map.endDate},'yyyy-mm-dd hh24:mi:ss')</if>
+        <if test="map.beginDate!='' and map.beginDate!=null ">and b.gendate&gt;=#{map.beginDate}</if>
+        <if test="map.endDate!='' and map.endDate!=null ">and b.gendate&lt;=#{map.endDate}</if>
 
     </select>
 </mapper>
