@@ -24,6 +24,18 @@ public class HIServiceFactory {
     private Service_JD001 sjd001;
     @Autowired
     private Service_JD002 sjd002;
+    @Autowired
+    private Service_JD004 sjd004;
+    @Autowired
+    private Service_JP012 sjp012;
+    @Autowired
+    private Service_JP010 sjp010;
+    @Autowired
+    private Service_JP022 sjp022;
+    @Autowired
+    private Service_JP020 sjp020;
+    @Autowired
+    private Service_JP014 sjp014;
 
     public String getXMLData(Map paramMap){
        Map rootMap = (Map)paramMap.get("root");
@@ -62,6 +74,39 @@ public class HIServiceFactory {
         }
         if("JD002".equals(sType)){
             result = sjd002.process(infoMap);
+        }
+        if("JD004".equals(sType)){
+            result = sjd004.process(infoMap);
+        }
+        if("JD004".equals(sType)){
+            result = sjd004.process(infoMap);
+        }
+        if("JP012".equals(sType)){
+            result = sjp012.process(infoMap);
+        }
+        if("JP010".equals(sType)){
+            result = sjp010.process(infoMap);
+        }
+        if("JP022".equals(sType)){
+            result = sjp022.process(infoMap);
+        }
+        if("JP020".equals(sType)){
+            result = sjp020.process(infoMap);
+        }
+        if("JP014".equals(sType)){
+            result = sjp014.process(infoMap);
+        }
+        if("JP013".equals(sType)){
+            result = "<Response></Response>";
+        }
+        if("JP011".equals(sType)){
+            result = "<Response></Response>";
+        }
+        if("JP023".equals(sType)){
+            result = "<Response></Response>";
+        }
+        if("JP021".equals(sType)){
+            result = "<Response></Response>";
         }
         return result;
     }

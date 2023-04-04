@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hospital.middleware.hospitalinfection.dao.his.InidDAO">
+    <select id="selectInid" resultType="java.util.HashMap">
+        select a.inhosno,
+               b.INTIMES,
+               a.in_id
+        from V_HSAF_LIS_ZY_ITEMS a,
+             ipr_inpatientinfo b
+        where a.org_code = b.orgcode
+          and a.in_id = b.inid
+          and org_code = #{map.OrgCode}
+          and in_id = #{map.ID}
+        group by a.inhosno, a.patient_id, b.INTIMES, a.in_id
+
+
+    </select>
+</mapper>

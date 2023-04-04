@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hospital.middleware.hospitalinfection.dao.lis.JD004DAO">
+    <select id="queryData" resultType="java.util.HashMap">
+        select a.* from (
+            select '03' as "ClassID",
+                dict_code as "ItemCode",
+                dict_name as "ItemName",
+               '1' as  "IsUse"
+       from lis_dictionary_detail
+            where is_valid='1'
+              and type_code='LIS_SAMPLE_TYPE') a
+              where  a.ClassID=#{map.ClassID}
+    </select>
+</mapper>

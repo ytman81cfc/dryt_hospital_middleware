@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hospital.middleware.hospitalinfection.dao.lis.JP012DAO">
+    <select id="queryData" resultType="java.util.HashMap">
+        select a.rid                                           as "ID",
+               a.inhosno                                       as "PatientId",
+               a.patient_name                                  as "PatientName",
+               case
+                   when a.sex = '1' then '男'
+                   when a.sex = '2' then '女'
+                   else '1' end                                as "Sex",
+               a.age                                           as "Age",
+               REGEXP_REPLACE(a.age, '[0-9]', '')              as "AgeUnit",
+               ''                                              as "LabItemsList",
+               b.exe_csqn                                      as "TestOrderNo",
+               '4'                                             as "ItemType",
+               '常规检查'                                          as "ItemTypeName",
+               a.sample_type                                   as "ItemCode",
+               c.dict_name                                     as "ItemName",
+               str_to_date(a.sample_reach_time, '%Y-%m-%d %T') as "SubmitAt",
+               str_to_date(a.get_result_time, '%Y-%m-%d %T')   as "ResultDate",
+               a.dept_id                                       as "DeptId",
+               a.dept_name                                     as "DeptName"
+        from lis_test_reg a,
+             lis_test_reg_his_item_detail b,
+             lis_dictionary_detail c
+        where a.org_code = b.org_code
+          and a.reg_id = b.reg_id
+          and a.patient_type = 'I'
+          and c.type_code = 'LIS_SAMPLE_TYPE'
+          and c.dict_code = a.sample_type
+          and a.org_code = #{orgcode}
+          and a.inhosno = #{inhosno}
+          and a.sample_reach_time &gt;= str_to_date(#{StartDate}, '%Y-%m-%d %T')
+          and a.sample_reach_time &lt;= str_to_date(#{EndDate}, '%Y-%m-%d %T')
+    </select>
+
+</mapper>
