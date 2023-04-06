@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hospital.middleware.hospitalinfection.dao.his.JP004DAO">
+    <select id="queryData" resultType="java.util.HashMap">
+        select a.rid                                                       as "ID",
+               b.inid                                                      as "ZYID",
+               b.intimes                                                   as "VisitId",
+               a.patient_id                                                as "PatientId",
+               b.PATIENTNAME                                               as "PatientName",
+               c.APPLYID                                                   as "OperOrderNo",
+               a.SURGERY_PLACE                                             as "OperRoom",
+               a.SURGERY_DESC                                              as "OperName",
+               a.SURGERY_CODE                                              as "OperId",
+               a.SURGERY_START_DATE                                        as "OperAt",
+               a.SURGEON_ID                                                as "OpeDocId",
+               a.SURGEON                                                   as "OpeDocName",
+               a.ANESTHESIOLOGIST_ID                                       as "AnesDrName",
+               a.PREOPERATIVE_DIAGNOSIS                                    as "OperDiagnose",
+               decode(a.INCISION_TYPE_ID, '0', 0, '1', 1, '2', 1, '3', 1, '10', 1, '4', 2, '5', 2, '6', 2, '11', 2, '7',
+                      3, '8', 3, '9', 3, '12', 3, '99', 4)                 as "IncisionGrade",
+               decode(a.SURGERY_HEAL, '甲', 1, '乙', 2, '丙', 3)              as "Heal",
+               5                                                           as "ASA",
+               a.IS_CHANGETIME                                             as "UrgentOpe",
+               a.ANAESTHESIA_METHOD                                        as "NarcKind",
+               to_date(a.SURGERY_START_DATE, 'yyyy-mm-dd hh24:mi:ss')                 as "OperStartTime",
+               to_date(a.SURGERY_END_DATE, 'yyyy-mm-dd hh24:mi:ss')                   as "OperEndTime",
+               ceil((a.SURGERY_END_DATE - a.SURGERY_START_DATE) * 24 * 60) as "OperLengTime",
+               0                                                           as "Replant",
+               case
+                   when a.CLEAN_ANTIBIOTIC_DAYS is null then 0
+                   else 1 end                                              as "WSQYY",
+               c.LISTDPCD                                                  as "DeptId",
+               c.LISTDPNM                                                  as "DeptName",
+               a.FIRST_ASSISTANT                                           as "OpeDocName2",
+               a.SECOND_ASSISTANT                                          as "OpeDocName3"
+
+        from EMR_OPERATIONINFO a,
+             ipr_inpatientinfo b,
+             MET_CHECKAPPLY_INFO c
+        where a.orgcode = b.orgcode
+          and a.visit_id = b.inid
+          and b.orgcode = c.orgcode
+          and b.inid = c.PATIENTBUSIID
+          and c.APPLYTYPE = '3'
+          and a.orgcode=#{map.OrgCode}
+          and to_char(a.ARRANGE_DATE, 'yyyy-mm-dd hh24:mi:ss')&gt;=#{map.StartDate}
+          and to_char(a.ARRANGE_DATE, 'yyyy-mm-dd hh24:mi:ss')&lt;=#{map.EndDate}
+    </select>
+</mapper>
