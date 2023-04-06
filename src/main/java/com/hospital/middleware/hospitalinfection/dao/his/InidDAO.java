@@ -9,4 +9,6 @@ import java.util.Map;
 @Mapper
 public interface InidDAO {
     Map selectInid(@Param("map")Map paramMap);
+
+    Map selectRegid(@Param("map")Map paramMap);
 }

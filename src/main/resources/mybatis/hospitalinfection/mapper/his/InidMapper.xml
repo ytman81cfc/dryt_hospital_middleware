@@ -9,10 +9,21 @@
              ipr_inpatientinfo b
         where a.org_code = b.orgcode
           and a.in_id = b.inid
-          and org_code = #{map.OrgCode}
-          and in_id = #{map.ID}
+          and a.org_code = #{map.OrgCode}
+          and a.in_id = #{map.ID}
         group by a.inhosno, a.patient_id, b.INTIMES, a.in_id
-
-
+    </select>
+    <select id="selectRegid" resultType="java.util.HashMap">
+        select a.patient_id,
+               m.num,
+               a.in_id
+        from V_HSAF_LIS_MZ_ITEMS a,
+             (select row_number() over(partition by b.PATIENTNO order by b.crte_time asc) as num, b.* from
+                 OPR_REGISTER b where b.orgcode =#{map.OrgCode}) m
+        where a.org_code = m.orgcode
+          and a.in_id = m.regid
+          and a.org_code =#{map.OrgCode}
+          and a.in_id = #{map.ID}
+        group by a.patient_id, m.num,a.in_id
     </select>
 </mapper>

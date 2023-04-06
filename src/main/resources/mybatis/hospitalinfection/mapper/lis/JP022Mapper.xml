@@ -30,7 +30,7 @@
           and c.type_code = 'LIS_SAMPLE_TYPE'
           and c.dict_code = a.sample_type
           and a.org_code = #{orgcode}
-          and a.inhosno = #{inhosno}
+          and a.patient_id = #{PatientId}
           and a.sample_reach_time &gt;= str_to_date(#{StartDate}, '%Y-%m-%d %T')
           and a.sample_reach_time &lt;= str_to_date(#{EndDate}, '%Y-%m-%d %T')
     </select>

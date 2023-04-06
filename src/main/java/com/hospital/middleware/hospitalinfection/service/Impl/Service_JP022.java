@@ -24,13 +24,13 @@ public class Service_JP022 extends BaseService implements IService {
         Map map = inidDAO.selectInid(paramMap);
         String EndDate= (String) paramMap.get("EndDate");
         String StartDate= (String) paramMap.get("StartDate");
-        String ZYID= (String) map.get("IN_ID");
-        String VisitId=  map.get("INTIMES").toString();
-        String inhosno= (String) map.get("INHOSNO");
+        String MZID= (String) map.get("IN_ID");
+        String VisitId=  map.get("NUM").toString();
+        String PatientId= (String) map.get("PATIENT_ID");
         String orgcode= (String) paramMap.get("OrgCode");
-        List<Map> listMap=jp022.queryData(orgcode,inhosno,StartDate,EndDate);
+        List<Map> listMap=jp022.queryData(orgcode,PatientId,StartDate,EndDate);
         for (int j = 0; j < listMap.size(); j++){
-            listMap.get(j).put("ZYID",ZYID);
+            listMap.get(j).put("MZID",MZID);
             listMap.get(j).put("VisitId",Integer.parseInt(VisitId));
         }
         return listMap;

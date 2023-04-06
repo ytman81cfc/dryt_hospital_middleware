@@ -25,7 +25,7 @@
           and a.patient_type = 'C'
           and b.test_type = '1'
           and a.org_code = #{orgcode}
-          and b.inhosno  = #{inhosno}
+          and b.patient_id  = #{PatientId}
           and a.get_sample_date &gt;= str_to_date(#{StartDate}, '%Y-%m-%d %T')
           and a.get_sample_date &lt;= str_to_date(#{EndDate}, '%Y-%m-%d %T')
     </select>
