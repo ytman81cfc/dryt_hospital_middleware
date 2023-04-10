@@ -35,6 +35,8 @@ public class HIServiceFactory {
     @Autowired
     private Service_JP022 sjp022;
     @Autowired
+    private Service_JP024 sjp024;
+    @Autowired
     private Service_JD001 sjd001;
     @Autowired
     private Service_JD002 sjd002;
@@ -108,6 +110,9 @@ public class HIServiceFactory {
         if("JP023".equals(sType)){
             result = "<Response></Response>";
         }
+        if("JP024".equals(sType)){
+            result = sjp024.process(infoMap);
+        }
         if("JD001".equals(sType)){
             result = sjd001.process(infoMap);
         }
@@ -120,6 +125,7 @@ public class HIServiceFactory {
         if("JD004".equals(sType)){
             result = sjd004.process(infoMap);
         }
+
         return result;
     }
 }
