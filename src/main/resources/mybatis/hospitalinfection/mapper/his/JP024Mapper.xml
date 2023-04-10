@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hospital.middleware.hospitalinfection.dao.his.JP024DAO">
+    <select id="queryData" resultType="java.util.HashMap">
+        select a.CHARTID as "ID" ,
+        a.inid as "ZYID",
+        b.intimes as "VisitId",
+        b.inhosno as "PatientId",
+        a.RECORDDATE as "WeightDate",
+        a.PATIENTWEIGHT as "WeightValues"
+        from  IPM_TEMPERATURECHART a,ipr_inpatientinfo b
+        where a.orgcode=b.orgcode
+        and a.inid=b.inid
+        and a.orgcode=#{map.OrgCode}
+        and a.inid=#{map.ID}
+        and to_char(a.RECORDDATE,'yyyy-mm-dd hh24:mi:ss')&gt;=#{map.StartDate}
+        and to_char(a.RECORDDATE,'yyyy-mm-dd hh24:mi:ss')&lt;=#{map.EndDate}
+        order by a.RECORDDATE
+    </select>
+</mapper>
