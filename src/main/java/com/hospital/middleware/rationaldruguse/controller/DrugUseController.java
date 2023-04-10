@@ -2,6 +2,7 @@ package com.hospital.middleware.rationaldruguse.controller;
 
 import com.google.gson.Gson;
 import com.hospital.middleware.rationaldruguse.dao.his.*;
+import com.hospital.middleware.rationaldruguse.dao.lis.MsLabInfo_zy_lisDAO;
 import com.hospital.middleware.rationaldruguse.dao.lis.TestMySqlDAO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -63,8 +66,16 @@ public class DrugUseController {
     @Autowired
     private MsRecordInfo_zyDAO msRecordInfo_zyDAO;
 
+    @Autowired
+    private MsLabInfo_zyDAO msLabInfo_zyDAO;
+
+
+    @Autowired
+    private MsLabInfo_zy_lisDAO msLabInfo_zy_lisDAO;
+
     @RequestMapping("/queryData")
     public List<Map> queryData(@RequestParam Map<String, String> map){
+        log.info(map.toString());
         Gson gson = new Gson();
         String str = gson.toJson(map);
         log.info("合理用药传入参数:" + str);
@@ -110,6 +121,36 @@ public class DrugUseController {
         }
         if("msRecordInfo_zy".equals(map.get("viewCode"))){
             return msRecordInfo_zyDAO.queryMsRecordInfo_zy(map);
+        }
+        if ("msLabInfo_zy".equals(map.get("viewCode"))){
+            /*List<Map> list = msLabInfo_zyDAO.queryMsLabInfo_zy(map);
+            for (int i = 0; i < list.size(); i++) {
+                String syh = (String) list.get(i).get("Syh");
+                String blCode = (String) list.get(i).get("BlCode");
+                String inid = (String) list.get(i).get("inid");
+                String inhosno = (String) list.get(i).get("inhosno");
+                String EndDate = (String) map.get("endDate");
+                String StartDate = (String) map.get("beginDate");
+                String orgCode = map.get("Hoscode");
+                List<Map> list1 = msLabInfo_zy_lisDAO.queryMsLabInfo_zy_lis(inhosno, EndDate, StartDate, orgCode);
+                for (int j = 0; j < list1.size(); j++) {
+                    String labNo = (String) list1.get(j).get("LabNo");
+                    String LabName = (String) list1.get(j).get("LabName");
+                    String DemoCode = (String) list1.get(j).get("DemoCode");
+                    String DemoName = (String) list1.get(j).get("DemoName");
+                    Object LabDate = list1.get(j).get("LabDate");
+                    list.get(j).put("LabNo", labNo);
+                    list.get(j).put("LabName", LabName);
+                    list.get(j).put("DemoCode", DemoCode);
+                    list.get(j).put("DemoName", DemoName);
+                    list.get(j).put("LabDate", LabDate);
+                }
+            }*/
+            List<Map> list = msLabInfo_zy_lisDAO.queryMsLabInfo_zy_lis(map);
+            for (int i = 0; i < list.size(); i++) {
+                list.get(i).put("LabType", "2");
+            }
+            return list;
         }
 
         return testMySqlDAO.queryCurrentDateTime();
