@@ -9,7 +9,7 @@
                decode(ANTILEVLE,'1','2','2','1','3','3')as "DrugLine",
                SALEPRICE as  "Price"
         from PHA_DRUGINFO	where  ISVALID='1'
-                            and ANTITYPE is not null
+                            and ANTILEVLE is not null
                             and orgcode =#{map.OrgCode}
     </select>
 </mapper>
