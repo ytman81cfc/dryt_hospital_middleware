@@ -23,18 +23,22 @@ public class Service_JP020 extends BaseService implements IService {
     @Override
     public List<Map> queryData(Map paramMap) {
         Map map = inidDAO.selectRegid(paramMap);
-        String EndDate= (String) paramMap.get("EndDate");
-        String StartDate= (String) paramMap.get("StartDate");
-        String MZID= (String) map.get("IN_ID");
-        String VisitId=  map.get("NUM").toString();
-        String PatientId= (String) map.get("PATIENT_ID");
-        String orgcode= (String) paramMap.get("OrgCode");
-        List<Map> listMap=jp020.queryData(orgcode,PatientId,StartDate,EndDate);
-        for (int j = 0; j < listMap.size(); j++){
-            listMap.get(j).put("MZID",MZID);
-            listMap.get(j).put("VisitId",Integer.parseInt(VisitId));
+        if(null==map) {
+            return null;
+        }else {
+            String EndDate = (String) paramMap.get("EndDate");
+            String StartDate = (String) paramMap.get("StartDate");
+            String MZID = (String) map.get("IN_ID");
+            String VisitId = map.get("NUM").toString();
+            String inhosno = (String) map.get("INHOSNO");
+            String orgcode = (String) paramMap.get("OrgCode");
+            List<Map> listMap = jp020.queryData(orgcode, inhosno, StartDate, EndDate);
+            for (int j = 0; j < listMap.size(); j++) {
+                listMap.get(j).put("MZID", MZID);
+                listMap.get(j).put("VisitId", Integer.parseInt(VisitId));
+            }
+            return listMap;
         }
-        return listMap;
     }
 
     @Override
@@ -49,9 +53,13 @@ public class Service_JP020 extends BaseService implements IService {
 
     @Override
     public String process(Map paramMap){
-        List<Map> t_result = queryData(paramMap);
-        List<String> rowList = assembleXmlRowArray(t_result);
-        String xmlString = assembleXml(rowList);
-        return xmlString;
+        if(null==queryData(paramMap)){
+            return null;
+        }else {
+            List<Map> t_result = queryData(paramMap);
+            List<String> rowList = assembleXmlRowArray(t_result);
+            String xmlString = assembleXml(rowList);
+            return xmlString;
+        }
     }
 }

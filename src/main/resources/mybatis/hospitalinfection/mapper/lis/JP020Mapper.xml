@@ -3,8 +3,8 @@
 <mapper namespace="com.hospital.middleware.hospitalinfection.dao.lis.JP020DAO">
     <select id="queryData" resultType="java.util.HashMap">
         SELECT a.rid                                         as "ID",
-               b.inhosno                                     as "PatientId",
-               c.exe_csqn                                    as "TestOrderNo",
+               d.inhosno                                     as "PatientId",
+               d.exe_csqn                                    as "TestOrderNo",
                str_to_date(a.get_sample_date, '%Y-%m-%d %T') as "ResultDate",
                a.item_code                                   as "AntiCode",
                a.item_name                                   as "AntiName",
@@ -12,20 +12,20 @@
                a.unit                                        as "Unit",
                a.range_value                                 as "ReferRange",
                a.flag                                        as "Remark"
-        FROM lis_result a,
-             lis_test_reg b,
-             lis_test_reg_his_item_detail c
-        where a.org_code = b.org_code
-          and a.patient_id = b.patient_id
-          and a.machine_code = b.machine_code
-          and a.test_form_no = b.test_form_no
-          and a.barcode = b.barcode
-          and b.org_code = c.org_code
-          and b.reg_id = c.reg_id
-          and a.patient_type = 'C'
-          and b.test_type = '1'
+        FROM lis_result a
+                 left join (select b.rid, b.inhosno, c.exe_csqn, b.org_code, b.barcode
+                            from lis_test_reg b,
+                                 lis_test_reg_his_item_detail c
+                            where b.org_code = c.org_code
+                              and b.reg_id = c.reg_id
+                              and b.test_type = '1'
+                            group by b.rid, b.inhosno, c.exe_csqn, b.org_code, b.barcode) d on
+                    a.org_code = d.org_code
+                and a.rid = d.rid
+                and a.barcode = d.barcode
+        where a.patient_type = 'C'
           and a.org_code = #{orgcode}
-          and b.patient_id  = #{PatientId}
+          and d.inhosno = #{inhosno}
           and a.get_sample_date &gt;= str_to_date(#{StartDate}, '%Y-%m-%d %T')
           and a.get_sample_date &lt;= str_to_date(#{EndDate}, '%Y-%m-%d %T')
     </select>

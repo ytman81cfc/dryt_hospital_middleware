@@ -11,10 +11,10 @@
           and a.in_id = b.inid
           and a.org_code = #{map.OrgCode}
           and a.in_id = #{map.ID}
-        group by a.inhosno, a.patient_id, b.INTIMES, a.in_id
+        group by a.inhosno, b.INTIMES, a.in_id
     </select>
     <select id="selectRegid" resultType="java.util.HashMap">
-        select a.patient_id,
+        select a.inhosno,
                m.num,
                a.in_id
         from V_HSAF_LIS_MZ_ITEMS a,
@@ -24,6 +24,6 @@
           and a.in_id = m.regid
           and a.org_code =#{map.OrgCode}
           and a.in_id = #{map.ID}
-        group by a.patient_id, m.num,a.in_id
+        group by a.inhosno, m.num,a.in_id
     </select>
 </mapper>

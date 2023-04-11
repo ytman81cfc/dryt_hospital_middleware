@@ -21,12 +21,10 @@
                str_to_date(a.get_result_time, '%Y-%m-%d %T')   as "ResultDate",
                a.dept_id                                       as "DeptId",
                a.dept_name                                     as "DeptName"
-        from lis_test_reg a,
-             lis_test_reg_his_item_detail b,
-             lis_dictionary_detail c
-        where a.org_code = b.org_code
-          and a.reg_id = b.reg_id
-          and a.patient_type = 'I'
+        from lis_dictionary_detail c,
+             lis_test_reg a
+                 left join lis_test_reg_his_item_detail b on a.org_code = b.org_code and a.reg_id = b.reg_id
+        where a.patient_type = 'I'
           and c.type_code = 'LIS_SAMPLE_TYPE'
           and c.dict_code = a.sample_type
           and a.org_code = #{orgcode}
