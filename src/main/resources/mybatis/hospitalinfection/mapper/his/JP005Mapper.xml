@@ -6,7 +6,7 @@
         a.inid as "ZYID",
         b.intimes as "VisitId",
         b.inhosno as "PatientId",
-        a.RECORDDATE as "StoolDate",
+        a.opertime as "StoolDate",
         c.dictname as "TemperatureTypeName",
         a.TEMPERATUREVALUE as "TwValue",
         d.PATIENTWEIGHT as "TzValue"
@@ -18,8 +18,8 @@
         and c.typecode='TEMPERATURETYPE'
         and a.orgcode=#{map.OrgCode}
         and a.inid=#{map.ID}
-        and to_char(a.RECORDDATE,'yyyy-mm-dd')&gt;=#{map.StartDate}
-        and to_char(a.RECORDDATE,'yyyy-mm-dd')&lt;=#{map.EndDate}
-        group by a.CHARTID,a.inid,b.intimes,b.inhosno ,a.RECORDDATE,c.dictname,a.TEMPERATUREVALUE,d.PATIENTWEIGHT
+        and to_char(a.opertime,'yyyy-mm-dd hh24:mi:ss')&gt;=#{map.StartDate}
+        and to_char(a.opertime,'yyyy-mm-dd hh24:mi:ss')&lt;=#{map.EndDate}
+        group by a.CHARTID,a.inid,b.intimes,b.inhosno ,a.opertime,c.dictname,a.TEMPERATUREVALUE,d.PATIENTWEIGHT
     </select>
 </mapper>
