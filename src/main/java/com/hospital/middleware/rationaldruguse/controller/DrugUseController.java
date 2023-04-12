@@ -67,10 +67,6 @@ public class DrugUseController {
     private MsRecordInfo_zyDAO msRecordInfo_zyDAO;
 
     @Autowired
-    private MsLabInfo_zyDAO msLabInfo_zyDAO;
-
-
-    @Autowired
     private MsLabInfo_zy_lisDAO msLabInfo_zy_lisDAO;
 
     @RequestMapping("/queryData")
