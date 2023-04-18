@@ -40,19 +40,22 @@ public class Service_JP001 extends BaseService implements IService {
                 if (list.get(i).containsKey("text1")) {
                     clob1 = (Clob) list.get(i).get("text1");
                     text1 = clob1.getSubString(1, (int) clob1.length());
-                    result1 = decodeBase64AndGZip(text1);
+                    String info = decodeBase64AndGZip(text1);
+                    result1=info.replaceAll("<.*?>", "");
                     list.get(i).remove("text1");
                 }
                 if (list.get(i).containsKey("text2")) {
                     clob2 = (Clob) list.get(i).get("text2");
                     text2 = clob2.getSubString(1, (int) clob2.length());
-                    result2 = decodeBase64AndGZip(text2);
+                    String info2 = decodeBase64AndGZip(text2);
+                    result2=info2.replaceAll("<.*?>", "");
                     list.get(i).remove("text2");
                 }
                 if (list.get(i).containsKey("text3")) {
                     clob3 = (Clob) list.get(i).get("text3");
-                    text3 = clob3.getSubString(1, (int) clob3.length());
-                    result3 = decodeBase64AndGZip(text3);
+                    text3= clob3.getSubString(1, (int) clob3.length());
+                    String info3 = decodeBase64AndGZip(text3);
+                    result3=info3.replaceAll("<.*?>", "");
                     list.get(i).remove("text3");
                 }
                 list.get(i).put("CourseContent", result1+result2+result3);
