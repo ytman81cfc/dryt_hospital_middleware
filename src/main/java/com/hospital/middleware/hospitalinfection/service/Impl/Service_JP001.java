@@ -6,6 +6,8 @@ import com.hospital.middleware.hospitalinfection.service.BaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Clob;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
@@ -17,7 +19,18 @@ public class Service_JP001 extends BaseService implements IService {
 
     @Override
     public List<Map> queryData(Map paramMap) {
-        return jp001.queryData(paramMap);
+        List<Map> list =jp001.queryData(paramMap);
+        for(int i = 0; i < list.size(); i++){
+            Clob clob= (Clob) list.get(i).get("CourseContent");
+
+            try {
+                String text = clob.getSubString(1, (int) clob.length());
+                list.get(i).put("CourseContent",text);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return list;
     }
 
     @Override
