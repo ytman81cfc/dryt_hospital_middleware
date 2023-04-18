@@ -12,7 +12,9 @@
         decode(a.DTYPE,'1','住院病历','2','门诊病历','3','门诊留观病历') as "CaseClass"  ,--病历分类
         a.DOCNUMBER as "BcCode"  ,--病历记录编号
         a.DOCNAME as "BcName"  ,--病历记录名称
-        c.content||','||d.content||','||e.content as "CourseContent"  --病历内容
+        c.content as "text1",
+               d.content as "text2",
+               e.content  as "text3"   --病历内容
         from ipr_inpatientinfo b,EMR_DOCUMENT  a
         left join EMR_RESOURCES c on a.RID_HEADER=c.rid
         left join EMR_RESOURCES d on a.RID_BODY=d.rid
