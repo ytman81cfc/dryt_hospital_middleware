@@ -16,7 +16,7 @@
                ddoctcode    as DDoctCode,--核对发药药师
                ddeptcode    as DDeptCode,--执行部门
                indate       as InDate,--入院日期
-               outdate      as OutDate,--	出院日期
+               nvl(outdate, gendate)      as OutDate,--	出院日期
                beddoct      as BedDoct,--床位医生代码
                liverstatus  as LiverStatus,--	肝功能状况
                kidneystatus as KidneyStatus,--肾功能状况

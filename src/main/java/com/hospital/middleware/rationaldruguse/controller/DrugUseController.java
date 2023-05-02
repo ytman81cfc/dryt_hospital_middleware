@@ -119,35 +119,21 @@ public class DrugUseController {
             return msRecordInfo_zyDAO.queryMsRecordInfo_zy(map);
         }
         if ("msLabInfo_zy".equals(map.get("viewCode"))){
-            /*List<Map> list = msLabInfo_zyDAO.queryMsLabInfo_zy(map);
-            for (int i = 0; i < list.size(); i++) {
-                String syh = (String) list.get(i).get("Syh");
-                String blCode = (String) list.get(i).get("BlCode");
-                String inid = (String) list.get(i).get("inid");
-                String inhosno = (String) list.get(i).get("inhosno");
-                String EndDate = (String) map.get("endDate");
-                String StartDate = (String) map.get("beginDate");
-                String orgCode = map.get("Hoscode");
-                List<Map> list1 = msLabInfo_zy_lisDAO.queryMsLabInfo_zy_lis(inhosno, EndDate, StartDate, orgCode);
-                for (int j = 0; j < list1.size(); j++) {
-                    String labNo = (String) list1.get(j).get("LabNo");
-                    String LabName = (String) list1.get(j).get("LabName");
-                    String DemoCode = (String) list1.get(j).get("DemoCode");
-                    String DemoName = (String) list1.get(j).get("DemoName");
-                    Object LabDate = list1.get(j).get("LabDate");
-                    list.get(j).put("LabNo", labNo);
-                    list.get(j).put("LabName", LabName);
-                    list.get(j).put("DemoCode", DemoCode);
-                    list.get(j).put("DemoName", DemoName);
-                    list.get(j).put("LabDate", LabDate);
-                }
-            }*/
             List<Map> list = msLabInfo_zy_lisDAO.queryMsLabInfo_zy_lis(map);
             for (int i = 0; i < list.size(); i++) {
                 list.get(i).put("LabType", "2");
             }
             return list;
         }
+        if("msLabPatho_zy".equals(map.get("viewCode"))){
+            List<Map> result = new ArrayList();
+            return result;
+        }
+        if("msLabAnti_zy".equals(map.get("viewCode"))){
+            List<Map> result = new ArrayList();
+            return result;
+        }
+
 
         return testMySqlDAO.queryCurrentDateTime();
     }
