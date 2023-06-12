@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hospital.middleware.emr.dao.his.EmrDAO">
+    <select id="queryBaza" resultType="java.util.HashMap">
+        select *  from ba_baza
+            where orgcode = #{map.orgCode} and create_time between to_date(#{map.startDate}, 'YYYY-MM-DD hh24:mi:ss') and to_date(#{map.endDate}, 'YYYY-MM-DD hh24:mi:ss')
+    </select>
+    <select id="queryBaf1" resultType="java.util.HashMap">
+        select *  from ba_baf1
+            where orgcode = #{map.orgCode} and create_time between to_date(#{map.startDate}, 'YYYY-MM-DD hh24:mi:ss') and to_date(#{map.endDate}, 'YYYY-MM-DD hh24:mi:ss')
+    </select>
+    <select id="queryBaf4" resultType="java.util.HashMap">
+        select *  from ba_baf4
+            where orgcode = #{map.orgCode} and create_time between to_date(#{map.startDate}, 'YYYY-MM-DD hh24:mi:ss') and to_date(#{map.endDate}, 'YYYY-MM-DD hh24:mi:ss')
+    </select>
+    <select id="queryBaf6" resultType="java.util.HashMap">
+        select *  from ba_baf6
+            where orgcode = #{map.orgCode} and create_time between to_date(#{map.startDate}, 'YYYY-MM-DD hh24:mi:ss') and to_date(#{map.endDate}, 'YYYY-MM-DD hh24:mi:ss')
+    </select>
+</mapper>
