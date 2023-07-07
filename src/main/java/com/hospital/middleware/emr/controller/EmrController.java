@@ -46,6 +46,10 @@ public class EmrController {
             result = emrDAO.queryBaf6(paraMap);
             return convertResult(result);
         }
+        if("tjz1".equals(dataType)){
+            result = emrDAO.queryTjz1(paraMap);
+            return convertResult(result);
+        }
         return result;
     }
 

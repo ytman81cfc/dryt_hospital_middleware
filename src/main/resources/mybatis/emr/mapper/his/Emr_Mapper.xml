@@ -4,24 +4,34 @@
     <select id="queryBaza" resultType="java.util.HashMap">
         select *  from ba_baza
         where orgcode = #{map.orgCode} and baza27 &gt;=to_char(to_date(#{map.startDate},'yyyy-mm-dd hh24:mi:ss'),'yyyy-mm-dd')
-        and baza27 &lt;=to_char(to_date(#{map.startDate},'yyyy-mm-dd hh24:mi:ss'),'yyyy-mm-dd')
+        and baza27 &lt;=to_char(to_date(#{map.endDate},'yyyy-mm-dd hh24:mi:ss'),'yyyy-mm-dd')
     </select>
     <select id="queryBaf1" resultType="java.util.HashMap">
         select a.*  from ba_baf1 a,ba_baza b
         where a.orgcode=b.orgcode and a.baza00=b.baza00  and   a.orgcode = #{map.orgCode} and
         b.baza27 &gt;=to_char(to_date(#{map.startDate},'yyyy-mm-dd hh24:mi:ss'),'yyyy-mm-dd')
-        and b.baza27 &lt;=to_char(to_date(#{map.startDate},'yyyy-mm-dd hh24:mi:ss'),'yyyy-mm-dd')
+        and b.baza27 &lt;=to_char(to_date(#{map.endDate},'yyyy-mm-dd hh24:mi:ss'),'yyyy-mm-dd')
     </select>
     <select id="queryBaf4" resultType="java.util.HashMap">
         select a.*  from ba_baf4 a,ba_baza b
         where a.orgcode=b.orgcode and a.baza00=b.baza00  and  a.orgcode = #{map.orgCode} and
         b.baza27 &gt;=to_char(to_date(#{map.startDate},'yyyy-mm-dd hh24:mi:ss'),'yyyy-mm-dd')
-        and b.baza27 &lt;=to_char(to_date(#{map.startDate},'yyyy-mm-dd hh24:mi:ss'),'yyyy-mm-dd')
+        and b.baza27 &lt;=to_char(to_date(#{map.endDate},'yyyy-mm-dd hh24:mi:ss'),'yyyy-mm-dd')
     </select>
     <select id="queryBaf6" resultType="java.util.HashMap">
         select a.*  from ba_baf6 a,ba_baza b
         where a.orgcode=b.orgcode and a.baza00=b.baza00  and  a.orgcode = #{map.orgCode} and
         b.baza27 &gt;=to_char(to_date(#{map.startDate},'yyyy-mm-dd hh24:mi:ss'),'yyyy-mm-dd')
-        and b.baza27 &lt;=to_char(to_date(#{map.startDate},'yyyy-mm-dd hh24:mi:ss'),'yyyy-mm-dd')
+        and b.baza27 &lt;=to_char(to_date(#{map.endDate},'yyyy-mm-dd hh24:mi:ss'),'yyyy-mm-dd')
     </select>
+
+    <select id="queryTjz1" resultType="java.util.HashMap">
+        select *  from BA_TJZ1
+        where orgcode = #{map.orgCode} and TJZ1RQ &gt;=to_char(to_date(#{map.startDate},'yyyy-mm-dd hh24:mi:ss'),'yyyymmdd')
+        and TJZ1RQ &lt;=to_char(to_date(#{map.endDate},'yyyy-mm-dd hh24:mi:ss'),'yyyymmdd')
+    </select>
+
+
+
+
 </mapper>

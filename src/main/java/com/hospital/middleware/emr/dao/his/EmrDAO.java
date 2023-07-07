@@ -12,4 +12,5 @@ public interface EmrDAO {
     List<Map> queryBaf1 (@Param("map") Map paramMap);
     List<Map> queryBaf4 (@Param("map") Map paramMap);
     List<Map> queryBaf6 (@Param("map") Map paramMap);
+    List<Map> queryTjz1 (@Param("map") Map paramMap);
 }
