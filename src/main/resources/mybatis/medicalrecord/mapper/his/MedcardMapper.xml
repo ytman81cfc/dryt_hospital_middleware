@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hospital.middleware.medicalrecord.dao.MedicalrecordDAO">
+    <select id="queryMedcard" resultType="java.util.HashMap">
+        select a.VISIT_ID                                                          as "relprimary",      --病案主键
+               b.INP_NO                                                            as "patno",           --病案号
+               b.NAME                                                              as "patname",         --病人姓名
+               to_char(a.DISCHARGE_DATE_TIME, 'yyyy-mm-dd hh24:mi:ss')             as "outdate",         --出院日期
+               a.DEPT_DISCHARGE_FROM                                               as "outdeptcode",--出院科室代码
+               a.DEPT_NAME_DISCHARGE_FROM                                          as "outdeptname",--出院科室名称
+               d.DIAGNOSIS_CODE                                                    as "icdecode11",--主要诊断代码
+               d.DIAGNOSIS_NAME                                                    as "icdename11",--主要诊断名称
+               ''                                                                  as "cureresult11",--诊断结果
+               nvl(g.SURGERY_CODE, '')                                             as "opericpm1",--主要手术代码
+               nvl(g.SURGERY_DESC, '')                                             as "opername1",--主要手术名称
+               b.INTIMES                                                           as "patnum",--住院次数
+               b.SEX_CODE                                                          as "patsex",--病人性别
+               b.SEX                                                               as "patsexname",--病人性别
+               b.INP_NO                                                            as "gestno",--住院号
+               to_char(b.BIRTH_DATE, 'yyyy-mm-dd hh24:mi:ss')                      as "patbirthday",--出生日期
+               case
+                   when a.AGE_UNIT = '1' then a.AGE
+                   end
+                                                                                   as "patage",--病人年龄[年]
+               case
+                   when a.AGE_UNIT = '2' then a.AGE
+                   end
+                                                                                   as "patmonth",--病人年龄[月]
+               case
+                   when a.AGE_UNIT = '3' then a.AGE
+                   end
+                                                                                   as "patday",--病人年龄[日]
+               b.BIRTH_PROVINCE || b.BIRTH_CITY || b.BIRTH_COUNTY || b.BIRTH_OTHER as "patbirthplace",--出生地址
+               b.NATIVE_PROVINCE || b.NATIVE_CITY || b.NATIVE_OTHER                as "province",--籍贯
+               b.CERTNO                                                            as "patciticard",--身份证号
+               a.PATIENT_CLASS                                                     as "inpass",--入院途径代码
+               a.inpassname                                                        as "inpassname",--入院途径名称
+               to_char(a.ADMISSION_DATE_TIME, 'yyyy-mm-dd hh24:mi:ss')             as "indate",--入院日期
+               a.DEPT_ADMISSION_TO                                                 as "indeptcode",--入院科室代码
+               a.DEPT_NAME_ADMISSION_TO                                            as "indeptname",--入院科室名称
+               a.WARD_ADMISSION_TO                                                 as "inwardcode",--入院病区代码
+               a.WARD_NAME_ADMISSION_TO                                            as "inwardname",--入院病区名称
+               e.DISE_CODE                                                         as "inwesticde",--入院诊断代码
+               e.DISE_NAME                                                         as "inwestname",--入院诊断名称
+               ''                                                                  as "changeddesc",--转科科室描述
+               a.WARD_DISCHARGE_FROM                                               as "outwardcode",--出院病区代码
+               a.WARD_NAME_DISCHARGE_FROM                                          as "outwardname",--出院病区名称
+               a.IN_HOS_DAYS                                                       as "inperiod",--住院天数
+               c.DIRECTOR_ID                                                       as "doctid1",--科室主任工号
+               c.DIRECTOR                                                          as "doctname1",--科室主任姓名
+               c.CHIEF_DOCTOR_ID                                                   as "doctid2",--主任医师工号
+               c.CHIEF_DOCTOR                                                      as "doctname2",--主任医师姓名
+               c.ATTENDING_DOCTOR_ID                                               as "doctid3",--主治医师工号
+               c.ATTENDING_DOCTOR                                                  as "doctname3",--主治医师姓名
+               c.DOCTOR_IN_CHARGE_ID                                               as "doctid4",--住院医师工号
+               c.DOCTOR_IN_CHARGE                                                  as "doctname4",--住院医师姓名
+               a.OUTREASON                                                         as "outsituation",--出院情况代码
+               a.outsituationname                                                  as "outsituationname",--出院情况名称
+               a.DISCHARGE_DISPOSITION                                             as "outkind",--出院方式代码
+               c.INP_NO_CUSTOM                                                     as "barcode",--病案条码号
+               f.updt_time                                                         as "upddt"            --数据更新时间
+        from (select a.*, b.dictname as outsituationname, c.dictname as inpassname
+              from EMR_INPATIENTINFO a
+                       left join com_dictcodeinfo b on a.OUTREASON = b.dictcode and b.typecode = 'OUTREASON'
+                       left join com_dictcodeinfo c on a.PATIENT_CLASS = c.dictcode and c.typecode = 'ADM_WAY'
+              where a.ACTIVE = '1') a,
+             (select * from EMR_PATIENTINFO where ACTIVE = '1') b,
+             (select * from EMR_MEDICALDOCTOR where ACTIVE = '1') c,
+             (select * from EMR_DIAGNOSE where ACTIVE = '1' and MAIN_FLAG = '1' and DIAGNOSIS_CLASS = '1') d,
+             (select * from IPR_DIAGNOSE where ISVALID = '1' and MAIN_FLAG = '1' and DISE_CLINICD = '3') e,
+             (select visit_id, max(updt_time) as updt_time, orgcode
+              from (
+                       select visit_id, updt_time, orgcode
+                       from emr_inpatientinfo
+                       union all
+                       select visit_id, updt_time, orgcode
+                       from emr_patientinfo
+                       union all
+                       select visit_id, updt_time, orgcode
+                       from EMR_MEDICALDOCTOR
+                       union all
+                       select visit_id, updt_time, orgcode
+                       from EMR_DIAGNOSE)
+              group by visit_id, orgcode) f
+                 left join EMR_OPERATIONINFO g
+                           on g.ACTIVE = '1' and g.MAIN_SURGERY_ID = '1' and g.orgcode = f.orgcode and
+                              g.visit_id = f.visit_id
+
+        where a.orgcode = b.orgcode
+          and b.orgcode = c.orgcode
+          and c.orgcode = d.orgcode
+          and d.orgcode = e.orgcode
+          and e.orgcode = f.orgcode
+          and a.visit_id = b.visit_id
+          and b.visit_id = c.visit_id
+          and c.visit_id = d.visit_id
+          and d.visit_id = e.inid
+          and e.inid = f.visit_id
+          and a.visit_id = #{inid}
+          and a.orgcode = #{orgcode}
+    </select>
+
+    <select id="queryIcde" resultType="java.util.HashMap">
+        select a.VISIT_ID                as "relprimary",     --病案主键
+               a.DIAGNOSIS_CODE          as "icdecode",--诊断代码
+               a.DIAGNOSIS_NAME          as "icdename",--诊断名称
+               ''                        as "icdetype",--疾病类型
+               ''                        as "icdepert",--附属编码
+               a.DISCHARGE_CONDITIONS_ID as "cureresultcode",--治疗结果代码
+               a.DISCHARGE_CONDITIONS    as "cureresultname",--治疗结果名称
+               a.ADMISSION_CONDITIONS_ID as "insituation",--入院病情（代码）
+               a.ADMISSION_CONDITIONS    as "insituationname",--入院病情（名称）
+               b.IN_HOS_DAYS             as "curedays",--治疗天数
+               a.DIAGNOSIS_NO            as "icdesort"        --诊断排序
+        from (select * from EMR_DIAGNOSE where ACTIVE = '1') a,
+             (select * from EMR_INPATIENTINFO where ACTIVE = '1') b
+        where a.orgcode = b.orgcode
+          and a.visit_id = b.visit_id
+          and a.visit_id = #{inid}
+          and a.orgcode = #{orgcode}
+    </select>
+
+
+    <select id="queryOper" resultType="java.util.HashMap">
+        select a.VISIT_ID                                             as "relprimary",   --病案主键
+               a.SURGERY_CODE                                         as "opericpm",--手术编码
+               a.SURGERY_DESC                                         as "opername",--手术名称
+               b.HASOPERATION                                         as "patnum",--是否手术
+               to_char(a.SURGERY_START_DATE, 'yyyy-mm-dd hh24:mi:ss') as "patsex",--手术日期
+               a.SURGERY_DEPT_ID                                      as "patsexname",--手术科室代码
+               a.SURGERY_DEPT_NAME                                    as "gestno",--手术科室名称
+               a.SURGEON_ID                                           as "patbirthday",--手术医师工号
+               a.SURGEON                                              as "patday",--手术医师姓名
+               a.ANESTHESIOLOGIST_ID                                  as "patbirthplace",--麻醉医师工号
+               a.ANESTHESIOLOGIST                                     as "province",--麻醉医师姓名
+               a.SURGERY_NO                                           as "patciticard"--手术排序
+        from (select * from EMR_INPATIENTINFO where ACTIVE = '1') b,
+             (select * from EMR_OPERATIONINFO where ACTIVE = '1') a
+        where a.orgcode = b.orgcode
+          and a.visit_id = b.visit_id
+          and a.visit_id = #{inid}
+          and a.orgcode = #{orgcode}
+    </select>
+</mapper>
