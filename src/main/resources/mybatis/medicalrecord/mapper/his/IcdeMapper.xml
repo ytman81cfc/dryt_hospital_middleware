@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hospital.middleware.medicalrecord.dao.MedicalrecordDAO">
+    <select id="queryMedcard" resultType="java.util.HashMap">
+        select a.VISIT_ID                as "relprimary",     --病案主键
+               a.DIAGNOSIS_CODE          as "icdecode",--诊断代码
+               a.DIAGNOSIS_NAME          as "icdename",--诊断名称
+               ''                        as "icdetype",--疾病类型
+               ''                        as "icdepert",--附属编码
+               a.DISCHARGE_CONDITIONS_ID as "cureresultcode",--治疗结果代码
+               a.DISCHARGE_CONDITIONS    as "cureresultname",--治疗结果名称
+               a.ADMISSION_CONDITIONS_ID as "insituation",--入院病情（代码）
+               a.ADMISSION_CONDITIONS    as "insituationname",--入院病情（名称）
+               b.IN_HOS_DAYS             as "curedays",--治疗天数
+               a.DIAGNOSIS_NO            as "icdesort"        --诊断排序
+        from (select * from EMR_DIAGNOSE where ACTIVE = '1') a,
+             (select * from EMR_INPATIENTINFO where ACTIVE = '1') b
+        where a.orgcode = b.orgcode
+          and a.visit_id = b.visit_id
+          and a.visit_id = #{inid}
+          and a.orgcode = #{orgcode}
+    </select>
+</mapper>
