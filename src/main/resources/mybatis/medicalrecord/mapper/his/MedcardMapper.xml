@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.hospital.middleware.medicalrecord.dao.MedicalrecordDAO">
+<mapper namespace="com.hospital.middleware.medicalrecord.dao.his.MedicalrecordDAO">
     <select id="queryMedcard" resultType="java.util.HashMap">
         select a.VISIT_ID                                                          as "relprimary",      --病案主键
                b.INP_NO                                                            as "patno",           --病案号
@@ -141,4 +141,22 @@
           and a.visit_id = #{inid}
           and a.orgcode = #{orgcode}
     </select>
+
+    <select id="qryMedCardListByPatNo"  resultType="java.util.HashMap">
+        select distinct visit_id as "relprimary"   --病案主键
+            from emr_patientinfo
+                where inp_no = #{patNo} and orgcode = #{orgcode}
+    </select>
+
+    <select id="qryMedCardListByOutDate" resultType="java.util.HashMap">
+        select distinct a.visit_id as "relprimary"  --病案主键
+            from emr_patientinfo a,
+                 emr_inpatientinfo b
+                 where a.orgcode = b.orgcode and
+                       a.orgcode = #{orgcode} and
+                       a.visit_id = b.visit_id and
+                       b.discharge_date_time between to_date(#{startdt}, 'YYYY-MM-DD') and to_date(#{enddt}, 'YYYY-MM-DD')
+    </select>
+
+
 </mapper>
