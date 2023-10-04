@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hospital.middleware.healthplatform.dao.his.HealthplatfromDAO">
+    <select id="queryJbzdml" resultType="java.util.HashMap">
+         select
+             ''  "YLJGDM"	,--	医疗机构代码	VARCHAR	22	必填	复合主键：采用22位“卫生机构代码”
+             a.dcode    "YNZDDM"	,--	院内诊断代码	VARCHAR	64	必填	复合主键：院内诊断代码
+             ''     "YLJGMC"	,--	医疗机构名称	VARCHAR	70	必填	医院执业许可第一名称
+             '0'   "FYDM"	,--	分院代码	VARCHAR	20	必填	记录分院代码（内码）,如无分院，则传0
+             ''   "FYMC"	,--	分院名称	VARCHAR	120	条件必填	分院代码不为0时必填
+             a.diagkind "ZDLXDM"	,--	诊断类型代码	VARCHAR	1	必填	1：西医 2：中医
+             a.dname    "YNZDMC"	,--	院内诊断名称	VARCHAR	128	必填	院内诊断名称
+             ''    "PTZXDM"	,--	平台中心诊断代码	VARCHAR	64		西医参见 《疾病分类与代码(ICD-10)》	中医参见 GB/T 15657-2021 中医病名/证候/治法
+             ''    "PTZXMC"	,--	平台中心诊断名称	VARCHAR	128		西医参见 《疾病分类与代码(ICD-10)》	中医参见 GB/T 15657-2021 中医病名/证候/治法
+             '0'    "JLZT"	,--	记录状态	VARCHAR	1	必填	0：正常 1：停用
+             to_date(to_char(sysdate, 'YYYY-MM-DD'), 'YYYY-MM-DD')      "TBRQ"	--	填报日期	DATETIME		必填	本条数据采集时间，格式YYYY-MM-DD
+       from  v_si_diag a
+       where a.areacode=#{orgcode} and a.valiflag='1'
+    </select>
+
+
+</mapper>

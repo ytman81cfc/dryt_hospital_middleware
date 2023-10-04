@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hospital.middleware.healthplatform.dao.his.HealthplatfromDAO">
+    <select id="queryJbksxxb" resultType="java.util.HashMap">
+         select
+           a.orgcode     "YLJGDM"	,--	医疗机构代码	VARCHAR	22	必填	复合主键：采用22位“卫生机构代码”
+           a.deptcode      "KSDM"	,--	科室代码	VARCHAR	64	必填	复合主键：医院科室代码
+           b.orgname      "YLJGMC"	,--	医疗机构名称	VARCHAR	70	必填	医院执业许可第一名称
+           '0'      "FYDM"	,--	分院代码	VARCHAR	20	必填	记录分院代码（内码）,如无分院，则传0
+           ''     "FYMC"	,--	分院名称	VARCHAR	120	条件必填	分院代码不为0时必填
+           a.deptname      "KSMC"	,--	科室名称	VARCHAR	100	必填	医院科室名称
+           ''      "WSJDM"	,--	标准科室代码	VARCHAR	64		该科室对应平台标准的代码，参见《全民健康信息平台科室分类代码表》
+           ''     "SBJDM"	,--	社保局代码	VARCHAR	64		该科室对应社保局标准的代码，如无，则参见《全民健康信息平台科室分类代码表》
+           ''      "SM"	,--	说明	VARCHAR	500		说明
+           decode(a.deptcode,'C','0101','CN','01','I','0102','N','01','OP','02','T','02','05')      "KSLB"	,--	科室类别	VARCHAR	5	 01：临床服务类 0101：门诊科室   0102：住院科室	02：医疗技术类 	03：医疗辅助类 	05：行政后勤类
+           '1'      "MZLX"	,--	门诊类型	VARCHAR	1		科室类别为门诊科室时必填，1：普通 2：急诊 3：专家 4：专科
+           decode(a.isreg, '1', '0', '0', '1')       "GHZT"	,--	挂号状态	VARCHAR	1	必填	是否可挂号，0：可挂号 1：不可挂号
+           '0'      "ZYKSBZ"	,--	中医科室标志	VARCHAR	1	必填	0：否 1：是
+           to_date(to_char(sysdate, 'YYYY-MM-DD'), 'YYYY-MM-DD')      "TBRQ"	--	填报日期	DATETIME		必填	本条数据采集时间，格式YYYY-MM-DD
+from com_deptinfo a,com_hospitalinfo b
+where a.orgcode =b.orgcode and a.isvalid='1'
+  and a.orgcode = #{orgcode}
+    </select>
+
+
+</mapper>
