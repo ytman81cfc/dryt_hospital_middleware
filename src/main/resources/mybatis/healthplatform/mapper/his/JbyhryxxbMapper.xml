@@ -78,6 +78,7 @@
         where a.orgcode = b.orgcode
           and a.usercode = b.usercode
           and a.isvalid = '1'
+          and a.is_stop='0'
           and a.orgcode = c.orgcode
           and b.orgcode = d.orgcode
           and b.deptcode = d.deptcode
