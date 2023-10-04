@@ -8,7 +8,7 @@
            b.orgname      "YLJGMC"	,--	医疗机构名称	VARCHAR	70	必填	医院执业许可第一名称
            '0'   "FYDM"	,--	分院代码	VARCHAR	20	必填	记录分院代码（内码）,如无分院，则传0
            ''   "FYMC"	,--	分院名称	VARCHAR	120	条件必填	分院代码不为0时必填
-           ''   "PTZXDM"	,--	平台中心代码	VARCHAR	64		参见《全民健康信息平台医疗服务项目价格表》
+           replace(f.MED_LIST_CODG,'_SI','')   "PTZXDM"	,--	平台中心代码	VARCHAR	64		参见《全民健康信息平台医疗服务项目价格表》
            a.MCSNAME  "CLMC"	,--	材料名称	VARCHAR	100	必填
            a.MCSKIND      "CLFLDM"	,--	材料分类代码	VARCHAR	36	必填	参见CVA08.50.009卫生材料代码表
            d.dictname      "CLDW"	,--	材料单位	VARCHAR	32	必填
@@ -28,7 +28,9 @@
        left join   COM_COMPANYINFO c  on  a.orgcode =c.orgcode and a.FACCODE =c.FACCODE and c.COMPANYTYPE='0' and c.isvalid='1'
        left join com_dictcodeinfo d on a.MINUNIT=d.dictcode and d.typecode='MINUNIT'
        left join   COM_COMPANYINFO e  on  a.orgcode =e.orgcode and a.FACCODE =e.FACCODE and e.COMPANYTYPE='1' and e.isvalid='1'
-where a.orgcode=b.orgcode and a.orgcode = #{orgcode}
+       left join   FIN_ITEM_COMPARE f  on  a.orgcode =f.orgcode and a.MEDLISTCODG=f.itemcode
+
+         where a.orgcode=b.orgcode and a.orgcode = #{orgcode}
     </select>
 
 
