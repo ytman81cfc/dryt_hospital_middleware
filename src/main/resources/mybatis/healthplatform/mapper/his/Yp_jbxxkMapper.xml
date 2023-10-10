@@ -35,33 +35,37 @@
               "JXDM"	,--	剂型代码	VARCHAR	3		参见 CV08.50.002 药物剂型代码表
               a.SPECS   "YPGG"	,--	药品规格	VARCHAR	128
               d.dictname   "DW"	,--	入库单位	VARCHAR	16		药品最小销售单元，药品不能再拆开的最小销售包装，如：“12 片/盒”中的“盒”
-              ''   "ZHXS"	,--	转换系数	VARCHAR	8	条件必填	(西药必填)
+              a.raton   "ZHXS"	,--	转换系数	VARCHAR	8	条件必填	(西药必填)
               f.FACCODE   "SCCJDM"	,--	生产厂家代码	VARCHAR	32
               f.facname   "SCCJMC"	,--	生产厂家名称	VARCHAR	128	必填
               a.APPROVEINFO   "PZWH"	,--	批准文号                    	VARCHAR	64
               a.CENPURCH   "JZCGBZ"	,--	集中采购标志	VARCHAR	1	必填	0：否 1：是
               a.ESSDRUG   "JYBZ"	,--	基本药物标志	VARCHAR	1	条件必填	(西药必填)0：否 1：是
                ''  "JYJB"	,--	基本药物级别	VARCHAR	12	条件必填	(西药必填)参见 CVA08.03.003 基本药物级别多选，代码以“;”(英文分号)分隔
-              case when a.DRUGTYPE='1' and a.DDDVALUE is null then '0'
-                  else '1' end "KJYWBZ"	,--	抗菌药物标志	VARCHAR	1	条件必填	(西药必填) 0：否 1：是
+              case when a.phykind='A'  then '1'
+                  else '0' end "KJYWBZ"	,--	抗菌药物标志	VARCHAR	1	条件必填	(西药必填) 0：否 1：是
                 a.ANTILEVLE "KJYWJB"	,--	抗菌药物级别	VARCHAR	1	条件必填	(西药必填)参见 CVA08.03.004 抗菌药物级别
-          case when a.DRUGTYPE='1' then  '0'
-               else '' end "KSSBZ"	,--	抗生素标志	VARCHAR	1	条件必填	(西药必填) 0：否 1：是
-                case when a.DRUGTYPE='1' then  '9'
-                    else '' end "KZLYWBZ"	,--	抗肿瘤药物标志	VARCHAR	1	条件必填	(西药必填) 0：否 1：是 9：未知，不确定
-                case when a.DRUGTYPE='1' and (a.DRUGQUALITY='6' or a.DRUGQUALITY='7') then '1'
-                    else '9' end  "JSYWBZ"	,--	精神药物标志	VARCHAR	1	条件必填	(西药必填) 0：否 1：是 9：未知，不确定
-          case when a.DRUGTYPE='1' and a.DRUGQUALITY='6'  then '1'
-              when a.DRUGTYPE='1' and a.DRUGQUALITY='7' then '2'
-                  else '9' end "JSYWLBDM"	,--	精神药物类别代码	VARCHAR	1	条件必填	(西药必填) 1：精一 2：精二 8：非精神用药 9：其他
-          case when a.DRUGTYPE='1' and a.DRUGQUALITY='1'  then '1'
-               else '9' end  "MZYWBZ"	,--	麻醉药物标志	VARCHAR	1	条件必填	(西药必填) 0：否 1：是 9：未知，不确定
-          case when a.DRUGTYPE='1' and a.DRUGQUALITY='2'  then '1'
-               else '9' end   "DXYWBZ"	,--	毒性药物标志	VARCHAR	1	条件必填	(西药必填) 0：否 1：是 9：未知，不确定
+          case when a.phykind='A' then  '1'
+               else '0' end "KSSBZ"	,--	抗生素标志	VARCHAR	1	条件必填	(西药必填) 0：否 1：是
+                case when a.phykind='B' then  '1'
+        when a.phykind is null then '9'
+                    else '0' end "KZLYWBZ"	,--	抗肿瘤药物标志	VARCHAR	1	条件必填	(西药必填) 0：否 1：是 9：未知，不确定
+                case when a.DRUGQUALITY='6' or a.DRUGQUALITY='7' then '1'
+                    when a.DRUGQUALITY is null then '9'
+                    else '0' end  "JSYWBZ"	,--	精神药物标志	VARCHAR	1	条件必填	(西药必填) 0：否 1：是 9：未知，不确定
+          case when  a.DRUGQUALITY='6'  then '1'
+              when  a.DRUGQUALITY='7' then '2'
+              when a.DRUGQUALITY is null then '9'
+                  else '8' end "JSYWLBDM"	,--	精神药物类别代码	VARCHAR	1	条件必填	(西药必填) 1：精一 2：精二 8：非精神用药 9：其他
+          case when a.DRUGQUALITY='1'  then '1'
+               when a.DRUGQUALITY is null then '9'
+               else '0' end  "MZYWBZ"	,--	麻醉药物标志	VARCHAR	1	条件必填	(西药必填) 0：否 1：是 9：未知，不确定
+          case when a.DRUGQUALITY='2'  then '1'
+               when a.DRUGQUALITY is null then '9'
+               else '0' end   "DXYWBZ"	,--	毒性药物标志	VARCHAR	1	条件必填	(西药必填) 0：否 1：是 9：未知，不确定
                '9'  "YZDYWBZ"	,--	易制毒药物标志	VARCHAR	1	条件必填	(西药必填) 0：否 1：是 9：未知，不确定
-          case when a.DRUGTYPE='1' then  '0'
-               else '' end  "SFYM"	,--	是否疫苗	VARCHAR	1	条件必填	(西药必填) 0：否 1：是
-               ''   "YPPJ"	,--	药品品级	VARCHAR	20	条件必填	(中药必填)
+               '0'  "SFYM"	,--	是否疫苗	VARCHAR	1	条件必填	(西药必填) 0：否 1：是
+               '-'   "YPPJ"	,--	药品品级	VARCHAR	20	条件必填	(中药必填)
                ''  "YPGL"	,--	药品归类	VARCHAR	2		参见 CT01.00.009药品分类代码
           case when a.DRUGTYPE='5' then  '1'
                else '0' end   "YNZJBZ"	,--	院内制剂标志	VARCHAR	1	必填	0：否 1：是

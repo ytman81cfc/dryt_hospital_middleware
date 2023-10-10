@@ -40,7 +40,7 @@
                a.praccertino                                                        "ZYZSH",       --	执业证书号	VARCHAR	64
                ''                                                                   "ZYZGMC",      --	执业资格名称	VARCHAR	64
                ''                                                                   "ZYZSZCSJ",    --	执业证书注册时间	DATETIME
-               ''                                                                   "QKYSBZ",      --	是否为全科医生	INT			0：否 1：是
+               '0'                                                                   "QKYSBZ",      --	是否为全科医生	INT			0：否 1：是
                ''                                                                   "YSZYLBDM",    --	医师执业类别代码	VARCHAR	1		1：临床 2：口腔 3：公共卫生 4：中医
                ''                                                                   "YSZYFWDM",    --	医师执业范围代码	VARCHAR	30		参见《全民健康信息平台科室分类代码表》
                ''                                                                   "ZCWDDZYYSBZ", --	是否注册为多地点执业医师	INT			0：否 1：是

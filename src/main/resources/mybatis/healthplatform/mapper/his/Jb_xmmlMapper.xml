@@ -18,7 +18,8 @@
               ''   "ZYBZ"	,--	中医标志	VARCHAR	1		0：否 1：是
              a.ISSTOP  "JLZT"	,--	记录状态	VARCHAR	1	必填	0：正常 1：停用
                 '' "XMWSDM"	,--	卫生收费代码	VARCHAR	40		卫生行业物价的收费规范统编的代码
-               decode(c.itemtype,'3','1','9')  "SFXMLB"	,--	收费项目类别代码	VARCHAR	2	必填	1：医用材料 9：其他
+              case when c.remark='卫生材料' then '1'
+                  else end '9' "SFXMLB"	,--	收费项目类别代码	VARCHAR	2	必填	1：医用材料 9：其他
                '0'  "YNZJBZ"	,--	院内自制标志	VARCHAR	1	必填	0：非自制 1：自制
              '0'  "WZYZBZ"	,--	文字医嘱标志	VARCHAR	1	必填	0:非文字医嘱 1：文字医嘱
              '0'   "GHCBZ"	,--	高值耗材标志	VARCHAR	1	必填	0:非高耗材 1：高耗材
