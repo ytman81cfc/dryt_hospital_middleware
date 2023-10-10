@@ -9,7 +9,7 @@
                '0'                                                                            "FYDM",-- 分院代码  VARCHAR 20  必填  记录分院代码（内码）,如无分院，则传0
                ''                                                                             "FYMC",-- 分院名称  VARCHAR 120 条件必填  分院代码不为0时必填
                a.PRE_RID                                                                      "YYLSH",-- 预约流水号 VARCHAR 64    关联门诊预约表(MZYYB)
-               a.SEENO                                                                        "GHSXH",-- 挂号顺序号 VARCHAR 6   从1号开始所挂科室或专家的顺序号
+               ''                                                                             "GHSXH",-- 挂号顺序号 VARCHAR 6   从1号开始所挂科室或专家的顺序号
                p.rid                                                                          "YYDAH",-- 医院内部档案号 VARCHAR 64  必填  填写患者主索引号，如没有则填写就诊流水号
                '1'                                                                            "KLX",-- 卡类型 VARCHAR 16  必填  请按照以下优先级顺序填写：1：患者主索引号、2：身份证号、3：医保卡号，如果都没有则填写门诊就诊流水号
                p.rid                                                                          "KH",-- 卡号  VARCHAR 64  必填
@@ -90,8 +90,8 @@
           and a.patientid = p.patientid
           and a.REGISTSTATE = '1'
           and a.orgcode = #{orgcode}
-          and to_char(a.reg_time,'yyyy-mm-dd hh24:mi:ss')&gt;=#{begtime}
-          and to_char(a.reg_time,'yyyy-mm-dd hh24:mi:ss')&lt;=#{endtime}
+          and to_char(a.reg_time, 'yyyy-mm-dd hh24:mi:ss') &gt;= #{begtime}
+          and to_char(a.reg_time, 'yyyy-mm-dd hh24:mi:ss') &lt;= #{endtime}
     </select>
 
 
