@@ -3,80 +3,85 @@
 <mapper namespace="com.hospital.middleware.healthplatform.dao.his.HealthplatfromDAO">
     <select id="queryYpjbxxk" resultType="java.util.HashMap">
 
-         select
-          a.orgcode   "YLJGDM"	,--	医疗机构代码	VARCHAR	22	必填	复合主键：采用22位“卫生机构代码”
-          a.DRUGCODE       "YPDM"	,--	医院药品代码	VARCHAR	64	必填	复合主键：院内药品代码
-          b.orgname      "YLJGMC"	,--	医疗机构名称	VARCHAR	70	必填	医院执业许可第一名称
-          '0'       "FYDM"	,--	分院代码	VARCHAR	20	必填	记录分院代码（内码）,如无分院，则传0
-           ''      "FYMC"	,--	分院名称	VARCHAR	120	条件必填	分院代码不为0时必填
-          a.GJYPID      "YPID"	,--	国家药品ID	VARCHAR	64	条件必填	三级医院必填,二级医院有条件的填 填写国家药管平台药品采购唯一性识别码YPID（V8.3），V8.3版本中不包含的药品填“-”。
-          ''       "YPBWM"	,--	本位码	VARCHAR	20
-          a.SUPPERVISIONCODE       "YPJGM"	,--	监管码	VARCHAR	32		如果没有可以填写医保编码
-          replace(e.MED_LIST_CODG,'_SI','')       "PTZXDM"	,--	平台药品代码	VARCHAR	64		药品医保编码
-          a.REGULARNAME      "YPMC"	,--	医院药品名称	VARCHAR	64	必填	通用名
-          a.TRADENAME       "YPSPM"	,--	医院药品商品名	VARCHAR	64		商品名
-          a.OTC       "CFYBZ"	,--	处方药标志	VARCHAR	1	必填	0：否 1：是
-          a.DRUGTYPE       "YPLB"	,--	药品类别	INT		必填	参见 CVA08.03.002 药品类别代码
-          a.DRUGQUALITY       "YPDL"	,--	药品属性大类	VARCHAR	8	必填	参见 CT08.50.008 药物药理类别代码
-          decode(a.DOSEMODELCODE,'290122','00','100000','01','100101','01','100102','02','100103','02','100301','03',
-              '100104','04','100201','05','100202','05','100304','05','100302','06','100305','07','100306','08',
-              '100314','09','100312','10','100105','12','100311','13','130901','14','130100','14','130401','14','240105','14','260103','14','130902','14',
-              '170101','15','170102','15','290101','15', '170200','16','110103','20','130701','20',
-              '110102','21','110104','21','110203','22','110201','22','160101','23','160106','23',
-              '120101','24','190201','25','190101','26','120109','26','120110','27','120202','28',
-              '120108','29','120107','30','120000','31','120204','32','120205','33','160108','35',
-              '120203','36','160102','37','160104','38','220101','38','160105','39','290121','40',
-              '220102','41','240101','43','240103','43','250101','44','250102','44','260101','45','260102','45',
-              '160109','47','180101','48','180501','48','180201','49','180301','49','180401','50' ,
-                 '200000','51','240102','52','150100','53','150102','53','150101','53','150200','53',
-                 '140101','54','160103','54','140104','55','140106','56','270102','57','270103','58',
-                 '270104','60','210104','61','290107','62','230100','63','210101','65','100310','66',
-                 '290106','69','110301','70','120103','71','270105','72','290123','99' ,'99')
-              "JXDM"	,--	剂型代码	VARCHAR	3		参见 CV08.50.002 药物剂型代码表
-              a.SPECS   "YPGG"	,--	药品规格	VARCHAR	128
-              d.dictname   "DW"	,--	入库单位	VARCHAR	16		药品最小销售单元，药品不能再拆开的最小销售包装，如：“12 片/盒”中的“盒”
-              a.raton   "ZHXS"	,--	转换系数	VARCHAR	8	条件必填	(西药必填)
-              f.FACCODE   "SCCJDM"	,--	生产厂家代码	VARCHAR	32
-              f.facname   "SCCJMC"	,--	生产厂家名称	VARCHAR	128	必填
-              a.APPROVEINFO   "PZWH"	,--	批准文号                    	VARCHAR	64
-              a.CENPURCH   "JZCGBZ"	,--	集中采购标志	VARCHAR	1	必填	0：否 1：是
-              a.ESSDRUG   "JYBZ"	,--	基本药物标志	VARCHAR	1	条件必填	(西药必填)0：否 1：是
-               ''  "JYJB"	,--	基本药物级别	VARCHAR	12	条件必填	(西药必填)参见 CVA08.03.003 基本药物级别多选，代码以“;”(英文分号)分隔
-              case when a.phykind='A'  then '1'
-                  else '0' end "KJYWBZ"	,--	抗菌药物标志	VARCHAR	1	条件必填	(西药必填) 0：否 1：是
-                a.ANTILEVLE "KJYWJB"	,--	抗菌药物级别	VARCHAR	1	条件必填	(西药必填)参见 CVA08.03.004 抗菌药物级别
-          case when a.phykind='A' then  '1'
-               else '0' end "KSSBZ"	,--	抗生素标志	VARCHAR	1	条件必填	(西药必填) 0：否 1：是
-                case when a.phykind='B' then  '1'
-        when a.phykind is null then '9'
-                    else '0' end "KZLYWBZ"	,--	抗肿瘤药物标志	VARCHAR	1	条件必填	(西药必填) 0：否 1：是 9：未知，不确定
-                case when a.DRUGQUALITY='6' or a.DRUGQUALITY='7' then '1'
-                    when a.DRUGQUALITY is null then '9'
-                    else '0' end  "JSYWBZ"	,--	精神药物标志	VARCHAR	1	条件必填	(西药必填) 0：否 1：是 9：未知，不确定
-          case when  a.DRUGQUALITY='6'  then '1'
-              when  a.DRUGQUALITY='7' then '2'
-              when a.DRUGQUALITY is null then '9'
-                  else '8' end "JSYWLBDM"	,--	精神药物类别代码	VARCHAR	1	条件必填	(西药必填) 1：精一 2：精二 8：非精神用药 9：其他
-          case when a.DRUGQUALITY='1'  then '1'
-               when a.DRUGQUALITY is null then '9'
-               else '0' end  "MZYWBZ"	,--	麻醉药物标志	VARCHAR	1	条件必填	(西药必填) 0：否 1：是 9：未知，不确定
-          case when a.DRUGQUALITY='2'  then '1'
-               when a.DRUGQUALITY is null then '9'
-               else '0' end   "DXYWBZ"	,--	毒性药物标志	VARCHAR	1	条件必填	(西药必填) 0：否 1：是 9：未知，不确定
-               '9'  "YZDYWBZ"	,--	易制毒药物标志	VARCHAR	1	条件必填	(西药必填) 0：否 1：是 9：未知，不确定
-               '0'  "SFYM"	,--	是否疫苗	VARCHAR	1	条件必填	(西药必填) 0：否 1：是
-               '-'   "YPPJ"	,--	药品品级	VARCHAR	20	条件必填	(中药必填)
-               ''  "YPGL"	,--	药品归类	VARCHAR	2		参见 CT01.00.009药品分类代码
-          case when a.DRUGTYPE='5' then  '1'
-               else '0' end   "YNZJBZ"	,--	院内制剂标志	VARCHAR	1	必填	0：否 1：是
-               decode(a.ISSTOP,'0','1','1','0')  "SYBZ"	,--	使用标志	VARCHAR	2	必填	0：否 1：是
-             to_date(to_char(sysdate, 'YYYY-MM-DD'), 'YYYY-MM-DD')  "TBRQ"	 --	填报日期	DATETIME		必填	本条数据采集时间，格式YYYY-MM-DD
-         from com_hospitalinfo b, PHA_DRUGINFO a
-               left join com_dictcodeinfo d on a.MINUNIT=d.dictcode and d.typecode='MINUNIT'
-               left join   FIN_ITEM_COMPARE e  on  a.orgcode =e.orgcode and a.DRUGCODE=e.itemcode
-               left join   COM_COMPANYINFO f  on  a.orgcode =f.orgcode and a.FACCODE =f.FACCODE and f.COMPANYTYPE='1' and f.isvalid='1'
-          where a.orgcode =b.orgcode  and
-             a.isvalid='1' and a.orgcode = #{orgcode}
+        select a.orgcode                                             "YLJGDM",--	医疗机构代码	VARCHAR	22	必填	复合主键：采用22位“卫生机构代码”
+               a.DRUGCODE                                            "YPDM",--	医院药品代码	VARCHAR	64	必填	复合主键：院内药品代码
+               b.orgname                                             "YLJGMC",--	医疗机构名称	VARCHAR	70	必填	医院执业许可第一名称
+               '0'                                                   "FYDM",--	分院代码	VARCHAR	20	必填	记录分院代码（内码）,如无分院，则传0
+               ''                                                    "FYMC",--	分院名称	VARCHAR	120	条件必填	分院代码不为0时必填
+               a.GJYPID                                              "YPID",--	国家药品ID	VARCHAR	64	条件必填	三级医院必填,二级医院有条件的填 填写国家药管平台药品采购唯一性识别码YPID（V8.3），V8.3版本中不包含的药品填“-”。
+               ''                                                    "YPBWM",--	本位码	VARCHAR	20
+               a.SUPPERVISIONCODE                                    "YPJGM",--	监管码	VARCHAR	32		如果没有可以填写医保编码
+               replace(e.MED_LIST_CODG, '_SI', '')                   "PTZXDM",--	平台药品代码	VARCHAR	64		药品医保编码
+               a.REGULARNAME                                         "YPMC",--	医院药品名称	VARCHAR	64	必填	通用名
+               a.TRADENAME                                           "YPSPM",--	医院药品商品名	VARCHAR	64		商品名
+               a.OTC                                                 "CFYBZ",--	处方药标志	VARCHAR	1	必填	0：否 1：是
+               a.DRUGTYPE                                            "YPLB",--	药品类别	INT		必填	参见 CVA08.03.002 药品类别代码
+               a.DRUGQUALITY                                         "YPDL",--	药品属性大类	VARCHAR	8	必填	参见 CT08.50.008 药物药理类别代码
+               g.item_id                                             "JXDM",--	剂型代码	VARCHAR	3		参见 CV08.50.002 药物剂型代码表
+               a.SPECS                                               "YPGG",--	药品规格	VARCHAR	128
+               d.dictname                                            "DW",--	入库单位	VARCHAR	16		药品最小销售单元，药品不能再拆开的最小销售包装，如：“12 片/盒”中的“盒”
+               a.raton                                               "ZHXS",--	转换系数	VARCHAR	8	条件必填	(西药必填)
+               f.FACCODE                                             "SCCJDM",--	生产厂家代码	VARCHAR	32
+               f.facname                                             "SCCJMC",--	生产厂家名称	VARCHAR	128	必填
+               a.APPROVEINFO                                         "PZWH",--	批准文号                    	VARCHAR	64
+               a.CENPURCH                                            "JZCGBZ",--	集中采购标志	VARCHAR	1	必填	0：否 1：是
+               a.ESSDRUG                                             "JYBZ",--	基本药物标志	VARCHAR	1	条件必填	(西药必填)0：否 1：是
+               ''                                                    "JYJB",--	基本药物级别	VARCHAR	12	条件必填	(西药必填)参见 CVA08.03.003 基本药物级别多选，代码以“;”(英文分号)分隔
+               case
+                   when a.phykind = 'A' then '1'
+                   else '0' end                                      "KJYWBZ",--	抗菌药物标志	VARCHAR	1	条件必填	(西药必填) 0：否 1：是
+               a.ANTILEVLE                                           "KJYWJB",--	抗菌药物级别	VARCHAR	1	条件必填	(西药必填)参见 CVA08.03.004 抗菌药物级别
+               case
+                   when a.phykind = 'A' then '1'
+                   else '0' end                                      "KSSBZ",--	抗生素标志	VARCHAR	1	条件必填	(西药必填) 0：否 1：是
+               case
+                   when a.phykind = 'B' then '1'
+                   when a.phykind is null then '9'
+                   else '0' end                                      "KZLYWBZ",--	抗肿瘤药物标志	VARCHAR	1	条件必填	(西药必填) 0：否 1：是 9：未知，不确定
+               case
+                   when a.DRUGQUALITY = '6' or a.DRUGQUALITY = '7' then '1'
+                   when a.DRUGQUALITY is null then '9'
+                   else '0' end                                      "JSYWBZ",--	精神药物标志	VARCHAR	1	条件必填	(西药必填) 0：否 1：是 9：未知，不确定
+               case
+                   when a.DRUGQUALITY = '6' then '1'
+                   when a.DRUGQUALITY = '7' then '2'
+                   when a.DRUGQUALITY is null then '9'
+                   else '8' end                                      "JSYWLBDM",--	精神药物类别代码	VARCHAR	1	条件必填	(西药必填) 1：精一 2：精二 8：非精神用药 9：其他
+               case
+                   when a.DRUGQUALITY = '1' then '1'
+                   when a.DRUGQUALITY is null then '9'
+                   else '0' end                                      "MZYWBZ",--	麻醉药物标志	VARCHAR	1	条件必填	(西药必填) 0：否 1：是 9：未知，不确定
+               case
+                   when a.DRUGQUALITY = '2' then '1'
+                   when a.DRUGQUALITY is null then '9'
+                   else '0' end                                      "DXYWBZ",--	毒性药物标志	VARCHAR	1	条件必填	(西药必填) 0：否 1：是 9：未知，不确定
+               '9'                                                   "YZDYWBZ",--	易制毒药物标志	VARCHAR	1	条件必填	(西药必填) 0：否 1：是 9：未知，不确定
+               '0'                                                   "SFYM",--	是否疫苗	VARCHAR	1	条件必填	(西药必填) 0：否 1：是
+               '-'                                                   "YPPJ",--	药品品级	VARCHAR	20	条件必填	(中药必填)
+               ''                                                    "YPGL",--	药品归类	VARCHAR	2		参见 CT01.00.009药品分类代码
+               case
+                   when a.DRUGTYPE = '5' then '1'
+                   else '0' end                                      "YNZJBZ",--	院内制剂标志	VARCHAR	1	必填	0：否 1：是
+               decode(a.ISSTOP, '0', '1', '1', '0')                  "SYBZ",--	使用标志	VARCHAR	2	必填	0：否 1：是
+               to_date(to_char(sysdate, 'YYYY-MM-DD'), 'YYYY-MM-DD') "TBRQ" --	填报日期	DATETIME		必填	本条数据采集时间，格式YYYY-MM-DD
+        from com_hospitalinfo b,
+             PHA_DRUGINFO a
+                 left join com_dictcodeinfo d on a.MINUNIT = d.dictcode and d.typecode = 'MINUNIT'
+                 left join FIN_ITEM_COMPARE e on a.orgcode = e.orgcode and a.DRUGCODE = e.itemcode
+                 left join COM_COMPANYINFO f
+                           on a.orgcode = f.orgcode and a.FACCODE = f.FACCODE and f.COMPANYTYPE = '1' and
+                              f.isvalid = '1'
+                 left join (select a.item_id, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202310101606231149584700000000') g on g.his_item_id = a.DOSEMODELCODE
+        where a.orgcode = b.orgcode
+          and a.isvalid = '1'
+          and a.orgcode = #{orgcode}
 
     </select>
 

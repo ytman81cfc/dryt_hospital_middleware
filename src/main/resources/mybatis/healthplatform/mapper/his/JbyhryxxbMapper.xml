@@ -9,11 +9,10 @@
                ''                                                                   "FYMC",        --	分院名称	VARCHAR	120	条件必填	分院代码不为0时必填
                a.usercode                                                           "GH",          --	工号	VARCHAR	64	必填	医护人员工号
                a.username                                                           "XM",          --	姓名	VARCHAR	50	必填	医护人员姓名
-               a.sex                                                                "XB",          --	性别代码	VARCHAR	1	必填	参见GB/T 2261.1-2003 性别代码表
+               e.item_id                                                            "XB",          --	性别代码	VARCHAR	1	必填	参见GB/T 2261.1-2003 性别代码表
                substr(a.certno, 7, 8)                                               "CSRQ",        --	出生日期	VARCHAR	8		出生日期：格式“YYYYMMDD”
                ''                                                                   "MZDM",        --	民族代码	VARCHAR	2		参见GB/T 3304-1991-2022修订版 民族代码表
-               decode(a.PSNCERTTYPE, '01', '01', '16', '03', '08', '03', '02', '04', '04', '06', '05', '06', '06', '07',
-                      '99')                                                         "SFBSLBDM",    --	身份标识类别代码	VARCHAR	2		参见CV02.01.101-2022修订版 身份证件类别代码
+               f.item_id                                                            "SFBSLBDM",    --	身份标识类别代码	VARCHAR	2		参见CV02.01.101-2022修订版 身份证件类别代码
                a.certno                                                             "SFBSHM",      --身份标识号码	VARCHAR	32
                a.deptcode                                                           "SSKS",        --所属科室代码	VARCHAR	50	必填	所属科室代码
                d.deptname                                                           "SSKSMC",      --	所属科室名称	VARCHAR	100	必填	所属科室名称
@@ -40,7 +39,7 @@
                a.praccertino                                                        "ZYZSH",       --	执业证书号	VARCHAR	64
                ''                                                                   "ZYZGMC",      --	执业资格名称	VARCHAR	64
                ''                                                                   "ZYZSZCSJ",    --	执业证书注册时间	DATETIME
-               '0'                                                                   "QKYSBZ",      --	是否为全科医生	INT			0：否 1：是
+               '0'                                                                  "QKYSBZ",      --	是否为全科医生	INT			0：否 1：是
                ''                                                                   "YSZYLBDM",    --	医师执业类别代码	VARCHAR	1		1：临床 2：口腔 3：公共卫生 4：中医
                ''                                                                   "YSZYFWDM",    --	医师执业范围代码	VARCHAR	30		参见《全民健康信息平台科室分类代码表》
                ''                                                                   "ZCWDDZYYSBZ", --	是否注册为多地点执业医师	INT			0：否 1：是
@@ -75,10 +74,26 @@
              com_deptinfo d,
              com_userinfo a
                  left join com_dictcodeinfo e on a.docpost = e.dictcode and e.typecode = 'DOCPOST'
+                 left join (select a.item_id, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202310101602441149584100000000') e on e.his_item_id = a.sex
+                 left join (select a.item_id, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202310101521161149402900000000') f on f.his_item_id = a.PSNCERTTYPE
         where a.orgcode = b.orgcode
           and a.usercode = b.usercode
           and a.isvalid = '1'
-          and a.is_stop='0'
+          and a.is_stop = '0'
           and a.orgcode = c.orgcode
           and b.orgcode = d.orgcode
           and b.deptcode = d.deptcode
