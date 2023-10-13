@@ -10,11 +10,15 @@ public interface HealthplatfromDAO {
     List<Map> queryJbyhryxxb(String orgcode);
     List<Map> queryJbksxxb(String orgcode);
     List<Map> queryJbbqxxb(String orgcode);
-    List<Map> queryJbxmml(String orgcode);
-    List<Map> queryJbclml(String orgcode);
-    List<Map> queryJbzdml(String orgcode);
-    List<Map> queryJbssml(String orgcode);
-    List<Map> queryYpjbxxk(String orgcode);
+    List<Map> queryJb_xmml(String orgcode);
+    List<Map> queryJb_clml(String orgcode);
+    List<Map> queryJb_zdml(String orgcode);
+    List<Map> queryJb_ssml(String orgcode);
+    List<Map> queryYp_jbxxk(String orgcode);
     List<Map> queryJbbrjbxxb(String orgcode,String begtime,String endtime);
     List<Map> queryMzghb(String orgcode,String begtime,String endtime);
+    List<Map> queryMzthb(String orgcode,String begtime,String endtime);
+    List<Map> queryMzjzjlb(String orgcode,String begtime,String endtime);
+    List<Map> queryMzyzmxb(String orgcode,String begtime,String endtime);
+
 }

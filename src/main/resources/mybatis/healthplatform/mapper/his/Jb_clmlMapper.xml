@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hospital.middleware.healthplatform.dao.his.HealthplatfromDAO">
-    <select id="queryJbclml" resultType="java.util.HashMap">
+    <select id="queryJb_clml" resultType="java.util.HashMap">
          select
            a.orgcode   "YLJGDM"	,--	医疗机构代码	VARCHAR	22	必填	复合主键：采用22位“卫生机构代码”
            a.MEDLISTCODG      "CLDM"	,--	材料代码	VARCHAR	64	必填	复合主键
