@@ -21,7 +21,11 @@
                d.rid                                                                           "KH",--	卡号	VARCHAR	64	必填
                f.item_id                                                                       "ZJLX",--	证件类型	VARCHAR	2		参见CV02.01.101-2022修订版 身份证件类别代码 优先使用身份证
                c.CERTNO                                                                        "ZJHM",--	证件号码	VARCHAR	32
-               case when c.PAYKINDCODE = '01' then '07' else g.item_id end                     "BXLX",--	医疗费用支付方式	VARCHAR	4	必填	参见CV07.10.003-2022修订版 医疗费用来源类别
+               case
+                   when c.PAYKINDCODE = '01' then '07'
+                   when c.PAYKINDCODE = '02' and c.INSUTYPE = 'A' then '01'
+                   when c.PAYKINDCODE = '02' and c.INSUTYPE = 'B' then '02'
+                   else '99' end                                                               "BXLX",--	医疗费用支付方式	VARCHAR	4	必填	参见CV07.10.003-2022修订版 医疗费用来源类别
                x.item_id                                                                       "YZXMLXDM",--	医嘱项目类型代码	VARCHAR	2	必填	参见CV06.00.229 （01：药品类医嘱 02：检查类医嘱 03：检验类医嘱 04：手术类医嘱 05：处置类医嘱 06：材料类医嘱 07：嘱托医嘱）
                x.item_name                                                                     "YZXMLXMC",--	医嘱项目类型名称	VARCHAR	32	必填
                a.rid                                                                           "CFXMMXHM",--	医嘱项目明细唯一标识	VARCHAR	64	必填	"药品类医嘱填写药品处方明细唯一标识 检查类医嘱填写检查明细唯一标识检验类医嘱填写检验明细唯一标识手术类医嘱填写手术医嘱明细唯一标识处置类医嘱填写处置医嘱明细唯一标识材料类医嘱填写材料医嘱明细唯一标识嘱托医嘱填写嘱托医嘱明细唯一标识如无以上标志，则填写医嘱明细流水号"
@@ -385,7 +389,7 @@
                    else null
                    end                                                                         "XMJE"
                 ,--	项目金额	NUMERIC	18,3
-               replace(t.MED_LIST_CODG, '_SI', '')                                             "ZXDM",--	中心药品/项目代码	VARCHAR	32	必填	"药品类填写药品医保编码，如非医保药品，则传999检查类参见《全民健康信息平台检查分类编码标准》检验类参见《全民健康信息平台检验分类编码标准》手术类参见《手术操作分类代码(ICD-9)》处置类医嘱填写《全民健康信息平台医疗服务项目价格表》材料类参见《国家医保医用耗材分类编码》嘱托类填写888"
+               nvl(replace(t.MED_LIST_CODG, '_SI', ''), '999')                                 "ZXDM",--	中心药品/项目代码	VARCHAR	32	必填	"药品类填写药品医保编码，如非医保药品，则传999检查类参见《全民健康信息平台检查分类编码标准》检验类参见《全民健康信息平台检验分类编码标准》手术类参见《手术操作分类代码(ICD-9)》处置类医嘱填写《全民健康信息平台医疗服务项目价格表》材料类参见《国家医保医用耗材分类编码》嘱托类填写888"
                a.itemname                                                                      "ZXXMMC",--	中心药品/项目名称	VARCHAR	200	必填
                to_date(to_char(a.UPDT_TIME, 'yyyy-mm-dd hh24:mi:ss'), 'yyyy-mm-dd hh24:mi:ss') "SJGXSJ",--	数据更新时间	DATETIME		必填	院内处方数据更新时间。YYYY-MM-DD HH24:MI:SS格式
                to_date(to_char(sysdate, 'YYYY-MM-DD'), 'YYYY-MM-DD')                           "TBRQ" --	填报日期	DATETIME	 必填	本条数据采集时间，格式YYYY-MM-DD
@@ -482,14 +486,6 @@
                               and a.rid = b.item_rid
                               and a.module_rid = '202310101511361148853000000000'
                               and a.type_rid = '202310101602441149584100000000') f on f.his_item_id = c.PSNCERTTYPE
-                 left join (select a.item_id, b.his_item_id
-                            from si_yt_report_item a,
-                                 si_yt_report_item_compare b
-                            where a.module_rid = b.module_rid
-                              and a.type_rid = b.type_rid
-                              and a.rid = b.item_rid
-                              and a.module_rid = '202310101511361148853000000000'
-                              and a.type_rid = '202310101745521149750000000000') g on g.his_item_id = c.INSUTYPE
 
         where a.orgcode = i.orgcode
           and a.REGID = i.REGID
@@ -506,8 +502,8 @@
           and p.ISVALID = '1'
           and p.ISSTOP = '0'
           and a.orgcode = #{orgcode}
-          and to_char (i.DRAWTIME, 'yyyy-mm-dd hh24:mi:ss')&gt;= #{begtime}
-          and to_char (i.DRAWTIME, 'yyyy-mm-dd hh24:mi:ss')&lt;= #{endtime}
+          and to_char(i.DRAWTIME, 'yyyy-mm-dd hh24:mi:ss') &gt;= #{begtime}
+          and to_char(i.DRAWTIME, 'yyyy-mm-dd hh24:mi:ss') &lt;= #{endtime}
     </select>
 
 

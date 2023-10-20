@@ -26,7 +26,9 @@
                ''                                                                             "THSJ",-- 退号时间  DATETIME      yyyy-mm-dd hh24:mi:ss
                case
                    when a.PAYKINDCODE = '01' then '07'
-                   else g.item_id end                                                         "BXLX",-- 医疗费用支付方式  VARCHAR 4 必填  参见CV07.10.003-2022修订版 医疗费用来源类别
+                   when a.PAYKINDCODE = '02' and a.INSUTYPE = 'A' then '01'
+                   when a.PAYKINDCODE = '02' and a.INSUTYPE = 'B' then '02'
+                   else '99' end                                                              "BXLX",-- 医疗费用支付方式  VARCHAR 4 必填  参见CV07.10.003-2022修订版 医疗费用来源类别
                a.SI_PSN_NO                                                                    "YBZHBZ",-- 医保账户号码  VARCHAR 64  条件必填  填写医保卡号或社保卡号，医保患者必填
                a.DEPTCODE                                                                     "YNKSBM",-- 院内科室编码  VARCHAR 64  必填
                a.DEPTNAME                                                                     "YNKSMC",-- 院内科室名称  VARCHAR 200 必填
@@ -144,7 +146,9 @@
                to_date(to_char(a.CANCELDATE, 'yyyy-mm-dd hh24:mi:ss'), 'yyyy-mm-dd hh24:mi:ss') "THSJ",-- 退号时间  DATETIME      yyyy-mm-dd hh24:mi:ss
                case
                    when a.PAYKINDCODE = '01' then '07'
-                   else g.item_id end                                                           "BXLX",-- 医疗费用支付方式  VARCHAR 4 必填  参见CV07.10.003-2022修订版 医疗费用来源类别
+                   when a.PAYKINDCODE = '02' and a.INSUTYPE = 'A' then '01'
+                   when a.PAYKINDCODE = '02' and a.INSUTYPE = 'B' then '02'
+                   else '99' end                                                                "BXLX",-- 医疗费用支付方式  VARCHAR 4 必填  参见CV07.10.003-2022修订版 医疗费用来源类别
                a.SI_PSN_NO                                                                      "YBZHBZ",-- 医保账户号码  VARCHAR 64  条件必填  填写医保卡号或社保卡号，医保患者必填
                a.DEPTCODE                                                                       "YNKSBM",-- 院内科室编码  VARCHAR 64  必填
                a.DEPTNAME                                                                       "YNKSMC",-- 院内科室名称  VARCHAR 200 必填
@@ -153,8 +157,8 @@
                decode(a.YNSEE, '0', '1', '2')                                                   "JZZT",-- 就诊状态  VARCHAR 1 必填  1：未就诊 2：已就诊
                ''                                                                               "ZCFWJBM",-- 诊察费物价编码 VARCHAR 20  条件必填  有物价码时必填
                ''                                                                               "ZCFWJMC",-- 诊察费物价名称 VARCHAR 50  条件必填  有物价码时必填
-               nvl(-round(d.totcost, 3), 0)                                                      "ZLF",-- 诊察费 NUMERIC 10,3  必填
-               nvl(-round(d.PAYCOST, 3), 0)                                                      "ZFZLF",-- 个人支付诊察费用  NUMERIC 10,3  必填  退号的费用以负数表示，通过退号标志进行区分。 若挂号时暂未收费则填入0
+               nvl(-round(d.totcost, 3), 0)                                                     "ZLF",-- 诊察费 NUMERIC 10,3  必填
+               nvl(-round(d.PAYCOST, 3), 0)                                                     "ZFZLF",-- 个人支付诊察费用  NUMERIC 10,3  必填  退号的费用以负数表示，通过退号标志进行区分。 若挂号时暂未收费则填入0
                ''                                                                               "SFZJH",-- 是否专家号 VARCHAR 1   0：否 1：是
                ''                                                                               "YSBM",-- 专家工号  VARCHAR 64
                ''                                                                               "ZJXM",-- 专家姓名  VARCHAR 50
