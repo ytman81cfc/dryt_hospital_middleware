@@ -29,7 +29,8 @@
         a.drugmoney     as "DrugMoney" --药品金额
         from SI_MSPRESINFO_MZ a,SI_MSSYINFO_MZ b where a.orgcode=b.orgcode and
                                                        a.syh=b.syh and
-                                                       a.orgcode =#{map.Hoscode}
+        a.precode = b.precode and
+        a.orgcode =#{map.Hoscode}
            <if test="map.beginDate!='' and map.beginDate!=null ">and b.gendate&gt;=#{map.beginDate}</if>
            <if test="map.endDate!='' and map.endDate!=null ">and b.gendate&lt;=#{map.endDate}</if>
 
