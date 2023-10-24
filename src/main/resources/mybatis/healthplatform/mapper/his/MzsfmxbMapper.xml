@@ -90,7 +90,8 @@
           and d.patientid = c.patientid
           and a.orgcode = e.orgcode
           and a.regid = e.regid
-          and a.INVOICENO = a.INVOICENO
+          and a.INVOICENO = e.INVOICENO
+          and a.TRANSTYPE =e.TRANSTYPE
           and a.TRANSTYPE = '1'
           and a.orgcode = #{orgcode}
           and to_char(a.FEEDATE, 'yyyy-mm-dd hh24:mi:ss') &gt;= #{begtime}
@@ -186,7 +187,8 @@
           and d.patientid = c.patientid
           and a.orgcode = e.orgcode
           and a.regid = e.regid
-          and a.INVOICENO = a.INVOICENO
+          and a.INVOICENO = e.INVOICENO
+          and a.TRANSTYPE =e.TRANSTYPE
           and a.TRANSTYPE = '2'
           and a.orgcode = #{orgcode}
           and to_char(a.FEEDATE, 'yyyy-mm-dd hh24:mi:ss') &gt;= #{begtime}

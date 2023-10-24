@@ -24,4 +24,9 @@ public interface HealthplatfromDAO {
     List<Map> queryMzsfjlbtf(String orgcode,String begtime,String endtime);
     List<Map> queryMzsfmxbsf(String orgcode,String begtime,String endtime);
     List<Map> queryMzsfmxbtf(String orgcode,String begtime,String endtime);
+    List<Map> queryMzsfjsxx(String orgcode,String begtime,String endtime);
+    List<Map> queryZyjzjlb(String orgcode,String begtime,String endtime);
+    List<Map> queryZyyzmxb(String orgcode,String begtime,String endtime);
+
+
 }
