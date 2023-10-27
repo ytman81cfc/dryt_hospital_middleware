@@ -3,7 +3,7 @@
 <mapper namespace="com.hospital.middleware.healthplatform.dao.his.HealthplatfromDAO">
     <select id="queryZyyzmxb" resultType="java.util.HashMap">
         select s.orgcode                                                                              "YLJGDM",-- 医疗机构代码  VARCHAR 22  必填  复合主键：采用22位“卫生机构代码”
-               s.SPLITID                                                                              "YZID",-- 医嘱明细流水号 VARCHAR 32  必填  复合主键：医嘱明细唯一标识
+               r.rid                                                                             "YZID",-- 医嘱明细流水号 VARCHAR 32  必填  复合主键：医嘱明细唯一标识
                b.orgname                                                                              "YLJGMC",-- 医疗机构名称  VARCHAR 70  必填  医院执业许可第一名称
                '0'                                                                                    "FYDM",-- 分院代码  VARCHAR 20  必填  记录分院代码（内码）,如无分院，则传0
                ''                                                                                     "FYMC",-- 分院名称  VARCHAR 120 条件必填  分院代码不为0时必填
@@ -180,47 +180,37 @@
                                                on b.his_item_id = a.MEDICAL_PAYMENT_METHOD) e
                            on e.orgcode = d.orgcode and e.visit_id = d.inid and e.active = '1',
              inr_receiveinfo f,
-             (select orgcode,
-                     inid,
-                     ORDERNO,
-                     ITEMCODE,
-                     DOSEMODELCODE,
-                     UNITPRICE,
-                     dictname,
-                     feedate,
-                     sum(TOTCOST) TOTCOST
-              from (select a.orgcode,
-                           a.inid,
-                           a.ORDERNO,
-                           a.ITEMCODE,
-                           a.DOSEMODELCODE,
-                           a.UNITPRICE,
-                           b.dictname,
-                           a.feedate,
-                           sum(a.TOTCOST) TOTCOST
-                    from IPS_FEEDETAIL a,
-                         com_dictcodeinfo b
-                    where b.typecode = 'DRUG_DOSFORM'
-                      and a.DOSEMODELCODE = b.dictcode
-                    group by a.orgcode, a.inid, a.ORDERNO, a.ITEMCODE, a.DOSEMODELCODE, a.UNITPRICE, b.dictname,
-                             a.feedate
-                    union all
-                    select a.orgcode,
-                           a.inid,
-                           a.ORDERNO,
-                           a.ITEMCODE,
-                           a.DOSEMODELCODE,
-                           a.UNITPRICE,
-                           b.dictname,
-                           a.feedate,
-                           sum(a.TOTCOST) TOTCOST
-                    from IPS_OUTFEEDETAIL a,
-                         com_dictcodeinfo b
-                    where b.typecode = 'DRUG_DOSFORM'
-                      and a.DOSEMODELCODE = b.dictcode
-                    group by a.orgcode, a.inid, a.ORDERNO, a.ITEMCODE, a.DOSEMODELCODE, a.UNITPRICE, b.dictname,
-                             a.feedate)
-              group by orgcode, inid, ORDERNO, ITEMCODE, DOSEMODELCODE, UNITPRICE, dictname，feedate) r
+             ( select a.orgcode,
+                      a.inid,
+                      a.rid,
+                      a.ORDERNO,
+                      a.ITEMCODE,
+                      a.DOSEMODELCODE,
+                      a.UNITPRICE,
+                      b.dictname,
+                      a.feedate,
+                      a.TOTCOST
+               from IPS_FEEDETAIL a,
+                    com_dictcodeinfo b
+               where b.typecode = 'DRUG_DOSFORM'
+                 and a.DOSEMODELCODE = b.dictcode
+
+               union all
+               select a.orgcode,
+                      a.inid,
+                      a.rid,
+                      a.ORDERNO,
+                      a.ITEMCODE,
+                      a.DOSEMODELCODE,
+                      a.UNITPRICE,
+                      b.dictname,
+                      a.feedate,
+                      a.TOTCOST
+               from IPS_OUTFEEDETAIL a,
+                    com_dictcodeinfo b
+               where b.typecode = 'DRUG_DOSFORM'
+                 and a.DOSEMODELCODE = b.dictcode
+             )  r
                  left join (select a.item_id, a.item_name, b.his_item_id
                             from si_yt_report_item a,
                                  si_yt_report_item_compare b
@@ -232,7 +222,7 @@
         where a.orgcode = s.orgcode
           and a.inid = s.inid
           and a.BILLID = s.BILLID
-          and a.ORDERSTATUS &lt;&gt; '0'
+          and a.ORDERSTATUS  in ('2','4')
           and s.orgcode = b.orgcode
           and s.orgcode = d.orgcode
           and s.inid = d.inid
