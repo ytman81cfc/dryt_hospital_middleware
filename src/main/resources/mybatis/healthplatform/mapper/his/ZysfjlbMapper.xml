@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hospital.middleware.healthplatform.dao.his.HealthplatfromDAO">
+    <select id="queryZysfjlb" resultType="java.util.HashMap">
+        select a.orgcode                                      "YLJGDM",--  医疗机构代码  VARCHAR 22  必填  复合主键：采用22位“卫生机构代码”
+               a.inid                                         "SFLSH",--	收费流水号	VARCHAR	64	必填	复合主键
+               b.orgcode                                      "YLJGMC",--	医疗机构名称	VARCHAR	70	必填	医院执业许可第一名称
+               '0'                                            "FYDM",--	分院代码	VARCHAR	20	必填	记录分院代码（内码）,如无分院，则传0
+               ''                                             "FYMC",--	分院名称	VARCHAR	120	条件必填	分院代码不为0时必填
+               a.inid                                         "JZLSH",--	住院就诊流水号	VARCHAR	32	必填	关联《就诊记录表》
+               d.num                                          "SFMXSL",--	收费明细数量	INT		必填	住院收费明细表(已结算)(ZYSFMXB)中关联数据的数量
+               '3'                                            "JSBZ",--	结算标志	VARCHAR	1	必填	0：出院结算 1：在院结算 2：非住院的结算 3：未结算
+               ''                                             "FPH",--	发票号	VARCHAR	64	条件必填	结算标志不是3时必填，多个发票号以“/”分隔
+               '1'                                            "KLX",--	卡类型	VARCHAR	16	必填	请按照以下优先级顺序填写：1：患者主索引号、2：身份证号、3：医保卡号，如果都没有则填写住院就诊流水号 c.rid "KH",--	卡号	VARCHAR	64	必填 f.item_id "ZJLX",--	证件类型	VARCHAR	2		参见CV02.01.101-2022修订版 身份证件类别代码 	优先使用身份证 a.certno "ZJHM",--	证件号码	VARCHAR	32
+               a.patientname                                  "XM",--	姓名	VARCHAR	50	必填
+               case
+                   when
+                       a.PAYKINDCODE = '01' then '07'
+                   when a.PAYKINDCODE = '02' and a.PATIRNTSTYPE = 'A' then '01'
+                   when a.PAYKINDCODE = '02' and a.PATIRNTSTYPE = 'B' then '02'
+                   end
+                                                              "BXLX",--	医疗费用支付方式	VARCHAR	4	必填	参见CV07.10.003-2022修订版 医疗费用来源类别
+               to_char(d.FEEOPTDATE, 'YYYY-MM-DD HH24:MI:SS') "SFSJ",--	收费时间	DATETIME			以最后一次收费时间为准
+               a.INDEPTCODE                                   "YNXDKSBM",--	院内费用发生科室编码	VARCHAR	50	必填
+               a.INDEPTNAME                                   "YNXDKSMC",--	院内费用发生科室名称	VARCHAR	100	必填
+               '-'                                            "XDKSBM",--	中心费用发生科室编码	VARCHAR	50	必填	参见《全民健康信息平台科室分类代码表》
+               '-'                                            "XDKSMC",--	中心费用发生科室名称	VARCHAR	100	必填	参见《全民健康信息平台科室分类代码表》
+               nvl(round(d.TOTCOST, 3), 0)                    "ZJE",--	总金额	NUMERIC	18,3	必填	退费标志为2（退费）时，传负数
+               0                                              "YBJE",--	医保结算范围金额	NUMERIC	18,3	必填	医保结算范围金额
+               nvl(round(d.PUBCOST, 3), 0)                    "YBZFJE",--	医保支付金额	NUMERIC	18,3	必填	医保实际报销支付金额 		退费标志为2（退费）时，传负数
+               nvl(round(d.OWNCOST, 3), 0)                    "ZFJE",--	个人现金支付金额	NUMERIC	18,3	必填	非医保报销范围，由患者个人自付的医疗费用总额 退费标志为2（退费）时，传负数
+               nvl(round(d.PAYCOST, 3), 0)                    "FLZJJE",--	个人账户支付金额	NUMERIC	18,3	必填	医疗保险患者的费用中属于个人支付部分的金额 		退费标志为2（退费）时，传负数
+               round(d.CWF, 3)                                "CWF",--	床位费	NUMERIC	18,3	必填	退费标志为2（退费）时，传负数
+               round(d.ZCF, 3)                                "ZCF",--	诊察费	NUMERIC	18,3	必填	退费标志为2（退费）时，传负数
+               round(d.JCF, 3)                                "JCF",--	检查费	NUMERIC	18,3	必填	退费标志为2（退费）时，传负数
+               round(d.HYF, 3)                                "HYF",--	化验费	NUMERIC	18,3	必填	退费标志为2（退费）时，传负数
+               round(d.ZHILF, 3)                              "ZHILF",--	治疗费	NUMERIC	18,3	必填	退费标志为2（退费）时，传负数
+               round(d.SSF, 3)                                "SSF",--	手术费	NUMERIC	18,3	必填	退费标志为2（退费）时，传负数
+               round(d.HLF, 3)                                "HLF",--	护理费	NUMERIC	18,3	必填	退费标志为2（退费）时，传负数
+               round(d.WSCLF, 3)                              "WSCLF",--	卫生材料费	NUMERIC	18,3	必填	退费标志为2（退费）时，传负数
+               round(d.XYF, 3)                                "XYF",--	西药费	NUMERIC	18,3	必填	退费标志为2（退费）时，传负数
+               0                                              "YMF",--	疫苗费	NUMERIC	18,3	必填	退费标志为2（退费）时，传负数
+               round(d.ZYYPF, 3)                              "ZYYPF",--	中药饮片费	NUMERIC	18,3	必填	退费标志为2（退费）时，传负数
+               round(d.ZCHYF, 3)                              "ZCHYF",--	中成药费	NUMERIC	18,3	必填	退费标志为2（退费）时，传负数
+               round(d.ZHENLF, 3)                             "ZHENLF",--	一般诊疗费	NUMERIC	18,3	必填	退费标志为2（退费）时，传负数
+               round(d.QTF, 3)                                "QTF",--	其他住院费用	NUMERIC	18,3	必填	除以上费用外的其他住院费用 	退费标志为2（退费）时，传负数
+               ''                                             "SFCZYGH",--	收费操作员工号	VARCHAR	64
+               ''                                             "SFCZYXM",--	收费操作员姓名	VARCHAR	50
+               ''                                             "SFCZYSFZHM",--	收费操作员身份证号码	VARCHAR	18
+               to_char(sysdate, 'YYYY-MM-DD')                 "TBRQ" --  填报日期  DATETIME   必填 本条数据采集时间，格式YYYY-MM-DD
+        from IPR_INPATIENTINFO a
+                 left join (select a.item_id, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202310101602441149584100000000') f
+                           on f.his_item_id = a.PSNCERTTYPE,
+             com_hospitalinfo b,
+             com_patientinfo c,
+             (select orgcode,
+                     inid,
+                     sum(num)        num,
+                     sum(CWF)        CWF,
+                     sum(ZCF)        ZCF,
+                     sum(JCF)        JCF,
+                     sum(HYF)        HYF,
+                     sum(ZHILF)      ZHILF,
+                     sum(SSF)        SSF,
+                     sum(HLF)        HLF,
+                     sum(WSCLF)      WSCLF,
+                     sum(XYF)        XYF,
+                     sum(ZYYPF)      ZYYPF,
+                     sum(ZCHYF)      ZCHYF,
+                     sum(ZHENLF)     ZHENLF,
+                     sum(QTF)        QTF,
+                     sum(totcost)    totcost,
+                     sum(PUBCOST)    PUBCOST,
+                     sum(OWNCOST)    OWNCOST,
+                     sum(PAYCOST)    PAYCOST,
+                     max(FEEOPTDATE) FEEOPTDATE
+              from (
+                       select a.orgcode,
+                              a.itemcode,
+                              a.inid,
+                              count(inid)                                           num,
+                              decode(d.invocode, '01', round(sum(a.totcost), 3), 0) CWF,
+                              decode(d.invocode, '02', round(sum(a.totcost), 3), 0) ZCF,
+                              decode(d.invocode, '03', round(sum(a.totcost), 3), 0) JCF,
+                              decode(d.invocode, '04', round(sum(a.totcost), 3), 0) HYF,
+                              decode(d.invocode, '05', round(sum(a.totcost), 3), 0) ZHILF,
+                              decode(d.invocode, '06', round(sum(a.totcost), 3), 0) SSF,
+                              decode(d.invocode, '07', round(sum(a.totcost), 3), 0) HLF,
+                              decode(d.invocode, '08', round(sum(a.totcost), 3), 0) WSCLF,
+                              decode(d.invocode, '09', round(sum(a.totcost), 3), 0) XYF,
+                              decode(d.invocode, '10', round(sum(a.totcost), 3), 0) ZYYPF,
+                              decode(d.invocode, '11', round(sum(a.totcost), 3), 0) ZCHYF,
+                              decode(d.invocode, '12', round(sum(a.totcost), 3), 0) ZHENLF,
+                              decode(d.invocode, '14', round(sum(a.totcost), 3), 0) QTF,
+                              sum(a.totcost)                                        totcost,
+                              sum(a.PUBCOST)                                        PUBCOST,
+                              sum(a.OWNCOST)                                        OWNCOST,
+                              sum(a.PAYCOST)                                        PAYCOST,
+                              a.FEEOPTDATE
+                       from IPS_FEEDETAIL a
+                                join
+                            (select orgcode, itemcode, feecode
+                             from fin_undruginfo
+                             union all
+                             select orgcode, drugcode, feecode
+                             from pha_druginfo
+                             union all
+                             select orgcode, MEDLISTCODG, feecode
+                             from pha_medcon
+                            ) b on a.orgcode = b.orgcode and a.itemcode = b.itemcode
+                                join com_feetype c on c.orgcode = b.orgcode and c.feecode = b.feecode
+                                join com_fee_invo_compare d
+                                     on d.orgcode = c.orgcode and d.feecode = c.feecode and d.statcode = 'ZY01'
+                       group by a.orgcode, a.itemcode, a.inid, d.invocode, a.FEEOPTDATE
+                   )
+              group by orgcode, inid) d
+        where a.orgcode = b.orgcode
+          and a.orgcode = c.orgcode
+          and a.inhosno = c.inhosno
+          and a.patientid = c.patientid
+          and a.orgcode = d.orgcode
+          and a.inid = d.inid
+          and a.instate not in ('0', '6')
+          and a.out_date is not null
+          and a.orgcode = #{orgcode}
+          and to_char(d.FEEOPTDATE, 'yyyy-mm-dd hh24:mi:ss') &gt;= #{begtime}
+          and to_char(d.FEEOPTDATE, 'yyyy-mm-dd hh24:mi:ss') &lt;= #{endtime}
+        union all
+        select a.orgcode                                        "YLJGDM",--  医疗机构代码  VARCHAR 22  必填  复合主键：采用22位“卫生机构代码”
+               a.inid                                           "SFLSH",--	收费流水号	VARCHAR	64	必填	复合主键
+               b.orgcode                                        "YLJGMC",--	医疗机构名称	VARCHAR	70	必填	医院执业许可第一名称
+               '0'                                              "FYDM",--	分院代码	VARCHAR	20	必填	记录分院代码（内码）,如无分院，则传0
+               ''                                               "FYMC",--	分院名称	VARCHAR	120	条件必填	分院代码不为0时必填
+               a.inid                                           "JZLSH",--	住院就诊流水号	VARCHAR	32	必填	关联《就诊记录表》
+               h.num                                            "SFMXSL",--	收费明细数量	INT		必填	住院收费明细表(已结算)(ZYSFMXB)中关联数据的数量
+               '0'                                              "JSBZ",--	结算标志	VARCHAR	1	必填	0：出院结算 1：在院结算 2：非住院的结算 3：未结算
+               d.invoiceno                                      "FPH",--	发票号	VARCHAR	64	条件必填	结算标志不是3时必填，多个发票号以“/”分隔
+               '1'                                              "KLX",--	卡类型	VARCHAR	16	必填	请按照以下优先级顺序填写：1：患者主索引号、2：身份证号、3：医保卡号，如果都没有则填写住院就诊流水号 c.rid KH,--	卡号	VARCHAR	64	必填 f.item_id ZJLX,--	证件类型	VARCHAR	2		参见CV02.01.101-2022修订版 身份证件类别代码 	优先使用身份证 a.certno "ZJHM",--	证件号码	VARCHAR	32
+               a.patientname                                    "XM", --	姓名	VARCHAR	50	必填
+               case
+                   when
+                       a.PAYKINDCODE = '01' then '07'
+                   when a.PAYKINDCODE = '02' and a.PATIRNTSTYPE = 'A' then '01'
+                   when a.PAYKINDCODE = '02' and a.PATIRNTSTYPE = 'B' then '02'
+                   end
+                                                                "BXLX"
+                ,--	医疗费用支付方式	VARCHAR	4	必填	参见CV07.10.003-2022修订版 医疗费用来源类别
+               to_char(a.BANLANCEDATE, 'YYYY-MM-DD HH24:MI:SS') "SFSJ",--	收费时间	DATETIME			以最后一次收费时间为准
+               a.OUTDEPTCODE                                    "YNXDKSBM",--	院内费用发生科室编码	VARCHAR	50	必填
+               a.OUTDEPTNAME                                    "YNXDKSMC",--	院内费用发生科室名称	VARCHAR	100	必填
+               '-'                                              "XDKSBM",--	中心费用发生科室编码	VARCHAR	50	必填	参见《全民健康信息平台科室分类代码表》
+               '-'                                              "XDKSMC",--	中心费用发生科室名称	VARCHAR	100	必填	参见《全民健康信息平台科室分类代码表》
+               nvl(round(d.TOTCOST, 3), 0)                      "ZJE",--	总金额	NUMERIC	18,3	必填	退费标志为2（退费）时，传负数
+               nvl(round(s.YBINSCP_SCP_AMT, 3), 0)              "YBJE",--	医保结算范围金额	NUMERIC	18,3	必填	医保结算范围金额
+               nvl(round(d.PUBCOST, 3), 0)                      "YBZFJE",--	医保支付金额	NUMERIC	18,3	必填	医保实际报销支付金额 		退费标志为2（退费）时，传负数
+               nvl(round(d.OWNCOST, 3), 0)                      "ZFJE",--	个人现金支付金额	NUMERIC	18,3	必填	非医保报销范围，由患者个人自付的医疗费用总额 退费标志为2（退费）时，传负数
+               nvl(round(d.PAYCOST, 3), 0)                      "FLZJJE",--	个人账户支付金额	NUMERIC	18,3	必填	医疗保险患者的费用中属于个人支付部分的金额 		退费标志为2（退费）时，传负数
+               round(e.CWF, 3)                                  "CWF",--	床位费	NUMERIC	18,3	必填	退费标志为2（退费）时，传负数
+               round(e.ZCF, 3)                                  "ZCF",--	诊察费	NUMERIC	18,3	必填	退费标志为2（退费）时，传负数
+               round(e.JCF, 3)                                  "JCF",--	检查费	NUMERIC	18,3	必填	退费标志为2（退费）时，传负数
+               round(e.HYF, 3)                                  "HYF",--	化验费	NUMERIC	18,3	必填	退费标志为2（退费）时，传负数
+               round(e.ZHILF, 3)                                "ZHILF",--	治疗费	NUMERIC	18,3	必填	退费标志为2（退费）时，传负数
+               round(e.SSF, 3)                                  "SSF",--	手术费	NUMERIC	18,3	必填	退费标志为2（退费）时，传负数
+               round(e.HLF, 3)                                  "HLF",--	护理费	NUMERIC	18,3	必填	退费标志为2（退费）时，传负数
+               round(e.WSCLF, 3)                                "WSCLF",--	卫生材料费	NUMERIC	18,3	必填	退费标志为2（退费）时，传负数
+               round(e.XYF, 3)                                  "XYF",--	西药费	NUMERIC	18,3	必填	退费标志为2（退费）时，传负数
+               0                                                "YMF",--	疫苗费	NUMERIC	18,3	必填	退费标志为2（退费）时，传负数
+               round(e.ZYYPF, 3)                                "ZYYPF",--	中药饮片费	NUMERIC	18,3	必填	退费标志为2（退费）时，传负数
+               round(e.ZCHYF, 3)                                "ZCHYF",--	中成药费	NUMERIC	18,3	必填	退费标志为2（退费）时，传负数
+               round(e.ZHENLF, 3)                               "ZHENLF",--	一般诊疗费	NUMERIC	18,3	必填	退费标志为2（退费）时，传负数
+               round(e.QTF, 3)                                  "QTF",--	其他住院费用	NUMERIC	18,3	必填	除以上费用外的其他住院费用 	退费标志为2（退费）时，传负数
+               d.OPTER_CODE                                     "SFCZYGH",--	收费操作员工号	VARCHAR	64
+               d.OPTER_NAME                                     "SFCZYXM",--	收费操作员姓名	VARCHAR	50
+               g.certno                                         "SFCZYSFZHM",--	收费操作员身份证号码	VARCHAR	18
+               to_char(sysdate, 'YYYY-MM-DD')                   "TBRQ" --  填报日期  DATETIME   必填 本条数据采集时间，格式YYYY-MM-DD
+        from IPR_INPATIENTINFO a
+                 left join (select a.item_id, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202310101602441149584100000000') f
+                           on f.his_item_id = a.PSNCERTTYPE,
+             com_hospitalinfo b,
+             com_patientinfo c,
+             ips_invoiceinfo d
+                 left join com_userinfo g on g.orgcode = d.orgcode and d.OPTER_CODE = g.usercode,
+             (select orgcode,
+                     inid,
+                     invoiceno,
+                     INVOICESTATUS,
+                     sum(CWF)    CWF,
+                     sum(ZCF)    ZCF,
+                     sum(JCF)    JCF,
+                     sum(HYF)    HYF,
+                     sum(ZHILF)  ZHILF,
+                     sum(SSF)    SSF,
+                     sum(HLF)    HLF,
+                     sum(WSCLF)  WSCLF,
+                     sum(XYF)    XYF,
+                     sum(ZYYPF)  ZYYPF,
+                     sum(ZCHYF)  ZCHYF,
+                     sum(ZHENLF) ZHENLF,
+                     sum(QTF)    QTF
+              from (select orgcode,
+                           inid,
+                           invoiceno,
+                           INVOICESTATUS,
+                           decode(invocode, '01', round(totcost, 3), 0) CWF,
+                           decode(invocode, '02', round(totcost, 3), 0) ZCF,
+                           decode(invocode, '03', round(totcost, 3), 0) JCF,
+                           decode(invocode, '04', round(totcost, 3), 0) HYF,
+                           decode(invocode, '05', round(totcost, 3), 0) ZHILF,
+                           decode(invocode, '06', round(totcost, 3), 0) SSF,
+                           decode(invocode, '07', round(totcost, 3), 0) HLF,
+                           decode(invocode, '08', round(totcost, 3), 0) WSCLF,
+                           decode(invocode, '09', round(totcost, 3), 0) XYF,
+                           decode(invocode, '10', round(totcost, 3), 0) ZYYPF,
+                           decode(invocode, '11', round(totcost, 3), 0) ZCHYF,
+                           decode(invocode, '12', round(totcost, 3), 0) ZHENLF,
+                           decode(invocode, '14', round(totcost, 3), 0) QTF
+                    from ips_invoicedetail)
+              group by orgcode, inid, invoiceno, INVOICESTATUS) e,
+             SI_IPS_SETLINFO s,
+             (select orgcode, inid, invoiceno, count(inid) num
+              from ips_outfeedetail
+              group by orgcode, inid, invoiceno) h
+        where a.orgcode = b.orgcode
+          and a.orgcode = c.orgcode
+          and a.inhosno = c.inhosno
+          and a.patientid = c.patientid
+          and a.orgcode = d.orgcode
+          and a.inid = d.inid
+          and d.orgcode = e.orgcode
+          and d.inid = e.inid
+          and d.INVOICENO = e.INVOICENO
+          and d.INVOICESTATUS = e.INVOICESTATUS
+          and d.INVOICESTATUS = '1'
+          and s.orgcode = d.orgcode
+          and s.INID = d.INID
+          and s.INVONO = d.INVOICENO
+          and d.orgcode = h.orgcode
+          and d.INID = h.INID
+          and d.INVOICENO = h.INVOICENO
+          and a.instate = '6'
+          and a.orgcode =
+              #{orgcode}
+          and to_char
+                  (
+                      a
+                          .
+                          BANLANCEDATE,
+                      'yyyy-mm-dd hh24:mi:ss'
+                  )
+            &gt;=
+              #{begtime}
+          and to_char
+                  (
+                      a
+                          .
+                          BANLANCEDATE,
+                      'yyyy-mm-dd hh24:mi:ss'
+                  )
+            &lt;=
+              #{endtime}
+
+    </select>
+
+</mapper>

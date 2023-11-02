@@ -23,7 +23,7 @@
            e.FACNAME      "SCCJMC"	,--	生产厂家名称	VARCHAR	100
            e.FACADDRESS      "CD"	,--	产地	VARCHAR	100
            a.ISSTOP      "JLZT"	,--	记录状态	VARCHAR	1	必填	0：正常 1：停用
-             to_date(to_char(sysdate, 'YYYY-MM-DD'), 'YYYY-MM-DD')    "TBRQ"	 --	填报日期	DATETIME		必填	本条数据采集时间，格式YYYY-MM-DD
+           to_char(sysdate, 'YYYY-MM-DD')    "TBRQ"	 --	填报日期	DATETIME		必填	本条数据采集时间，格式YYYY-MM-DD
          from com_hospitalinfo b,PHA_MEDCON a
        left join   COM_COMPANYINFO c  on  a.orgcode =c.orgcode and a.FACCODE =c.FACCODE and c.COMPANYTYPE='0' and c.isvalid='1'
        left join com_dictcodeinfo d on a.MINUNIT=d.dictcode and d.typecode='MINUNIT'

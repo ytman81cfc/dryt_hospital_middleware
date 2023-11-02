@@ -12,7 +12,7 @@
            ''      "PTZXDM"	,--	平台中心手术代码	VARCHAR	64		参见《手术操作分类代码(ICD-9)》
             ''     "PTZXMC"	,--	平台中心手术名称	VARCHAR	256		参见《手术操作分类代码(ICD-9)》
             '0'     "JLZT"	,--	记录状态	VARCHAR	1	必填	0：正常 1：停用
-             to_date(to_char(sysdate, 'YYYY-MM-DD'), 'YYYY-MM-DD')    "TBRQ"	 --	填报日期	DATETIME		必填	本条数据采集时间，格式YYYY-MM-DD
+             to_char(sysdate, 'YYYY-MM-DD')    "TBRQ"	 --	填报日期	DATETIME		必填	本条数据采集时间，格式YYYY-MM-DD
 FROM SI_OPRNSTDLIST a
          where a.areacode=#{orgcode} and a.VALIDSTATE='1'
     </select>

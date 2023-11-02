@@ -2,177 +2,181 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hospital.middleware.healthplatform.dao.his.HealthplatfromDAO">
     <select id="queryMzjzjlb" resultType="java.util.HashMap">
-        select
-               a.orgcode "YLJGDM",--	医疗机构代码	VARCHAR	22	必填	复合主键：采用22位“卫生机构代码”
-               a.regid "JZLSH",--	就诊流水号	VARCHAR	32	必填	复合主键：医院内部HIS系统唯一编号
-               b.orgname "YLJGMC",--	医疗机构名称	VARCHAR	70	必填	医院执业许可第一名称
-               '0' "FYDM",--	分院代码	VARCHAR	20	必填	记录分院代码（内码）,如无分院，则传0
-               '' "FYMC",--	分院名称	VARCHAR	120	条件必填	分院代码不为0时必填
-               '1' "KLXDM",--	卡类型	VARCHAR	16	必填	请按照以下优先级顺序填写：1：患者主索引号、2：身份证号、3：医保卡号，如果都没有则填写门诊就诊流水号
-               c.rid "KHM",--	卡号	VARCHAR	64	必填
-               a.patientname "XM",--	姓名	VARCHAR	50	必填
-               to_number(extract(year from a.reg_time))-to_number(extract(year from a.BRDY)) "NL",--	年龄(岁)	NUMERIC	3	必填	就诊时的年龄，1岁以内填0
-               g.item_id "ZJLX",--	证件类型	VARCHAR	2		参见CV02.01.101-2022修订版 身份证件类别代码优先使用身份证
-               a.CERTNO "ZJHM",--	证件号码	VARCHAR	32
-               decode(a.YNFR,'1','0','0','1') "CFZBZ",--	初复诊标志	VARCHAR	1	必填	0：初诊 1：复诊
-               '100' "JZLXDM",--	就诊类型代码	VARCHAR	3	必填	参见CVA5101_01就诊类型代码
-               a.DEPTCODE "YNJZKSDM",--	院内就诊科室代码	VARCHAR	50	必填
-               a.DEPTNAME "YNJZKSMC",--	院内就诊科室名称	VARCHAR	100	必填
-               '-' "JZKSDM",--	中心就诊科室代码	VARCHAR	50	必填	参见《全民健康信息平台科室分类代码表》
-               '-' "JZKSMC",--	中心就诊科室名称	VARCHAR	100	必填	参见《全民健康信息平台科室分类代码表》
-               to_date(to_char(a.reg_time,'YYYY-MM-DD'),'YYYY-MM-DD') "JZSJ",--	首次就诊时间	DATETIME		必填	时间格式YYYY-MM-DD
-               a.DOCCODE "ZDYSDM",--	就诊医师工号	VARCHAR	64	必填
-               a.DOCNAME "ZDYSXM",--	就诊医师姓名	VARCHAR	50	必填
-               d.certno "JZYSSFZHM",--	就诊医生身份证号码	VARCHAR	18	必填
-               e.DISE_CODE "YNJBZDDM",--	院内西医主要诊断疾病编码	VARCHAR	200
-               e.DISE_NAME "YNJBZDMC",--	院内西医主要诊断疾病名称	VARCHAR	2000
-               '' "JBZDDM",--	中心西医主要诊断疾病编码	VARCHAR	200		参见《疾病分类与代码(ICD-10)》
-               '' "JBZDMC",--	中心西医主要诊断疾病名称	VARCHAR	2000		参见《疾病分类与代码(ICD-10)》
-               f.DISE_CODE "YNZYZDJBBM",--	院内中医诊断疾病编码	VARCHAR	64
-               f.DISE_NAME "YNZYZDJBMC",--	院内中医诊断疾病名称	VARCHAR	256
-               '' "ZYZDJBBM",--	中心中医诊断疾病编码	VARCHAR	64		参见GB/T 15657-2021
-               '' "ZYZDJBMC",--	中心中医诊断疾病名称	VARCHAR	256		参见GB/T 15657-2021
-               f.TCM_DISE_CODE "YNZYZDZHBM",--	院内中医诊断证候编码	VARCHAR	64
-               f.TCM_DISE_NAME "YNZYZDZHMC",--	院内中医诊断证候名称	VARCHAR	256
-               '' "ZYZDZHBM",--	中心中医诊断证候编码	VARCHAR	64		参见GB/T 15657-2021
-               '' "ZYZDZHMC",--	中心中医诊断证候名称	VARCHAR	256		参见GB/T 15657-2021
-               '' "ZYZZDMZH",--	主要症状代码组合	VARCHAR	128		主要症状代码组合（多项用英文分号“;”分割）。参见ZD_JBKZJCZZDM疾病控制监测症状代码
-               null "ZYZZSJ",--	主要症状时间	NUMERIC	2
-               '' "ZYZZSJDW",--	主要症状时间单位	VARCHAR	10		选择“分、时、天、月、年”之一
-               '' "BSCYZZDMZH",--	伴随次要症状代码组合	VARCHAR	128		伴随次要症状代码组合（多项用英文分号“;”分割）参见ZD_JBKZJCZZDM疾病控制监测症状代码
-               null "CYZZSJ",--	次要症状时间	NUMERIC	2
-               '' "CYZZSJDW",--	次要症状时间单位	VARCHAR	10		选择“分、时、天、月、年”之一
-               '' "ZS",--	主诉	VARCHAR	4000
-               '' "TZ",--	体征	VARCHAR	4000
-               '' "XBS",--	现病史	VARCHAR	4000		现病史描述
-               '' "JWFRMBS",--	否认慢病史	VARCHAR	1		0：否认 1：承认
-               '' "HMXBDM",--	患慢性病代码组合	VARCHAR	200		ICD10（多项用英文分号“;”分割）
-               '' "JWXXGZBDFYS",--	新冠肺炎史	VARCHAR	1		见CVA01.00.001是否标志（0.否 1.是）
-               '-' "JWS",--	既往史	VARCHAR	4000	必填	既往史描述
-               '' "XGFYYQJCS",--	新冠肺炎疫区接触史	VARCHAR	1		"0：无疫区接触史 1：发病前14天内有病例报告社区的旅行史或居住史2：发病前14天内与新型冠状病毒感染的患者或无症状感染者有接触史3：发病前14天内曾接触过来自病例报告社区的发热或呼吸道症状的患者4：聚集性发病（2周内在小范围内如家庭、办公室、学校班级等场所，出现2例以上发热和/或呼吸道症状的病例）"
-               '' "LJS",--	一月内境外旅居史	VARCHAR	1		见CVA01.00.001是否标志（0.否 1.是）
-               c.ALLERGY "GMS",--	过敏史	VARCHAR	4000
-               '' "YCJZS",--	遗传家族史	VARCHAR	4000
-               '' "ZYSZMS",--	中医“四诊”等描述	VARCHAR	4000		中医记录
-               ''  "TGJCJL",--	体格检查记录	VARCHAR	4000		患者就诊时体格检查结果记录
-               '' "CLCS",--	处理措施	VARCHAR	4000		对患者所采取处理措施记录
-                '' "LYGCBZ",--	留院观察标志	VARCHAR	1		0：否 1：是
-               null "SSY",--	收缩压(mmHg)	NUMERIC	3		患者就诊时的收缩压，单位为mmHg。
-               null "SZY",--	舒张压(mmHg)	NUMERIC	3		患者就诊时的舒张压，单位为mmHg。
-               null "TW",--	体温（℃）	NUMERIC	4,1		患者就诊时的体温，单位为℃。
-               null "ML",--	脉率（次/分钟）	NUMERIC	4,1		患者就诊时的脉搏，单位为次/分钟
-               null "XL",--	心率（次/分钟）	NUMERIC	4,1		患者就诊时的心率，单位为次/分钟
-               null "HXPL",--	呼吸频率	NUMERIC	4,1		单位：次/分钟
-               '' "YSZT",--	意识状态	VARCHAR	1		0：清醒 1：意识模糊 2：谵妄3：嗜睡 4：昏睡 5：昏迷
-               '' "FJGHZD",--	非结构化诊断	VARCHAR	1024		非结构化诊断（允许多个诊断），多个诊断时，相互之间用“，”分开
-               '' "XYYWZLBZ",--	西医药物治疗标志	VARCHAR	1		0：否 1：是
-               '' "CFYWJL",--	处方药物记录	VARCHAR	1024
-               '' "TSCZBZ",--	特殊操作标志	VARCHAR	1		0：否 1：是
-               '' "YCCZJL",--	有创操作记录	VARCHAR	1024
-               '' "HZBZ",--	会诊标志	VARCHAR	1		0：否 1：是
-               '' "HZXXJL",--	会诊信息记录	VARCHAR	1024
-               '' "CRBBZ",--	传染病标志	VARCHAR	1		0：否 1：是
-               '' "CRBJL",--	传染病记录	VARCHAR	1024
-               '0' "ZYBZ",--	住院标志	VARCHAR	1		0：否 1：是
-               '' "ZYTZD",--	住院通知单	VARCHAR	1024
-               '0' "RJBFSSBZ",--	日间病房（手术）标志	VARCHAR	1		0：否 1：是
-               '' "RJBFSSJL",--	日间病房（手术）记录	VARCHAR	1024
-               '0' "SFJGHDZBL",--	是否结构化电子病历	VARCHAR	1	必填	"0：否 1：是 已支持结构化电子病历的机构该字段填写1，且以下结构化电子病历字段必填 未实现结构化电子病历的机构该字段填写0，且以下机构化电子病历字段不填"
-               '' "SFPFNMJC",--	是否皮肤黏膜检查	VARCHAR	1	条件必填	0：否 1：是
-               '' "PFYS",--	皮肤颜色	VARCHAR	1	条件必填	0：正常 1：苍白 2：发红 3：发绀 4：黄染 5：色素沉着 6：色素脱失
-               '' "PZ",--	皮疹	VARCHAR	1	条件必填	0：无 1：斑疹 2：荨麻疹 3：丘疹 4：斑丘疹 5：玫瑰疹 6：疱疹
-               '' "PZBWJTD",--	皮疹部位及特点	VARCHAR	80	条件必填
-               '' "PXCX",--	皮下出血	VARCHAR	1	条件必填	0：无 1：瘀点 2：紫癜 3：瘀斑 4：血肿
-               '' "PXCXBWJTD",--	皮下出血部位及特点	VARCHAR	80	条件必填
-               '' "SZ",--	水肿	VARCHAR	1	条件必填	0：无 1：有
-               '' "SZBWJTD",--	水肿部位及特点	VARCHAR	80	条件必填
-               '' "PFNMQTMS",--	皮肤黏膜其他描述	VARCHAR	400	条件必填
-               '' "SFXBJC",--	是否胸部检查	VARCHAR	1	条件必填	0：否 1：是
-               '' "XBWX",--	胸部外形	VARCHAR	1	条件必填	0：正常 1：桶状胸 2：扁平胸 3：佝偻病胸
-               '' "XBYT",--	胸壁压痛	VARCHAR	1	条件必填	0：无 1：有
-               '' "SFFZJXMJC",--	是否肺脏及胸膜检查	VARCHAR	1	条件必填	0：否 1：是
-               '' "HXY",--	呼吸音	VARCHAR	1	条件必填	0：正常 1：增强 2：减弱 3：消失 4：粗糙
-               ''  "LY",--	啰音	VARCHAR	1	条件必填	0：未闻及 1：闻及
-               '' "LYBWJXZ",--	啰音部位及性质	VARCHAR	80	条件必填
-               '' "XMMCY",--	胸膜摩擦音	VARCHAR	1	条件必填	0：未触及 1：触及
-               '' "FZJXMQTMS",--	肺脏及胸膜其他描述	VARCHAR	400	条件必填
-               '' "SFXZJC",--	是否心脏检查	VARCHAR	1	条件必填	0：否 1：是
-               '' "XLQK",--	心律	VARCHAR	1	条件必填	0：齐 1：不齐 2：绝对不齐
-               '' "ZY",--	杂音	VARCHAR	1	条件必填	0：未闻及 1：闻及
-               '' "ZYBWJTD",--	杂音部位及特点	VARCHAR	80	条件必填
-               ''  "XBMCY",--	心包摩檫音	VARCHAR	1	条件必填	0：未闻及 1：闻及
-               '' "ZWXGZ",--	周围血管征	VARCHAR	1	条件必填	0：阴性 1：枪击音 2：Duroziez双重音 3：毛细血管搏动征
-               '' "XZJCQTMS",--	心脏检查其他描述	VARCHAR	400	条件必填
-               '' "SFFBJC",--	是否腹部检查	VARCHAR	1	条件必填	0：否 1：是
-               '' "WX",--	外形	VARCHAR	1	条件必填	0：正常 1：膨隆 2：凹陷 3：胃形 4：肠形
-               '' "FBYT",--	压痛	VARCHAR	1	条件必填	0：无 1：有
-               '' "YTBW",--	压痛部位	VARCHAR	80	条件必填
-               ''  "FTT",--	反跳痛	VARCHAR	1	条件必填	0：无 1：有
-               ''  "FBBK",--	包块	VARCHAR	1	条件必填	0：未触及 1：触及
-               ''  "BKBW",--	包块部位	VARCHAR	80	条件必填
-               null "BKDX1",--	包块大小（cm）	NUMERIC	2	条件必填
-               null "BKDX2",--	包块大小（cm）	NUMERIC	2	条件必填
-               '' "BKZD",--	包块质地	VARCHAR	1	条件必填	0：质软 1：质韧 2：质硬
-               '' "BKYT",--	包块压痛	VARCHAR	1	条件必填	0：无 1：有
-               '' "BKYDD",--	包块移动度	VARCHAR	1	条件必填	0：好 1：较好 2：差
-               ''  "BKBJ",--	包块边界	VARCHAR	1	条件必填	0：清晰 1：不清 2：与周围粘连
-               '' "FBQTMS",--	腹部其他描述	VARCHAR	400	条件必填
-               '' "SFGZJC",--	是否肝脏检查	VARCHAR	1	条件必填	0：否 1：是
-               ''  "GZ",--	肝脏	VARCHAR	1	条件必填	0：未触及 1：触及
-               null  "LGX",--	肋弓下（cm）	NUMERIC	2	条件必填
-               null  "JTX",--	剑突下（cm）	NUMERIC	2	条件必填
-               ''  "ZD",--	质地	VARCHAR	1	条件必填	0：质软 1：质韧 2：质硬
-               ''  "BM",--	表面	VARCHAR	1	条件必填	0：光滑 1：不平 2：有结节
-               ''  "BYUAN",--	边缘	VARCHAR	1	条件必填	0：整齐 1：圆钝 2：锐利 3：不规则
-                ''  "GZYT",--	压痛	VARCHAR	1	条件必填	0：无 1 ：有
-               ''   "KJT",--	叩击痛	VARCHAR	1	条件必填	0：无 1： 有
-               ''  "SFSZJC",--	是否肾脏检查	VARCHAR	1	条件必填	0：否 1：是
-               '' "SQKJT",--	肾区叩击痛	VARCHAR	1	条件必填	0：无 1：有
-               '' "YDXZY",--	移动性浊音	VARCHAR	1	条件必填	0：阴性 1：阳性
-               '' "CMY",--	肠鸣音	VARCHAR	1	条件必填	0：正常 1：活跃 2：亢进 3：减弱 4：消失
-               '' "SJFSJC",--	神经反射检查	VARCHAR	1	条件必填	0：否 1：是
-               '' "QFS",--	浅反射	VARCHAR	1	条件必填	0：正常 1：亢进 2：减弱 3：消失
-               '' "SFS",--	深反射	VARCHAR	1	条件必填	0：正常 1：亢进 2：减弱 3：消失
-               '' "BLFS",--	病理反射	VARCHAR	1	条件必填	0：阴性 1：阳性
-               '' "NMCJZ",--	脑膜刺激征	VARCHAR	1	条件必填	0：阴性 1：阳性
-               '' "ZYSFSZ",--	中医是否舌诊	VARCHAR	1	条件必填	0：否 1：是
-               '' "SZSS",--	舌质：舌神	VARCHAR	1	条件必填	0：荣舌 1：枯舌
-               '' "SZSSE",--	舌质：舌色	VARCHAR	1	条件必填	0：淡红舌 1：淡白舌 2：红舌 3：绛舌 4：青舌 5：紫舌
-               '' "SZSX",--	舌质：舌形	VARCHAR	1	条件必填	参见 CVA08.03.015 舌形代码
-               '' "SZST",--	舌质：舌态	VARCHAR	1	条件必填	0：正常 1：痿软舌 2：强硬舌 3：震颤舌 4：歪斜舌  5：吐弄舌 6：短缩舌
-               '' "SZSXLM",--	舌质：舌下络脉	VARCHAR	1	条件必填	0：正常 1：异常
-               '' "SXLMYCMS",--	舌下络脉异常描述	VARCHAR	80	条件必填
-               '' "STTZ",--	舌苔：苔质	VARCHAR	2	条件必填	参见 CVA08.03.016 舌苔质代码
-               '' "STTS",--	舌苔：苔色	VARCHAR	1	条件必填	0：白苔 1：黄苔 2：灰黑苔
-               '' "SZQTMS",--	舌诊其他描述	VARCHAR	400	条件必填
-               '' "ZYSFMZ",--	中医是否脉诊	VARCHAR	1	条件必填	0：否 1：是
-               '' "ZYMZ",--	脉诊	VARCHAR	2	条件必填	参见 CVA08.03.009 切诊-脉诊代码
-               to_date(to_char(sysdate, 'YYYY-MM-DD'), 'YYYY-MM-DD') "TBRQ" --	填报日期	DATETIME		必填	本条数据采集时间，格式YYYY-MM-DD
-        from com_hospitalinfo b,com_patientinfo c,com_userinfo d ,opr_register a
-        left join opm_diagnose e on a.orgcode=e.orgcode and e.main_flag='1' and  e.dise_type='1' and e.isvalid='1'
-        left join opm_diagnose f on a.orgcode=f.orgcode and f.main_flag='1' and  f.dise_type='2' and f.isvalid='1'
-        left join (select a.item_id, b.his_item_id
-                   from si_yt_report_item a,
-                        si_yt_report_item_compare b
-                   where a.module_rid = b.module_rid
-                     and a.type_rid = b.type_rid
-                     and a.rid = b.item_rid
-                     and a.module_rid = '202310101511361148853000000000'
-                     and a.type_rid = '202310101521161149402900000000') g on g.his_item_id = a.PSNCERTTYPE
+        select a.orgcode                                                                       "YLJGDM",--	医疗机构代码	VARCHAR	22	必填	复合主键：采用22位“卫生机构代码”
+               a.regid                                                                         "JZLSH",--	就诊流水号	VARCHAR	32	必填	复合主键：医院内部HIS系统唯一编号
+               b.orgname                                                                       "YLJGMC",--	医疗机构名称	VARCHAR	70	必填	医院执业许可第一名称
+               '0'                                                                             "FYDM",--	分院代码	VARCHAR	20	必填	记录分院代码（内码）,如无分院，则传0
+               ''                                                                              "FYMC",--	分院名称	VARCHAR	120	条件必填	分院代码不为0时必填
+               '1'                                                                             "KLXDM",--	卡类型	VARCHAR	16	必填	请按照以下优先级顺序填写：1：患者主索引号、2：身份证号、3：医保卡号，如果都没有则填写门诊就诊流水号
+               c.rid                                                                           "KHM",--	卡号	VARCHAR	64	必填
+               a.patientname                                                                   "XM",--	姓名	VARCHAR	50	必填
+               to_number(extract(year from a.reg_time)) - to_number(extract(year from a.BRDY)) "NL",--	年龄(岁)	NUMERIC	3	必填	就诊时的年龄，1岁以内填0
+               g.item_id                                                                       "ZJLX",--	证件类型	VARCHAR	2		参见CV02.01.101-2022修订版 身份证件类别代码优先使用身份证
+               a.CERTNO                                                                        "ZJHM",--	证件号码	VARCHAR	32
+               decode(a.YNFR, '1', '0', '0', '1')                                              "CFZBZ",--	初复诊标志	VARCHAR	1	必填	0：初诊 1：复诊
+               '100'                                                                           "JZLXDM",--	就诊类型代码	VARCHAR	3	必填	参见CVA5101_01就诊类型代码
+               a.DEPTCODE                                                                      "YNJZKSDM",--	院内就诊科室代码	VARCHAR	50	必填
+               a.DEPTNAME                                                                      "YNJZKSMC",--	院内就诊科室名称	VARCHAR	100	必填
+               '-'                                                                             "JZKSDM",--	中心就诊科室代码	VARCHAR	50	必填	参见《全民健康信息平台科室分类代码表》
+               '-'                                                                             "JZKSMC",--	中心就诊科室名称	VARCHAR	100	必填	参见《全民健康信息平台科室分类代码表》
+               to_char(a.reg_time, 'YYYY-MM-DD')                                               "JZSJ",--	首次就诊时间	DATETIME		必填	时间格式YYYY-MM-DD
+               a.DOCCODE                                                                       "ZDYSDM",--	就诊医师工号	VARCHAR	64	必填
+               a.DOCNAME                                                                       "ZDYSXM",--	就诊医师姓名	VARCHAR	50	必填
+               d.certno                                                                        "JZYSSFZHM",--	就诊医生身份证号码	VARCHAR	18	必填
+               e.DISE_CODE                                                                     "YNJBZDDM",--	院内西医主要诊断疾病编码	VARCHAR	200
+               e.DISE_NAME                                                                     "YNJBZDMC",--	院内西医主要诊断疾病名称	VARCHAR	2000
+               ''                                                                              "JBZDDM",--	中心西医主要诊断疾病编码	VARCHAR	200		参见《疾病分类与代码(ICD-10)》
+               ''                                                                              "JBZDMC",--	中心西医主要诊断疾病名称	VARCHAR	2000		参见《疾病分类与代码(ICD-10)》
+               f.DISE_CODE                                                                     "YNZYZDJBBM",--	院内中医诊断疾病编码	VARCHAR	64
+               f.DISE_NAME                                                                     "YNZYZDJBMC",--	院内中医诊断疾病名称	VARCHAR	256
+               ''                                                                              "ZYZDJBBM",--	中心中医诊断疾病编码	VARCHAR	64		参见GB/T 15657-2021
+               ''                                                                              "ZYZDJBMC",--	中心中医诊断疾病名称	VARCHAR	256		参见GB/T 15657-2021
+               f.TCM_DISE_CODE                                                                 "YNZYZDZHBM",--	院内中医诊断证候编码	VARCHAR	64
+               f.TCM_DISE_NAME                                                                 "YNZYZDZHMC",--	院内中医诊断证候名称	VARCHAR	256
+               ''                                                                              "ZYZDZHBM",--	中心中医诊断证候编码	VARCHAR	64		参见GB/T 15657-2021
+               ''                                                                              "ZYZDZHMC",--	中心中医诊断证候名称	VARCHAR	256		参见GB/T 15657-2021
+               ''                                                                              "ZYZZDMZH",--	主要症状代码组合	VARCHAR	128		主要症状代码组合（多项用英文分号“;”分割）。参见ZD_JBKZJCZZDM疾病控制监测症状代码
+               null                                                                            "ZYZZSJ",--	主要症状时间	NUMERIC	2
+               ''                                                                              "ZYZZSJDW",--	主要症状时间单位	VARCHAR	10		选择“分、时、天、月、年”之一
+               ''                                                                              "BSCYZZDMZH",--	伴随次要症状代码组合	VARCHAR	128		伴随次要症状代码组合（多项用英文分号“;”分割）参见ZD_JBKZJCZZDM疾病控制监测症状代码
+               null                                                                            "CYZZSJ",--	次要症状时间	NUMERIC	2
+               ''                                                                              "CYZZSJDW",--	次要症状时间单位	VARCHAR	10		选择“分、时、天、月、年”之一
+               ''                                                                              "ZS",--	主诉	VARCHAR	4000
+               ''                                                                              "TZ",--	体征	VARCHAR	4000
+               ''                                                                              "XBS",--	现病史	VARCHAR	4000		现病史描述
+               ''                                                                              "JWFRMBS",--	否认慢病史	VARCHAR	1		0：否认 1：承认
+               ''                                                                              "HMXBDM",--	患慢性病代码组合	VARCHAR	200		ICD10（多项用英文分号“;”分割）
+               ''                                                                              "JWXXGZBDFYS",--	新冠肺炎史	VARCHAR	1		见CVA01.00.001是否标志（0.否 1.是）
+               '-'                                                                             "JWS",--	既往史	VARCHAR	4000	必填	既往史描述
+               ''                                                                              "XGFYYQJCS",--	新冠肺炎疫区接触史	VARCHAR	1		"0：无疫区接触史 1：发病前14天内有病例报告社区的旅行史或居住史2：发病前14天内与新型冠状病毒感染的患者或无症状感染者有接触史3：发病前14天内曾接触过来自病例报告社区的发热或呼吸道症状的患者4：聚集性发病（2周内在小范围内如家庭、办公室、学校班级等场所，出现2例以上发热和/或呼吸道症状的病例）"
+               ''                                                                              "LJS",--	一月内境外旅居史	VARCHAR	1		见CVA01.00.001是否标志（0.否 1.是）
+               c.ALLERGY                                                                       "GMS",--	过敏史	VARCHAR	4000
+               ''                                                                              "YCJZS",--	遗传家族史	VARCHAR	4000
+               ''                                                                              "ZYSZMS",--	中医“四诊”等描述	VARCHAR	4000		中医记录
+               ''                                                                              "TGJCJL",--	体格检查记录	VARCHAR	4000		患者就诊时体格检查结果记录
+               ''                                                                              "CLCS",--	处理措施	VARCHAR	4000		对患者所采取处理措施记录
+               ''                                                                              "LYGCBZ",--	留院观察标志	VARCHAR	1		0：否 1：是
+               null                                                                            "SSY",--	收缩压(mmHg)	NUMERIC	3		患者就诊时的收缩压，单位为mmHg。
+               null                                                                            "SZY",--	舒张压(mmHg)	NUMERIC	3		患者就诊时的舒张压，单位为mmHg。
+               null                                                                            "TW",--	体温（℃）	NUMERIC	4,1		患者就诊时的体温，单位为℃。
+               null                                                                            "ML",--	脉率（次/分钟）	NUMERIC	4,1		患者就诊时的脉搏，单位为次/分钟
+               null                                                                            "XL",--	心率（次/分钟）	NUMERIC	4,1		患者就诊时的心率，单位为次/分钟
+               null                                                                            "HXPL",--	呼吸频率	NUMERIC	4,1		单位：次/分钟
+               ''                                                                              "YSZT",--	意识状态	VARCHAR	1		0：清醒 1：意识模糊 2：谵妄3：嗜睡 4：昏睡 5：昏迷
+               ''                                                                              "FJGHZD",--	非结构化诊断	VARCHAR	1024		非结构化诊断（允许多个诊断），多个诊断时，相互之间用“，”分开
+               ''                                                                              "XYYWZLBZ",--	西医药物治疗标志	VARCHAR	1		0：否 1：是
+               ''                                                                              "CFYWJL",--	处方药物记录	VARCHAR	1024
+               ''                                                                              "TSCZBZ",--	特殊操作标志	VARCHAR	1		0：否 1：是
+               ''                                                                              "YCCZJL",--	有创操作记录	VARCHAR	1024
+               ''                                                                              "HZBZ",--	会诊标志	VARCHAR	1		0：否 1：是
+               ''                                                                              "HZXXJL",--	会诊信息记录	VARCHAR	1024
+               ''                                                                              "CRBBZ",--	传染病标志	VARCHAR	1		0：否 1：是
+               ''                                                                              "CRBJL",--	传染病记录	VARCHAR	1024
+               '0'                                                                             "ZYBZ",--	住院标志	VARCHAR	1		0：否 1：是
+               ''                                                                              "ZYTZD",--	住院通知单	VARCHAR	1024
+               '0'                                                                             "RJBFSSBZ",--	日间病房（手术）标志	VARCHAR	1		0：否 1：是
+               ''                                                                              "RJBFSSJL",--	日间病房（手术）记录	VARCHAR	1024
+               '0'                                                                             "SFJGHDZBL",--	是否结构化电子病历	VARCHAR	1	必填	"0：否 1：是 已支持结构化电子病历的机构该字段填写1，且以下结构化电子病历字段必填 未实现结构化电子病历的机构该字段填写0，且以下机构化电子病历字段不填"
+               ''                                                                              "SFPFNMJC",--	是否皮肤黏膜检查	VARCHAR	1	条件必填	0：否 1：是
+               ''                                                                              "PFYS",--	皮肤颜色	VARCHAR	1	条件必填	0：正常 1：苍白 2：发红 3：发绀 4：黄染 5：色素沉着 6：色素脱失
+               ''                                                                              "PZ",--	皮疹	VARCHAR	1	条件必填	0：无 1：斑疹 2：荨麻疹 3：丘疹 4：斑丘疹 5：玫瑰疹 6：疱疹
+               ''                                                                              "PZBWJTD",--	皮疹部位及特点	VARCHAR	80	条件必填
+               ''                                                                              "PXCX",--	皮下出血	VARCHAR	1	条件必填	0：无 1：瘀点 2：紫癜 3：瘀斑 4：血肿
+               ''                                                                              "PXCXBWJTD",--	皮下出血部位及特点	VARCHAR	80	条件必填
+               ''                                                                              "SZ",--	水肿	VARCHAR	1	条件必填	0：无 1：有
+               ''                                                                              "SZBWJTD",--	水肿部位及特点	VARCHAR	80	条件必填
+               ''                                                                              "PFNMQTMS",--	皮肤黏膜其他描述	VARCHAR	400	条件必填
+               ''                                                                              "SFXBJC",--	是否胸部检查	VARCHAR	1	条件必填	0：否 1：是
+               ''                                                                              "XBWX",--	胸部外形	VARCHAR	1	条件必填	0：正常 1：桶状胸 2：扁平胸 3：佝偻病胸
+               ''                                                                              "XBYT",--	胸壁压痛	VARCHAR	1	条件必填	0：无 1：有
+               ''                                                                              "SFFZJXMJC",--	是否肺脏及胸膜检查	VARCHAR	1	条件必填	0：否 1：是
+               ''                                                                              "HXY",--	呼吸音	VARCHAR	1	条件必填	0：正常 1：增强 2：减弱 3：消失 4：粗糙
+               ''                                                                              "LY",--	啰音	VARCHAR	1	条件必填	0：未闻及 1：闻及
+               ''                                                                              "LYBWJXZ",--	啰音部位及性质	VARCHAR	80	条件必填
+               ''                                                                              "XMMCY",--	胸膜摩擦音	VARCHAR	1	条件必填	0：未触及 1：触及
+               ''                                                                              "FZJXMQTMS",--	肺脏及胸膜其他描述	VARCHAR	400	条件必填
+               ''                                                                              "SFXZJC",--	是否心脏检查	VARCHAR	1	条件必填	0：否 1：是
+               ''                                                                              "XLQK",--	心律	VARCHAR	1	条件必填	0：齐 1：不齐 2：绝对不齐
+               ''                                                                              "ZY",--	杂音	VARCHAR	1	条件必填	0：未闻及 1：闻及
+               ''                                                                              "ZYBWJTD",--	杂音部位及特点	VARCHAR	80	条件必填
+               ''                                                                              "XBMCY",--	心包摩檫音	VARCHAR	1	条件必填	0：未闻及 1：闻及
+               ''                                                                              "ZWXGZ",--	周围血管征	VARCHAR	1	条件必填	0：阴性 1：枪击音 2：Duroziez双重音 3：毛细血管搏动征
+               ''                                                                              "XZJCQTMS",--	心脏检查其他描述	VARCHAR	400	条件必填
+               ''                                                                              "SFFBJC",--	是否腹部检查	VARCHAR	1	条件必填	0：否 1：是
+               ''                                                                              "WX",--	外形	VARCHAR	1	条件必填	0：正常 1：膨隆 2：凹陷 3：胃形 4：肠形
+               ''                                                                              "FBYT",--	压痛	VARCHAR	1	条件必填	0：无 1：有
+               ''                                                                              "YTBW",--	压痛部位	VARCHAR	80	条件必填
+               ''                                                                              "FTT",--	反跳痛	VARCHAR	1	条件必填	0：无 1：有
+               ''                                                                              "FBBK",--	包块	VARCHAR	1	条件必填	0：未触及 1：触及
+               ''                                                                              "BKBW",--	包块部位	VARCHAR	80	条件必填
+               null                                                                            "BKDX1",--	包块大小（cm）	NUMERIC	2	条件必填
+               null                                                                            "BKDX2",--	包块大小（cm）	NUMERIC	2	条件必填
+               ''                                                                              "BKZD",--	包块质地	VARCHAR	1	条件必填	0：质软 1：质韧 2：质硬
+               ''                                                                              "BKYT",--	包块压痛	VARCHAR	1	条件必填	0：无 1：有
+               ''                                                                              "BKYDD",--	包块移动度	VARCHAR	1	条件必填	0：好 1：较好 2：差
+               ''                                                                              "BKBJ",--	包块边界	VARCHAR	1	条件必填	0：清晰 1：不清 2：与周围粘连
+               ''                                                                              "FBQTMS",--	腹部其他描述	VARCHAR	400	条件必填
+               ''                                                                              "SFGZJC",--	是否肝脏检查	VARCHAR	1	条件必填	0：否 1：是
+               ''                                                                              "GZ",--	肝脏	VARCHAR	1	条件必填	0：未触及 1：触及
+               null                                                                            "LGX",--	肋弓下（cm）	NUMERIC	2	条件必填
+               null                                                                            "JTX",--	剑突下（cm）	NUMERIC	2	条件必填
+               ''                                                                              "ZD",--	质地	VARCHAR	1	条件必填	0：质软 1：质韧 2：质硬
+               ''                                                                              "BM",--	表面	VARCHAR	1	条件必填	0：光滑 1：不平 2：有结节
+               ''                                                                              "BYUAN",--	边缘	VARCHAR	1	条件必填	0：整齐 1：圆钝 2：锐利 3：不规则
+               ''                                                                              "GZYT",--	压痛	VARCHAR	1	条件必填	0：无 1 ：有
+               ''                                                                              "KJT",--	叩击痛	VARCHAR	1	条件必填	0：无 1： 有
+               ''                                                                              "SFSZJC",--	是否肾脏检查	VARCHAR	1	条件必填	0：否 1：是
+               ''                                                                              "SQKJT",--	肾区叩击痛	VARCHAR	1	条件必填	0：无 1：有
+               ''                                                                              "YDXZY",--	移动性浊音	VARCHAR	1	条件必填	0：阴性 1：阳性
+               ''                                                                              "CMY",--	肠鸣音	VARCHAR	1	条件必填	0：正常 1：活跃 2：亢进 3：减弱 4：消失
+               ''                                                                              "SJFSJC",--	神经反射检查	VARCHAR	1	条件必填	0：否 1：是
+               ''                                                                              "QFS",--	浅反射	VARCHAR	1	条件必填	0：正常 1：亢进 2：减弱 3：消失
+               ''                                                                              "SFS",--	深反射	VARCHAR	1	条件必填	0：正常 1：亢进 2：减弱 3：消失
+               ''                                                                              "BLFS",--	病理反射	VARCHAR	1	条件必填	0：阴性 1：阳性
+               ''                                                                              "NMCJZ",--	脑膜刺激征	VARCHAR	1	条件必填	0：阴性 1：阳性
+               ''                                                                              "ZYSFSZ",--	中医是否舌诊	VARCHAR	1	条件必填	0：否 1：是
+               ''                                                                              "SZSS",--	舌质：舌神	VARCHAR	1	条件必填	0：荣舌 1：枯舌
+               ''                                                                              "SZSSE",--	舌质：舌色	VARCHAR	1	条件必填	0：淡红舌 1：淡白舌 2：红舌 3：绛舌 4：青舌 5：紫舌
+               ''                                                                              "SZSX",--	舌质：舌形	VARCHAR	1	条件必填	参见 CVA08.03.015 舌形代码
+               ''                                                                              "SZST",--	舌质：舌态	VARCHAR	1	条件必填	0：正常 1：痿软舌 2：强硬舌 3：震颤舌 4：歪斜舌  5：吐弄舌 6：短缩舌
+               ''                                                                              "SZSXLM",--	舌质：舌下络脉	VARCHAR	1	条件必填	0：正常 1：异常
+               ''                                                                              "SXLMYCMS",--	舌下络脉异常描述	VARCHAR	80	条件必填
+               ''                                                                              "STTZ",--	舌苔：苔质	VARCHAR	2	条件必填	参见 CVA08.03.016 舌苔质代码
+               ''                                                                              "STTS",--	舌苔：苔色	VARCHAR	1	条件必填	0：白苔 1：黄苔 2：灰黑苔
+               ''                                                                              "SZQTMS",--	舌诊其他描述	VARCHAR	400	条件必填
+               ''                                                                              "ZYSFMZ",--	中医是否脉诊	VARCHAR	1	条件必填	0：否 1：是
+               ''                                                                              "ZYMZ",--	脉诊	VARCHAR	2	条件必填	参见 CVA08.03.009 切诊-脉诊代码
+               to_char(sysdate, 'YYYY-MM-DD')                                                  "TBRQ" --	填报日期	DATETIME		必填	本条数据采集时间，格式YYYY-MM-DD
+        from com_hospitalinfo b,
+             com_patientinfo c,
+             com_userinfo d,
+             opr_register a
+                 left join opm_diagnose e
+                           on a.orgcode = e.orgcode and e.main_flag = '1' and e.dise_type = '1' and e.isvalid = '1'
+                 left join opm_diagnose f
+                           on a.orgcode = f.orgcode and f.main_flag = '1' and f.dise_type = '2' and f.isvalid = '1'
+                 left join (select a.item_id, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202310101521161149402900000000') g on g.his_item_id = a.PSNCERTTYPE
 
-          where a.orgcode = b.orgcode
+        where a.orgcode = b.orgcode
           and a.orgcode = c.orgcode
           and a.patientno = c.patientno
-          and a.patientid=c.patientid
+          and a.patientid = c.patientid
           and a.orgcode = d.orgcode
-            and a.DOCCODE=d.usercode
-            and d.isvalid = '1'
-            and d.is_stop = '0'
+          and a.DOCCODE = d.usercode
+          and d.isvalid = '1'
+          and d.is_stop = '0'
           and a.orgcode = #{orgcode}
-            and to_char(a.reg_time
-           , 'yyyy-mm-dd hh24:mi:ss') &gt;= #{begtime}
-            and to_char(a.reg_time
-           , 'yyyy-mm-dd hh24:mi:ss') &lt;= #{endtime}
+          and to_char(a.reg_time
+                  , 'yyyy-mm-dd hh24:mi:ss') &gt;= #{begtime}
+          and to_char(a.reg_time
+                  , 'yyyy-mm-dd hh24:mi:ss') &lt;= #{endtime}
     </select>
 
 

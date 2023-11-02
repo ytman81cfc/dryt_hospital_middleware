@@ -18,11 +18,11 @@
                case
                    when a.si_type = 'A' then '01'
                    when a.si_type = 'B' then '02'
-                   else '07' end "BXLX",--	医疗费用支付方式	VARCHAR	4	必填	参见CV07.10.003-2022修订版 医疗费用来源类别
+                   else '07' end                                             "BXLX",--	医疗费用支付方式	VARCHAR	4	必填	参见CV07.10.003-2022修订版 医疗费用来源类别
                b.si_psn_no                                                   "YBKH",--	医保卡号	VARCHAR	20	条件必填	患者的医保卡的唯一标识，医保患者必填
                ''                                                            "XLDM",--	学历代码	VARCHAR	2		患者受教育最高程度的类别代码， 	参见GB/T 4658-2006-2022修订版
                a.MARRIED                                                     "HYZK",--	婚姻状况	VARCHAR	3		参见GB/T 2261.2-2003-2022修订版 婚姻状况代码
-               to_date(to_char(a.BRDY, 'YYYY-MM-DD'), 'YYYY-MM-DD')          "CSRQ",--	出生日期	DATETIME			YYYY-MM-DD
+               to_char(a.BRDY, 'YYYY-MM-DD')                                 "CSRQ",--	出生日期	DATETIME			YYYY-MM-DD
                a.RESIHOME                                                    "CSD",--	出生地	VARCHAR	32		参见 GB/T 2260-2007
                a.NATY                                                        "MZ",--	民族	VARCHAR	2		参见 GB/T 3304-1991-2022修订版 民族代码表
                a.COUNTRYCODE                                                 "GJ",--	国籍	VARCHAR	3		参见 GB/T 2659-2000
@@ -49,9 +49,9 @@
                a.UPDT_TIME                                                   "GXSJ",--	更新时间	DATETIME
                a.opter_name                                                  "GXRXM",--	更新人姓名	VARCHAR	50
                ''                                                            "GXRSFZH",--	更新人身份证号	VARCHAR	20
-               to_date(to_char(sysdate, 'YYYY-MM-DD'), 'YYYY-MM-DD')         "TBRQ" --	填报日期	DATETIME		必填	本条数据采集时间，格式YYYY-MM-DD
+               to_char(sysdate, 'YYYY-MM-DD')                                "TBRQ" --	填报日期	DATETIME		必填	本条数据采集时间，格式YYYY-MM-DD
         from (select PATIENTID, TEL, max(time), PERSON_AREA_FLAG
-              from (select PATIENTID, TEL,max(reg_time)time ,PERSON_AREA_FLAG
+              from (select PATIENTID, TEL, max(reg_time)time ,PERSON_AREA_FLAG
                     from opr_register b
                     where orgcode =#{orgcode}
                     group by PATIENTID, TEL, PERSON_AREA_FLAG

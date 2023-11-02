@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hospital.middleware.healthplatform.dao.his.HealthplatfromDAO">
+    <select id="queryZyyjj" resultType="java.util.HashMap">
+        select a.orgcode                                   "YLJGDM",--  医疗机构代码  VARCHAR 22  必填  复合主键：采用22位“卫生机构代码”
+               a.INVOICENO                                 "SFLSH",--	收费流水号	VARCHAR	64	必填	复合主键
+               a.inid                                      "JZLSH",--	就诊流水号	VARCHAR	32	必填	关联《就诊记录表》
+               '1'                                         "KH",--	卡号	VARCHAR	64	必填
+               c.rid                                       "KLX",--	卡类型	VARCHAR	16	必填	参见CVA5104就诊卡类型
+               f.item_id                                   "ZJLX",--	证件类型	VARCHAR	2		参见CV02.01.101身份证件类别代码
+               b.certno                                    "ZJHM",--	证件号码	VARCHAR	32
+               a.INVOICENO                                 "XM",--	姓名	VARCHAR	50	必填
+               case
+                   when a.PREPAYCOST &gt; 0 then '1'
+                   else '2' end                            "TFBZ",--	收退费标志	VARCHAR	1	必填	1：收费；2：退费
+               decode(a.PAY_WAY, '1', '01', '2', '03', '3', '04', '8', '02', '101', '03', '111', '03', '112', '04',
+                      '99')                                "YLFKFS",--	医疗付费方式	VARCHAR	2	必填	01 现金; 02 银行卡; 03 微信;  04 支付宝; 99 其它
+               to_char(a.FEEDATE, 'YYYY-MM-DD HH24:MI:SS') "SFSJ",--	收费时间	DATETIME		必填
+               round(a.PREPAYCOST, 3)                      "ZFJE",--	支付金额	NUMERIC	18,3	必填	单位：元； 收费填写正数，退费填写负数
+               a.FEEOPCD                                   "SFCZYGH",--	收费操作员工号	VARCHAR	64	必填
+               a.FEENAME                                   "SFCZYXM",--	收费操作员姓名	VARCHAR	50	必填
+               to_char(sysdate, 'YYYY-MM-DD')              "TBRQ" --  填报日期  DATETIME   必填 本条数据采集时间，格式YYYY-MM-DD
+        from IPR_INPATIENTINFO b
+                 left join (select a.item_id, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202310101602441149584100000000') f
+                           on f.his_item_id = b.PSNCERTTYPE,
+             IPB_INPREPAY a,
+             com_patientinfo c
+
+        where b.orgcode = c.orgcode
+          and b.inhosno = c.inhosno
+          and b.patientid = c.patientid
+          and a.orgcode = b.orgcode
+          and a.inid = b.inid
+          and b.instate &lt;&gt; '0'
+          and a.PREPAYSTATUS = '0'
+          and a.orgcode =
+              #{orgcode}
+          and to_char
+                  (
+                      a
+                          .
+                          FEEDATE,
+                      'yyyy-mm-dd hh24:mi:ss'
+                  )
+            &gt;=
+              #{begtime}
+          and to_char
+                  (
+                      a
+                          .
+                          FEEDATE,
+                      'yyyy-mm-dd hh24:mi:ss'
+                  )
+            &lt;=
+              #{endtime}
+
+    </select>
+
+</mapper>

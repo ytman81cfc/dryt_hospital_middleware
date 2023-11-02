@@ -2,68 +2,68 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hospital.middleware.healthplatform.dao.his.HealthplatfromDAO">
     <select id="queryZyjzjlb" resultType="java.util.HashMap">
-        select
-               a.orgcode "YLJGDM",--	医疗机构代码	VARCHAR	22	必填	复合主键：采用22位“卫生机构代码”
-               a.inid "JZLSH"	,--	住院就诊流水号	VARCHAR	32	必填	复合主键：医院HIS系统的唯一编号,在同一家医院内应保证不重复。一次就诊的完整过程由一个作为HIS系统索引号的“就诊流水号”予以标识
-               b.orgname "YLJGMC"	,--	医疗机构名称	VARCHAR	70	必填	医院执业许可第一名称
-               '0' "FYDM"	,--	分院代码	VARCHAR	20	必填	记录分院代码（内码）,如无分院，则传0
-               '' "FYMC"	,--	分院名称	VARCHAR	120	条件必填	分院代码不为0时必填
-               a.inhosno "CISID"	,--	住院号	VARCHAR	32	必填	若无则可填住院就诊流水号
-               a.inhosno "BAH"	,--	病案号	VARCHAR	32	必填	病案首页中的病案号
-               '1' "KLX"	,--	卡类型	VARCHAR	16	必填	请按照以下优先级顺序填写：1：患者主索引号、2：身份证号、3：医保卡号，如果都没有则填写住院就诊流水号
-               c.rid "KH"	,--	卡号	VARCHAR	64	必填
-               f.item_id "ZJLX"	,--	证件类型	VARCHAR	2		参见CV02.01.101-2022修订版 身份证件类别代码 优先使用身份证
-               a.certno  "ZJHM"	,--	证件号码	VARCHAR	32
-               a.PATIENTNAME "HZXM"	,--	患者姓名	VARCHAR	50	必填
-               a.INAVENUE "RYLYDM"	,--	入院来源代码	VARCHAR	1	必填	1：急诊 2：门诊 3：其他医疗机构转入 9：其他
-               a.INDEPTCODE "YNJZKSBM"	,--	院内入院科室编码	VARCHAR	50	必填
-               a.INDEPTNAME "YNJZKSMC"	,--	院内入院科室名称	VARCHAR	100	必填
-               '' "JZKSBM"	,--	中心入院科室编码	VARCHAR	50	必填	参见《全民健康信息平台科室分类代码表》
-               '' "JZKSMC"	,--	中心入院科室名称	VARCHAR	100	必填	参见《全民健康信息平台科室分类代码表》
-               a.OUTDEPTCODE "YNCYKSBM"	,--	院内出院科室编码	VARCHAR	50
-               a.OUTDEPTNAME "YNCYKSMC"	,--	院内出院科室名称	VARCHAR	100
-               '' "CYKSBM"	,--	中心出院科室编码	VARCHAR	50		参见《全民健康信息平台科室分类代码表》
-               '' "CYKSMC"	,--	中心出院科室名称	VARCHAR	100		参见《全民健康信息平台科室分类代码表》
-               to_date(to_char(a.INDATE,'YYYY-MM-DD HH24:MI:SS'),'YYYY-MM-DD HH24:MI:SS') "RYSJ"	,--	入院时间	DATETIME		必填	YYYY-MM-DD HH24:MI:SS
-               to_date(to_char(a.OUT_DATE,'YYYY-MM-DD HH24:MI:SS'),'YYYY-MM-DD HH24:MI:SS')  "CYSJ"	,--	出院时间	DATETIME		必填	YYYY-MM-DD HH24:MI:SS
-               d.MEDICAL_PAYMENT_METHOD "BXLX"	,--	医疗费用支付方式	VARCHAR	4	必填	参见CV07.10.003-2022修订版 医疗费用来源类别
-               '' "ZYZZDMZH"	,--	主要症状代码组合	VARCHAR	128		主要症状代码组合（用英文分号“;”分割）。参见ZD_JBKZJCZZDM疾病控制监测症状代码
-               '-' "ZS"	,--	主诉	VARCHAR	4000	必填
-               '' "XBS"	,--	现病史	VARCHAR	4000	条件必填	有则必填
-               '' "GMS"	,--	过敏史	VARCHAR	4000	条件必填	有则必填
-               '' "YCJZS"	,--	遗传家族史	VARCHAR	4000	条件必填	有则必填
-               '' "JWS"	,--	既往史	VARCHAR	4000	条件必填	有则必填
-               '' "ZYSZMS"	,--	中医“四诊”等描述	VARCHAR	4000	条件必填	有则必填
-               '' "TGJCJL"	,--	体格检查记录	VARCHAR	4000	条件必填	有则必填
-               '' "CLCS"	,--	处理措施	VARCHAR	4000	条件必填	有则必填
-               '' "SSY"	,--	入院时收缩压(mmHg)	NUMERIC	3		患者就诊时的收缩压，单位为mmHg。
-               '' "SZY"	,--	入院时舒张压(mmHg)	NUMERIC	3		患者就诊时的舒张压，单位为mmHg。
-               '' "TW"	,--	入院时体温（℃）	NUMERIC	4,1		患者就诊时的体温，单位为℃。
-               '' "ML"	,--	入院时脉率（次/分钟）	NUMERIC	4,1		患者就诊时的脉搏，单位为次/分钟
-               '' "XL"	,--	入院时心率（次/分钟）	NUMERIC	4,1		患者就诊时的脉搏，单位为次/分钟
-               '' "HXPL"	,--	呼吸频率 	NUMERIC	3		患者就诊时的呼吸频率，单位为次/分钟
-                 to_date(to_char(sysdate, 'YYYY-MM-DD'), 'YYYY-MM-DD') "TBRQ" --	填报日期	DATETIME		必填	本条数据采集时间，格式YYYY-MM-DD
+        select a.orgcode                                    "YLJGDM",--	医疗机构代码	VARCHAR	22	必填	复合主键：采用22位“卫生机构代码”
+               a.inid                                       "JZLSH",--	住院就诊流水号	VARCHAR	32	必填	复合主键：医院HIS系统的唯一编号,在同一家医院内应保证不重复。一次就诊的完整过程由一个作为HIS系统索引号的“就诊流水号”予以标识
+               b.orgname                                    "YLJGMC",--	医疗机构名称	VARCHAR	70	必填	医院执业许可第一名称
+               '0'                                          "FYDM",--	分院代码	VARCHAR	20	必填	记录分院代码（内码）,如无分院，则传0
+               ''                                           "FYMC",--	分院名称	VARCHAR	120	条件必填	分院代码不为0时必填
+               a.inhosno                                    "CISID",--	住院号	VARCHAR	32	必填	若无则可填住院就诊流水号
+               a.inhosno                                    "BAH",--	病案号	VARCHAR	32	必填	病案首页中的病案号
+               '1'                                          "KLX",--	卡类型	VARCHAR	16	必填	请按照以下优先级顺序填写：1：患者主索引号、2：身份证号、3：医保卡号，如果都没有则填写住院就诊流水号
+               c.rid                                        "KH",--	卡号	VARCHAR	64	必填
+               f.item_id                                    "ZJLX",--	证件类型	VARCHAR	2		参见CV02.01.101-2022修订版 身份证件类别代码 优先使用身份证
+               a.certno                                     "ZJHM",--	证件号码	VARCHAR	32
+               a.PATIENTNAME                                "HZXM",--	患者姓名	VARCHAR	50	必填
+               a.INAVENUE                                   "RYLYDM",--	入院来源代码	VARCHAR	1	必填	1：急诊 2：门诊 3：其他医疗机构转入 9：其他
+               a.INDEPTCODE                                 "YNJZKSBM",--	院内入院科室编码	VARCHAR	50	必填
+               a.INDEPTNAME                                 "YNJZKSMC",--	院内入院科室名称	VARCHAR	100	必填
+               ''                                           "JZKSBM",--	中心入院科室编码	VARCHAR	50	必填	参见《全民健康信息平台科室分类代码表》
+               ''                                           "JZKSMC",--	中心入院科室名称	VARCHAR	100	必填	参见《全民健康信息平台科室分类代码表》
+               a.OUTDEPTCODE                                "YNCYKSBM",--	院内出院科室编码	VARCHAR	50
+               a.OUTDEPTNAME                                "YNCYKSMC",--	院内出院科室名称	VARCHAR	100
+               ''                                           "CYKSBM",--	中心出院科室编码	VARCHAR	50		参见《全民健康信息平台科室分类代码表》
+               ''                                           "CYKSMC",--	中心出院科室名称	VARCHAR	100		参见《全民健康信息平台科室分类代码表》
+               to_char(a.INDATE, 'YYYY-MM-DD HH24:MI:SS')   "RYSJ",--	入院时间	DATETIME		必填	YYYY-MM-DD HH24:MI:SS
+               to_char(a.OUT_DATE, 'YYYY-MM-DD HH24:MI:SS') "CYSJ",--	出院时间	DATETIME		必填	YYYY-MM-DD HH24:MI:SS
+               d.MEDICAL_PAYMENT_METHOD                     "BXLX",--	医疗费用支付方式	VARCHAR	4	必填	参见CV07.10.003-2022修订版 医疗费用来源类别
+               ''                                           "ZYZZDMZH",--	主要症状代码组合	VARCHAR	128		主要症状代码组合（用英文分号“;”分割）。参见ZD_JBKZJCZZDM疾病控制监测症状代码
+               '-'                                          "ZS",--	主诉	VARCHAR	4000	必填
+               ''                                           "XBS",--	现病史	VARCHAR	4000	条件必填	有则必填
+               ''                                           "GMS",--	过敏史	VARCHAR	4000	条件必填	有则必填
+               ''                                           "YCJZS",--	遗传家族史	VARCHAR	4000	条件必填	有则必填
+               ''                                           "JWS",--	既往史	VARCHAR	4000	条件必填	有则必填
+               ''                                           "ZYSZMS",--	中医“四诊”等描述	VARCHAR	4000	条件必填	有则必填
+               ''                                           "TGJCJL",--	体格检查记录	VARCHAR	4000	条件必填	有则必填
+               ''                                           "CLCS",--	处理措施	VARCHAR	4000	条件必填	有则必填
+               ''                                           "SSY",--	入院时收缩压(mmHg)	NUMERIC	3		患者就诊时的收缩压，单位为mmHg。
+               ''                                           "SZY",--	入院时舒张压(mmHg)	NUMERIC	3		患者就诊时的舒张压，单位为mmHg。
+               ''                                           "TW",--	入院时体温（℃）	NUMERIC	4,1		患者就诊时的体温，单位为℃。
+               ''                                           "ML",--	入院时脉率（次/分钟）	NUMERIC	4,1		患者就诊时的脉搏，单位为次/分钟
+               ''                                           "XL",--	入院时心率（次/分钟）	NUMERIC	4,1		患者就诊时的脉搏，单位为次/分钟
+               ''                                           "HXPL",--	呼吸频率 	NUMERIC	3		患者就诊时的呼吸频率，单位为次/分钟
+               to_char(sysdate, 'YYYY-MM-DD')               "TBRQ" --	填报日期	DATETIME		必填	本条数据采集时间，格式YYYY-MM-DD
         from IPR_INPATIENTINFO a
-               left join emr_PATIENTINFO d on a.orgcode=d.orgcode and a.inid=d.visit_id and d.ACTIVE='1'
-         left join (select a.item_id, b.his_item_id
-                   from si_yt_report_item a,
-                        si_yt_report_item_compare b
-                   where a.module_rid = b.module_rid
-                     and a.type_rid = b.type_rid
-                     and a.rid = b.item_rid
-                     and a.module_rid = '202310101511361148853000000000'
-                     and a.type_rid = '202310101521161149402900000000') f on f.his_item_id = a.PSNCERTTYPE,
-               com_hospitalinfo b,com_patientinfo c
-          where a.orgcode = b.orgcode
+                 left join emr_PATIENTINFO d on a.orgcode = d.orgcode and a.inid = d.visit_id and d.ACTIVE = '1'
+                 left join (select a.item_id, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202310101521161149402900000000') f on f.his_item_id = a.PSNCERTTYPE,
+             com_hospitalinfo b,
+             com_patientinfo c
+        where a.orgcode = b.orgcode
           and a.orgcode = c.orgcode
           and a.inhosno = c.inhosno
-          and a.patientid=c.patientid
-    and a.instate &lt;&gt; '0'
+          and a.patientid = c.patientid
+          and a.instate &lt;&gt; '0'
           and a.orgcode = #{orgcode}
-            and to_char(a.INDATE
-           , 'yyyy-mm-dd hh24:mi:ss') &gt;= #{begtime}
-            and to_char(a.INDATE
-           , 'yyyy-mm-dd hh24:mi:ss') &lt;= #{endtime}
+          and to_char(a.INDATE
+                  , 'yyyy-mm-dd hh24:mi:ss') &gt;= #{begtime}
+          and to_char(a.INDATE
+                  , 'yyyy-mm-dd hh24:mi:ss') &lt;= #{endtime}
     </select>
 
 

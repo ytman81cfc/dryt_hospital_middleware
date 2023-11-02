@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hospital.middleware.healthplatform.dao.his.HealthplatfromDAO">
+    <select id="queryZycydjb" resultType="java.util.HashMap">
+        select a.orgcode                                                "YLJGDM",--  医疗机构代码  VARCHAR 22  必填  复合主键：采用22位“卫生机构代码”
+               a.inid                                                   "JZLSH",--	住院就诊流水号 	VARCHAR 	32	必填 	复合主键：His系统内部业务主键；入院登记时产生的代表该次住院的信息系统唯一识别编号
+               '1'                                                      "KLX",--	卡类型	VARCHAR	16	必填	参见CVA5104就诊卡类型
+               c.rid                                                    "KH",--	卡号	VARCHAR	64	必填
+               a.certno                                                 "ZJHM",--	证件号码	VARCHAR	32
+               f.item_id                                                "ZJLX",--	证件类型	VARCHAR	2		参见CV02.01.101身份证件类别代码
+               a.patientname                                            "XM",--	姓名	VARCHAR 	50	必填
+               a.sexcode                                                "XB",--	性别	VARCHAR 	1	必填 	编码。按国标GB/T 2261.1-2003执行
+               to_char(a.birthday, 'YYYY-MM-DD')                        "CSRQ",--	出生日期	DATETIME 		必填 	格式：YYYY-MM-DD
+               a.indeptcode                                             "RYKSBM",--	入院科室编码	VARCHAR	50	必填	填医院系统内部定义的科室编码
+               a.indeptname                                             "RYKSMC",--	入院科室名称	VARCHAR	100	必填	填医院系统内部定义的科室名称
+               d.NURSECELLCODE                                          "RYBQBM",--	入院病区编码	VARCHAR	20	必填	填医院系统内部定义的病区编码
+               d.NURSECELLNAME                                          "RYBQMC",--	入院病区名称	VARCHAR	100	必填	填医院系统内部定义的病区名称
+               to_char(a.indate, 'YYYY-MM-DD HH24:MI:SS')               "RYSJ",--	入院时间	DATETIME		必填	YYYY-MM-DD HH:MM:SS
+               a.outdeptcode                                            "CYKSBM",--	出院科室编码	VARCHAR	50	必填	填医院内定义的科室编码
+               a.outdeptname                                            "CYKSMC",--	出院科室名称	VARCHAR	100	必填	填医院系统内部定义的科室名称
+               d.NURSECELLCODE                                          "CYBQBM",--	出院病区编码	VARCHAR	20	必填	填医院内定义的病区科室编码
+               d.NURSECELLNAME                                          "CYBQMC",--	出院病区名称	VARCHAR	100	必填	填医院系统内部定义的病区名称
+               to_char(a.out_date, 'YYYY-MM-DD HH24:MI:SS')             "CYSJ",--	出院时间	DATETIME		必填	YYYY-MM-DD HH:MM:SS
+               '0'                                                      "LGBZ",--	留观标志	VARCHAR	1	必填	编码。0：住院；1：留院观察
+               decode(a.PERSON_AREA_FLAG, '1', '1', '2', '2', '3', '2') "WDBZ”	,--	外地标志	VARCHAR	1		编码。1：本市；2：外地；3：境外（港澳台）；4：外国；5：未知
+              '0' "TXBZ"	,--	特需标志	VARCHAR	1	必填	编码。0：非特需；1：特需；
+              '1' "ZFBZ"	,--	作废标志	VARCHAR	1	必填	编码。1：正常；2：作废；
+              a.INSUTYPE "BXLX""	,--	保险类型	VARCHAR	4	必填	参见CV07.10.003医疗费用来源类别 a.inhosno "ZYH",--	住院号	VARCHAR	32	必填	若无则可填住院就诊流水号。 a.SI_PSN_NO ”YBZHBZ“	,--	医保账户标识	VARCHAR	64		医保卡和社保卡用户写，完全参照医保16位帐户标志
+              to_char(sysdate, 'YYYY-MM-DD')                          "TBRQ" --  填报日期  DATETIME   必填 本条数据采集时间，格式YYYY-MM-DD
+        from IPR_INPATIENTINFO a
+            left join com_userinfo u1
+        on u1.orgcode = a.orgcode and u1.userid = a.CRTER
+            left join (select a.item_id, b.his_item_id
+            from si_yt_report_item a,
+            si_yt_report_item_compare b
+            where a.module_rid = b.module_rid
+            and a.type_rid = b.type_rid
+            and a.rid = b.item_rid
+            and a.module_rid = '202310101511361148853000000000'
+            and a.type_rid = '202310101602441149584100000000') f
+            on f.his_item_id = a.PSNCERTTYPE
+            left join (select a.item_id, b.his_item_id
+            from si_yt_report_item a,
+            si_yt_report_item_compare b
+            where a.module_rid = b.module_rid
+            and a.type_rid = b.type_rid
+            and a.rid = b.item_rid
+            and a.module_rid = '202310101511361148853000000000'
+            and a.type_rid = '202310101743311149749700000000') g
+            on f.his_item_id = a.INAVENUE,
+            com_hospitalinfo b,
+            com_patientinfo c,
+            inr_receiveinfo d
+
+        where a.orgcode = b.orgcode
+          and a.orgcode = c.orgcode
+          and a.inhosno = c.inhosno
+          and a.patientid = c.patientid
+          and a.orgcode = d.orgcode
+          and a.inid = d.inid
+          and a.instate &lt;&gt; '0'
+          and a.out_date is not null
+          and a.orgcode = #{orgcode}
+          and to_char
+            (
+            a
+            .
+            out_date
+            , 'yyyy-mm-dd hh24:mi:ss'
+            )
+            &gt;= #{begtime}
+          and to_char
+            (
+            a
+            .
+            out_date
+            , 'yyyy-mm-dd hh24:mi:ss'
+            )
+            &lt;= #{endtime}
+
+    </select>
+
+</mapper>
