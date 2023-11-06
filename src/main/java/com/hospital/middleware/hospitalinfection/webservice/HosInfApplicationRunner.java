@@ -14,7 +14,7 @@ import javax.xml.ws.Endpoint;
 public class HosInfApplicationRunner implements ApplicationRunner {
     @Autowired
     HosInfWebServer hosInfWebServer;
-    @Value("${webservice.path}")
+    @Value("${hosInfWebservice.path}")
     private String path;
     private Logger log = LoggerFactory.getLogger(HosInfApplicationRunner.class);
 
