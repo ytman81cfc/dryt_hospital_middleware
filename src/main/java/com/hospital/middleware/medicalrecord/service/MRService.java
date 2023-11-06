@@ -4,10 +4,7 @@ import com.hospital.middleware.medicalrecord.dao.his.MedicalrecordDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class MRService {
@@ -18,8 +15,8 @@ public class MRService {
     public String QryMedCardListByOutDate(String startdt, String enddt){
         try {
             Map<String, String> param = new HashMap<String, String>();
-            param.put("startdt", startdt);
-            param.put("enddt", enddt);
+            param.put("startdt", startdt.trim() + " 00:00:00");
+            param.put("enddt", enddt.trim() + " 23:59:59");
             param.put("orgcode", "H37068300546");
             List<Map> qr = medicalrecordDAO.qryMedCardListByOutDate(param);
             String t_rr = "";
@@ -70,6 +67,7 @@ public class MRService {
         try {
             List<Map> qmResult = medicalrecordDAO.queryMedcard("H37068300546", relprimary);
             Map qmMap = qmResult.get(0);
+            //genSqlString("medcard", qmMap);
             String qm_rr = "";
             Iterator iterator = qmMap.keySet().iterator();
             while(iterator.hasNext()){
@@ -82,6 +80,7 @@ public class MRService {
             String qi_rr = "<icdes>";
             for(int i = 0; i < qiResult.size(); i++){
                 Map qiMap = qiResult.get(i);
+                //genSqlString("icde", qiMap);
                 qi_rr = qi_rr + "<icde>";
                 Iterator qi_iterator = qiMap.keySet().iterator();
                 while(qi_iterator.hasNext()){
@@ -96,6 +95,7 @@ public class MRService {
             String qo_rr = "<opers>";
             for(int i = 0; i < qoResult.size(); i++) {
                 Map qoMap = qoResult.get(i);
+                //genSqlString("oper", qoMap);
                 qo_rr = qo_rr + "<oper>";
                 Iterator qo_iterator = qoMap.keySet().iterator();
                 while(qo_iterator.hasNext()){
@@ -122,5 +122,27 @@ public class MRService {
                     "</result>";
         }
     }
+
+    public void genSqlString(String tableName, Map columnSet){
+        Iterator iterator = columnSet.keySet().iterator();
+        ArrayList al = new ArrayList();
+        while(iterator.hasNext()){
+            String key = iterator.next().toString();
+            al.add(key);
+        }
+        System.out.println("<insert id=\"insert" + tableName + "\" parameterType=\"java.util.HashMap\">");
+        String sql = "insert into " + tableName + "(";
+        for(int i = 0; i < al.size(); i++){
+            sql = sql + al.get(i).toString() + ", ";
+        }
+        sql = sql.substring(0, sql.length() -2) + ") values (";
+        for(int i = 0; i < al.size(); i++){
+            sql = sql + "#{" + al.get(i) + ", jdbcType=VARCHAR}, ";
+        }
+        sql = sql.substring(0, sql.length() -2) + ")";
+        System.out.println(sql);
+        System.out.println("</insert>");
+    }
+
 
 }

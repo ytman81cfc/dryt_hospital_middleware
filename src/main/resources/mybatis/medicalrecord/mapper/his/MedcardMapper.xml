@@ -155,7 +155,7 @@
                  where a.orgcode = b.orgcode and
                        a.orgcode = #{orgcode} and
                        a.visit_id = b.visit_id and
-                       b.discharge_date_time between to_date(#{startdt}, 'YYYY-MM-DD') and to_date(#{enddt}, 'YYYY-MM-DD')
+                       b.discharge_date_time between to_date(#{startdt}, 'YYYY-MM-DD HH24:mi:ss') and to_date(#{enddt}, 'YYYY-MM-DD HH24:mi:ss')
     </select>
 
 
