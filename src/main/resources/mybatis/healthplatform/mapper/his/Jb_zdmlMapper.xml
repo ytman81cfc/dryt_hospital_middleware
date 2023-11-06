@@ -13,7 +13,7 @@
              ''    "PTZXDM"	,--	平台中心诊断代码	VARCHAR	64		西医参见 《疾病分类与代码(ICD-10)》	中医参见 GB/T 15657-2021 中医病名/证候/治法
              ''    "PTZXMC"	,--	平台中心诊断名称	VARCHAR	128		西医参见 《疾病分类与代码(ICD-10)》	中医参见 GB/T 15657-2021 中医病名/证候/治法
              '0'    "JLZT"	,--	记录状态	VARCHAR	1	必填	0：正常 1：停用
-             to_date(to_char(sysdate, 'YYYY-MM-DD'), 'YYYY-MM-DD')      "TBRQ"	--	填报日期	DATETIME		必填	本条数据采集时间，格式YYYY-MM-DD
+              to_char(sysdate, 'YYYY-MM-DD')      "TBRQ"	--	填报日期	DATETIME		必填	本条数据采集时间，格式YYYY-MM-DD
        from  v_si_diag a
        where a.areacode=#{orgcode} and a.valiflag='1'
     </select>

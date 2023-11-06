@@ -2,60 +2,60 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hospital.middleware.healthplatform.dao.his.HealthplatfromDAO">
     <select id="queryZyyzmxb" resultType="java.util.HashMap">
-        select s.orgcode                                                                              "YLJGDM",-- 医疗机构代码  VARCHAR 22  必填  复合主键：采用22位“卫生机构代码”
-               r.rid                                                                             "YZID",-- 医嘱明细流水号 VARCHAR 32  必填  复合主键：医嘱明细唯一标识
-               b.orgname                                                                              "YLJGMC",-- 医疗机构名称  VARCHAR 70  必填  医院执业许可第一名称
-               '0'                                                                                    "FYDM",-- 分院代码  VARCHAR 20  必填  记录分院代码（内码）,如无分院，则传0
-               ''                                                                                     "FYMC",-- 分院名称  VARCHAR 120 条件必填  分院代码不为0时必填
-               s.inid                                                                                 "JZLSH",--  住院就诊流水号 VARCHAR 32  必填  与《住院就诊记录表》关联
-               '1'                                                                                    "CXBZ",-- 撤销标志  VARCHAR 1 必填  1：正常 2：撤销该医嘱
-               '1'                                                                                    "KLX",--  卡类型 VARCHAR 16  必填  请按照以下优先级顺序填写：1：患者主索引号、2：身份证号、3：医保卡号，如果都没有则填写住院就诊流水号
-               c.rid                                                                                  "KH",-- 卡号  VARCHAR 64  必填
-               h.item_id                                                                              "ZJLX",-- 证件类型  VARCHAR 2   参见CV02.01.101-2022修订版 身份证件类别代码   优先使用身份证
-               d.certno                                                                               "ZJHM",-- 证件号码  VARCHAR 32
-               d.PATIENTNAME                                                                          "XM",-- 姓名  VARCHAR   50  必填
-               i.item_id                                                                              "XB",-- 性别  VARCHAR   1 必填  参见 GB/T 2261.1-2003 性别代码表
-               to_date(to_char(d.BIRTHDAY, 'YYYY-MM-DD'), 'YYYY-MM-DD')                               "CSRQ",-- 出生日期  DATETIME    必填  格式：YYYY-MM-DD
-               e.item_id                                                                              "BXLX",-- 医疗费用支付方式  VARCHAR 4 必填  参见CV07.10.003-2022修订版 医疗费用来源类别
-               f.NURSECELLNAME                                                                        "BQ",-- 病区  VARCHAR 50    病人所在的病区。
-               s.DEPTCODE                                                                             "YNXDKSBM",-- 院内医嘱开立科室编码  VARCHAR 50  必填
-               s.DEPTNAME                                                                             "YNXDKSMC",-- 院内医嘱开立科室名称  VARCHAR 100 必填
-               '-'                                                                                    "XDKSBM",-- 中心医嘱开立科室编码  VARCHAR 50  必填  参见《全民健康信息平台科室分类代码表》
-               '-'                                                                                    "XDKSMC",-- 中心医嘱开立科室名称  VARCHAR 100 必填  参见《全民健康信息平台科室分类代码表》
-               s.DOCTCODE                                                                             "XDRGH",--  医嘱开立医师工号  VARCHAR 64  必填
-               s.DOCTNAME                                                                             "XDRXM",--  医嘱开立医师姓名  VARCHAR 50  必填
-               g.certno                                                                               "XDRSFZHM",-- 医嘱开立医师身份证号码 VARCHAR 18  必填
-               to_date(to_char(s.RECORDDATE, 'YYYY-MM-DD hh24:mi:ss'), 'YYYY-MM-DD hh24:mi:ss')       "YZXDSJ",-- 医嘱下达时间  DATETIME    必填
-               s.CHECKNURSECD                                                                         "SHRGH",--  医嘱审核医师工号  VARCHAR 64
-               s.CHECKNURSENM                                                                         "SHRXM",--  医嘱审核医师姓名  VARCHAR 50
-               j.certno                                                                               "SHRSFZHM",-- 医嘱审核医师身份证号码 VARCHAR 18
-               to_date(to_char(s.CHECKNURSEDATE, 'YYYY-MM-DD hh24:mi:ss'), 'YYYY-MM-DD hh24:mi:ss')   "SHSJ",-- 医嘱审核时间  DATETIME      YYYY-MM-DD HH24:MI:SS
-               '0'                                                                                    "SFKZXSHSFH",-- 是否进行线上护士复核  VARCHAR 1 必填  0：否 1：是
-               ''                                                                                     "HDHSGH",-- 医嘱复核护士工号  VARCHAR 64  条件必填  是否开展线上护士复核为“是”时必填
-               ''                                                                                     "HDHSXM",-- 医嘱复核护士姓名  VARCHAR 50  条件必填  是否开展线上护士复核为“是”时必填
-               ''                                                                                     "HDHSSFZHM",--  医嘱复核护士身份证号码 VARCHAR 18  条件必填  是否开展线上护士复核为“是”时必填
-               ''                                                                                     "HDSJ",-- 医嘱复核时间  DATETIME    条件必填  是否开展线上护士复核为“是”时必填
-               s.EXEDEPTCODE                                                                          "YNZXKSBM",-- 院内执行科室编码  VARCHAR 50
-               s.EXEDEPTNAME                                                                          "YNZXKSMC",-- 院内执行科室名称  VARCHAR 100
-               '-'                                                                                    "ZXKSBM",-- 中心执行科室编码  VARCHAR 50    参见《全民健康信息平台科室分类代码表》
-               '-'                                                                                    "ZXKSMC",-- 中心执行科室名称  VARCHAR 100   参见《全民健康信息平台科室分类代码表》
-               decode(s.islong, '1', s.CONFIRMCODE, s.EXECCODE)                                       "ZXRGH",--  医嘱执行人工号 VARCHAR 64  必填  填写首次执行医嘱的人员或医嘱复核人员工号
-               decode(s.islong, '1', s.CONFIRMNAME, s.EXECNAME)                                       "ZXRXM",--  医嘱执行人姓名 VARCHAR 50  必填
-               decode(s.islong, '1', k.certno, l.certno)                                              "ZXRSFZHM",-- 医嘱执行人身份证号码  VARCHAR 18  必填
-               decode(s.islong, '1', to_date(to_char(s.CONFIRMDATE, 'YYYY-MM-DD hh24:mi:ss'), 'YYYY-MM-DD hh24:mi:ss'),
-                      to_date(to_char(s.EXECDATE, 'YYYY-MM-DD hh24:mi:ss'), 'YYYY-MM-DD hh24:mi:ss')) "YZZXSJ",-- 医嘱执行时间  DATETIME    必填  对于长期医嘱，这里填“医嘱开始时间”
-               to_date(to_char(a.DCCONFIRMDATE, 'YYYY-MM-DD hh24:mi:ss'), 'YYYY-MM-DD hh24:mi:ss')    "YZZZSJ",-- 停嘱时间  DATETIME    条件必填  长期医嘱必填
-               a.DCDOCCODE                                                                            "TZYZZGH",--  停嘱医生工号  VARCHAR 64
-               a.DCDOCNAME                                                                            "TZYZZXM",--  停嘱医生姓名  VARCHAR 50
-               m.certno                                                                               "TZYZZSFZHM",-- 停嘱医生身份证号码 VARCHAR 18
-               a.DOCTNOTE                                                                             "YZSM",-- 医嘱说明  VARCHAR 256   对该医嘱的文字性说明。
-               s.BILLID                                                                               "YZZH",-- 医嘱组号  VARCHAR 32  必填  即医嘱分组序号，标识同一次医疗活动使用的医嘱
-               s.ORDERNO                                                                              "YZZXH",--  医嘱组序号 VARCHAR 64  必填  同一组医嘱中明细的序号
+        select s.orgcode                                            "YLJGDM",-- 医疗机构代码  VARCHAR 22  必填  复合主键：采用22位“卫生机构代码”
+               r.rid                                                "YZID",-- 医嘱明细流水号 VARCHAR 32  必填  复合主键：医嘱明细唯一标识
+               b.orgname                                            "YLJGMC",-- 医疗机构名称  VARCHAR 70  必填  医院执业许可第一名称
+               '0'                                                  "FYDM",-- 分院代码  VARCHAR 20  必填  记录分院代码（内码）,如无分院，则传0
+               ''                                                   "FYMC",-- 分院名称  VARCHAR 120 条件必填  分院代码不为0时必填
+               s.inid                                               "JZLSH",--  住院就诊流水号 VARCHAR 32  必填  与《住院就诊记录表》关联
+               '1'                                                  "CXBZ",-- 撤销标志  VARCHAR 1 必填  1：正常 2：撤销该医嘱
+               '1'                                                  "KLX",--  卡类型 VARCHAR 16  必填  请按照以下优先级顺序填写：1：患者主索引号、2：身份证号、3：医保卡号，如果都没有则填写住院就诊流水号
+               c.rid                                                "KH",-- 卡号  VARCHAR 64  必填
+               h.item_id                                            "ZJLX",-- 证件类型  VARCHAR 2   参见CV02.01.101-2022修订版 身份证件类别代码   优先使用身份证
+               d.certno                                             "ZJHM",-- 证件号码  VARCHAR 32
+               d.PATIENTNAME                                        "XM",-- 姓名  VARCHAR   50  必填
+               i.item_id                                            "XB",-- 性别  VARCHAR   1 必填  参见 GB/T 2261.1-2003 性别代码表
+               to_char(d.BIRTHDAY, 'YYYY-MM-DD')                    "CSRQ",-- 出生日期  DATETIME    必填  格式：YYYY-MM-DD
+               e.item_id                                            "BXLX",-- 医疗费用支付方式  VARCHAR 4 必填  参见CV07.10.003-2022修订版 医疗费用来源类别
+               f.NURSECELLNAME                                      "BQ",-- 病区  VARCHAR 50    病人所在的病区。
+               s.DEPTCODE                                           "YNXDKSBM",-- 院内医嘱开立科室编码  VARCHAR 50  必填
+               s.DEPTNAME                                           "YNXDKSMC",-- 院内医嘱开立科室名称  VARCHAR 100 必填
+               '-'                                                  "XDKSBM",-- 中心医嘱开立科室编码  VARCHAR 50  必填  参见《全民健康信息平台科室分类代码表》
+               '-'                                                  "XDKSMC",-- 中心医嘱开立科室名称  VARCHAR 100 必填  参见《全民健康信息平台科室分类代码表》
+               s.DOCTCODE                                           "XDRGH",--  医嘱开立医师工号  VARCHAR 64  必填
+               s.DOCTNAME                                           "XDRXM",--  医嘱开立医师姓名  VARCHAR 50  必填
+               g.certno                                             "XDRSFZHM",-- 医嘱开立医师身份证号码 VARCHAR 18  必填
+               to_char(s.RECORDDATE, 'YYYY-MM-DD hh24:mi:ss')       "YZXDSJ",-- 医嘱下达时间  DATETIME    必填
+               s.CHECKNURSECD                                       "SHRGH",--  医嘱审核医师工号  VARCHAR 64
+               s.CHECKNURSENM                                       "SHRXM",--  医嘱审核医师姓名  VARCHAR 50
+               j.certno                                             "SHRSFZHM",-- 医嘱审核医师身份证号码 VARCHAR 18
+               to_char(s.CHECKNURSEDATE, 'YYYY-MM-DD hh24:mi:ss')   "SHSJ",-- 医嘱审核时间  DATETIME      YYYY-MM-DD HH24:MI:SS
+               '0'                                                  "SFKZXSHSFH",-- 是否进行线上护士复核  VARCHAR 1 必填  0：否 1：是
+               ''                                                   "HDHSGH",-- 医嘱复核护士工号  VARCHAR 64  条件必填  是否开展线上护士复核为“是”时必填
+               ''                                                   "HDHSXM",-- 医嘱复核护士姓名  VARCHAR 50  条件必填  是否开展线上护士复核为“是”时必填
+               ''                                                   "HDHSSFZHM",--  医嘱复核护士身份证号码 VARCHAR 18  条件必填  是否开展线上护士复核为“是”时必填
+               ''                                                   "HDSJ",-- 医嘱复核时间  DATETIME    条件必填  是否开展线上护士复核为“是”时必填
+               s.EXEDEPTCODE                                        "YNZXKSBM",-- 院内执行科室编码  VARCHAR 50
+               s.EXEDEPTNAME                                        "YNZXKSMC",-- 院内执行科室名称  VARCHAR 100
+               '-'                                                  "ZXKSBM",-- 中心执行科室编码  VARCHAR 50    参见《全民健康信息平台科室分类代码表》
+               '-'                                                  "ZXKSMC",-- 中心执行科室名称  VARCHAR 100   参见《全民健康信息平台科室分类代码表》
+               decode(s.islong, '1', s.CONFIRMCODE, s.EXECCODE)     "ZXRGH",--  医嘱执行人工号 VARCHAR 64  必填  填写首次执行医嘱的人员或医嘱复核人员工号
+               decode(s.islong, '1', s.CONFIRMNAME, s.EXECNAME)     "ZXRXM",--  医嘱执行人姓名 VARCHAR 50  必填
+               decode(s.islong, '1', k.certno, l.certno)            "ZXRSFZHM",-- 医嘱执行人身份证号码  VARCHAR 18  必填
+               decode(s.islong, '1', to_char(s.CONFIRMDATE, 'YYYY-MM-DD hh24:mi:ss'),
+                      to_char(s.EXECDATE, 'YYYY-MM-DD hh24:mi:ss')) "YZZXSJ",-- 医嘱执行时间  DATETIME    必填  对于长期医嘱，这里填“医嘱开始时间”
+               to_char(a.DCCONFIRMDATE, 'YYYY-MM-DD hh24:mi:ss')    "YZZZSJ",-- 停嘱时间  DATETIME    条件必填  长期医嘱必填
+               a.DCDOCCODE                                          "TZYZZGH",--  停嘱医生工号  VARCHAR 64
+               a.DCDOCNAME                                          "TZYZZXM",--  停嘱医生姓名  VARCHAR 50
+               m.certno                                             "TZYZZSFZHM",-- 停嘱医生身份证号码 VARCHAR 18
+               a.DOCTNOTE                                           "YZSM",-- 医嘱说明  VARCHAR 256   对该医嘱的文字性说明。
+               s.BILLID                                             "YZZH",-- 医嘱组号  VARCHAR 32  必填  即医嘱分组序号，标识同一次医疗活动使用的医嘱
+               s.ORDERNO                                            "YZZXH",--  医嘱组序号 VARCHAR 64  必填  同一组医嘱中明细的序号
                case
                    when s.ORDE_EXERTYPECD = '1' and s.islong = '1' then '2'
                    when s.ORDE_EXERTYPECD = '1' and s.islong = '2' then '1'
                    when s.ORDE_EXERTYPECD = '2' then '3'
-                   else '9' end                                                                       "YZLB",-- 医嘱类别  VARCHAR 1 必填  1：长期（在院） 2：临时（在院） 3：出院带药；9 其他
+                   else '9' end                                     "YZLB",-- 医嘱类别  VARCHAR 1 必填  1：长期（在院） 2：临时（在院） 3：出院带药；9 其他
                case
                    when s.ORDE_EXERTYPECD = '1' and s.ITEMTYPE = '1' then '01'
                    when s.ORDE_EXERTYPECD = '1' and s.ITEMTYPE = '3' then '06'
@@ -63,7 +63,7 @@
                    when s.ORDE_EXERTYPECD = '1' and s.ITEMTYPE in ('2', '4') and s.APPLYTYPE = '2' then '02'
                    when s.ORDE_EXERTYPECD = '1' and s.ITEMTYPE in ('2', '4') and s.APPLYTYPE = '3' then '04'
                    when s.ORDE_EXERTYPECD = '1' and s.ITEMTYPE in ('2', '4') and s.APPLYTYPE = '4' then '05'
-                   when s.ORDE_EXERTYPECD = '3' then '07' end                                         "YZXMLXDM",-- 医嘱项目类型代码  VARCHAR 2 必填  "参见CV06.00.229   01：药品类医嘱 02：检查类医嘱 03：检验类医嘱 04：手术类医嘱 05：处置类医嘱 06：材料类医嘱 07：嘱托医嘱"
+                   when s.ORDE_EXERTYPECD = '3' then '07' end       "YZXMLXDM",-- 医嘱项目类型代码  VARCHAR 2 必填  "参见CV06.00.229   01：药品类医嘱 02：检查类医嘱 03：检验类医嘱 04：手术类医嘱 05：处置类医嘱 06：材料类医嘱 07：嘱托医嘱"
                case
                    when s.ORDE_EXERTYPECD = '1' and s.ITEMTYPE = '1' then '药品类医嘱'
                    when s.ORDE_EXERTYPECD = '1' and s.ITEMTYPE = '3' then '材料类医嘱'
@@ -71,53 +71,53 @@
                    when s.ORDE_EXERTYPECD = '1' and s.ITEMTYPE in ('2', '4') and s.APPLYTYPE = '2' then '检查类医嘱'
                    when s.ORDE_EXERTYPECD = '1' and s.ITEMTYPE in ('2', '4') and s.APPLYTYPE = '3' then '手术类医嘱'
                    when s.ORDE_EXERTYPECD = '1' and s.ITEMTYPE in ('2', '4') and s.APPLYTYPE = '4' then '处置类医嘱'
-                   when s.ORDE_EXERTYPECD = '3' then '嘱托医嘱' end                                       "YZXMLXMC",-- 医嘱项目类型名称  VARCHAR 32  必填
-               s.APPLYID                                                                              "DZSQDBH",--  电子申请单编号 VARCHAR 20
-               decode(s.ITEMTYPE, '1', '1', '0')                                                      "YZLX",-- 是否药品  VARCHAR 2 必填  0：否 1：是
-               n.GJYPID                                                                               "YPID",-- 国家药品ID  VARCHAR 64    是否药品为“是”时填写 三级医院必填,二级医院有条件的填
-               s.ITEMID                                                                               "YZMXBM",-- 院内医嘱项目编码  VARCHAR 32  必填  嘱托类等医嘱没有编码的填写999
-               s.ITEMNAME                                                                             "YZMXMC",-- 院内医嘱项目名称  VARCHAR 1024  必填
-               o.MED_LIST_CODG                                                                        "ZXDM",-- 中心医嘱项目编码  VARCHAR 32  必填  "药品类填写药品医保编码，如非医保药品，则传999检查类参见《全民健康信息平台检查分类编码标准》检验类参见《全民健康信息平台检验分类编码标准》手术类参见《手术操作分类代码(ICD-9)》处置类医嘱填写《全民健康信息平台医疗服务项目价格表》材料类参见《国家医保医用耗材分类编码》嘱托类填写888"
-               o.SERVITEM_NAME                                                                        "ZXMC",-- 中心医嘱项目名称  VARCHAR 1024  必填
-               round(r.UNITPRICE, 3)                                                                  "XMDJ",-- 项目单价  NUMERIC 18,3
-               round(r.TOTCOST, 3)                                                                    "XMJE",-- 项目金额  NUMERIC 18,3
-               decode(s.DRUGTYPE, '1', '1', '2', '2', '3', '3')                                       "YPLB",-- 药品类别  VARCHAR 1 条件必填  1：西药 2：中成药 3：中草药
-               decode(s.itemtype, '1', '9', '')                                                       "ZYCFFL",-- 中药处方分类  VARCHAR 1 条件必填  1：散装饮片 2：小包装饮片 3：颗粒剂 4：协定 5：膏方 6：中药制剂 9：其他
-               decode(s.itemtype, '1', s.SPECS, '')                                                   "YPGG",-- 药品规格  VARCHAR 32  条件必填  若为药品，则必填写，若为非药品，则必须为空。
-               decode(s.itemtype, '1', r.DOSEMODELCODE, '')                                           "YNYWJXDM",-- 院内药物剂型代码  VARCHAR 10  条件必填
-               decode(s.itemtype, '1', r.dictname, '')                                                "YNYWJXMC",-- 院内药物剂型名称  VARCHAR 128 条件必填
-               decode(s.itemtype, '1', p.item_id, '')                                                 "YWJXDM",-- 中心药物剂型代码  VARCHAR 3 条件必填  参见 CV08.50.002 药物剂型代码表
-               decode(s.itemtype, '1', p.item_name, '')                                               "YWJXMC",-- 中心药物剂型名称  VARCHAR 128 条件必填
-               decode(s.itemtype, '1', s.USAGECODE, '')                                               "YNYPYFDM",-- 院内药品用法代码  VARCHAR 32  条件必填
-               decode(s.itemtype, '1', s.USAGENAME, '')                                               "YNYPYFMC",-- 院内药品用法名称  VARCHAR 128 条件必填
-               decode(s.itemtype, '1', q.item_id, '')                                                 "YPYF",-- 中心药品用法代码  VARCHAR 32  条件必填  参见CV06.00.102 用药途径代码
-               decode(s.itemtype, '1', q.item_name, '')                                               "YPYFMC",-- 中心药品用法名称  VARCHAR 128 条件必填
-               decode(s.itemtype, '1', s.FREQCODE, '')                                                "YNYYPDDM",-- 院内用药频度代码  VARCHAR 32  条件必填
-               decode(s.itemtype, '1', s.FREQNAME, '')                                                "YNYYPDMC",-- 院内用药频度名称  VARCHAR 128 条件必填
-               decode(s.itemtype, '1', t.item_id, '')                                                 "YYPD",-- 中心用药频度代码  VARCHAR 32  条件必填  参见CVA5301_01 药物使用频率代码表”
-               decode(s.itemtype, '1', t.item_name, '')                                               "YYPDMC",-- 中心用药频度名称  VARCHAR 128 条件必填  平台用药频度名称
-               decode(s.itemtype, '1', round(s.DOSEONCE, 3), null)                                    "JL",-- 药物使用次剂量 NUMERIC 10,3  条件必填
-               decode(s.itemtype, '1', s.DOSEUNIT, '')                                                "JLDWDM",-- 药物使用次剂量单位代码 VARCHAR 64  条件必填  参见 CVA08.03.014 药物使用剂量单位
-               decode(s.itemtype, '1', u.dictname, '')                                                "DW",-- 药物使用次剂量单位名称 VARCHAR 16  条件必填
-               decode(s.itemtype, '1', '2', '')                                                       "YYMD",-- 用药目的  VARCHAR 1 条件必填  1：预防 2：治疗 3：预防+治疗
-               decode(s.itemtype, '1', round(n.DDDVALUE, 2), null)                                    "DDD",--  DDD值  NUMERIC 12,2  条件必填  抗菌药物必填
-               decode(s.itemtype, '1', n.DDDUNIT, '')                                                 "DDDDW",--  DDD单位 VARCHAR 8 条件必填  抗菌药物必填
-               decode(s.itemtype, '1', '2', null)                                                     "YYTS",-- 出院带药用药天数  NUMERIC 3 条件必填  医嘱类别为“出院带药”时必填
+                   when s.ORDE_EXERTYPECD = '3' then '嘱托医嘱' end     "YZXMLXMC",-- 医嘱项目类型名称  VARCHAR 32  必填
+               s.APPLYID                                            "DZSQDBH",--  电子申请单编号 VARCHAR 20
+               decode(s.ITEMTYPE, '1', '1', '0')                    "YZLX",-- 是否药品  VARCHAR 2 必填  0：否 1：是
+               n.GJYPID                                             "YPID",-- 国家药品ID  VARCHAR 64    是否药品为“是”时填写 三级医院必填,二级医院有条件的填
+               s.ITEMID                                             "YZMXBM",-- 院内医嘱项目编码  VARCHAR 32  必填  嘱托类等医嘱没有编码的填写999
+               s.ITEMNAME                                           "YZMXMC",-- 院内医嘱项目名称  VARCHAR 1024  必填
+               o.MED_LIST_CODG                                      "ZXDM",-- 中心医嘱项目编码  VARCHAR 32  必填  "药品类填写药品医保编码，如非医保药品，则传999检查类参见《全民健康信息平台检查分类编码标准》检验类参见《全民健康信息平台检验分类编码标准》手术类参见《手术操作分类代码(ICD-9)》处置类医嘱填写《全民健康信息平台医疗服务项目价格表》材料类参见《国家医保医用耗材分类编码》嘱托类填写888"
+               o.SERVITEM_NAME                                      "ZXMC",-- 中心医嘱项目名称  VARCHAR 1024  必填
+               round(r.UNITPRICE, 3)                                "XMDJ",-- 项目单价  NUMERIC 18,3
+               round(r.TOTCOST, 3)                                  "XMJE",-- 项目金额  NUMERIC 18,3
+               decode(s.DRUGTYPE, '1', '1', '2', '2', '3', '3')     "YPLB",-- 药品类别  VARCHAR 1 条件必填  1：西药 2：中成药 3：中草药
+               decode(s.itemtype, '1', '9', '')                     "ZYCFFL",-- 中药处方分类  VARCHAR 1 条件必填  1：散装饮片 2：小包装饮片 3：颗粒剂 4：协定 5：膏方 6：中药制剂 9：其他
+               decode(s.itemtype, '1', s.SPECS, '')                 "YPGG",-- 药品规格  VARCHAR 32  条件必填  若为药品，则必填写，若为非药品，则必须为空。
+               decode(s.itemtype, '1', r.DOSEMODELCODE, '')         "YNYWJXDM",-- 院内药物剂型代码  VARCHAR 10  条件必填
+               decode(s.itemtype, '1', r.dictname, '')              "YNYWJXMC",-- 院内药物剂型名称  VARCHAR 128 条件必填
+               decode(s.itemtype, '1', p.item_id, '')               "YWJXDM",-- 中心药物剂型代码  VARCHAR 3 条件必填  参见 CV08.50.002 药物剂型代码表
+               decode(s.itemtype, '1', p.item_name, '')             "YWJXMC",-- 中心药物剂型名称  VARCHAR 128 条件必填
+               decode(s.itemtype, '1', s.USAGECODE, '')             "YNYPYFDM",-- 院内药品用法代码  VARCHAR 32  条件必填
+               decode(s.itemtype, '1', s.USAGENAME, '')             "YNYPYFMC",-- 院内药品用法名称  VARCHAR 128 条件必填
+               decode(s.itemtype, '1', q.item_id, '')               "YPYF",-- 中心药品用法代码  VARCHAR 32  条件必填  参见CV06.00.102 用药途径代码
+               decode(s.itemtype, '1', q.item_name, '')             "YPYFMC",-- 中心药品用法名称  VARCHAR 128 条件必填
+               decode(s.itemtype, '1', s.FREQCODE, '')              "YNYYPDDM",-- 院内用药频度代码  VARCHAR 32  条件必填
+               decode(s.itemtype, '1', s.FREQNAME, '')              "YNYYPDMC",-- 院内用药频度名称  VARCHAR 128 条件必填
+               decode(s.itemtype, '1', t.item_id, '')               "YYPD",-- 中心用药频度代码  VARCHAR 32  条件必填  参见CVA5301_01 药物使用频率代码表”
+               decode(s.itemtype, '1', t.item_name, '')             "YYPDMC",-- 中心用药频度名称  VARCHAR 128 条件必填  平台用药频度名称
+               decode(s.itemtype, '1', round(s.DOSEONCE, 3), null)  "JL",-- 药物使用次剂量 NUMERIC 10,3  条件必填
+               decode(s.itemtype, '1', s.DOSEUNIT, '')              "JLDWDM",-- 药物使用次剂量单位代码 VARCHAR 64  条件必填  参见 CVA08.03.014 药物使用剂量单位
+               decode(s.itemtype, '1', u.dictname, '')              "DW",-- 药物使用次剂量单位名称 VARCHAR 16  条件必填
+               decode(s.itemtype, '1', '2', '')                     "YYMD",-- 用药目的  VARCHAR 1 条件必填  1：预防 2：治疗 3：预防+治疗
+               decode(s.itemtype, '1', round(n.DDDVALUE, 2), null)  "DDD",--  DDD值  NUMERIC 12,2  条件必填  抗菌药物必填
+               decode(s.itemtype, '1', n.DDDUNIT, '')               "DDDDW",--  DDD单位 VARCHAR 8 条件必填  抗菌药物必填
+               decode(s.itemtype, '1', '2', null)                   "YYTS",-- 出院带药用药天数  NUMERIC 3 条件必填  医嘱类别为“出院带药”时必填
                case
                    when s.ORDE_EXERTYPECD = '2' and s.itemtype = '1' then a.TOTQTY
-                   else null end                                                                      "YPSL",-- 出院带药数量  NUMERIC 10,3  条件必填  医嘱类别为“出院带药”时必填
+                   else null end                                    "YPSL",-- 出院带药数量  NUMERIC 10,3  条件必填  医嘱类别为“出院带药”时必填
                case
                    when s.ORDE_EXERTYPECD = '2' and s.itemtype = '1' then a.PRICEUNIT
-                   else '' end                                                                        "YPDW",-- 出院带药数量单位  VARCHAR 16  条件必填  医嘱类别为“出院带药”时必填
-               decode(s.itemtype, '1', s.USAGECODE, '')                                               "YNJYDM",-- 院内中药煎煮法代码 VARCHAR 4 条件必填  院内中药煎煮法代码
-               decode(s.itemtype, '1', s.USAGENAME, '')                                               "YNJYMC",-- 院内中药煎煮法名称 VARCHAR 128 条件必填  院内中药煎煮法名称
-               '-'                                                                                    "JYDM",-- 中心中药煎煮法代码 VARCHAR 4 条件必填  参见 CVA08.03.012 平台中药煎煮法代码
-               '-'                                                                                    "JYMC",-- 中心中药煎煮法名称 VARCHAR 128 条件必填  平台中药煎煮法名称
+                   else '' end                                      "YPDW",-- 出院带药数量单位  VARCHAR 16  条件必填  医嘱类别为“出院带药”时必填
+               decode(s.itemtype, '1', s.USAGECODE, '')             "YNJYDM",-- 院内中药煎煮法代码 VARCHAR 4 条件必填  院内中药煎煮法代码
+               decode(s.itemtype, '1', s.USAGENAME, '')             "YNJYMC",-- 院内中药煎煮法名称 VARCHAR 128 条件必填  院内中药煎煮法名称
+               '-'                                                  "JYDM",-- 中心中药煎煮法代码 VARCHAR 4 条件必填  参见 CVA08.03.012 平台中药煎煮法代码
+               '-'                                                  "JYMC",-- 中心中药煎煮法名称 VARCHAR 128 条件必填  平台中药煎煮法名称
                case
                    when a.itemtype = '1' and a.ISSKINTEST = '1' then '0'
                    when a.itemtype = '1' and a.ISSKINTEST in ('2', '3') then '1'
-                   end                                                                                "SFPS",-- 是否皮试  VARCHAR 1 条件必填  0：否 1：是
-               to_date(to_char(sysdate, 'YYYY-MM-DD'), 'YYYY-MM-DD')                                  "TBRQ" -- 填报日期  DATETIME   必填 本条数据采集时间，格式YYYY-MM-DD
+                   end                                              "SFPS",-- 是否皮试  VARCHAR 1 条件必填  0：否 1：是
+               to_char(sysdate, 'YYYY-MM-DD')                       "TBRQ" -- 填报日期  DATETIME   必填 本条数据采集时间，格式YYYY-MM-DD
         from IPM_ORDER_INFO a
                  left join com_userinfo m on m.orgcode = a.orgcode and m.usercode = a.DCDOCCODE,
              IPM_ORDER_SPLIT s
@@ -180,37 +180,37 @@
                                                on b.his_item_id = a.MEDICAL_PAYMENT_METHOD) e
                            on e.orgcode = d.orgcode and e.visit_id = d.inid and e.active = '1',
              inr_receiveinfo f,
-             ( select a.orgcode,
-                      a.inid,
-                      a.rid,
-                      a.ORDERNO,
-                      a.ITEMCODE,
-                      a.DOSEMODELCODE,
-                      a.UNITPRICE,
-                      b.dictname,
-                      a.feedate,
-                      a.TOTCOST
-               from IPS_FEEDETAIL a,
-                    com_dictcodeinfo b
-               where b.typecode = 'DRUG_DOSFORM'
-                 and a.DOSEMODELCODE = b.dictcode
+             (select a.orgcode,
+                     a.inid,
+                     a.rid,
+                     a.ORDERNO,
+                     a.ITEMCODE,
+                     a.DOSEMODELCODE,
+                     a.UNITPRICE,
+                     b.dictname,
+                     a.feedate,
+                     a.TOTCOST
+              from IPS_FEEDETAIL a,
+                   com_dictcodeinfo b
+              where b.typecode = 'DRUG_DOSFORM'
+                and a.DOSEMODELCODE = b.dictcode
 
-               union all
-               select a.orgcode,
-                      a.inid,
-                      a.rid,
-                      a.ORDERNO,
-                      a.ITEMCODE,
-                      a.DOSEMODELCODE,
-                      a.UNITPRICE,
-                      b.dictname,
-                      a.feedate,
-                      a.TOTCOST
-               from IPS_OUTFEEDETAIL a,
-                    com_dictcodeinfo b
-               where b.typecode = 'DRUG_DOSFORM'
-                 and a.DOSEMODELCODE = b.dictcode
-             )  r
+              union all
+              select a.orgcode,
+                     a.inid,
+                     a.rid,
+                     a.ORDERNO,
+                     a.ITEMCODE,
+                     a.DOSEMODELCODE,
+                     a.UNITPRICE,
+                     b.dictname,
+                     a.feedate,
+                     a.TOTCOST
+              from IPS_OUTFEEDETAIL a,
+                   com_dictcodeinfo b
+              where b.typecode = 'DRUG_DOSFORM'
+                and a.DOSEMODELCODE = b.dictcode
+             ) r
                  left join (select a.item_id, a.item_name, b.his_item_id
                             from si_yt_report_item a,
                                  si_yt_report_item_compare b
@@ -222,7 +222,7 @@
         where a.orgcode = s.orgcode
           and a.inid = s.inid
           and a.BILLID = s.BILLID
-          and a.ORDERSTATUS  in ('2','4')
+          and a.ORDERSTATUS in ('2', '4')
           and s.orgcode = b.orgcode
           and s.orgcode = d.orgcode
           and s.inid = d.inid

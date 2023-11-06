@@ -29,8 +29,8 @@
                d.DEPTNAME                                                                      "YNJZKSMC",--  院内费用发生科室名称  VARCHAR 100 必填
                '-'                                                                             "JZKSDM",--  中心费用发生科室代码  VARCHAR 50  必填  《全民健康信息平台科室分类代码表》
                '-'                                                                             "JZKSMC",--  中心费用发生科室名称  VARCHAR 100 必填  《全民健康信息平台科室分类代码表》
-               round(a.totcost, 3)                                                             "ZJE",-- 总金额 NUMERIC 18,3  必填  医院实际收取的费用     退费标志为2（退费）时，传负数
-               null                                                                            "YBJE",--  医保结算范围金额  NUMERIC 18,3  必填  医保结算范围金额
+               nvl(round(a.totcost, 3) ,0)                                                          "ZJE",-- 总金额 NUMERIC 18,3  必填  医院实际收取的费用     退费标志为2（退费）时，传负数
+               nvl(s.YBINSCP_SCP_AMT, 0)                                                                       "YBJE",--  医保结算范围金额  NUMERIC 18,3  必填  医保结算范围金额
                nvl(round(a.PUBCOST, 3), 0)                                                     "YBZFJE",--  医保支付金额  NUMERIC 18,3  必填  医保实际报销支付金额，如无，则填写0  退费标志为2（退费）时，传负数
                nvl(round(a.OWNCOST, 3), 0)                                                     "ZFJE",--  个人现金支付金额  NUMERIC 18,3  必填  非医保报销范围，由患者个人自付的医疗费用总额  退费标志为2（退费）时，传负数
                nvl(round(a.PAYCOST, 3), 0)                                                     "FLZJJE",--  个人账户支付金额  NUMERIC 18,3  必填  医疗保险患者的费用中属于个人支付部分的金额   退费标志为2（退费）时，传负数
@@ -113,16 +113,20 @@
                               and a.rid = b.item_rid
                               and a.module_rid = '202310101511361148853000000000'
                               and a.type_rid = '202310101602441149584100000000') f
-                           on f.his_item_id = d.PSNCERTTYPE
+                           on f.his_item_id = d.PSNCERTTYPE,
+             SI_OPB_SETLINFO s
         where a.orgcode = b.orgcode
           and a.orgcode = d.orgcode
           and a.regid = d.regid
           and c.orgcode = d.orgcode
           and c.patientno = d.patientno
           and c.patientid = d.patientid
-          and a.orgcode = e.orgcode
+          and a.orgcode =s.orgcode
+          and a.INVOICENO=s.INVONO
+          and a.TRANSTYPE=s.TRANSTYPE
+           and a.orgcode = e.orgcode
           and a.regid = e.regid
-          and a.INVOICENO = a.INVOICENO
+          and a.INVOICENO = e.INVOICENO
           and a.TRANSTYPE = e.TRANSTYPE
           and a.TRANSTYPE = '1'
           and a.orgcode = #{orgcode}
@@ -157,8 +161,8 @@
                d.DEPTNAME                                                                       "YNJZKSMC",--	院内费用发生科室名称	VARCHAR	100	必填
                '-'                                                                              "JZKSDM",--	中心费用发生科室代码	VARCHAR	50	必填	《全民健康信息平台科室分类代码表》
                '-'                                                                              "JZKSMC",--	中心费用发生科室名称	VARCHAR	100	必填	《全民健康信息平台科室分类代码表》
-               round(a.totcost, 3)                                                              "ZJE",-- 总金额 NUMERIC 18,3  必填  医院实际收取的费用     退费标志为2（退费）时，传负数
-               null                                                                             "YBJE",--  医保结算范围金额  NUMERIC 18,3  必填  医保结算范围金额
+               nvl(round(a.totcost, 3) ,  0 )                                                          "ZJE",-- 总金额 NUMERIC 18,3  必填  医院实际收取的费用     退费标志为2（退费）时，传负数
+               nvl(s.YBINSCP_SCP_AMT, 0)                                                                                "YBJE",--  医保结算范围金额  NUMERIC 18,3  必填  医保结算范围金额
                nvl(round(a.PUBCOST, 3), 0)                                                      "YBZFJE",--  医保支付金额  NUMERIC 18,3  必填  医保实际报销支付金额，如无，则填写0  退费标志为2（退费）时，传负数
                nvl(round(a.OWNCOST, 3), 0)                                                      "ZFJE",--  个人现金支付金额  NUMERIC 18,3  必填  非医保报销范围，由患者个人自付的医疗费用总额  退费标志为2（退费）时，传负数
                nvl(round(a.PAYCOST, 3), 0)                                                      "FLZJJE",--  个人账户支付金额  NUMERIC 18,3  必填  医疗保险患者的费用中属于个人支付部分的金额   退费标志为2（退费）时，传负数
@@ -250,7 +254,7 @@
           and c.patientid = d.patientid
           and a.orgcode = e.orgcode
           and a.regid = e.regid
-          and a.INVOICENO = a.INVOICENO
+          and a.INVOICENO = e.INVOICENO
           and a.TRANSTYPE = e.TRANSTYPE
           and a.TRANSTYPE = '2'
           and a.orgcode = #{orgcode}
