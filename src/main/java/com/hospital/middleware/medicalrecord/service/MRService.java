@@ -114,7 +114,8 @@ public class MRService {
                             qi_rr +
                             qo_rr +
                             "</result>";
-            return rr;
+            String rr1 = rr.replaceAll("<硅肺>", "(硅肺)");
+            return rr1;
         }catch(Exception e){
             return  "<result>" +
                     "<resultflag>0</resultflag>" +
