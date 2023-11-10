@@ -65,9 +65,8 @@ public class MRService {
 
     public String GetMedCardXml(String relprimary){
         try {
-            List<Map> qmResult = medicalrecordDAO.queryMedcard("H37068300546", relprimary);
+            List<Map<String, String>> qmResult = medicalrecordDAO.queryMedcard("H37068300546", relprimary);
             Map qmMap = qmResult.get(0);
-            //genSqlString("medcard", qmMap);
             String qm_rr = "";
             Iterator iterator = qmMap.keySet().iterator();
             while(iterator.hasNext()){
@@ -76,31 +75,45 @@ public class MRService {
             }
             qm_rr = "<medcard>" + qm_rr + "</medcard>";
 
-            List<Map> qiResult = medicalrecordDAO.queryIcde("H37068300546", relprimary);
+            List<Map<String, String>> qiResult = medicalrecordDAO.queryIcde("H37068300546", relprimary);
             String qi_rr = "<icdes>";
             for(int i = 0; i < qiResult.size(); i++){
-                Map qiMap = qiResult.get(i);
-                //genSqlString("icde", qiMap);
+                Map<String, String> qiMap = qiResult.get(i);
                 qi_rr = qi_rr + "<icde>";
                 Iterator qi_iterator = qiMap.keySet().iterator();
                 while(qi_iterator.hasNext()){
                     String key = qi_iterator.next().toString();
-                    qi_rr = qi_rr + "<" + key + ">" + qiMap.get(key) + "</" + key + ">";
+                    String value = "";
+                    if(qiMap.get(key) != null){
+                        value = String.valueOf(qiMap.get(key));
+                        value = value.replaceAll("<", "&lt;");
+                        value = value.replaceAll(">", "&gt;");
+                    }else{
+                        value = null;
+                    }
+                    qi_rr = qi_rr + "<" + key + ">" + value + "</" + key + ">";
                 }
                 qi_rr = qi_rr + "</icde>";
             }
             qi_rr = qi_rr + "</icdes>";
 
-            List<Map> qoResult = medicalrecordDAO.queryOper("H37068300546", relprimary);
+            List<Map<String, String>> qoResult = medicalrecordDAO.queryOper("H37068300546", relprimary);
             String qo_rr = "<opers>";
             for(int i = 0; i < qoResult.size(); i++) {
-                Map qoMap = qoResult.get(i);
-                //genSqlString("oper", qoMap);
+                Map<String, String> qoMap = qoResult.get(i);
                 qo_rr = qo_rr + "<oper>";
                 Iterator qo_iterator = qoMap.keySet().iterator();
                 while(qo_iterator.hasNext()){
                     String key = qo_iterator.next().toString();
-                    qo_rr = qo_rr + "<" + key + ">" + qoMap.get(key) + "</" + key + ">";
+                    String value = "";
+                    if(qoMap.get(key) != null){
+                        value = String.valueOf(qoMap.get(key));
+                        value = value.replaceAll("<", "&lt;");
+                        value = value.replaceAll(">", "&gt;");
+                    }else{
+                        value = null;
+                    }
+                    qo_rr = qo_rr + "<" + key + ">" + value + "</" + key + ">";
                 }
                 qo_rr = qo_rr + "</oper>";
             }
@@ -114,8 +127,7 @@ public class MRService {
                             qi_rr +
                             qo_rr +
                             "</result>";
-            String rr1 = rr.replaceAll("<硅肺>", "(硅肺)");
-            return rr1;
+            return rr;
         }catch(Exception e){
             return  "<result>" +
                     "<resultflag>0</resultflag>" +
@@ -123,27 +135,4 @@ public class MRService {
                     "</result>";
         }
     }
-
-    public void genSqlString(String tableName, Map columnSet){
-        Iterator iterator = columnSet.keySet().iterator();
-        ArrayList al = new ArrayList();
-        while(iterator.hasNext()){
-            String key = iterator.next().toString();
-            al.add(key);
-        }
-        System.out.println("<insert id=\"insert" + tableName + "\" parameterType=\"java.util.HashMap\">");
-        String sql = "insert into " + tableName + "(";
-        for(int i = 0; i < al.size(); i++){
-            sql = sql + al.get(i).toString() + ", ";
-        }
-        sql = sql.substring(0, sql.length() -2) + ") values (";
-        for(int i = 0; i < al.size(); i++){
-            sql = sql + "#{" + al.get(i) + ", jdbcType=VARCHAR}, ";
-        }
-        sql = sql.substring(0, sql.length() -2) + ")";
-        System.out.println(sql);
-        System.out.println("</insert>");
-    }
-
-
 }

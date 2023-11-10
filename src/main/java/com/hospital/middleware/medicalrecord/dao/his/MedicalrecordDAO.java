@@ -8,9 +8,9 @@ import java.util.Map;
 
 @Mapper
 public interface MedicalrecordDAO {
-    List<Map> queryMedcard(String orgcode,String inid);
-    List<Map> queryIcde(String orgcode,String inid);
-    List<Map> queryOper(String orgcode,String inid);
+    List<Map<String, String>> queryMedcard(String orgcode,String inid);
+    List<Map<String, String>> queryIcde(String orgcode,String inid);
+    List<Map<String, String>> queryOper(String orgcode,String inid);
     List<Map> qryMedCardListByPatNo(Map param);
     List<Map> qryMedCardListByOutDate(Map param);
 }
