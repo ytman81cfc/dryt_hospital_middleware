@@ -19,7 +19,7 @@
                         a.OPTER_CODE                                            "SFCZYGH",--	收费操作员工号	VARCHAR	64	必填
                         a.OPTER_NAME                                            "SFCZYXM",--	收费操作员姓名	VARCHAR		必填
                         to_date(to_char(sysdate, 'YYYY-MM-DD'), 'YYYY-MM-DD')   "TBRQ" --	填报日期	DATETIME	 必填	本条数据采集时间，格式YYYY-MM-DD
-        from OPB_INVOICEINFO a
+        from OPB_INVOICEINFO a,
              opr_register b
                  left join (select a.item_id, b.his_item_id
                             from si_yt_report_item a,
