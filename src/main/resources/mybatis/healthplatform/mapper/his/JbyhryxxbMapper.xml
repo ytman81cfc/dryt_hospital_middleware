@@ -30,7 +30,7 @@
                ''                                                                   "DHHM",        --	电话号码	VARCHAR	20
                a.mob                                                                "SJHM1",       --	手机号码	VARCHAR	20
                ''                                                                   "YSJJ",        --	医生简介	VARCHAR	4000
-               decode(d.isreg, '1', '0', '0', '1')                                  "GHZT",        --	是否可挂号	VARCHAR	1	必填	0：可挂号 1：不可挂号
+               nvl(decode(d.isreg, '1', '0', '0', '1'), 1)                                  "GHZT",        --	是否可挂号	VARCHAR	1	必填	0：可挂号 1：不可挂号
                ''                                                                   "WHCD",        --	文化程度代码	VARCHAR	2		参见 GB/T 4658-2006-2022修订版 学历代码表
                ''                                                                   "XWDM",        --	学位代码	VARCHAR	1		1：名誉博士 2：博士 3：硕士 4：学士
                ''                                                                   "XZGLZWDM",    --	行政管理职务代码	VARCHAR	1		1：单位正职领导 2：单位副职领导 3：中层正职 4：中层副职
@@ -38,17 +38,17 @@
                ''                                                                   "GW",          --	岗位	VARCHAR	64
                a.praccertino                                                        "ZYZSH",       --	执业证书号	VARCHAR	64
                ''                                                                   "ZYZGMC",      --	执业资格名称	VARCHAR	64
-               ''                                                                   "ZYZSZCSJ",    --	执业证书注册时间	DATETIME
+               null                                                                   "ZYZSZCSJ",    --	执业证书注册时间	DATETIME
                '0'                                                                  "QKYSBZ",      --	是否为全科医生	INT			0：否 1：是
-               ''                                                                   "YSZYLBDM",    --	医师执业类别代码	VARCHAR	1		1：临床 2：口腔 3：公共卫生 4：中医
+               '1'                                                                   "YSZYLBDM",    --	医师执业类别代码	VARCHAR	1		1：临床 2：口腔 3：公共卫生 4：中医
                ''                                                                   "YSZYFWDM",    --	医师执业范围代码	VARCHAR	30		参见《全民健康信息平台科室分类代码表》
                ''                                                                   "ZCWDDZYYSBZ", --	是否注册为多地点执业医师	INT			0：否 1：是
                ''                                                                   "D2ZYDWLBDM",  --	第2执业单位类别代码	VARCHAR	1		1：医院 2：乡镇卫生院 3：社区卫生服务中心/站 9：其他医疗机构
                ''                                                                   "DSZYDWLBDM",  --	第3执业单位类别代码	VARCHAR	1		1：医院 2：乡镇卫生院 3：社区卫生服务中心/站 9：其他医疗机构
                '19'                                                                 "RYDRQK",      --	人员调入情况	VARCHAR	2	必填	11：高中等院校毕业生 12：其他卫生机构调入 13：非卫生机构调入 14：军转人员 19：其他
                ''                                                                   "RYDCQK",      --	人员调出情况	VARCHAR	2		22：考取研究生 23：出国留学 24：退休 25：辞职26：自然减员 27：辞退 29：其他 31：调往本市本系统 32：调往本市外系统 33：调往外市本系统 34：调往外市外系统
-               ''                                                                   "DRSJ",        --	调入时间	DATETIME
-               ''                                                                   "DCSJ",        --	调出时间	DATETIME
+               null                                                                   "DRSJ",        --	调入时间	DATETIME
+               null                                                                   "DCSJ",        --	调出时间	DATETIME
                ''                                                                   "CJGZRQ",      --	参加工作日期	VARCHAR	6		YYYYMM
                '2'                                                                  "BZQK",        --	编制情况	VARCHAR	1	必填	1：编制内 2：合同制 3：临聘人员 4：返聘
                '1'                                                                  "GZZT",        --	工作状态	VARCHAR	2	必填	1：在岗 2：停薪留职 3：长病假 4：借出外系统
@@ -58,14 +58,14 @@
                ''                                                                   "GWJB",        --	岗位级别	VARCHAR	2		1：一级 2：二级 3：三级 4：四级 5：五级 6：六级 7：七级 8：八级 9：九级 10：十级 11：十一级 12：十二级 13：十三级 0：普通工
                '0'                                                                  "SFNRQKYSPX",  --	纳入全科医生培训标志	VARCHAR	1	必填	0：未纳入 1：已纳入
                ''                                                                   "QKYSZCZSH",   --	全科医生注册证书号	VARCHAR	50
-               ''                                                                   "QKYSZCZSSJ",  --	全科医生注册证书时间	DATETIME
+               null                                                                   "QKYSZCZSSJ",  --	全科医生注册证书时间	DATETIME
                ''                                                                   "ZCZSH",       --	注册证书号	VARCHAR	50
-               ''                                                                   "ZCSJ",        --	注册时间	DATETIME
+               null                                                                   "ZCSJ",        --	注册时间	DATETIME
                ''                                                                   "SFPY",        --	是否聘用	VARCHAR	1		0：否 1：是
-               ''                                                                   "XPGWSJ",      --	现聘岗位时间	DATETIME
+               null                                                                   "XPGWSJ",      --	现聘岗位时间	DATETIME
                ''                                                                   "DCDDDM",      --	调出地点代码	VARCHAR	50
                ''                                                                   "DCDDMC",      --	调出地点名称	VARCHAR	100
-               ''                                                                   "JCSJ",        --	借出时间	DATETIME
+               null                                                                   "JCSJ",        --	借出时间	DATETIME
                ''                                                                   "JCDWDM",      --	借出单位代码	VARCHAR	50
                ''                                                                   "JCDWMC",      --	借出单位名称	VARCHAR	100
                 to_char(sysdate, 'YYYY-MM-DD')                "TBRQ"         --	填报日期	DATETIME		必填	本条数据采集时间，格式YYYY-MM-DD
