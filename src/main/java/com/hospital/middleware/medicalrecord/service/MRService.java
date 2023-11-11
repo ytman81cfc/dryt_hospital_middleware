@@ -71,7 +71,15 @@ public class MRService {
             Iterator iterator = qmMap.keySet().iterator();
             while(iterator.hasNext()){
                 String key = iterator.next().toString();
-                qm_rr = qm_rr + "<" + key + ">" + qmMap.get(key) + "</" + key + ">";
+                String value = "";
+                if(qmMap.get(key) != null){
+                    value = String.valueOf(qmMap.get(key));
+                    value = value.replaceAll("<", "&lt;");
+                    value = value.replaceAll(">", "&gt;");
+                }else{
+                    value = null;
+                }
+                qm_rr = qm_rr + "<" + key + ">" + value + "</" + key + ">";
             }
             qm_rr = "<medcard>" + qm_rr + "</medcard>";
 
