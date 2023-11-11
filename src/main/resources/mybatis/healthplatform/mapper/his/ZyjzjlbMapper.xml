@@ -59,10 +59,11 @@
           and a.inhosno = c.inhosno
           and a.patientid = c.patientid
           and a.instate &lt;&gt; '0'
+          and a.out_date is not null
           and a.orgcode = #{orgcode}
-          and to_char(a.INDATE
+          and to_char(a.out_date
                   , 'yyyy-mm-dd hh24:mi:ss') &gt;= #{begtime}
-          and to_char(a.INDATE
+          and to_char(a.out_date
                   , 'yyyy-mm-dd hh24:mi:ss') &lt;= #{endtime}
     </select>
 
