@@ -7,32 +7,69 @@ import java.util.Map;
 
 @Mapper
 public interface HealthplatfromDAO {
+    //JBYHRYXXB 医护人员信息表
     List<Map> queryJbyhryxxb(String orgcode);
+    //JBKSXXB 科室信息
     List<Map> queryJbksxxb(String orgcode);
+    //JBBQXXB 病区信息
     List<Map> queryJbbqxxb(String orgcode);
+    //JB_XMML 收费项目目录
     List<Map> queryJb_xmml(String orgcode);
+    //JB_CLML 材料目录
     List<Map> queryJb_clml(String orgcode);
+    //JB_ZDML 疾病诊断目录
     List<Map> queryJb_zdml(String orgcode);
+    //JB_SSML 手术目录
     List<Map> queryJb_ssml(String orgcode);
+    //YP_JBXXK 药品基本信息
     List<Map> queryYp_jbxxk(String orgcode);
+    //JBBRJBXXB 患者基本信息表
     List<Map> queryJbbrjbxxb(String orgcode,String begtime,String endtime);
+
+    //MZGHB 门诊挂号表
+    //挂号
     List<Map> queryMzghb(String orgcode,String begtime,String endtime);
+    //退号
     List<Map> queryMzthb(String orgcode,String begtime,String endtime);
+
+    //MZJZJLB 门诊就诊记录表
     List<Map> queryMzjzjlb(String orgcode,String begtime,String endtime);
+    //MZYZMXB 门诊医嘱明细表
     List<Map> queryMzyzmxb(String orgcode,String begtime,String endtime);
+
+    //MZSFJLB 门诊收费记录表
+    //收费
     List<Map> queryMzsfjlbsf(String orgcode,String begtime,String endtime);
+    //退费
     List<Map> queryMzsfjlbtf(String orgcode,String begtime,String endtime);
+
+    //MZSFMXB 门诊收费明细表
+    //收费
     List<Map> queryMzsfmxbsf(String orgcode,String begtime,String endtime);
+    //退费
     List<Map> queryMzsfmxbtf(String orgcode,String begtime,String endtime);
+
+    //MZFYJSXX 门诊费用结算信息
     List<Map> queryMzfyjsxx(String orgcode,String begtime,String endtime);
+
+    //ZYJZJLB 住院就诊记录表
     List<Map> queryZyjzjlb(String orgcode,String begtime,String endtime);
+    //ZYYZMXB 住院医嘱明细表
     List<Map> queryZyyzmxb(String orgcode,String begtime,String endtime);
+    //ZYSFJLB 出院患者收费记录表
     List<Map> queryZysfjlb(String orgcode,String begtime,String endtime);
+    //ZYSFMXB 出院患者收费明细表
     List<Map> queryZysfmxb(String orgcode,String begtime,String endtime);
+
+    //ZYCYXJBG 住院出院小结报告/死亡记录
     List<Map> queryZycyxjbg(String orgcode,String begtime,String endtime);
+    //ZYRYDJB 入院登记信息
     List<Map> queryZyrydjb(String orgcode,String begtime,String endtime);
+    //ZYCYDJB 出院登记信息
     List<Map> queryZycydjb(String orgcode,String begtime,String endtime);
+    //ZYYJJ 住院预交金
     List<Map> queryZyyjj(String orgcode,String begtime,String endtime);
+    //ZYFYFSMX 住院费用发生明细
     List<Map> queryZyfyfsmx(String orgcode,String begtime,String endtime);
 
 }
