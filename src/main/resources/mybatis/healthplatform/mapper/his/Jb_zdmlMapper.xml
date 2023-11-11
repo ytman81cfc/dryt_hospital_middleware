@@ -3,9 +3,9 @@
 <mapper namespace="com.hospital.middleware.healthplatform.dao.his.HealthplatfromDAO">
     <select id="queryJb_zdml" resultType="java.util.HashMap">
          select
-             ''  "YLJGDM"	,--	医疗机构代码	VARCHAR	22	必填	复合主键：采用22位“卫生机构代码”
+             '370600'  "YLJGDM"	,--	医疗机构代码	VARCHAR	22	必填	复合主键：采用22位“卫生机构代码”
              a.dcode    "YNZDDM"	,--	院内诊断代码	VARCHAR	64	必填	复合主键：院内诊断代码
-             ''     "YLJGMC"	,--	医疗机构名称	VARCHAR	70	必填	医院执业许可第一名称
+             '370600'     "YLJGMC"	,--	医疗机构名称	VARCHAR	70	必填	医院执业许可第一名称
              '0'   "FYDM"	,--	分院代码	VARCHAR	20	必填	记录分院代码（内码）,如无分院，则传0
              ''   "FYMC"	,--	分院名称	VARCHAR	120	条件必填	分院代码不为0时必填
              a.diagkind "ZDLXDM"	,--	诊断类型代码	VARCHAR	1	必填	1：西医 2：中医
