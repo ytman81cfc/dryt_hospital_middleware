@@ -14,7 +14,7 @@
            ''      "SM"	,--	说明	VARCHAR	500		说明
            c.item_id       "KSLB"	,--	科室类别	VARCHAR	5	 01：临床服务类 0101：门诊科室   0102：住院科室	02：医疗技术类 	03：医疗辅助类 	05：行政后勤类
            '4'      "MZLX"	,--	门诊类型	VARCHAR	1		科室类别为门诊科室时必填，1：普通 2：急诊 3：专家 4：专科
-           decode(a.isreg, '1', '0', '0', '1')       "GHZT"	,--	挂号状态	VARCHAR	1	必填	是否可挂号，0：可挂号 1：不可挂号
+           nvl(decode(a.isreg, '1', '0', '0', '1'), 1)       "GHZT"	,--	挂号状态	VARCHAR	1	必填	是否可挂号，0：可挂号 1：不可挂号
            '0'      "ZYKSBZ"	,--	中医科室标志	VARCHAR	1	必填	0：否 1：是
             to_char(sysdate, 'YYYY-MM-DD')       "TBRQ"	--	填报日期	DATETIME		必填	本条数据采集时间，格式YYYY-MM-DD
 from com_hospitalinfo b,com_deptinfo a
