@@ -23,10 +23,10 @@
                a.raton                              "ZHXS",--	转换系数	VARCHAR	8	条件必填	(西药必填)
                f.FACCODE                            "SCCJDM",--	生产厂家代码	VARCHAR	32
                f.facname                            "SCCJMC",--	生产厂家名称	VARCHAR	128	必填
-               a.APPROVEINFO                        "PZWH",--	批准文号                    	VARCHAR	64
+               substr(a.APPROVEINFO, 0, 30)                        "PZWH",--	批准文号                    	VARCHAR	64
                a.CENPURCH                           "JZCGBZ",--	集中采购标志	VARCHAR	1	必填	0：否 1：是
                a.ESSDRUG                            "JYBZ",--	基本药物标志	VARCHAR	1	条件必填	(西药必填)0：否 1：是
-               ''                                   "JYJB",--	基本药物级别	VARCHAR	12	条件必填	(西药必填)参见 CVA08.03.003 基本药物级别多选，代码以“;”(英文分号)分隔
+               '没有对照'                             "JYJB",--	基本药物级别	VARCHAR	12	条件必填	(西药必填)参见 CVA08.03.003 基本药物级别多选，代码以“;”(英文分号)分隔
                case
                    when a.phykind = 'A' then '1'
                    else '0' end                     "KJYWBZ",--	抗菌药物标志	VARCHAR	1	条件必填	(西药必填) 0：否 1：是
