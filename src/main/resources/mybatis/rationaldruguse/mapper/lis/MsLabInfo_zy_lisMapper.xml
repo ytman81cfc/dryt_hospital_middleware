@@ -2,31 +2,27 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hospital.middleware.rationaldruguse.dao.lis.MsLabInfo_zy_lisDAO">
     <select id="queryMsLabInfo_zy_lis" resultType="java.util.HashMap">
-        select c.testform_no    as "LabNo",
-               b.hisitem_name   as "LabName",
-            b.sample_type       as "DemoCode",
-            d.dict_name         as "DemoName",
-               c.in_id          as "Syh",
-               b.patient_id     as "BlCode",
-               str_to_date(b.sample_reach_time, '%Y-%m-%d %T') as "LabDate"
-        from lis_result a,
-             lis_test_reg b,
-             lis_test_reg_his_item_detail c,
-             lis_dictionary_detail d
-        where a.org_code = b.org_code
-          and a.patient_id = b.patient_id
-          and a.machine_code = b.machine_code
-          and a.test_form_no = b.test_form_no
-          and a.barcode = b.barcode
-          and b.org_code = c.org_code
-          and b.reg_id = c.reg_id
-          and a.patient_type = 'I'
-          and b.test_type = '1'
-            and d.type_code = 'LIS_SAMPLE_TYPE'
-            and d.dict_code = b.sample_type
-        and a.org_code = #{map.Hoscode}
-          and a.get_sample_date &gt;= str_to_date(#{map.beginDate}, '%Y-%m-%d %T')
-          and a.get_sample_date &lt;= str_to_date(#{map.endDate}, '%Y-%m-%d %T')
+        SELECT
+        c.exe_csqn AS "LabNo",-- 检验单号
+        c.his_item_name AS "LabName",-- 送检项目名称
+        b.sample_type AS "DemoCode",-- 样本编号
+        d.dict_name AS "DemoName",-- 样本名称
+        b.patient_id AS "Syh",-- 住院唯一编号
+        b.inhosno AS "BlCode",-- 住院病历号
+        '2' AS "LabType",-- 送检类别 1，细菌 2 其他
+        str_to_date( b.sample_reach_time, '%Y-%m-%d %T' ) AS "LabDate"  -- 送检日期
+        FROM
+        lis_test_reg b
+        LEFT JOIN lis_dictionary_detail d ON d.type_code = 'LIS_SAMPLE_TYPE'
+        AND d.dict_code = b.sample_type
+        AND d.org_code = b.org_code
+        LEFT JOIN lis_test_reg_his_item_detail c ON b.reg_id = c.reg_id
+        AND b.org_code = b.org_code
+        WHERE
+        b.patient_type = 'I'
+        AND b.org_code = #{map.Hoscode}
+        AND b.get_sample_date &gt;= str_to_date( #{map.beginDate}, '%Y-%m-%d %T' )
+        AND b.get_sample_date &lt;= str_to_date( #{map.endDate}, '%Y-%m-%d %T' )
         group by c.testform_no,b.hisitem_name,b.sample_type ,d.dict_name,c.in_id,b.patient_id,b.sample_reach_time
     </select>
 </mapper>
