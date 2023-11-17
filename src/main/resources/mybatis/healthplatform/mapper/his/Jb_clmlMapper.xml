@@ -10,9 +10,9 @@
            ''   "FYMC"	,--	分院名称	VARCHAR	120	条件必填	分院代码不为0时必填
            replace(f.MED_LIST_CODG,'_SI','')   "PTZXDM"	,--	平台中心代码	VARCHAR	64		参见《全民健康信息平台医疗服务项目价格表》
            a.MCSNAME  "CLMC"	,--	材料名称	VARCHAR	100	必填
-           a.MCSKIND      "CLFLDM"	,--	材料分类代码	VARCHAR	36	必填	参见CVA08.50.009卫生材料代码表
+           g.item_id      "CLFLDM"	,--	材料分类代码	VARCHAR	36	必填	参见CVA08.50.009卫生材料代码表
            d.dictname      "CLDW"	,--	材料单位	VARCHAR	32	必填
-           a.HIGHVALMCSFLAG      "GZHCBZ"	,--	高值耗材标志	VARCHAR	1	必填	0：否 1：是
+           nvl(a.HIGHVALMCSFLAG,'0')      "GZHCBZ"	,--	高值耗材标志	VARCHAR	1	必填	0：否 1：是
            '0'      "YZBXBZ"	,--	医保报销标志	VARCHAR	1	必填	0：否 1：是
            decode(a.IMPTITVTCLSSFLAG,'1','1','0')     "ZRWBZ"	,--	植入物标志	VARCHAR	1	必填	0：否 1：是
            null    "JZJG"	,--	基准价格	NUMERIC	14,2
@@ -29,6 +29,16 @@
        left join com_dictcodeinfo d on a.MINUNIT=d.dictcode and d.typecode='MINUNIT'
        left join   COM_COMPANYINFO e  on  a.orgcode =e.orgcode and a.FACCODE =e.FACCODE and e.COMPANYTYPE='1' and e.isvalid='1'
        left join   FIN_ITEM_COMPARE f  on  a.orgcode =f.orgcode and a.MEDLISTCODG=f.itemcode
+       left join (select a.item_id, b.his_item_id
+                  from si_yt_report_item a,
+                       si_yt_report_item_compare b
+                  where a.module_rid = b.module_rid
+                    and a.type_rid = b.type_rid
+                    and a.rid = b.item_rid
+                    and a.module_rid = '202310101511361148853000000000'
+                    and a.type_rid = '202311151526201333567600000000'
+                    and b.orgcode =#{orgcode}
+         ) g on   g.his_item_id = a.MCSKIND
 
          where a.orgcode=b.orgcode and a.orgcode = #{orgcode}
     </select>

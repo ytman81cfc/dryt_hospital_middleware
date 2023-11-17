@@ -21,7 +21,7 @@
                    else '07' end                                             "BXLX",--	医疗费用支付方式	VARCHAR	4	必填	参见CV07.10.003-2022修订版 医疗费用来源类别
                a.si_psn_no                                                   "YBKH",--	医保卡号	VARCHAR	20	条件必填	患者的医保卡的唯一标识，医保患者必填
                ''                                                            "XLDM",--	学历代码	VARCHAR	2		患者受教育最高程度的类别代码， 	参见GB/T 4658-2006-2022修订版
-               a.MARRIED                                                     "HYZK",--	婚姻状况	VARCHAR	3		参见GB/T 2261.2-2003-2022修订版 婚姻状况代码
+               f.item_id                                                     "HYZK",--	婚姻状况	VARCHAR	3		参见GB/T 2261.2-2003-2022修订版 婚姻状况代码
                to_char(a.BRDY, 'YYYY-MM-DD')                                 "CSRQ",--	出生日期	DATETIME			YYYY-MM-DD
                a.RESIHOME                                                    "CSD",--	出生地	VARCHAR	32		参见 GB/T 2260-2007
                a.NATY                                                        "MZ",--	民族	VARCHAR	2		参见 GB/T 3304-1991-2022修订版 民族代码表
@@ -36,12 +36,12 @@
                a.WORKNAME                                                    "GZDWMC",--	工作单位名称	VARCHAR	128
                a.WORKHOME                                                    "GZDWDZ",--	工作单位地址	VARCHAR	128
                a.PROFCODE                                                    "ZYLBDM",--	职业类别代码	VARCHAR	3		参见 GB/T 2261.4-2003 职业分类与代码
-               nvl(a.HOME, '无')                                                        "JZDZ",--	居住地址	VARCHAR	128	必填	患者本人常住地址的描述
-               nvl(substr(a.SI_INSUPLCADMDVS, 0, 3), '无')                                            "XZQHDM",--	常住地址-行政区划代码	VARCHAR	6	必填	患者本人常住地址中的县（区）的 6 位行政区划代码
+               a.HOME                                                        "JZDZ",--	居住地址	VARCHAR	128	必填	患者本人常住地址的描述
+               a.SI_INSUPLCADMDVS                                            "XZQHDM",--	常住地址-行政区划代码	VARCHAR	6	必填	患者本人常住地址中的县（区）的 6 位行政区划代码
                a.RESIHOME                                                    "HKDZ",--	户口地址	VARCHAR	128
                a.RESIHOME_ZIP                                                "HKDZYB",--	户口地址邮编	VARCHAR	6
                substr(a.LINKMANNAME, 0, 20)                                                 "LXRXM",--	联系人姓名	VARCHAR	50
-               a.RELACODE                                                    "LXRGX",--	联系人关系	VARCHAR	3		参见GB/T 4761-2008-2022修订版 家庭关系代码表
+               g.item_id                                                    "LXRGX",--	联系人关系	VARCHAR	3		参见GB/T 4761-2008-2022修订版 家庭关系代码表
                a.LINKMANADDRESS                                              "LXRDZ",--	联系人地址	VARCHAR	128
                ''                                                            "LXRYB",--	联系人邮编	VARCHAR	6
                a.LINKMANTEL                                                  "LXRDH",--	联系人电话	VARCHAR	24
@@ -80,6 +80,22 @@
                               and a.rid = b.item_rid
                               and a.module_rid = '202310101511361148853000000000'
                               and a.type_rid = '202310101602441149584100000000') e on e.his_item_id = a.SEXCODE
+                 left join (select a.item_id, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202311011354491261411600000000') f on f.his_item_id = a.MARRIED
+                 left join (select a.item_id, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202311161530191338672700000000') g on g.his_item_id = a.RELACODE
         where a.orgcode = c.orgcode
           and a.PATIENTID = b.PATIENTID
           and a.orgcode = #{orgcode}
