@@ -152,9 +152,9 @@
              com_userinfo d,
              opr_register a
                  left join opm_diagnose e
-                           on a.orgcode = e.orgcode and e.main_flag = '1' and e.dise_type = '1' and e.isvalid = '1'
+                           on a.orgcode = e.orgcode and a.regid=e.regid  and e.main_flag = '1' and e.dise_type = '1' and e.isvalid = '1'
                  left join opm_diagnose f
-                           on a.orgcode = f.orgcode and f.main_flag = '1' and f.dise_type = '2' and f.isvalid = '1'
+                           on a.orgcode = f.orgcode and a.regid=f.regid  and f.main_flag = '1' and f.dise_type = '2' and f.isvalid = '1'
                  left join (select a.item_id, b.his_item_id
                             from si_yt_report_item a,
                                  si_yt_report_item_compare b

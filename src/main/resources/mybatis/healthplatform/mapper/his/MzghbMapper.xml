@@ -21,7 +21,7 @@
                case
                    when a.ISEMERGENCY = '1' then '2'
                    else '1' end                             "GHLB",-- 挂号类别  VARCHAR 3 必填  1：门诊 2：急诊 3：体检 9：其他
-               decode(a.REG_RESOURCE, '0', '1', '1', '3')   "GHTJ",-- 挂号途径  VARCHAR 1 必填  1：窗口 2：自助机 3：线上 9：其他
+               decode(a.REG_RESOURCE, '0', '1', '1', '3','1')   "GHTJ",-- 挂号途径  VARCHAR 1 必填  1：窗口 2：自助机 3：线上 9：其他
                to_char(a.REG_TIME, 'yyyy-mm-dd hh24:mi:ss') "GHSJ",-- 挂号时间  DATETIME    必填  yyyy-mm-dd hh24:mi:ss
                ''                                           "THSJ",-- 退号时间  DATETIME      yyyy-mm-dd hh24:mi:ss
                case
@@ -32,8 +32,8 @@
                a.SI_PSN_NO                                  "YBZHBZ",-- 医保账户号码  VARCHAR 64  条件必填  填写医保卡号或社保卡号，医保患者必填
                a.DEPTCODE                                   "YNKSBM",-- 院内科室编码  VARCHAR 64  必填
                a.DEPTNAME                                   "YNKSMC",-- 院内科室名称  VARCHAR 200 必填
-               ''                                           "KSBM",-- 中心科室编码  VARCHAR 64  必填  参见《全民健康信息平台科室分类代码表》
-               ''                                           "KSMC",-- 中心科室名称  VARCHAR 200 必填  参见《全民健康信息平台科室分类代码表》
+               h.item_id                                           "KSBM",-- 中心科室编码  VARCHAR 64  必填  参见《全民健康信息平台科室分类代码表》
+               h.item_name                                           "KSMC",-- 中心科室名称  VARCHAR 200 必填  参见《全民健康信息平台科室分类代码表》
                decode(a.YNSEE, '0', '1', '2', '2')          "JZZT",-- 就诊状态  VARCHAR 1 必填  1：未就诊 2：已就诊
                ''                                           "ZCFWJBM",-- 诊察费物价编码 VARCHAR 20  条件必填  有物价码时必填
                ''                                           "ZCFWJMC",-- 诊察费物价名称 VARCHAR 50  条件必填  有物价码时必填
@@ -44,13 +44,13 @@
                ''                                           "ZJXM",-- 专家姓名  VARCHAR 50
                ''                                           "ZJJB",-- 专家级别  VARCHAR 1   1：国特 2：主任 3：副主任 9：其他专家
                ''                                           "ZJSFZHM",-- 专家身份证号码 VARCHAR 18
-               a.ISEMERGENCY                                "SFJZGH",-- 是否急诊挂号  VARCHAR 1 必填  0：否 1：是
-               a.REG_RESOURCE                               "HLWGHBZ",-- 互联网挂号标志 VARCHAR 1 必填  0：否 1：是
+               nvl(a.ISEMERGENCY,'0')                                "SFJZGH",-- 是否急诊挂号  VARCHAR 1 必填  0：否 1：是
+               nvl(a.REG_RESOURCE  ,'0')                             "HLWGHBZ",-- 互联网挂号标志 VARCHAR 1 必填  0：否 1：是
                '0'                                          "SFPDJH",-- 是否排队叫号  VARCHAR 1 必填  0：否 1：是
                to_char(a.REG_TIME, 'yyyy-mm-dd hh24:mi:ss') "BDSJ",-- 首次报道时间  DATETIME    条件必填  yyyy-mm-dd hh24:mi:ss  患者到分诊台或通过信息系统（自助机、APP等）报到时的时间
                to_char(a.SEE_TIME, 'yyyy-mm-dd hh24:mi:ss') "JAOZSJ",-- 首次叫号时间  DATETIME    条件必填  yyyy-mm-dd hh24:mi:ss  患者进入诊室后医生点击叫诊系统的时间
-               ''                                           "SFJHSJC",-- 是否仅核酸检测 VARCHAR 1 必填  0：否 1：是
-               ''                                           "FRMZ",-- 发热门诊标志  VARCHAR 1 必填  0：否 1：是
+               '0'                                           "SFJHSJC",-- 是否仅核酸检测 VARCHAR 1 必填  0：否 1：是
+               '0'                                           "FRMZ",-- 发热门诊标志  VARCHAR 1 必填  0：否 1：是
                case
                    when a.PRE_RID is null then '0'
                    else '1' end                             "SFYY",-- 预约挂号标识  VARCHAR 1 必填  0：否 1：是
@@ -108,6 +108,14 @@
                               and a.rid = b.item_rid
                               and a.module_rid = '202310101511361148853000000000'
                               and a.type_rid = '202310101745521149750000000000') g on g.his_item_id = a.INSUTYPE
+                 left join (select a.item_id,a.item_name, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202311141512391328016800000000') h on h.his_item_id = a.DEPTCODE
         where a.orgcode = b.orgcode
           and a.orgcode = c.orgcode
           and a.CRTER = c.userid
@@ -141,7 +149,7 @@
                case
                    when a.ISEMERGENCY = '1' then '2'
                    else '1' end                               "GHLB",-- 挂号类别  VARCHAR 3 必填  1：门诊 2：急诊 3：体检 9：其他
-               decode(a.REG_RESOURCE, '0', '1', '1', '3')     "GHTJ",-- 挂号途径  VARCHAR 1 必填  1：窗口 2：自助机 3：线上 9：其他
+               decode(a.REG_RESOURCE, '0', '1', '1', '3','1')     "GHTJ",-- 挂号途径  VARCHAR 1 必填  1：窗口 2：自助机 3：线上 9：其他
                to_char(a.REG_TIME, 'yyyy-mm-dd hh24:mi:ss')   "GHSJ",-- 挂号时间  DATETIME    必填  yyyy-mm-dd hh24:mi:ss
                to_char(a.CANCELDATE, 'yyyy-mm-dd hh24:mi:ss') "THSJ",-- 退号时间  DATETIME      yyyy-mm-dd hh24:mi:ss
                case
@@ -152,8 +160,8 @@
                a.SI_PSN_NO                                    "YBZHBZ",-- 医保账户号码  VARCHAR 64  条件必填  填写医保卡号或社保卡号，医保患者必填
                a.DEPTCODE                                     "YNKSBM",-- 院内科室编码  VARCHAR 64  必填
                a.DEPTNAME                                     "YNKSMC",-- 院内科室名称  VARCHAR 200 必填
-               ''                                             "KSBM",-- 中心科室编码  VARCHAR 64  必填  参见《全民健康信息平台科室分类代码表》
-               ''                                             "KSMC",-- 中心科室名称  VARCHAR 200 必填  参见《全民健康信息平台科室分类代码表》
+               h.item_id                                            "KSBM",-- 中心科室编码  VARCHAR 64  必填  参见《全民健康信息平台科室分类代码表》
+               h.item_name                                             "KSMC",-- 中心科室名称  VARCHAR 200 必填  参见《全民健康信息平台科室分类代码表》
                decode(a.YNSEE, '0', '1', '2')                 "JZZT",-- 就诊状态  VARCHAR 1 必填  1：未就诊 2：已就诊
                ''                                             "ZCFWJBM",-- 诊察费物价编码 VARCHAR 20  条件必填  有物价码时必填
                ''                                             "ZCFWJMC",-- 诊察费物价名称 VARCHAR 50  条件必填  有物价码时必填
@@ -164,13 +172,13 @@
                ''                                             "ZJXM",-- 专家姓名  VARCHAR 50
                ''                                             "ZJJB",-- 专家级别  VARCHAR 1   1：国特 2：主任 3：副主任 9：其他专家
                ''                                             "ZJSFZHM",-- 专家身份证号码 VARCHAR 18
-               a.ISEMERGENCY                                  "SFJZGH",-- 是否急诊挂号  VARCHAR 1 必填  0：否 1：是
-               a.REG_RESOURCE                                 "HLWGHBZ",-- 互联网挂号标志 VARCHAR 1 必填  0：否 1：是
+               nvl(a.ISEMERGENCY,'0')                                  "SFJZGH",-- 是否急诊挂号  VARCHAR 1 必填  0：否 1：是
+               nvl(a.REG_RESOURCE,'0')                               "HLWGHBZ",-- 互联网挂号标志 VARCHAR 1 必填  0：否 1：是
                '0'                                            "SFPDJH",-- 是否排队叫号  VARCHAR 1 必填  0：否 1：是
                to_char(a.REG_TIME, 'yyyy-mm-dd hh24:mi:ss')   "BDSJ",-- 首次报道时间  DATETIME    条件必填  yyyy-mm-dd hh24:mi:ss  患者到分诊台或通过信息系统（自助机、APP等）报到时的时间
                to_char(a.SEE_TIME, 'yyyy-mm-dd hh24:mi:ss')   "JAOZSJ",-- 首次叫号时间  DATETIME    条件必填  yyyy-mm-dd hh24:mi:ss  患者进入诊室后医生点击叫诊系统的时间
-               ''                                             "SFJHSJC",-- 是否仅核酸检测 VARCHAR 1 必填  0：否 1：是
-               ''                                             "FRMZ",-- 发热门诊标志  VARCHAR 1 必填  0：否 1：是
+               '0'                                             "SFJHSJC",-- 是否仅核酸检测 VARCHAR 1 必填  0：否 1：是
+               '0'                                             "FRMZ",-- 发热门诊标志  VARCHAR 1 必填  0：否 1：是
                case
                    when a.PRE_RID is null then '0'
                    else '1' end                               "SFYY",-- 预约挂号标识  VARCHAR 1 必填  0：否 1：是
@@ -228,6 +236,14 @@
                               and a.rid = b.item_rid
                               and a.module_rid = '202310101511361148853000000000'
                               and a.type_rid = '202310101745521149750000000000') g on g.his_item_id = a.INSUTYPE
+                 left join (select a.item_id,a.item_name, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202311141512391328016800000000') h on h.his_item_id = a.DEPTCODE
         where a.orgcode = b.orgcode
           and a.orgcode = c.orgcode
           and a.CRTER = c.userid
