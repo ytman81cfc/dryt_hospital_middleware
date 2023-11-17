@@ -23,6 +23,5 @@
         AND b.org_code = #{map.Hoscode}
         AND b.get_sample_date &gt;= str_to_date( #{map.beginDate}, '%Y-%m-%d %T' )
         AND b.get_sample_date &lt;= str_to_date( #{map.endDate}, '%Y-%m-%d %T' )
-        group by c.testform_no,b.hisitem_name,b.sample_type ,d.dict_name,c.in_id,b.patient_id,b.sample_reach_time
     </select>
 </mapper>
