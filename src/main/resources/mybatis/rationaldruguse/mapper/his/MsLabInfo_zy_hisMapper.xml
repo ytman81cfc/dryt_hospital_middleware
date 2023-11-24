@@ -8,8 +8,9 @@
 
     <insert id="add">
         insert into SI_MSLABINFO_ZY(labno,labname,democode,demoname,syh,blcode,labtype,labdate)
-        values(#{map.LABNO},#{map.LABNAME},#{map.DEMOCODE},#{map.DEMONAME},#{map.SYH},
-               #{map.BLCODE},#{map.LABTYPE},#{map.LABDATE})
+        values({#{map.LABNO,jdbcType=VARCHAR},#{map.LABNAME,jdbcType=VARCHAR},#{map.DEMOCODE,jdbcType=VARCHAR},
+               #{map.DEMONAME,jdbcType=VARCHAR},#{map.SYH,jdbcType=VARCHAR},
+               #{map.BLCODE,jdbcType=VARCHAR},#{map.LABTYPE,jdbcType=VARCHAR},#{map.LABDATE,jdbcType=VARCHAR})
     </insert>
 
     <update id="updateAll">

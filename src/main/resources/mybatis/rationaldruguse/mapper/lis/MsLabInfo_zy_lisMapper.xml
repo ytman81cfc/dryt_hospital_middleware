@@ -23,7 +23,7 @@
         b.patient_type = 'I'
         AND b.org_code = #{map.Hoscode}
         and c.exe_csqn is not null
-        and c.exe_csqn	&lt;&gt; ''
+        and c.exe_csqn != ''
         AND b.get_sample_date &gt;= str_to_date( #{map.beginDate}, '%Y-%m-%d %T' )
         AND b.get_sample_date &lt;= str_to_date( #{map.endDate}, '%Y-%m-%d %T' )
         AND b.sample_reach_time is not null
