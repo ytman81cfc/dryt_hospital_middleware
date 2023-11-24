@@ -69,6 +69,9 @@ public class DrugUseController {
     @Autowired
     private MsLabInfo_zy_lisDAO msLabInfo_zy_lisDAO;
 
+    @Autowired
+    private MsLabInfo_zy_hisDAO msLabInfo_zy_hisDAO;
+
     @RequestMapping("/queryData")
     public List<Map> queryData(@RequestParam Map<String, String> map){
         log.info(map.toString());
@@ -120,10 +123,13 @@ public class DrugUseController {
         }
         if ("msLabInfo_zy".equals(map.get("viewCode"))){
             List<Map> list = msLabInfo_zy_lisDAO.queryMsLabInfo_zy_lis(map);
+            msLabInfo_zy_hisDAO.deleteAll(map.get("Hoscode"));
             for (int i = 0; i < list.size(); i++) {
-                list.get(i).put("LabType", "2");
+                msLabInfo_zy_hisDAO.add(list.get(i));
             }
-            return list;
+            msLabInfo_zy_hisDAO.updateAll(map.get("Hoscode"));
+            List<Map> resultList = msLabInfo_zy_hisDAO.queryMsLabInfo_zy_his(map.get("Hoscode"));
+            return resultList;
         }
         if("msLabPatho_zy".equals(map.get("viewCode"))){
             List<Map> result = new ArrayList();

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hospital.middleware.rationaldruguse.dao.his.MsLabInfo_zy_hisDAO">
+
+    <delete id="deleteAll">
+        delete from SI_MSLABINFO_ZY where orgcode=#{Hoscode}
+    </delete>
+
+    <insert id="add">
+        insert into SI_MSLABINFO_ZY(labno,labname,democode,demoname,syh,blcode,labtype,labdate)
+        values(#{map.LABNO},#{map.LABNAME},#{map.DEMOCODE},#{map.DEMONAME},#{map.SYH},
+               #{map.BLCODE},#{map.LABTYPE},#{map.LABDATE})
+    </insert>
+
+    <update id="updateAll">
+    update  SI_MSLABINFO_ZY a SET a.SYH =(select b.PATIENTBUSIID  from MET_CHECKAPPLY_INFO b where a.orgcode=b.orgcode and b.patientid=a.blcode and b.applyid=a.labno)
+    where a.orgcode =#{Hoscode}
+    </update>
+
+    <select id="queryMsLabInfo_zy_his" resultType="java.util.HashMap">
+        SELECT
+            labno AS "LabNo",-- 检验单号
+            labname AS "LabName" ,-- 送检项目名称
+            democode AS "DemoCode",-- 样本编号
+            demoname AS "DemoName",-- 样本名称
+            syh AS "Syh",-- 住院唯一编号
+            blcode AS "BlCode",-- 住院病历号
+            labtype AS "LabType",-- 送检类别 1，细菌 2 其他
+            labdate AS  "LabDate" -- 送检日期
+        FROM
+            SI_MSPATINFO_ZY
+        WHERE
+         orgcode = #{Hoscode}
+    </select>
+</mapper>

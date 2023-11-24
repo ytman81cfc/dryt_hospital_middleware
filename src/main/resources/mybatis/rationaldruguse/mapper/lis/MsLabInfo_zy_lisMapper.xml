@@ -3,14 +3,15 @@
 <mapper namespace="com.hospital.middleware.rationaldruguse.dao.lis.MsLabInfo_zy_lisDAO">
     <select id="queryMsLabInfo_zy_lis" resultType="java.util.HashMap">
         SELECT
-        c.exe_csqn AS "LabNo",-- 检验单号
-        c.his_item_name AS "LabName",-- 送检项目名称
-        b.sample_type AS "DemoCode",-- 样本编号
-        d.dict_name AS "DemoName",-- 样本名称
-        b.patient_id AS "Syh",-- 住院唯一编号
-        b.inhosno AS "BlCode",-- 住院病历号
-        '2' AS "LabType",-- 送检类别 1，细菌 2 其他
-        str_to_date( b.sample_reach_time, '%Y-%m-%d %T' ) AS "LabDate"  -- 送检日期
+        b.org_code as orgcode  ,
+        c.exe_csqn AS labno,-- 检验单号
+        c.his_item_name AS labname,-- 送检项目名称
+        b.sample_type AS democode,-- 样本编号
+        d.dict_name AS demoname,-- 样本名称
+        '' AS syh,-- 住院唯一编号
+        b.patient_id AS blcode,-- 住院病历号
+        '2' AS labtype,-- 送检类别 1，细菌 2 其他
+        date_format( b.sample_reach_time, '%Y-%m-%d %T' ) AS labdate  -- 送检日期
         FROM
         lis_test_reg b
         LEFT JOIN lis_dictionary_detail d ON d.type_code = 'LIS_SAMPLE_TYPE'
@@ -21,7 +22,10 @@
         WHERE
         b.patient_type = 'I'
         AND b.org_code = #{map.Hoscode}
+        and c.exe_csqn is not null
+        and c.exe_csqn	&lt;&gt; ''
         AND b.get_sample_date &gt;= str_to_date( #{map.beginDate}, '%Y-%m-%d %T' )
         AND b.get_sample_date &lt;= str_to_date( #{map.endDate}, '%Y-%m-%d %T' )
+        AND b.sample_reach_time is not null
     </select>
 </mapper>
