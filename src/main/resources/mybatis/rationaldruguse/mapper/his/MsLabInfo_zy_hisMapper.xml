@@ -7,10 +7,11 @@
     </delete>
 
     <insert id="add">
-        insert into SI_MSLABINFO_ZY(labno,labname,democode,demoname,syh,blcode,labtype,labdate)
-        values({#{map.LABNO,jdbcType=VARCHAR},#{map.LABNAME,jdbcType=VARCHAR},#{map.DEMOCODE,jdbcType=VARCHAR},
-               #{map.DEMONAME,jdbcType=VARCHAR},#{map.SYH,jdbcType=VARCHAR},
-               #{map.BLCODE,jdbcType=VARCHAR},#{map.LABTYPE,jdbcType=VARCHAR},#{map.LABDATE,jdbcType=VARCHAR})
+        insert into SI_MSLABINFO_ZY(labno,labname,democode,demoname,syh,blcode,labtype,labdate,orgcode)
+        values(#{map.labno,jdbcType=VARCHAR},#{map.labname,jdbcType=VARCHAR},#{map.democode,jdbcType=VARCHAR},
+               #{map.demoname,jdbcType=VARCHAR},#{map.syh,jdbcType=VARCHAR},
+               #{map.blcode,jdbcType=VARCHAR},#{map.labtype,jdbcType=VARCHAR},
+               #{map.labdate,jdbcType=VARCHAR},#{map.orgcode,jdbcType=VARCHAR})
     </insert>
 
     <update id="updateAll">
@@ -29,7 +30,7 @@
             labtype AS "LabType",-- 送检类别 1，细菌 2 其他
             labdate AS  "LabDate" -- 送检日期
         FROM
-            SI_MSPATINFO_ZY
+            SI_MSLABINFO_ZY
         WHERE
          orgcode = #{Hoscode}
     </select>
