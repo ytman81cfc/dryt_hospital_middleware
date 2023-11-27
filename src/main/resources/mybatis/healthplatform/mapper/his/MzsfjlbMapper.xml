@@ -245,13 +245,17 @@
                               and a.type_rid = b.type_rid
                               and a.rid = b.item_rid
                               and a.module_rid = '202310101511361148853000000000'
-                              and a.type_rid = '202310101602441149584100000000') f on f.his_item_id = d.PSNCERTTYPE
+                              and a.type_rid = '202310101602441149584100000000') f on f.his_item_id = d.PSNCERTTYPE,
+            SI_OPB_SETLINFO s
         where a.orgcode = b.orgcode
           and a.orgcode = d.orgcode
           and a.regid = d.regid
           and c.orgcode = d.orgcode
           and c.patientno = d.patientno
           and c.patientid = d.patientid
+          and a.orgcode =s.orgcode
+          and a.INVOICENO=s.INVONO
+          and a.TRANSTYPE=s.TRANSTYPE
           and a.orgcode = e.orgcode
           and a.regid = e.regid
           and a.INVOICENO = e.INVOICENO
