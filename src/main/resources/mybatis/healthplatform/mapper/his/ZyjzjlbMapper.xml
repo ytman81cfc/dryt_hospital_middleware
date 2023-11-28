@@ -17,15 +17,15 @@
                a.INAVENUE                                   "RYLYDM",--	入院来源代码	VARCHAR	1	必填	1：急诊 2：门诊 3：其他医疗机构转入 9：其他
                a.INDEPTCODE                                 "YNJZKSBM",--	院内入院科室编码	VARCHAR	50	必填
                a.INDEPTNAME                                 "YNJZKSMC",--	院内入院科室名称	VARCHAR	100	必填
-               ''                                           "JZKSBM",--	中心入院科室编码	VARCHAR	50	必填	参见《全民健康信息平台科室分类代码表》
-               ''                                           "JZKSMC",--	中心入院科室名称	VARCHAR	100	必填	参见《全民健康信息平台科室分类代码表》
+               h.item_id                                    "JZKSBM",--	中心入院科室编码	VARCHAR	50	必填	参见《全民健康信息平台科室分类代码表》
+               h.item_name                                  "JZKSMC",--	中心入院科室名称	VARCHAR	100	必填	参见《全民健康信息平台科室分类代码表》
                a.OUTDEPTCODE                                "YNCYKSBM",--	院内出院科室编码	VARCHAR	50
                a.OUTDEPTNAME                                "YNCYKSMC",--	院内出院科室名称	VARCHAR	100
-               ''                                           "CYKSBM",--	中心出院科室编码	VARCHAR	50		参见《全民健康信息平台科室分类代码表》
-               ''                                           "CYKSMC",--	中心出院科室名称	VARCHAR	100		参见《全民健康信息平台科室分类代码表》
+               j.item_id                                    "CYKSBM",--	中心出院科室编码	VARCHAR	50		参见《全民健康信息平台科室分类代码表》
+               j.item_name                                  "CYKSMC",--	中心出院科室名称	VARCHAR	100		参见《全民健康信息平台科室分类代码表》
                to_char(a.INDATE, 'YYYY-MM-DD HH24:MI:SS')   "RYSJ",--	入院时间	DATETIME		必填	YYYY-MM-DD HH24:MI:SS
                to_char(a.OUT_DATE, 'YYYY-MM-DD HH24:MI:SS') "CYSJ",--	出院时间	DATETIME		必填	YYYY-MM-DD HH24:MI:SS
-               d.MEDICAL_PAYMENT_METHOD                     "BXLX",--	医疗费用支付方式	VARCHAR	4	必填	参见CV07.10.003-2022修订版 医疗费用来源类别
+               d.item_id                                    "BXLX",--	医疗费用支付方式	VARCHAR	4	必填	参见CV07.10.003-2022修订版 医疗费用来源类别
                ''                                           "ZYZZDMZH",--	主要症状代码组合	VARCHAR	128		主要症状代码组合（用英文分号“;”分割）。参见ZD_JBKZJCZZDM疾病控制监测症状代码
                '-'                                          "ZS",--	主诉	VARCHAR	4000	必填
                ''                                           "XBS",--	现病史	VARCHAR	4000	条件必填	有则必填
@@ -43,7 +43,34 @@
                ''                                           "HXPL",--	呼吸频率 	NUMERIC	3		患者就诊时的呼吸频率，单位为次/分钟
                to_char(sysdate, 'YYYY-MM-DD')               "TBRQ" --	填报日期	DATETIME		必填	本条数据采集时间，格式YYYY-MM-DD
         from IPR_INPATIENTINFO a
-                 left join emr_PATIENTINFO d on a.orgcode = d.orgcode and a.inid = d.visit_id and d.ACTIVE = '1'
+                 left join (select a.*, k.item_id, k.item_name
+                            from emr_PATIENTINFO a
+                                     left join (select a.item_id, a.item_name, b.his_item_id
+                                                from si_yt_report_item a,
+                                                     si_yt_report_item_compare b
+                                                where a.module_rid = b.module_rid
+                                                  and a.type_rid = b.type_rid
+                                                  and a.rid = b.item_rid
+                                                  and a.module_rid = '202310101511361148853000000000'
+                                                  and a.type_rid = '202310101745521149750000000000') k
+                                               on k.his_item_id = a.MEDICAL_PAYMENT_METHOD
+        ) d on a.orgcode = d.orgcode and a.inid = d.visit_id and d.ACTIVE = '1'
+                 left join (select a.item_id, a.item_name, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202311141512391328016800000000') h on h.his_item_id = a.INDEPTCODE
+                 left join (select a.item_id, a.item_name, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202311141512391328016800000000') j on j.his_item_id = a.OUTDEPTCODE
                  left join (select a.item_id, b.his_item_id
                             from si_yt_report_item a,
                                  si_yt_report_item_compare b

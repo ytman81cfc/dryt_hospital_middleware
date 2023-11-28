@@ -13,8 +13,8 @@
                         ''                                                                           "FYMC",--	分院名称	VARCHAR	120	条件必填	分院代码不为0时必填
                         a.outdeptcode                                                                "YNKSDM ",--	院内科室编码	VARCHAR 	50	必填
                         a.OUTDEPTNAME                                                                "YNKSMC ",--	院内科室名称	VARCHAR 	100	必填
-                        '-'                                                                          "KSDM ",--	中心科室编码	VARCHAR 	50	必填 	参见《全民健康信息平台科室分类代码表》
-                        '-'                                                                          "KSMC ",--	中心科室名称	VARCHAR 	100	必填 	参见《全民健康信息平台科室分类代码表》
+                        h.item_id                                                                    "KSDM ",--	中心科室编码	VARCHAR 	50	必填 	参见《全民健康信息平台科室分类代码表》
+                        h.item_name                                                                  "KSMC ",--	中心科室名称	VARCHAR 	100	必填 	参见《全民健康信息平台科室分类代码表》
                         '1'                                                                          "KLX",--	卡类型 	VARCHAR 	16	必填 	请按照以下优先级顺序填写：1：患者主索引号、2：身份证号、3：医保卡号，如果都没有则填写住院就诊流水号
                         c.rid                                                                        "KH",--	卡号 	VARCHAR 	64	必填
                         f.item_id                                                                    "ZJLX",--	证件类型	VARCHAR	2		参见CV02.01.101-2022修订版 身份证件类别代码 优先使用身份证
@@ -23,7 +23,7 @@
                         a.SEXCODE                                                                    "XB",--	性别 	VARCHAR	1	必填 	参见 GB/T 2261.1-2003 性别代码表
                         trunc(MONTHS_BETWEEN(a.out_date, a.BIRTHDAY) / 12)                           "NL",--	年龄（岁） 	NUMERIC	3	必填
                         e.item_id                                                                    "HYZK",--	婚姻状况	VARCHAR	4	必填	参见 GB/T 2261.2-2003-2022修订版 婚姻状况代码（10：未婚20：已婚 30：丧偶 40：离婚 90：未说明的婚姻状况 99：其他）
-                        c.PROFCODE                                                                   "ZYDM",--	职业（从业）代码	VARCHAR	4	必填	参见 GB/T 2261.4-2003 职业分类与代码
+                        j.item_id                                                                    "ZYDM",--	职业（从业）代码	VARCHAR	4	必填	参见 GB/T 2261.4-2003 职业分类与代码
                         d.NURSECELLNAME                                                              "BQ",--	病区	VARCHAR	50	必填
                         d.BEDNO                                                                      "CH",--	床号	VARCHAR	16	必填
                         a.inhosno                                                                    "ZYH",--	住院号	VARCHAR	30	必填
@@ -49,7 +49,7 @@
                         a.OUTREASON                                                                  "CYQK",--	出院情况	VARCHAR 	4000	必填 	该数据项在某些医院的出院小结中称为“出院时情况（症状、体征）”
                         i.DOCTNOTE                                                                   "CYYZ",--	出院医嘱	VARCHAR 	4000	必填 	该数据项在某些医院的出院小结中称为“出院后用药及建议”
                         a.OUTREASON                                                                  "ZLJG",--	治疗结果	VARCHAR	4000	必填
-                        '-'                                                                          "BQZGDM",--	病情转归代码	VARCHAR	1	必填	参见 CV05.10.010 病情转归代码表
+                        k.item_id                                                                    "BQZGDM",--	病情转归代码	VARCHAR	1	必填	参见 CV05.10.010 病情转归代码表
                         ''                                                                           "SSQKYHDJDM",--	伤口愈合情况	VARCHAR	50
                         d.CHIFDR_NO                                                                  "ZZYSGH",--	主治医师工号 	VARCHAR 	64	必填
                         d.CHIFDR_NAME                                                                "ZZYSXM",--	主治医师姓名 	VARCHAR 	50	必填
@@ -69,6 +69,22 @@
                         to_char(a.updt_time, 'YYYY-MM-DD HH24:MI:SS')                                "DJRQ",--	最后保存时间	DATETIME		必填
                         to_char(sysdate, 'YYYY-MM-DD')                                               "TBRQ" --  填报日期  DATETIME   必填 本条数据采集时间，格式YYYY-MM-DD
         from IPR_INPATIENTINFO a
+                 left join (select a.item_id, a.item_name, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202310101744071149749900000000') k on k.his_item_id = a.OUTREASON
+                 left join (select a.item_id, a.item_name, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202311141512391328016800000000') h on h.his_item_id = a.outdeptcode
                  left join (select a.item_id, b.his_item_id
                             from si_yt_report_item a,
                                  si_yt_report_item_compare b
@@ -98,7 +114,16 @@
                               and a.rid = b.item_rid
                               and a.module_rid = '202310101511361148853000000000'
                               and a.type_rid = '202311011354491261411600000000') e
-                           on e.his_item_id = c.MARRIED,
+                           on e.his_item_id = c.MARRIED
+                 left join (select a.item_id, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202311281553021393182200000000') j
+                           on j.his_item_id = c.PROFCODE,
              inr_receiveinfo d
                  left join com_userinfo u1 on u1.orgcode = d.orgcode and u1.usercode = d.CHIFDR_NO
                  left join com_userinfo u2 on u2.orgcode = d.orgcode and u2.usercode = d.CHADR_NO,

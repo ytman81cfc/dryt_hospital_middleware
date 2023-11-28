@@ -18,13 +18,12 @@
                        a.PAYKINDCODE = '01' then '07'
                    when a.PAYKINDCODE = '02' and a.PATIRNTSTYPE = 'A' then '01'
                    when a.PAYKINDCODE = '02' and a.PATIRNTSTYPE = 'B' then '02'
-                   end
-                                                              "BXLX",--	医疗费用支付方式	VARCHAR	4	必填	参见CV07.10.003-2022修订版 医疗费用来源类别
+                   end                                        "BXLX",--	医疗费用支付方式	VARCHAR	4	必填	参见CV07.10.003-2022修订版 医疗费用来源类别
                to_char(d.FEEOPTDATE, 'YYYY-MM-DD HH24:MI:SS') "SFSJ",--	收费时间	DATETIME			以最后一次收费时间为准
-               a.INDEPTCODE                                   "YNXDKSBM",--	院内费用发生科室编码	VARCHAR	50	必填
-               a.INDEPTNAME                                   "YNXDKSMC",--	院内费用发生科室名称	VARCHAR	100	必填
-               '-'                                            "XDKSBM",--	中心费用发生科室编码	VARCHAR	50	必填	参见《全民健康信息平台科室分类代码表》
-               '-'                                            "XDKSMC",--	中心费用发生科室名称	VARCHAR	100	必填	参见《全民健康信息平台科室分类代码表》
+               a.OUTDEPTCODE                                  "YNXDKSBM",--	院内费用发生科室编码	VARCHAR	50	必填
+               a.OUTDEPTNAME                                  "YNXDKSMC",--	院内费用发生科室名称	VARCHAR	100	必填
+               j.item_id                                      "XDKSBM",--	中心费用发生科室编码	VARCHAR	50	必填	参见《全民健康信息平台科室分类代码表》
+               j.item_name                                    "XDKSMC",--	中心费用发生科室名称	VARCHAR	100	必填	参见《全民健康信息平台科室分类代码表》
                nvl(round(d.TOTCOST, 3), 0)                    "ZJE",--	总金额	NUMERIC	18,3	必填	退费标志为2（退费）时，传负数
                0                                              "YBJE",--	医保结算范围金额	NUMERIC	18,3	必填	医保结算范围金额
                nvl(round(d.PUBCOST, 3), 0)                    "YBZFJE",--	医保支付金额	NUMERIC	18,3	必填	医保实际报销支付金额 		退费标志为2（退费）时，传负数
@@ -49,6 +48,14 @@
                ''                                             "SFCZYSFZHM",--	收费操作员身份证号码	VARCHAR	18
                to_char(sysdate, 'YYYY-MM-DD')                 "TBRQ" --  填报日期  DATETIME   必填 本条数据采集时间，格式YYYY-MM-DD
         from IPR_INPATIENTINFO a
+                 left join (select a.item_id, a.item_name, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202311141512391328016800000000') j on j.his_item_id = a.OUTDEPTCODE
                  left join (select a.item_id, b.his_item_id
                             from si_yt_report_item a,
                                  si_yt_report_item_compare b
@@ -149,14 +156,12 @@
                        a.PAYKINDCODE = '01' then '07'
                    when a.PAYKINDCODE = '02' and a.PATIRNTSTYPE = 'A' then '01'
                    when a.PAYKINDCODE = '02' and a.PATIRNTSTYPE = 'B' then '02'
-                   end
-                                                                "BXLX"
-                ,--	医疗费用支付方式	VARCHAR	4	必填	参见CV07.10.003-2022修订版 医疗费用来源类别
+                   end                                          "BXLX",--	医疗费用支付方式	VARCHAR	4	必填	参见CV07.10.003-2022修订版 医疗费用来源类别
                to_char(a.BANLANCEDATE, 'YYYY-MM-DD HH24:MI:SS') "SFSJ",--	收费时间	DATETIME			以最后一次收费时间为准
                a.OUTDEPTCODE                                    "YNXDKSBM",--	院内费用发生科室编码	VARCHAR	50	必填
                a.OUTDEPTNAME                                    "YNXDKSMC",--	院内费用发生科室名称	VARCHAR	100	必填
-               '-'                                              "XDKSBM",--	中心费用发生科室编码	VARCHAR	50	必填	参见《全民健康信息平台科室分类代码表》
-               '-'                                              "XDKSMC",--	中心费用发生科室名称	VARCHAR	100	必填	参见《全民健康信息平台科室分类代码表》
+               j.item_id                                        "XDKSBM",--	中心费用发生科室编码	VARCHAR	50	必填	参见《全民健康信息平台科室分类代码表》
+               j.item_name                                      "XDKSMC",--	中心费用发生科室名称	VARCHAR	100	必填	参见《全民健康信息平台科室分类代码表》
                nvl(round(d.TOTCOST, 3), 0)                      "ZJE",--	总金额	NUMERIC	18,3	必填	退费标志为2（退费）时，传负数
                nvl(round(s.YBINSCP_SCP_AMT, 3), 0)              "YBJE",--	医保结算范围金额	NUMERIC	18,3	必填	医保结算范围金额
                nvl(round(d.PUBCOST, 3), 0)                      "YBZFJE",--	医保支付金额	NUMERIC	18,3	必填	医保实际报销支付金额 		退费标志为2（退费）时，传负数
@@ -181,6 +186,14 @@
                g.certno                                         "SFCZYSFZHM",--	收费操作员身份证号码	VARCHAR	18
                to_char(sysdate, 'YYYY-MM-DD')                   "TBRQ" --  填报日期  DATETIME   必填 本条数据采集时间，格式YYYY-MM-DD
         from IPR_INPATIENTINFO a
+                 left join (select a.item_id, a.item_name, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202311141512391328016800000000') j on j.his_item_id = a.OUTDEPTCODE
                  left join (select a.item_id, b.his_item_id
                             from si_yt_report_item a,
                                  si_yt_report_item_compare b
