@@ -17,16 +17,16 @@
                '100'                                                                           "JZLXDM",--	就诊类型代码	VARCHAR	3	必填	参见CVA5101_01就诊类型代码
                a.DEPTCODE                                                                      "YNJZKSDM",--	院内就诊科室代码	VARCHAR	50	必填
                a.DEPTNAME                                                                      "YNJZKSMC",--	院内就诊科室名称	VARCHAR	100	必填
-               '-'                                                                             "JZKSDM",--	中心就诊科室代码	VARCHAR	50	必填	参见《全民健康信息平台科室分类代码表》
-               '-'                                                                             "JZKSMC",--	中心就诊科室名称	VARCHAR	100	必填	参见《全民健康信息平台科室分类代码表》
+               i.item_id                                                                       "JZKSDM",--	中心就诊科室代码	VARCHAR	50	必填	参见《全民健康信息平台科室分类代码表》
+               i.item_name                                                                     "JZKSMC",--	中心就诊科室名称	VARCHAR	100	必填	参见《全民健康信息平台科室分类代码表》
                to_char(a.reg_time, 'YYYY-MM-DD')                                               "JZSJ",--	首次就诊时间	DATETIME		必填	时间格式YYYY-MM-DD
                a.DOCCODE                                                                       "ZDYSDM",--	就诊医师工号	VARCHAR	64	必填
                a.DOCNAME                                                                       "ZDYSXM",--	就诊医师姓名	VARCHAR	50	必填
                d.certno                                                                        "JZYSSFZHM",--	就诊医生身份证号码	VARCHAR	18	必填
                e.DISE_CODE                                                                     "YNJBZDDM",--	院内西医主要诊断疾病编码	VARCHAR	200
                e.DISE_NAME                                                                     "YNJBZDMC",--	院内西医主要诊断疾病名称	VARCHAR	2000
-               ''                                                                              "JBZDDM",--	中心西医主要诊断疾病编码	VARCHAR	200		参见《疾病分类与代码(ICD-10)》
-               ''                                                                              "JBZDMC",--	中心西医主要诊断疾病名称	VARCHAR	2000		参见《疾病分类与代码(ICD-10)》
+               e.item_id                                                                       "JBZDDM",--	中心西医主要诊断疾病编码	VARCHAR	200		参见《疾病分类与代码(ICD-10)》
+               e.item_name                                                                     "JBZDMC",--	中心西医主要诊断疾病名称	VARCHAR	2000		参见《疾病分类与代码(ICD-10)》
                f.DISE_CODE                                                                     "YNZYZDJBBM",--	院内中医诊断疾病编码	VARCHAR	64
                f.DISE_NAME                                                                     "YNZYZDJBMC",--	院内中医诊断疾病名称	VARCHAR	256
                ''                                                                              "ZYZDJBBM",--	中心中医诊断疾病编码	VARCHAR	64		参见GB/T 15657-2021
@@ -151,10 +151,22 @@
              com_patientinfo c,
              com_userinfo d,
              opr_register a
-                 left join opm_diagnose e
-                           on a.orgcode = e.orgcode and a.regid=e.regid  and e.main_flag = '1' and e.dise_type = '1' and e.isvalid = '1'
+                 left join (select a.*, j.item_id, j.item_name
+                            from opm_diagnose a
+                                     left join (select a.item_id, a.item_name, b.his_item_id
+                                                from si_yt_report_item a,
+                                                     si_yt_report_item_compare b
+                                                where a.module_rid = b.module_rid
+                                                  and a.type_rid = b.type_rid
+                                                  and a.rid = b.item_rid
+                                                  and a.module_rid = '202310101511361148853000000000'
+                                                  and a.type_rid = '202311281105131392640900000000') j
+                                               on j.his_item_id = a.DISE_CODE) e
+                           on a.orgcode = e.orgcode and a.regid = e.regid and e.main_flag = '1' and
+                              e.dise_type = '1' and e.isvalid = '1'
                  left join opm_diagnose f
-                           on a.orgcode = f.orgcode and a.regid=f.regid  and f.main_flag = '1' and f.dise_type = '2' and f.isvalid = '1'
+                           on a.orgcode = f.orgcode and a.regid = f.regid and f.main_flag = '1' and
+                              f.dise_type = '2' and f.isvalid = '1'
                  left join (select a.item_id, b.his_item_id
                             from si_yt_report_item a,
                                  si_yt_report_item_compare b
@@ -163,6 +175,14 @@
                               and a.rid = b.item_rid
                               and a.module_rid = '202310101511361148853000000000'
                               and a.type_rid = '202310101521161149402900000000') g on g.his_item_id = a.PSNCERTTYPE
+                 left join (select a.item_id, a.item_name, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202311141512391328016800000000') i on i.his_item_id = a.DEPTCODE
 
         where a.orgcode = b.orgcode
           and a.orgcode = c.orgcode

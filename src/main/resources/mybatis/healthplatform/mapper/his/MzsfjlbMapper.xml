@@ -27,10 +27,10 @@
                ''                                                                              "TFSJ",--  退费时间  DATETIME
                d.DEPTCODE                                                                      "YNJZKSDM",--  院内费用发生科室代码  VARCHAR 50  必填
                d.DEPTNAME                                                                      "YNJZKSMC",--  院内费用发生科室名称  VARCHAR 100 必填
-               '-'                                                                             "JZKSDM",--  中心费用发生科室代码  VARCHAR 50  必填  《全民健康信息平台科室分类代码表》
-               '-'                                                                             "JZKSMC",--  中心费用发生科室名称  VARCHAR 100 必填  《全民健康信息平台科室分类代码表》
-               nvl(round(a.totcost, 3) ,0)                                                          "ZJE",-- 总金额 NUMERIC 18,3  必填  医院实际收取的费用     退费标志为2（退费）时，传负数
-               nvl(s.YBINSCP_SCP_AMT, 0)                                                                       "YBJE",--  医保结算范围金额  NUMERIC 18,3  必填  医保结算范围金额
+               h.item_id                                                                       "JZKSDM",--  中心费用发生科室代码  VARCHAR 50  必填  《全民健康信息平台科室分类代码表》
+               h.item_name                                                                     "JZKSMC",--  中心费用发生科室名称  VARCHAR 100 必填  《全民健康信息平台科室分类代码表》
+               nvl(round(a.totcost, 3), 0)                                                     "ZJE",-- 总金额 NUMERIC 18,3  必填  医院实际收取的费用     退费标志为2（退费）时，传负数
+               nvl(s.YBINSCP_SCP_AMT, 0)                                                       "YBJE",--  医保结算范围金额  NUMERIC 18,3  必填  医保结算范围金额
                nvl(round(a.PUBCOST, 3), 0)                                                     "YBZFJE",--  医保支付金额  NUMERIC 18,3  必填  医保实际报销支付金额，如无，则填写0  退费标志为2（退费）时，传负数
                nvl(round(a.OWNCOST, 3), 0)                                                     "ZFJE",--  个人现金支付金额  NUMERIC 18,3  必填  非医保报销范围，由患者个人自付的医疗费用总额  退费标志为2（退费）时，传负数
                nvl(round(a.PAYCOST, 3), 0)                                                     "FLZJJE",--  个人账户支付金额  NUMERIC 18,3  必填  医疗保险患者的费用中属于个人支付部分的金额   退费标志为2（退费）时，传负数
@@ -50,7 +50,7 @@
                a.OPTER_CODE                                                                    "SFCZYGH",-- 收费操作员工号 VARCHAR 64  必填
                a.OPTER_NAME                                                                    "SFCZYXM",-- 收费操作员姓名 VARCHAR 50  必填
                g.certno                                                                        "SFCZYSFZHM",--  收费操作员身份证号码  VARCHAR 18
-               to_date(to_char(sysdate, 'YYYY-MM-DD'), 'YYYY-MM-DD')                           "TBRQ" --  填报日期  DATETIME   必填 本条数据采集时间，格式YYYY-MM-DD
+               to_char(sysdate, 'YYYY-MM-DD')                                                  "TBRQ" --  填报日期  DATETIME   必填 本条数据采集时间，格式YYYY-MM-DD
         from com_hospitalinfo b,
              com_patientinfo c,
              (select orgcode,
@@ -113,7 +113,15 @@
                               and a.rid = b.item_rid
                               and a.module_rid = '202310101511361148853000000000'
                               and a.type_rid = '202310101602441149584100000000') f
-                           on f.his_item_id = d.PSNCERTTYPE,
+                           on f.his_item_id = d.PSNCERTTYPE
+                 left join (select a.item_id, a.item_name, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202311141512391328016800000000') h on h.his_item_id = d.DEPTCODE,
              SI_OPB_SETLINFO s
         where a.orgcode = b.orgcode
           and a.orgcode = d.orgcode
@@ -121,10 +129,10 @@
           and c.orgcode = d.orgcode
           and c.patientno = d.patientno
           and c.patientid = d.patientid
-          and a.orgcode =s.orgcode
-          and a.INVOICENO=s.INVONO
-          and a.TRANSTYPE=s.TRANSTYPE
-           and a.orgcode = e.orgcode
+          and a.orgcode = s.orgcode
+          and a.INVOICENO = s.INVONO
+          and a.TRANSTYPE = s.TRANSTYPE
+          and a.orgcode = e.orgcode
           and a.regid = e.regid
           and a.INVOICENO = e.INVOICENO
           and a.TRANSTYPE = e.TRANSTYPE
@@ -159,10 +167,10 @@
                to_date(to_char(a.OPTER_TIME, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS') "TFSJ",--	退费时间	DATETIME
                d.DEPTCODE                                                                       "YNJZKSDM",--	院内费用发生科室代码	VARCHAR	50	必填
                d.DEPTNAME                                                                       "YNJZKSMC",--	院内费用发生科室名称	VARCHAR	100	必填
-               '-'                                                                              "JZKSDM",--	中心费用发生科室代码	VARCHAR	50	必填	《全民健康信息平台科室分类代码表》
-               '-'                                                                              "JZKSMC",--	中心费用发生科室名称	VARCHAR	100	必填	《全民健康信息平台科室分类代码表》
-               nvl(round(a.totcost, 3) ,  0 )                                                          "ZJE",-- 总金额 NUMERIC 18,3  必填  医院实际收取的费用     退费标志为2（退费）时，传负数
-               nvl(s.YBINSCP_SCP_AMT, 0)                                                                                "YBJE",--  医保结算范围金额  NUMERIC 18,3  必填  医保结算范围金额
+               h.item_id                                                                        "JZKSDM",--	中心费用发生科室代码	VARCHAR	50	必填	《全民健康信息平台科室分类代码表》
+               h.item_name                                                                      "JZKSMC",--	中心费用发生科室名称	VARCHAR	100	必填	《全民健康信息平台科室分类代码表》
+               nvl(round(a.totcost, 3), 0)                                                      "ZJE",-- 总金额 NUMERIC 18,3  必填  医院实际收取的费用     退费标志为2（退费）时，传负数
+               nvl(s.YBINSCP_SCP_AMT, 0)                                                        "YBJE",--  医保结算范围金额  NUMERIC 18,3  必填  医保结算范围金额
                nvl(round(a.PUBCOST, 3), 0)                                                      "YBZFJE",--  医保支付金额  NUMERIC 18,3  必填  医保实际报销支付金额，如无，则填写0  退费标志为2（退费）时，传负数
                nvl(round(a.OWNCOST, 3), 0)                                                      "ZFJE",--  个人现金支付金额  NUMERIC 18,3  必填  非医保报销范围，由患者个人自付的医疗费用总额  退费标志为2（退费）时，传负数
                nvl(round(a.PAYCOST, 3), 0)                                                      "FLZJJE",--  个人账户支付金额  NUMERIC 18,3  必填  医疗保险患者的费用中属于个人支付部分的金额   退费标志为2（退费）时，传负数
@@ -245,17 +253,25 @@
                               and a.type_rid = b.type_rid
                               and a.rid = b.item_rid
                               and a.module_rid = '202310101511361148853000000000'
-                              and a.type_rid = '202310101602441149584100000000') f on f.his_item_id = d.PSNCERTTYPE,
-            SI_OPB_SETLINFO s
+                              and a.type_rid = '202310101602441149584100000000') f on f.his_item_id = d.PSNCERTTYPE
+                 left join (select a.item_id, a.item_name, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202311141512391328016800000000') h on h.his_item_id = d.DEPTCODE,
+             SI_OPB_SETLINFO s
         where a.orgcode = b.orgcode
           and a.orgcode = d.orgcode
           and a.regid = d.regid
           and c.orgcode = d.orgcode
           and c.patientno = d.patientno
           and c.patientid = d.patientid
-          and a.orgcode =s.orgcode
-          and a.INVOICENO=s.INVONO
-          and a.TRANSTYPE=s.TRANSTYPE
+          and a.orgcode = s.orgcode
+          and a.INVOICENO = s.INVONO
+          and a.TRANSTYPE = s.TRANSTYPE
           and a.orgcode = e.orgcode
           and a.regid = e.regid
           and a.INVOICENO = e.INVOICENO
