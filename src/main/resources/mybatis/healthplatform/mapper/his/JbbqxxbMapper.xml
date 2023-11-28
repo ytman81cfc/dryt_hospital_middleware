@@ -2,18 +2,22 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hospital.middleware.healthplatform.dao.his.HealthplatfromDAO">
     <select id="queryJbbqxxb" resultType="java.util.HashMap">
-         select
-          a.orgcode "YLJGDM"	,--	医疗机构代码	VARCHAR	22	必填	复合主键：填写医疗机构组织机构代码
-          b.nursdeptcode        "BQDM"	,--	病区代码	VARCHAR	64	必填	复合主键：医院病区代码
-          b.nursdeptname       "BQMC"	,--	病区名称	VARCHAR	100	必填	医院病区名称
-          count (a.deptcode)      "CWS"	,--	床位数	NUMERIC	5		床位数
-            to_char(sysdate, 'YYYY-MM-DD')     "TBRQ"	 --	填报日期	DATETIME 	必填	本条数据采集时间，格式YYYY-MM-DD
-         from COM_BEDINFO a,COM_NURSE_DEPTINFO b,com_deptinfo c
-         where a.orgcode =b.orgcode and a.deptcode=b.deptcode and
-          b.orgcode =c.orgcode and b.deptcode=c.deptcode and c.isvalid='1'
+        select a.orgcode                      "YLJGDM",--	医疗机构代码	VARCHAR	22	必填	复合主键：填写医疗机构组织机构代码
+               b.nursdeptcode                 "BQDM",--	病区代码	VARCHAR	64	必填	复合主键：医院病区代码
+               b.nursdeptname                 "BQMC",--	病区名称	VARCHAR	100	必填	医院病区名称
+               count(a.deptcode)              "CWS",--	床位数	NUMERIC	5		床位数
+               to_char(sysdate, 'YYYY-MM-DD') "TBRQ"   --	填报日期	DATETIME 	必填	本条数据采集时间，格式YYYY-MM-DD
+        from COM_BEDINFO a,
+             COM_NURSE_DEPTINFO b,
+             com_deptinfo c
+        where a.orgcode = b.orgcode
+          and a.deptcode = b.deptcode
+          and b.orgcode = c.orgcode
+          and b.deptcode = c.deptcode
+          and c.isvalid = '1'
           and a.bedstate &lt;&gt; '9'
-  and a.orgcode = #{orgcode}
-         group by a.orgcode ,b.nursdeptcode , b.nursdeptname
+          and a.orgcode = #{orgcode}
+        group by a.orgcode, b.nursdeptcode, b.nursdeptname
     </select>
 
 
