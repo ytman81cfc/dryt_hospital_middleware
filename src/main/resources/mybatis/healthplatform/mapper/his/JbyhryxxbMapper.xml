@@ -9,7 +9,7 @@
                ''                                                                   "FYMC",        --	分院名称	VARCHAR	120	条件必填	分院代码不为0时必填
                a.usercode                                                           "GH",          --	工号	VARCHAR	64	必填	医护人员工号
                a.username                                                           "XM",          --	姓名	VARCHAR	50	必填	医护人员姓名
-               nvl(e.item_id,'1')                                                            "XB",          --	性别代码	VARCHAR	1	必填	参见GB/T 2261.1-2003 性别代码表
+               nvl(e.item_id, '1')                                                  "XB",          --	性别代码	VARCHAR	1	必填	参见GB/T 2261.1-2003 性别代码表
                substr(a.certno, 7, 8)                                               "CSRQ",        --	出生日期	VARCHAR	8		出生日期：格式“YYYYMMDD”
                '01'                                                                 "MZDM",        --	民族代码	VARCHAR	2		参见GB/T 3304-1991-2022修订版 民族代码表
                f.item_id                                                            "SFBSLBDM",    --	身份标识类别代码	VARCHAR	2		参见CV02.01.101-2022修订版 身份证件类别代码
@@ -38,7 +38,7 @@
                ''                                                                   "GW",          --	岗位	VARCHAR	64
                a.praccertino                                                        "ZYZSH",       --	执业证书号	VARCHAR	64
                ''                                                                   "ZYZGMC",      --	执业资格名称	VARCHAR	64
-               ''                                                                 "ZYZSZCSJ",    --	执业证书注册时间	DATETIME
+               ''                                                                   "ZYZSZCSJ",    --	执业证书注册时间	DATETIME
                '0'                                                                  "QKYSBZ",      --	是否为全科医生	INT			0：否 1：是
                '1'                                                                  "YSZYLBDM",    --	医师执业类别代码	VARCHAR	1		1：临床 2：口腔 3：公共卫生 4：中医
                ''                                                                   "YSZYFWDM",    --	医师执业范围代码	VARCHAR	30		参见《全民健康信息平台科室分类代码表》
@@ -47,8 +47,8 @@
                ''                                                                   "DSZYDWLBDM",  --	第3执业单位类别代码	VARCHAR	1		1：医院 2：乡镇卫生院 3：社区卫生服务中心/站 9：其他医疗机构
                '19'                                                                 "RYDRQK",      --	人员调入情况	VARCHAR	2	必填	11：高中等院校毕业生 12：其他卫生机构调入 13：非卫生机构调入 14：军转人员 19：其他
                ''                                                                   "RYDCQK",      --	人员调出情况	VARCHAR	2		22：考取研究生 23：出国留学 24：退休 25：辞职26：自然减员 27：辞退 29：其他 31：调往本市本系统 32：调往本市外系统 33：调往外市本系统 34：调往外市外系统
-               ''                                                                 "DRSJ",        --	调入时间	DATETIME
-               ''                                                                 "DCSJ",        --	调出时间	DATETIME
+               ''                                                                   "DRSJ",        --	调入时间	DATETIME
+               ''                                                                   "DCSJ",        --	调出时间	DATETIME
                ''                                                                   "CJGZRQ",      --	参加工作日期	VARCHAR	6		YYYYMM
                '2'                                                                  "BZQK",        --	编制情况	VARCHAR	1	必填	1：编制内 2：合同制 3：临聘人员 4：返聘
                '1'                                                                  "GZZT",        --	工作状态	VARCHAR	2	必填	1：在岗 2：停薪留职 3：长病假 4：借出外系统
@@ -58,14 +58,14 @@
                ''                                                                   "GWJB",        --	岗位级别	VARCHAR	2		1：一级 2：二级 3：三级 4：四级 5：五级 6：六级 7：七级 8：八级 9：九级 10：十级 11：十一级 12：十二级 13：十三级 0：普通工
                '0'                                                                  "SFNRQKYSPX",  --	纳入全科医生培训标志	VARCHAR	1	必填	0：未纳入 1：已纳入
                ''                                                                   "QKYSZCZSH",   --	全科医生注册证书号	VARCHAR	50
-               ''                                                                 "QKYSZCZSSJ",  --	全科医生注册证书时间	DATETIME
+               ''                                                                   "QKYSZCZSSJ",  --	全科医生注册证书时间	DATETIME
                ''                                                                   "ZCZSH",       --	注册证书号	VARCHAR	50
-               ''                                                                 "ZCSJ",        --	注册时间	DATETIME
+               ''                                                                   "ZCSJ",        --	注册时间	DATETIME
                ''                                                                   "SFPY",        --	是否聘用	VARCHAR	1		0：否 1：是
-               ''                                                                 "XPGWSJ",      --	现聘岗位时间	DATETIME
+               ''                                                                   "XPGWSJ",      --	现聘岗位时间	DATETIME
                ''                                                                   "DCDDDM",      --	调出地点代码	VARCHAR	50
                ''                                                                   "DCDDMC",      --	调出地点名称	VARCHAR	100
-               ''                                                                 "JCSJ",        --	借出时间	DATETIME
+               ''                                                                   "JCSJ",        --	借出时间	DATETIME
                ''                                                                   "JCDWDM",      --	借出单位代码	VARCHAR	50
                ''                                                                   "JCDWMC",      --	借出单位名称	VARCHAR	100
                to_char(sysdate, 'YYYY-MM-DD')                                       "TBRQ"         --	填报日期	DATETIME		必填	本条数据采集时间，格式YYYY-MM-DD
@@ -97,8 +97,8 @@
                               and a.rid = b.item_rid
                               and a.module_rid = '202310101511361148853000000000'
                               and a.type_rid = '202311141512391328016800000000'
-                     and b.orgcode =#{orgcode}
-                     ) g on   g.his_item_id = a.deptcode
+                              and b.orgcode = #{orgcode}
+             ) g on g.his_item_id = a.deptcode
         where a.orgcode = b.orgcode
           and a.usercode = b.usercode
           and a.isvalid = '1'
