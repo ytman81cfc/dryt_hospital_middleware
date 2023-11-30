@@ -14,18 +14,18 @@
                f.item_id                                    "ZJLX",--	证件类型	VARCHAR	2		参见CV02.01.101-2022修订版 身份证件类别代码 优先使用身份证
                a.certno                                     "ZJHM",--	证件号码	VARCHAR	32
                a.PATIENTNAME                                "HZXM",--	患者姓名	VARCHAR	50	必填
-               a.INAVENUE                                   "RYLYDM",--	入院来源代码	VARCHAR	1	必填	1：急诊 2：门诊 3：其他医疗机构转入 9：其他
+               nvl(a.INAVENUE, '2')                                   "RYLYDM",--	入院来源代码	VARCHAR	1	必填	1：急诊 2：门诊 3：其他医疗机构转入 9：其他
                a.INDEPTCODE                                 "YNJZKSBM",--	院内入院科室编码	VARCHAR	50	必填
                a.INDEPTNAME                                 "YNJZKSMC",--	院内入院科室名称	VARCHAR	100	必填
                h.item_id                                    "JZKSBM",--	中心入院科室编码	VARCHAR	50	必填	参见《全民健康信息平台科室分类代码表》
                h.item_name                                  "JZKSMC",--	中心入院科室名称	VARCHAR	100	必填	参见《全民健康信息平台科室分类代码表》
                a.OUTDEPTCODE                                "YNCYKSBM",--	院内出院科室编码	VARCHAR	50
                a.OUTDEPTNAME                                "YNCYKSMC",--	院内出院科室名称	VARCHAR	100
-               j.item_id                                    "CYKSBM",--	中心出院科室编码	VARCHAR	50		参见《全民健康信息平台科室分类代码表》
-               j.item_name                                  "CYKSMC",--	中心出院科室名称	VARCHAR	100		参见《全民健康信息平台科室分类代码表》
+               nvl(j.item_id, '-')                                    "CYKSBM",--	中心出院科室编码	VARCHAR	50		参见《全民健康信息平台科室分类代码表》
+               nvl(j.item_name, '-')                                  "CYKSMC",--	中心出院科室名称	VARCHAR	100		参见《全民健康信息平台科室分类代码表》
                to_char(a.INDATE, 'YYYY-MM-DD HH24:MI:SS')   "RYSJ",--	入院时间	DATETIME		必填	YYYY-MM-DD HH24:MI:SS
                to_char(a.OUT_DATE, 'YYYY-MM-DD HH24:MI:SS') "CYSJ",--	出院时间	DATETIME		必填	YYYY-MM-DD HH24:MI:SS
-               d.item_id                                    "BXLX",--	医疗费用支付方式	VARCHAR	4	必填	参见CV07.10.003-2022修订版 医疗费用来源类别
+               nvl(d.item_id, '-')                                    "BXLX",--	医疗费用支付方式	VARCHAR	4	必填	参见CV07.10.003-2022修订版 医疗费用来源类别
                ''                                           "ZYZZDMZH",--	主要症状代码组合	VARCHAR	128		主要症状代码组合（用英文分号“;”分割）。参见ZD_JBKZJCZZDM疾病控制监测症状代码
                '-'                                          "ZS",--	主诉	VARCHAR	4000	必填
                ''                                           "XBS",--	现病史	VARCHAR	4000	条件必填	有则必填
