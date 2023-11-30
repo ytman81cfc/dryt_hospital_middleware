@@ -21,14 +21,14 @@
                    when a.PAYKINDCODE = '02' and d.INSUTYPE = 'A' then '01'
                    when a.PAYKINDCODE = '02' and d.INSUTYPE = 'B' then '02'
                    else '99' end                                                               "BXLX",--  医疗费用支付方式  VARCHAR 4 必填  参见CV07.10.003-2022修订版 医疗费用来源类别
-               a.MCARDNO                                                                       "YBZHBZ",--  医保账户标识  VARCHAR 64  条件必填  医保账号，医保患者必填
+               nvl(a.MCARDNO, '-')                                                                       "YBZHBZ",--  医保账户标识  VARCHAR 64  条件必填  医保账号，医保患者必填
                decode(d.PERSON_AREA_FLAG, '1', '1', '2', '2', '3', '2', '5')                   "WDBZ",--  外地标志  VARCHAR 1   1：本市 2：外地 3：境外（港澳台） 4：外国 5：未知
-               to_date(to_char(a.CRTE_TIME, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS') "SFSJ",--  收费时间  DATETIME    必填
+               to_char(a.CRTE_TIME, 'YYYY-MM-DD HH24:MI:SS') "SFSJ",--  收费时间  DATETIME    必填
                ''                                                                              "TFSJ",--  退费时间  DATETIME
                d.DEPTCODE                                                                      "YNJZKSDM",--  院内费用发生科室代码  VARCHAR 50  必填
-               d.DEPTNAME                                                                      "YNJZKSMC",--  院内费用发生科室名称  VARCHAR 100 必填
-               h.item_id                                                                       "JZKSDM",--  中心费用发生科室代码  VARCHAR 50  必填  《全民健康信息平台科室分类代码表》
-               h.item_name                                                                     "JZKSMC",--  中心费用发生科室名称  VARCHAR 100 必填  《全民健康信息平台科室分类代码表》
+               nvl(d.DEPTNAME, '-')                                                                      "YNJZKSMC",--  院内费用发生科室名称  VARCHAR 100 必填
+               nvl(h.item_id, '-')                                                                       "JZKSDM",--  中心费用发生科室代码  VARCHAR 50  必填  《全民健康信息平台科室分类代码表》
+               nvl(h.item_name, '-')                                                                     "JZKSMC",--  中心费用发生科室名称  VARCHAR 100 必填  《全民健康信息平台科室分类代码表》
                nvl(round(a.totcost, 3), 0)                                                     "ZJE",-- 总金额 NUMERIC 18,3  必填  医院实际收取的费用     退费标志为2（退费）时，传负数
                nvl(s.YBINSCP_SCP_AMT, 0)                                                       "YBJE",--  医保结算范围金额  NUMERIC 18,3  必填  医保结算范围金额
                nvl(round(a.PUBCOST, 3), 0)                                                     "YBZFJE",--  医保支付金额  NUMERIC 18,3  必填  医保实际报销支付金额，如无，则填写0  退费标志为2（退费）时，传负数
@@ -161,14 +161,14 @@
                    when a.PAYKINDCODE = '02' and d.INSUTYPE = 'A' then '01'
                    when a.PAYKINDCODE = '02' and d.INSUTYPE = 'B' then '02'
                    else '99' end                                                                "BXLX",--	医疗费用支付方式	VARCHAR	4	必填	参见CV07.10.003-2022修订版 医疗费用来源类别
-               a.MCARDNO                                                                        "YBZHBZ",--	医保账户标识	VARCHAR	64	条件必填	医保账号，医保患者必填
+               nvl(a.MCARDNO, '-')                                                                        "YBZHBZ",--	医保账户标识	VARCHAR	64	条件必填	医保账号，医保患者必填
                decode(d.PERSON_AREA_FLAG, '1', '1', '2', '2', '3', '2', '5')                    "WDBZ",--	外地标志	VARCHAR	1		1：本市 2：外地 3：境外（港澳台） 4：外国 5：未知
-               to_date(to_char(a.CRTE_TIME, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS')  "SFSJ",--	收费时间	DATETIME		必填
-               to_date(to_char(a.OPTER_TIME, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS') "TFSJ",--	退费时间	DATETIME
+               to_char(a.CRTE_TIME, 'YYYY-MM-DD HH24:MI:SS')                                    "SFSJ",   --	收费时间	DATETIME		必填
+               to_char(a.OPTER_TIME, 'YYYY-MM-DD HH24:MI:SS')                                   "TFSJ",         --	退费时间	DATETIME
                d.DEPTCODE                                                                       "YNJZKSDM",--	院内费用发生科室代码	VARCHAR	50	必填
-               d.DEPTNAME                                                                       "YNJZKSMC",--	院内费用发生科室名称	VARCHAR	100	必填
-               h.item_id                                                                        "JZKSDM",--	中心费用发生科室代码	VARCHAR	50	必填	《全民健康信息平台科室分类代码表》
-               h.item_name                                                                      "JZKSMC",--	中心费用发生科室名称	VARCHAR	100	必填	《全民健康信息平台科室分类代码表》
+               nvl(d.DEPTNAME, '-')                                                                       "YNJZKSMC",--	院内费用发生科室名称	VARCHAR	100	必填
+               nvl(h.item_id, '-')                                                                        "JZKSDM",--	中心费用发生科室代码	VARCHAR	50	必填	《全民健康信息平台科室分类代码表》
+               nvl(h.item_name, '-')                                                                      "JZKSMC",--	中心费用发生科室名称	VARCHAR	100	必填	《全民健康信息平台科室分类代码表》
                nvl(round(a.totcost, 3), 0)                                                      "ZJE",-- 总金额 NUMERIC 18,3  必填  医院实际收取的费用     退费标志为2（退费）时，传负数
                nvl(s.YBINSCP_SCP_AMT, 0)                                                        "YBJE",--  医保结算范围金额  NUMERIC 18,3  必填  医保结算范围金额
                nvl(round(a.PUBCOST, 3), 0)                                                      "YBZFJE",--  医保支付金额  NUMERIC 18,3  必填  医保实际报销支付金额，如无，则填写0  退费标志为2（退费）时，传负数
@@ -190,7 +190,7 @@
                a.OPTER_CODE                                                                     "SFCZYGH",--	收费操作员工号	VARCHAR	64	必填
                a.OPTER_NAME                                                                     "SFCZYXM",--	收费操作员姓名	VARCHAR	50	必填
                g.certno                                                                         "SFCZYSFZHM",--	收费操作员身份证号码	VARCHAR	18
-               to_date(to_char(sysdate, 'YYYY-MM-DD'), 'YYYY-MM-DD')                            "TBRQ" --	填报日期	DATETIME	 必填	本条数据采集时间，格式YYYY-MM-DD
+               to_char(sysdate, 'YYYY-MM-DD')                            "TBRQ" --	填报日期	DATETIME	 必填	本条数据采集时间，格式YYYY-MM-DD
         from com_hospitalinfo b,
              com_patientinfo c,
              (select orgcode,
