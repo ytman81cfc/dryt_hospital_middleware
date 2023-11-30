@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hospital.middleware.healthplatform.dao.his.HealthplatfromDAO">
+    <select id="queryTj_ssyw_cwzyqk" resultType="java.util.HashMap">
+        select c.orgcode                                 "YLJGDM",--  医疗机构代码  VARCHAR 22  必填  复合主键：采用22位“卫生机构代码”
+               to_char(to_date(#{begtime}, 'YYYY-MM-DD'), 'YYYY-MM-DD')            "CJRQ",--  采集日期  VARCHAR 10  必填  复合主键：格式为YYYY-MM-DD
+               #{begtime}  "CJSJ",--  采集时间  DATETIME    必填  复合主键
+               c.deptcode                                "BQBM",--  病区(科室)代码  VARCHAR 20  必填  复合主键：若医院以科室进行划分，则填写科室代码；若以病区划分的则填写病区代码。通常是按病区划分的
+               p.deptname                                "BQMC",--  病区(科室)名称  VARCHAR 100 必填  若医院以科室进行划分，则填写科室名称；若以病区划分的则填写病区名称。通常是按病区划分的
+               a.num                                     "HDCWZS",--  核定床位总数  NUMERIC 10  必填  该病区的床位总数。多科室共用病区不细分。
+               b.num                                     "SJKFCWZS",--  实际开放床位总数  NUMERIC 10  必填
+               ''                                        "ZZJHCWS",-- 重症监护床位数 NUMERIC 10
+               ''                                        "LGCWS",-- 留观床位数 NUMERIC 10
+               ''                                        "ZZJHBRS",-- 重症监护病人数 NUMERIC 10
+               ''                                        "LGBRS",-- 留观病人数 NUMERIC 10
+               ''                                        "SSBRS",-- 手术病人数 NUMERIC 10
+               nvl(j.num, 0)                             "BRRLYBRS",--  本日仍留院病人数  NUMERIC 10  必填  指本日开始截止到采集当时的人数
+               nvl(e.num, 0)                             "BRXRYBRS",--  本日新入院病人数  NUMERIC 10  必填  指本日开始截止到采集时的人数
+               nvl(i.num, 0)                             "BRXZRBRS",--  本日新转入病人数  NUMERIC 10  必填  指本日开始截止到采集时的人数
+               nvl(h.num, 0)                             "BRXZCBRS",--  本日新转出病人数  NUMERIC 10  必填  指本日开始截止到采集时的人数
+               nvl(f.num, 0)                             "BRCYBRS",-- 本日出院病人数 NUMERIC 10  必填  指本日开始截止到采集时的人数
+               nvl(g.num, 0)                             "BRSWBRS",-- 本日死亡病人数 NUMERIC 10  必填  指本日开始截止到采集时的人数
+               0                                         "BRJCS",-- 本日加床数 NUMERIC 10  必填  指本日开始截止到采集时的床位数
+               d.num                                     "BRKCS",-- 本日空床数 NUMERIC 10  必填  指本日开始截止到采集时的床位数
+               ''                                        "HDUKFCWS",--  HDU开放床位数  NUMERIC 10
+               ''                                        "HDUZYCWS",--  HDU占用床位数  NUMERIC 10
+               ''                                        "GYYCWSZC",--  高压氧舱位数（坐舱）  NUMERIC 10
+               ''                                        "GYYZYCWSZC",--  高压氧占用舱位数（坐舱）  NUMERIC 10
+               to_char(sysdate, 'YYYY-MM-DD')            "TBRQ" --  填报日期  DATETIME   必填 本条数据采集时间，格式YYYY-MM-DD
+        from COM_BEDINFO c
+                 left join (select count(deptcode) num, deptcode, orgcode from COM_BEDINFO group by deptcode, orgcode) a
+                           on a.orgcode = c.orgcode and a.deptcode = c.deptcode
+                 left join (select count(deptcode) num, deptcode, orgcode
+                            from COM_BEDINFO
+                            where BEDSTATE &lt;&gt; '9'
+                            group by deptcode, orgcode) b on b.orgcode = c.orgcode and b.deptcode = c.deptcode
+                 left join (select count(deptcode) num, deptcode, orgcode
+                            from COM_BEDINFO
+                            where BEDSTATE = '0'
+                            group by deptcode, orgcode) d on d.orgcode = c.orgcode and d.deptcode = c.deptcode
+                 left join (select count(INDEPTCODE) num, INDEPTCODE, orgcode
+                            from IPR_INPATIENTINFO
+                            where instate &lt;&gt; '0'
+                              and to_char(indate, 'yyyy-mm-dd hh24:mi:ss') &gt;= #{begtime}
+                              and to_char(indate, 'yyyy-mm-dd hh24:mi:ss') &lt;= #{endtime}
+                            group by INDEPTCODE, orgcode) e on e.orgcode = c.orgcode and e.INDEPTCODE = c.deptcode
+                 left join (select count(OUTDEPTCODE) num, OUTDEPTCODE, orgcode
+                            from IPR_INPATIENTINFO
+                            where instate &lt;&gt; '0'
+                              and to_char(out_date, 'yyyy-mm-dd hh24:mi:ss') &gt;= #{begtime}
+                              and to_char(out_date, 'yyyy-mm-dd hh24:mi:ss') &lt;= #{endtime}
+                            group by OUTDEPTCODE, orgcode) f on f.orgcode = c.orgcode and f.OUTDEPTCODE = c.deptcode
+                 left join (select count(OUTDEPTCODE) num, OUTDEPTCODE, orgcode
+                            from IPR_INPATIENTINFO
+                            where instate &lt;&gt; '0'
+                              and to_char(DIE_DATE, 'yyyy-mm-dd hh24:mi:ss') &gt;= #{begtime}
+                              and to_char(DIE_DATE, 'yyyy-mm-dd hh24:mi:ss') &lt;= #{endtime}
+                            group by OUTDEPTCODE, orgcode) g on g.orgcode = c.orgcode and g.OUTDEPTCODE = c.deptcode
+                 left join (select count(a.OLDSUBJECTCODE) num, a.OLDSUBJECTCODE, a.orgcode
+                            from ipr_shiftinfo a,
+                                 IPR_INPATIENTINFO b
+                            where a.orgcode = b.orgcode
+                              and a.inid = b.inid
+                              and b.instate &lt;&gt; '0'
+                              and a.SHIFTTYPE = 'RD'
+                              and to_char(a.CRTE_TIME, 'yyyy-mm-dd hh24:mi:ss') &gt;= #{begtime}
+                              and to_char(a.CRTE_TIME, 'yyyy-mm-dd hh24:mi:ss') &lt;= #{endtime}
+                            group by a.OLDSUBJECTCODE, a.orgcode) h
+                           on h.orgcode = c.orgcode and h.OLDSUBJECTCODE = c.deptcode
+                 left join (select count(a.NEWSUBJECTCODE) num, a.NEWSUBJECTCODE, a.orgcode
+                            from ipr_shiftinfo a,
+                                 IPR_INPATIENTINFO b
+                            where a.orgcode = b.orgcode
+                              and a.inid = b.inid
+                              and b.instate &lt;&gt; '0'
+                              and a.SHIFTTYPE = 'RD'
+                              and a.SHIFT_STATE = '2'
+                              and to_char(a.UPDT_TIME, 'yyyy-mm-dd hh24:mi:ss') &gt;= #{begtime}
+                              and to_char(a.UPDT_TIME, 'yyyy-mm-dd hh24:mi:ss') &lt;= #{endtime}
+                            group by a.NEWSUBJECTCODE, a.orgcode) i
+                           on i.orgcode = c.orgcode and i.NEWSUBJECTCODE = c.deptcode
+                 left join (select count(OUTDEPTCODE) num, OUTDEPTCODE, orgcode
+                            from IPR_INPATIENTINFO
+                            where instate &lt;&gt; '0'
+                                and to_char(out_date, 'yyyy-mm-dd hh24:mi:ss')&gt;= #{endtime}
+                         or out_date is null
+                            group by OUTDEPTCODE, orgcode) j
+                           on j.orgcode = c.orgcode and j.OUTDEPTCODE = c.deptcode,
+             com_deptinfo p
+        where c.orgcode =p.orgcode
+          and  c.deptcode=p.deptcode
+          and  c.orgcode = #{orgcode}
+    </select>
+
+</mapper>

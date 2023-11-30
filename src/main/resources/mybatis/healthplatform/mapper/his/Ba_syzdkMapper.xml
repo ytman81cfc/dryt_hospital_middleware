@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hospital.middleware.healthplatform.dao.his.HealthplatfromDAO">
+    <select id="queryBa_syzdk" resultType="java.util.HashMap">
+        select a.orgcode                      "YLJGDM",--	医疗机构代码 	VARCHAR	22	必填	复合主键：采用22位“卫生机构代码”
+               a.DIAGNOSIS_NO - 1             "ZDXH",--	诊断序号	VARCHAR	2	必填	复合主键：诊断的排序序号，主要诊断序号为0，其他诊断按照1,2,3排列
+               a.visit_id                     "JZLSH",--	住院就诊流水号 	VARCHAR	50	必填	复合主键：医院HIS系统的唯一编号（内码）
+               b.orgname                      "YLJGMC",--	医疗机构名称	VARCHAR	70	必填	医院执业许可第一名称
+               '0'                            "FYDM",--	分院代码	VARCHAR	20	必填	记录分院代码（内码），如无分院，则传0
+               ''                             "FYMC",--	分院名称	VARCHAR	120	条件必填	分院代码不为0时必填
+               '1'                            "ZXYZDBS",--	中西医诊断标识	VARCHAR	1	必填	1：西医 2：中医 本表填写固定值1（西医）
+               a.MAIN_FLAG                    "SFZYZD",--	是否主要诊断	VARCHAR	1	必填	0：否 1：是
+               '0'                            "SFQTDYZD",--	是否其他第一诊断	VARCHAR	1	必填	0：否 1：是
+               a.DIAGNOSIS_CODE               "YNZDDM",--	院内西医出院诊断代码	VARCHAR	256	必填
+               a.DIAGNOSIS_NAME               "YNZDMC",--	院内西医出院诊断名称	VARCHAR	512	必填
+               d.item_id                      "ZDDM",--	中心西医出院诊断代码	VARCHAR	256	必填	参见《疾病分类与代码(ICD-10)》
+               d.item_name                    "ZDMC",--	中心西医出院诊断名称	VARCHAR	512	必填	参见《疾病分类与代码(ICD-10)》
+               e.item_id                      "RYBQ",--	入院病情	VARCHAR	4	必填	参见 CV05.10.019入院病情  1：有 2：临床未确定 3：情况不明 4：无
+               f.item_id                      "ZGQK",--	治疗转归	VARCHAR	4	必填	参见 CV05.10.010病情转归  1：治愈 2：好转 3：稳定 4：恶化 5：死亡 9：其他
+               to_char(sysdate, 'YYYY-MM-DD') "TBRQ" --  填报日期  DATETIME   必填 本条数据采集时间，格式YYYY-MM-DD
+        from emr_diagnose a
+                 left join (select a.item_id, a.item_name, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202311281105131392640900000000') d on d.his_item_id = a.DIAGNOSIS_CODE
+                 left join (select a.item_id, a.item_name, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202311281108031392669200000000') e
+                           on e.his_item_id = a.ADMISSION_CONDITIONS_ID
+                 left join (select a.item_id, a.item_name, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202311281118281392669500000000') f
+                           on f.his_item_id = a.DISCHARGE_CONDITIONS_ID,
+             com_hospitalinfo b,
+             ipr_inpatientinfo m
+        where a.orgcode = b.orgcode
+          and a.orgcode = m.orgcode
+          and a.visit_id = m.inid
+          and m.instate &lt;&gt; '0'
+          and a.DIAGNOSIS_TYPE='1'
+          and a.orgcode = #{orgcode}
+          and a.crte_time &gt;= to_date(#{begtime}, 'yyyy-mm-dd hh24:mi:ss')
+          and a.crte_time &lt;= to_date(#{endtime}, 'yyyy-mm-dd hh24:mi:ss')
+    </select>
+
+</mapper>

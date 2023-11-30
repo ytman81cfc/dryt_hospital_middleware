@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hospital.middleware.healthplatform.dao.his.HealthplatfromDAO">
+    <select id="queryEmr_mjzbl" resultType="java.util.HashMap">
+        select a.orgcode                                    "YLJGDM",--	医疗机构代码 	VARCHAR	22	必填	复合主键：采用22位“卫生机构代码”
+               a.regid                                      "JZLSH",--	就诊流水号	VARCHAR	32	必填	复合主键：医院内部HIS系统唯一编号
+               '1'                                          "ZXYBLBZ",--	中西医病历标志	VARCHAR	1	必填	0:中医处方; 1:西医处方
+               a.patientname                                "HZXM",--	患者姓名	VARCHAR	50	必填
+               a.SEXCODE                                    "XBDM",--	性别代码	VARCHAR	1	必填	编码。按国标GB/T 2261.1-2003执行
+               to_char(a.BRDY, 'YYYY-MM-DD')                "CSRQ",--	出生日期	DATETIME		必填	格式：YYYY-MM-DD
+               case
+                   when extract(year from a.reg_time) - extract(year from a.BRDY) &gt; 1
+                       then floor(extract(year from a.reg_time) - extract(year from a.BRDY))
+                   else 0 end                              "NLS",--	年龄(岁)	NUMERIC	3
+               case
+                   when extract(year from a.reg_time) - extract(year from a.BRDY) &lt; 1 and
+                        months_between(a.reg_time, a.BRDY) &gt; 1 then floor(months_between(a.reg_time, a.BRDY))
+                   else 0 end                              "NLY",--年龄(月)		NUMERIC	3
+               case
+                   when months_between(a.reg_time, a.BRDY) &lt; 1 then floor(a.reg_time - a.BRDY)
+                   else 0 end                              "NLR"
+                ,--	年龄(日)	NUMERIC	3
+               case
+                   when a.reg_time - a.BRDY &lt; 1 then floor(a.reg_time - a.BRDY) * 24
+                   else 0
+                   end                                      "NLXS"
+                ,--	年龄(小时)	NUMERIC	3
+               d.item_id                                    "ZJLX",--	证件类型	VARCHAR	2	必填	参见CV02.01.101身份证件类别代码
+               a.certno                                     "ZJHM",--	证件号码	VARCHAR	32	必填	患者身份证件上唯一法定标识
+               a.DEPTNAME                                   "KSMC",--	科室名称	VARCHAR	100	必填
+               a.DEPTCODE                                   "KSBM",--	科室编码	VARCHAR	20	必填	院内科室编码，见《科室信息(JBKSXXB)》表
+               e.rid                                        "KH",--	卡号	VARCHAR	64	必填
+               '1'                                          "KLX",--	卡类型	VARCHAR	16	必填	参见CVA5104就诊卡类型
+               a.ISEMERGENCY                                "MJZLB",--	门（急）诊类别	VARCHAR	1	必填	0：门诊 1：急诊
+               a.patientno                                  "MZBLH",--	门（急）诊病历号	VARCHAR	50	必填
+               a.PAYKINDNAME                                "MZFYLBMC",--	门诊费用类别名称	VARCHAR	20		患者发生的门诊费用种类名称，例如“医保”“自费”等
+               '9'                                          "GMSBZ",--	过敏史标志	VARCHAR	1		0：否；1：是；9：未知，不确定
+               ''                                           "GMS",--	过敏史	VARCHAR	1024		有多项时用英文分号“;”分割
+               to_char(a.reg_time, 'YYYY-MM-DD HH24:MM:SS') "JZRQSJ",--	就诊日期时间	DATETIME		必填	格式：YYYY-MM-DD HH:MM:SS
+               decode(a.YNFR, '1', '1', '0', '2')           "CZBZDM",--	初诊标志代码	VARCHAR	1	必填	1：初诊；2：复诊
+               ''                                           "SG",--	身高	NUMERIC	5,1		身高的测量值，计量单位为 cm
+               ''                                           "TZ",--	体重	NUMERIC	5,1		体重的测量值，计量单位为 kg
+               ''                                           "YZ",--	孕周（d）	NUMERIC	3		孕妇的妊娠时长，计量单位为 d
+               ''                                           "TTPF",--	疼痛评分	VARCHAR	200		患者的疼痛评分
+               ''                                           "GXPG",--	各项评估	VARCHAR	200
+               '-'                                          "ZS",--	主诉	VARCHAR	1024	必填
+               ''                                           "XBS",--	现病史	VARCHAR	1024		有多项时用英文分号“;”分割
+               '-'                                          "JWS",--	既往史	VARCHAR	1024	必填	有多项时用英文分号“;”分割
+               ''                                           "JBS",--	疾病史（外伤史）	VARCHAR	1024		患者既往健康状况和疾病（含外伤）的详细描述
+               ''                                           "LXBXS",--	流行病学史	VARCHAR	1024
+               ''                                           "YFJZS",--	预防接种史	VARCHAR	1024
+               ''                                           "SSS",--	手术史	VARCHAR	1024		患者既往接受手术/操作经历的详细描述
+               ''                                           "CSS",--	出生史	VARCHAR	1024
+               ''                                           "WYS",--	喂养史	VARCHAR	1024
+               ''                                           "SXS",--	输血史	VARCHAR	1024
+               ''                                           "GRS",--	个人史	VARCHAR	1024		患者个人生活习惯及有无烟、酒、药物等嗜好，职业与工作条件及有无工业毒物、粉尘、放射性物质接触史，有无冶游史的描述
+               ''                                           "HYS",--	婚育史	VARCHAR	1024
+               ''                                           "YJS",--	月经史	VARCHAR	1024
+               ''                                           "YCJZS",--	遗传家族史	VARCHAR	1024
+               ''                                           "TGJC",--	体格检查	VARCHAR	500
+               ''                                           "FZJCXM",--	辅助检查项目	VARCHAR	200		患者辅助检查、检验项目的通用名称
+               ''                                           "BZYJ",--	辨证依据	VARCHAR	100
+               ''                                           "ZZZF",--	治则治法代码	VARCHAR	200		参见GB/T 15657-2021中医法治
+               ''                                           "ZZZFMC",--	治则治法名称	VARCHAR	2000
+               b.code                                       "XYZDDM",--	初步诊断--西医诊断编码	VARCHAR	200	必填	ICD-10，多个用英文分号“;”分割
+               b.name                                       "XYZDMC",--	初步诊断--西医诊断名称	VARCHAR	2000	必填
+               ''                                           "XYZDYNMS",--	西医诊断院内描述	VARCHAR	2000	必填
+               ''                                           "ZYBMDM",--	初步诊断--中医病名代码	VARCHAR	200	条件必填(中医病历必填)	参考GB/T 15657-2021中医病证分类代码，多个用英文分号“;”分割
+               ''                                           "ZYBMMC",--	初步诊断--中医病名名称	VARCHAR	512	条件必填(中医病历必填)
+               ''                                           "ZYZHDM",--	初步诊断--中医症候代码	VARCHAR	64	条件必填(中医病历必填)	参考GB/T 15657-2021中医病证分类代码，多个用英文分号“;”分割
+               ''                                           "ZYZHMC",--	初步诊断--中医症候名称	VARCHAR	512	条件必填(中医病历必填)
+               ''                                           "DZSQDBH",--	电子申请单编号	VARCHAR	20
+               ''                                           "WZWSDM",--	望诊-望神代码	VARCHAR	200	条件(中医病历)	参考CVA08.03.018 多项以“;”分隔"
+               ''                                           "WZWS",--	望诊-望神	VARCHAR	2000	条件(中医病历)
+               ''                                           "WZWMSDM",--	望诊-望面色代码	VARCHAR	200	条件(中医病历)	参考CVA08.03.019 多项以“;”分隔"
+               ''                                           "WZWMS",--	望诊-望面色	VARCHAR	2000	条件(中医病历)
+               ''                                           "WZWXTDM",--	望诊-望形态代码	VARCHAR	200	条件(中医病历)	参考CVA08.03.020 多项以“;”分隔"
+               ''                                           "WZWXT",--	望诊-望形态	VARCHAR	2000	条件(中医病历)
+               ''                                           "WZWXRXFDM",--	望诊-望小儿胸腹代码	VARCHAR	200	条件(中医病历)	参考CVA08.03.021 多项以“;”分隔"
+               ''                                           "WZWXRXF",--	望诊-望小儿胸腹	VARCHAR	2000	条件(中医病历)
+               ''                                           "WZWTLWGJQDM",--	望诊-望头颅五官九窍代码	VARCHAR	400	条件(中医病历)	参考CVA08.03.022 多项以“;”分隔"
+               ''                                           "WZWTLWGJQ",--	望诊-望头颅五官九窍	VARCHAR	2000	条件(中医病历)
+               ''                                           "WZWPFDM",--	望诊-望皮肤代码	VARCHAR	200	条件(中医病历)	参考CVA08.03.023 多项以“;”分隔"
+               ''                                           "WZWPF",--	望诊-望皮肤	VARCHAR	2000	条件(中医病历)
+               ''                                           "WZWLMDM",--	望诊-望小儿食指络脉代码	VARCHAR	200	条件(中医病历)	参考CVA08.03.024 多项以“;”分隔"
+               ''                                           "WZWLM",--	望诊-望小儿食指络脉	VARCHAR	2000	条件(中医病历)
+               ''                                           "WZWPXWYFMWDM",--	望诊-望排泄物与分泌物代码	VARCHAR	200	条件(中医病历)	参考CVA08.03.025 多项以“;”分隔"
+               ''                                           "WZWPXWYFMW",--	望诊-望排泄物与分物	VARCHAR	2000	条件(中医病历)
+               ''                                           "WZSDM",--	望诊-舌代码	VARCHAR	200	条件必填(中医病历必填)	参考CVA08.03.005 多项以“;”分隔"
+               ''                                           "WZS",--	望诊-舌	VARCHAR	2000	条件必填(中医病历必填)
+               ''                                           "WZTDM",--	望诊-苔代码	VARCHAR	200	条件必填（中医病历必填）	参考CVA08.03.006 多项以“;”分隔"
+               ''                                           "WZT",--	望诊-苔	VARCHAR	2000	条件必填(中医病历必填)
+               ''                                           "WZQT1",--	望诊-其他	VARCHAR	2000	条件(中医病历)	望诊-其他的描述
+               ''                                           "WZTSYDM",--	闻诊-听声音代码	VARCHAR	200	条件(中医病历)	参考CVA08.03.026 多项以“;”分隔"
+               ''                                           "WZTSY",--	闻诊-听声音	VARCHAR	2000	条件(中医病历)
+               ''                                           "WZXQWDM",--	闻诊-嗅气味代码	VARCHAR	200	条件(中医病历)	参考CVA08.03.027 多项以“;”分隔"
+               ''                                           "WZXQW",--	闻诊-嗅气味	VARCHAR	2000	条件(中医病历)
+               ''                                           "WZQT2",--	闻诊-其他	VARCHAR	2000	条件(中医病历)
+               ''                                           "WZHRDM",--	问诊-问寒热代码	VARCHAR	200	条件(中医病历)	参考CVA08.03.028 多项以“;”分隔"
+               ''                                           "WZHR",--	问诊-问寒热	VARCHAR	2000	条件(中医病历)
+               ''                                           "WZCHDM",--	问诊-问出汗代码	VARCHAR	200	条件(中医病历)	参考CVA08.03.029 多项以“;”分隔"
+               ''                                           "WZCH",--	问诊-问出汗	VARCHAR	2000	条件(中医病历)
+               ''                                           "WZTSDM",--	问诊-问头身代码	VARCHAR	200	条件(中医病历)	参考CVA08.03.030 多项以“;”分隔"
+               ''                                           "WZTS",--	问诊-问头身	VARCHAR	2000	条件(中医病历)
+               ''                                           "WZXXWFDM",--	问诊-问胸胁脘腹代码	VARCHAR	200	条件(中医病历)	参考CVA08.03.031 多项以“;”分隔"
+               ''                                           "WZXXWF",--	问诊-问胸胁脘腹	VARCHAR	2000	条件(中医病历)
+               ''                                           "WZEMDM",--	问诊-问耳目代码	VARCHAR	200	条件(中医病历)	参考CVA08.03.032 多项以“;”分隔"
+               ''                                           "WZEM",--	问诊-问耳目	VARCHAR	2000	条件(中医病历)
+               ''                                           "WZYSYKWDM",--	问诊-问饮食与口味代码	VARCHAR	200	条件(中医病历)	参考CVA08.03.007 多项以“;”分隔"
+               ''                                           "WZYSYKW",--	问诊-问饮食与口味	VARCHAR	2000	条件(中医病历)
+               ''                                           "WZSMDM",--	问诊-问睡眠代码	VARCHAR	200	条件(中医病历)	参考CVA08.03.008 多项以“;”分隔"
+               ''                                           "WZSM",--	问诊-问睡眠	VARCHAR	2000	条件(中医病历)
+               ''                                           "WZDBDM",--	问诊-问大便代码	VARCHAR	200	条件(中医病历)	参考CVA08.03.013 多项以“;”分隔"
+               ''                                           "WZDB",--	问诊-问大便	VARCHAR	2000	条件(中医病历)
+               ''                                           "WZXBDM",--	问诊-问小便代码	VARCHAR	200	条件(中医病历)	参考CVA08.03.033 多项以“;”分隔"
+               ''                                           "WZXB",--	问诊-问小便	VARCHAR	2000	条件(中医病历)
+               ''                                           "WZFNDM",--	问诊-问妇女代码	VARCHAR	200	条件(中医病历)	参考CVA08.03.034 多项以“;”分隔"
+               ''                                           "WZFN",--	问诊-问妇女	VARCHAR	2000	条件(中医病历)
+               ''                                           "WZQT3",--	问诊-其他	VARCHAR	2000	条件(中医病历)
+               ''                                           "QZMZDM",--	切诊-脉诊代码	VARCHAR	200	条件必填（中医病历必填）	参考CVA08.03.009 多项以“;”分隔"
+               ''                                           "QZMZ",--	切诊-脉诊	VARCHAR	2000	条件必填（中医病历必填）
+               ''                                           "QZAZ",--	切诊-按诊	VARCHAR	2000	条件(中医病历)
+               ''                                           "QZQT",--	切诊-其他	VARCHAR	2000	条件(中医病历)
+               ''                                           "YSSFZJHM",--	医师身份证号码	VARCHAR	20	条件必填（中医病历必填）
+               a.DOCNAME                                    "YSQM",--	医师签名	VARCHAR	50	必填
+               a.DOCCODE                                    "YSGH",--	医生工号	VARCHAR	64	必填
+               ''                                           "HZQXDM",--	患者去向代码	NUMERIC	1		参考CVA08.03.010CVA08.03.010患者去向代码
+               ''                                           "CZJH",--	处置计划	VARCHAR	2000	条件必填（西医病历必填）	在患者评估基础上为其制定的处置计划、诊疗计划或处理的详细描述
+               ''                                           "ZLYJ",--	治疗意见	VARCHAR	2000	必填	医师对患者需要进一步治疗提出的指导建议或诊疗意见
+               ''                                           "YZXMNR",--	医嘱	VARCHAR	2000		对医嘱项目具体内容的描述
+               ''                                           "ZYSX",--	注意事项	VARCHAR	2000		对下达医嘱的补充说明和注意事项提示
+               ''                                           "JKJY",--	健康教育	VARCHAR	2000
+               to_char(a.reg_time, 'YYYY-MM-DD')            "JLRQ",--	记录日期	DATETIME		必填	记录的公元纪年日期的完整描述
+               to_char(sysdate, 'YYYY-MM-DD')               "TBRQ" --  填报日期  DATETIME   必填 本条数据采集时间，格式YYYY-MM-DD
+        from opr_register a
+                 left join (select listagg(c.item_id, ';') within group (order by c.item_id)code,
+                     listagg(c.item_name,';') within
+                            group (order by c.item_name) name, a.orgcode, a.regid
+                            from opm_diagnose a
+                                left join (select a.item_id, a.item_name, b.his_item_id
+                                from si_yt_report_item a,
+                                si_yt_report_item_compare b
+                                where a.module_rid = b.module_rid
+                                and a.type_rid = b.type_rid
+                                and a.rid = b.item_rid
+                                and a.module_rid = '202310101511361148853000000000'
+                                and a.type_rid = '202311281105131392640900000000') c
+                            on c.his_item_id = a.dise_code
+                            group by a.orgcode, a.regid) b on a.orgcode = b.orgcode and a.regid = b.regid
+                 left join (select a.item_id, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202310101521161149402900000000') d on d.his_item_id = a.PSNCERTTYPE,
+             com_patientinfo e
+        where a.orgcode = e.orgcode
+          and a.patientno = e.patientno
+          and a.patientid = e.patientid
+          and a.REGISTSTATE = '1'
+          and a.orgcode = #{orgcode}
+          and a.reg_time &gt;= to_date(#{begtime}, 'YYYY-MM-DD HH24:MI:SS')
+          and a.reg_time &lt;= to_date(#{endtime}, 'YYYY-MM-DD HH24:MI:SS')
+    </select>
+
+</mapper>

@@ -2,45 +2,50 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hospital.middleware.healthplatform.dao.his.HealthplatfromDAO">
     <select id="queryJb_clml" resultType="java.util.HashMap">
-         select
-           a.orgcode   "YLJGDM"	,--	医疗机构代码	VARCHAR	22	必填	复合主键：采用22位“卫生机构代码”
-           a.MEDLISTCODG      "CLDM"	,--	材料代码	VARCHAR	64	必填	复合主键
-           b.orgname      "YLJGMC"	,--	医疗机构名称	VARCHAR	70	必填	医院执业许可第一名称
-           '0'   "FYDM"	,--	分院代码	VARCHAR	20	必填	记录分院代码（内码）,如无分院，则传0
-           ''   "FYMC"	,--	分院名称	VARCHAR	120	条件必填	分院代码不为0时必填
-           replace(f.MED_LIST_CODG,'_SI','')   "PTZXDM"	,--	平台中心代码	VARCHAR	64		参见《全民健康信息平台医疗服务项目价格表》
-           a.MCSNAME  "CLMC"	,--	材料名称	VARCHAR	100	必填
-           g.item_id      "CLFLDM"	,--	材料分类代码	VARCHAR	36	必填	参见CVA08.50.009卫生材料代码表
-           d.dictname      "CLDW"	,--	材料单位	VARCHAR	32	必填
-           nvl(a.HIGHVALMCSFLAG,'0')      "GZHCBZ"	,--	高值耗材标志	VARCHAR	1	必填	0：否 1：是
-           '0'      "YZBXBZ"	,--	医保报销标志	VARCHAR	1	必填	0：否 1：是
-           decode(a.IMPTITVTCLSSFLAG,'1','1','0')     "ZRWBZ"	,--	植入物标志	VARCHAR	1	必填	0：否 1：是
-           null    "JZJG"	,--	基准价格	NUMERIC	14,2
-           null      "ZGXJ"	,--	最高限价	NUMERIC	14,2
-           c.FACNAME      "GYSMC"	,--	供应商名称	VARCHAR	100
-           c.FACCODE      "GYSDM"	,--	供应商代码	VARCHAR	64
-            ''     "SCPH"	,--	生产批号	VARCHAR	30
-           e.FACNAME      "SCCJMC"	,--	生产厂家名称	VARCHAR	100
-           e.FACADDRESS      "CD"	,--	产地	VARCHAR	100
-           a.ISSTOP      "JLZT"	,--	记录状态	VARCHAR	1	必填	0：正常 1：停用
-           to_char(sysdate, 'YYYY-MM-DD')    "TBRQ"	 --	填报日期	DATETIME		必填	本条数据采集时间，格式YYYY-MM-DD
-         from com_hospitalinfo b,PHA_MEDCON a
-       left join   COM_COMPANYINFO c  on  a.orgcode =c.orgcode and a.FACCODE =c.FACCODE and c.COMPANYTYPE='0' and c.isvalid='1'
-       left join com_dictcodeinfo d on a.MINUNIT=d.dictcode and d.typecode='MINUNIT'
-       left join   COM_COMPANYINFO e  on  a.orgcode =e.orgcode and a.FACCODE =e.FACCODE and e.COMPANYTYPE='1' and e.isvalid='1'
-       left join   FIN_ITEM_COMPARE f  on  a.orgcode =f.orgcode and a.MEDLISTCODG=f.itemcode
-       left join (select a.item_id, b.his_item_id
-                  from si_yt_report_item a,
-                       si_yt_report_item_compare b
-                  where a.module_rid = b.module_rid
-                    and a.type_rid = b.type_rid
-                    and a.rid = b.item_rid
-                    and a.module_rid = '202310101511361148853000000000'
-                    and a.type_rid = '202311151526201333567600000000'
-                    and b.orgcode =#{orgcode}
-         ) g on   g.his_item_id = a.MCSKIND
+        select a.orgcode                                 "YLJGDM",--	医疗机构代码	VARCHAR	22	必填	复合主键：采用22位“卫生机构代码”
+               a.MEDLISTCODG                             "CLDM",--	材料代码	VARCHAR	64	必填	复合主键
+               b.orgname                                 "YLJGMC",--	医疗机构名称	VARCHAR	70	必填	医院执业许可第一名称
+               '0'                                       "FYDM",--	分院代码	VARCHAR	20	必填	记录分院代码（内码）,如无分院，则传0
+               ''                                        "FYMC",--	分院名称	VARCHAR	120	条件必填	分院代码不为0时必填
+               replace(f.MED_LIST_CODG, '_SI', '')       "PTZXDM",--	平台中心代码	VARCHAR	64		参见《全民健康信息平台医疗服务项目价格表》
+               a.MCSNAME                                 "CLMC",--	材料名称	VARCHAR	100	必填
+               g.item_id                                 "CLFLDM",--	材料分类代码	VARCHAR	36	必填	参见CVA08.50.009卫生材料代码表
+               d.dictname                                "CLDW",--	材料单位	VARCHAR	32	必填
+               nvl(a.HIGHVALMCSFLAG, '0')                "GZHCBZ",--	高值耗材标志	VARCHAR	1	必填	0：否 1：是
+               '0'                                       "YZBXBZ",--	医保报销标志	VARCHAR	1	必填	0：否 1：是
+               decode(a.IMPTITVTCLSSFLAG, '1', '1', '0') "ZRWBZ",--	植入物标志	VARCHAR	1	必填	0：否 1：是
+               null                                      "JZJG",--	基准价格	NUMERIC	14,2
+               null                                      "ZGXJ",--	最高限价	NUMERIC	14,2
+               c.FACNAME                                 "GYSMC",--	供应商名称	VARCHAR	100
+               c.FACCODE                                 "GYSDM",--	供应商代码	VARCHAR	64
+               ''                                        "SCPH",--	生产批号	VARCHAR	30
+               e.FACNAME                                 "SCCJMC",--	生产厂家名称	VARCHAR	100
+               e.FACADDRESS                              "CD",--	产地	VARCHAR	100
+               a.ISSTOP                                  "JLZT",--	记录状态	VARCHAR	1	必填	0：正常 1：停用
+               to_char(sysdate, 'YYYY-MM-DD')            "TBRQ"   --	填报日期	DATETIME		必填	本条数据采集时间，格式YYYY-MM-DD
+        from com_hospitalinfo b,
+             PHA_MEDCON a
+                 left join COM_COMPANYINFO c
+                           on a.orgcode = c.orgcode and a.FACCODE = c.FACCODE and c.COMPANYTYPE = '0' and
+                              c.isvalid = '1'
+                 left join com_dictcodeinfo d on a.MINUNIT = d.dictcode and d.typecode = 'MINUNIT'
+                 left join COM_COMPANYINFO e
+                           on a.orgcode = e.orgcode and a.FACCODE = e.FACCODE and e.COMPANYTYPE = '1' and
+                              e.isvalid = '1'
+                 left join FIN_ITEM_COMPARE f on a.orgcode = f.orgcode and a.MEDLISTCODG = f.itemcode
+                 left join (select a.item_id, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202311151526201333567600000000'
+                              and b.orgcode = #{orgcode}
+             ) g on g.his_item_id = a.MCSKIND
 
-         where a.orgcode=b.orgcode and a.orgcode = #{orgcode}
+        where a.orgcode = b.orgcode
+          and a.orgcode = #{orgcode}
     </select>
 
 

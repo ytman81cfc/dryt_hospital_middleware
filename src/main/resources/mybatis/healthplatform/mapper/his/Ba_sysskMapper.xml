@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hospital.middleware.healthplatform.dao.his.HealthplatfromDAO">
+    <select id="queryBa_syssk" resultType="java.util.HashMap">
+        select a.orgcode                                      "YLJGDM",--	医疗机构代码 	VARCHAR	22	必填	复合主键：采用22位“卫生机构代码”
+               a.SURGERY_NO - 1                               "SSXH",--	手术序号	VARCHAR	64	必填	复合主键：手术的排序序号，主要手术及操作传0，其他手术及操作按照1,2,3顺序排列
+               a.VISIT_ID                                     "JZLSH",--	住院就诊流水号 	VARCHAR	32	必填	复合主键：医院HIS系统的唯一编号
+               b.orgname                                      "YLJGMC",--	医疗机构名称	VARCHAR	70	必填	医院执业许可第一名称
+               '0'                                            "FYDM",--	分院代码	VARCHAR	20	必填	记录分院代码（内码）,如无分院，则传0
+               ''                                             "FYMC",--	分院名称	VARCHAR	120	条件必填	分院代码不为0时必填
+               decode(a.MAIN_SURGERY_ID, '2', '0', '1')       "SFSZYSSJCZ",--	是否是主要手术及操作	VARCHAR	1	必填	0：否 1：是
+               '0'                                            "SFSDYQTSSJCZ",--	是否是第一其他手术及操作	VARCHAR	1	必填	0：否 1：是
+               a.SURGERY_CODE                                 "YNSSDM",--	院内手术代码	VARCHAR	20	必填
+               a.SURGERY_DESC                                 "YNSSMC",--	院内手术名称	VARCHAR	256
+               g.item_id                                      "SSDM",--	中心手术代码	VARCHAR	20	必填	参见《手术操作分类代码(ICD-9)》
+               g.item_name                                    "SSMC",--	中心手术名称	VARCHAR	256		参见《手术操作分类代码(ICD-9)》
+               to_char(ARRANGE_DATE, 'YYYY-MM-DD HH24:MI:SS') "SSRQ",--	手术日期	DATETIME		必填	YYYY-MM-DD HH:MI:SS
+               c.item_id                                      "SSJB",--	手术级别	VARCHAR	4		由医院内部手术目录判断手术级别，与病案实际显示保持一致 参见 CV05.10.024 手术级别 "1：一级手术 2：二级手术 3：三级手术 4：四级手术	"
+               ''                                             "SSLB",--	手术类别	VARCHAR	1		1：择期 2：急诊
+               a.SURGEON_ID                                   "SSYSBM",--	术者工号	VARCHAR	64
+               a.SURGEON                                      "SSYS",--	术者姓名	VARCHAR	50
+               d.certno                                       "SSYSSFZHM",--	术者身份证号码	VARCHAR	18
+               d.mailbox                                      "SSYSZYZSBH",--	术者执业证书编号	VARCHAR	30
+               a.FIRST_ASSISTANT_ID                           "SSYZBM",--	手术一助工号	VARCHAR	64
+               a.FIRST_ASSISTANT                              "SSYZ",--	手术一助姓名	VARCHAR	50
+               e.certno                                       "SSYZSFZHM",--	手术一助身份证号码	VARCHAR	18
+               a.SECOND_ASSISTANT_ID                          "SSEZBM",--	手术二助工号	VARCHAR	64
+               a.SECOND_ASSISTANT                             "SSEZ",--	手术二助姓名	VARCHAR	50
+               f.certno                                       "SSEZSFZHM",--	手术二助身份证号码	VARCHAR	18
+               h.item_id                                      "SSQKLBDM",--	手术切口类别代码	VARCHAR	2		参见 CV05.10.022 手术切口类别代码 	1：0类切口 2：Ⅰ类切口 3：Ⅱ类切口 4：Ⅲ类切口
+               h.item_name                                    "SSQKLBMC",--	手术切口类别名称	VARCHAR	100
+               i.item_id                                      "YHLB",--	切口愈合等级	VARCHAR	4		参见 CV05.10.023 切口愈合等级 		1：甲 2：乙 3：丙 9：其他
+               a.ANAESTHESIA_METHOD_ID                        "YNMZDM",--	院内麻醉方式代码	VARCHAR	4
+               a.ANAESTHESIA_METHOD                           "YNMZMC",--	院内麻醉方式名称	VARCHAR	200
+               j.item_id                                      "MZDM",--	中心麻醉方式代码	VARCHAR	4		参见 CV06.00.103-2022修订版 麻醉方法代码表
+               j.item_name                                    "MZMC",--	中心麻醉方式名称	VARCHAR	200
+               k.item_id                                      "MZFJ",--	麻醉分级	VARCHAR	1		参见 CV05.10.021 ASA分级标准代码表
+               a.ANESTHESIOLOGIST_ID                          "MZYSBM",--	麻醉医师工号	VARCHAR	64
+               a.ANESTHESIOLOGIST                             "MZYS",--	麻醉医生姓名	VARCHAR	50
+               l.certno                                       "MZYSSFZH",--	麻醉医生身份证号	VARCHAR	18
+               a.SURGERY_COST_TIME                            "SSCXSJ",--	手术持续时间	NUMERIC	7,2	 单位（小时）
+               to_char(sysdate, 'YYYY-MM-DD')                 "TBRQ" --  填报日期  DATETIME   必填 本条数据采集时间，格式YYYY-MM-DD
+        from EMR_OPERATIONINFO a
+                 left join (select a.item_id, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202311281017231391494900000000') c on c.his_item_id = a.SURGERY_LEVEL_ID
+                 left join (select a.item_id, a.item_name, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202311281028201392170200000000') g on g.his_item_id = a.SURGERY_CODE
+                 left join (select a.item_id, a.item_name, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202311281032051392189100000000') h on h.his_item_id = a.INCISION_TYPE_ID
+                 left join (select a.item_id, a.item_name ,b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202311281040341392189800000000') i on i.his_item_id = a.SURGERY_HEAL_ID
+                 left join (select a.item_id, a.item_name, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202311281042241392565500000000') j
+                           on j.his_item_id = a.ANAESTHESIA_METHOD_ID
+                 left join (select a.item_id, a.item_name, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202311281043021392566000000000') k
+                           on k.his_item_id = a.ANESTHESIA_CLASS_ID
+                 left join com_userinfo d on d.orgcode = a.orgcode and d.usercode = a.SURGEON_ID
+                 left join com_userinfo e on e.orgcode = a.orgcode and e.usercode = a.FIRST_ASSISTANT_ID
+                 left join com_userinfo f on f.orgcode = a.orgcode and f.usercode = a.SECOND_ASSISTANT_ID
+                 left join com_userinfo l on l.orgcode = a.orgcode and l.usercode = a.ANESTHESIOLOGIST_ID,
+             com_hospitalinfo b,
+             ipr_inpatientinfo m
+where a.orgcode =b.orgcode
+and a.orgcode =m.orgcode
+and a.visit_id=m.inid
+and m.instate &lt;&gt; '0'
+and a.orgcode=#{orgcode}
+and a.ARRANGE_DATE&gt;=to_date(#{begtime},'yyyy-mm-dd hh24:mi:ss')
+  and a.ARRANGE_DATE&lt;=to_date(#{endtime},'yyyy-mm-dd hh24:mi:ss')
+    </select>
+
+</mapper>
