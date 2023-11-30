@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hospital.middleware.healthplatform.dao.his.HealthplatfromDAO">
+    <select id="queryEmr_ryjl" resultType="java.util.HashMap">
+        select a.orgcode                                  "YLJGDM",--	医疗机构代码 	VARCHAR	22	必填	复合主键：采用22位“卫生机构代码”
+               a.inid                                     "ZYJZLSH",--	住院就诊流水号	VARCHAR	32	必填	复合主键
+               a.inhosno                                  "CISID",--	住院号	VARCHAR	32	必填	若无则可填住院就诊流水号
+               a.inhosno                                  "BAH",--	病案号	VARCHAR	32	必填
+               b.NURSECELLCODE                            "BQBM",--	病区编码	VARCHAR	20	必填	填医院系统内部定义的病区编码
+               b.NURSECELLNAME                            "BQMC",--	病区名称	VARCHAR	100	必填	填医院系统内部定义的病区名称
+               a.OUTDEPTCODE                              "KSBM",--	科室编码	VARCHAR	50	必填	填医院系统内部定义的科室编码
+               a.OUTDEPTNAME                              "KSMC",--	科室名称	VARCHAR	100	必填	填医院系统内部定义的科室名称
+               c.ROOMNO                                   "BFH",--	病房号	VARCHAR	10
+               b.bedno                                    "BCH",--	病床号	VARCHAR	10
+               d.rid                                      "KH",--	卡号	VARCHAR	64	必填
+               '1'                                        "KLX",--	卡类型	VARCHAR	16	必填	参见CVA5104就诊卡类型
+               a.certno                                   "ZJHM",--	证件号码	VARCHAR	32
+               e.item_id                                  "ZJLX",--	证件类型	VARCHAR	2		参见CV02.01.101身份证件类别代码
+               a.patientname                              "HZXM",--	患者姓名	VARCHAR	50	必填
+               a.SEXCODE                                  "XBDM",--	性别代码	VARCHAR	1	必填	编码。按国标GB/T 2261.1-2003执行
+               case
+                   when extract(year from a.indate) - extract(year from a.BIRTHDAY) &gt; 1
+                       then floor(extract(year from a.indate) - extract(year from a.BIRTHDAY))
+                   else 0 end                             "NLS",--	年龄(岁)	NUMERIC	3
+               case
+                   when extract(year from a.indate) - extract(year from a.BIRTHDAY) &lt; 1 and
+                        months_between(a.indate, a.BIRTHDAY) &gt; 1 then floor(months_between(a.indate, a.BIRTHDAY))
+                   else 0 end                             "NLY",--	年龄(月)	NUMERIC	3
+               d.NATY                                     "MZ",--	民族	VARCHAR	2		参见GB/T 3304-1991
+               f.item_id                                  "HYZKDM",--	婚姻状况代码	VARCHAR	2	必填	参照GB/T 2261.2-2003婚姻状况
+               '-'                                        "XZQHDM",--	行政区划代码	VARCHAR	12	必填	参照GB/T 2260-2007 中华人民共和国行政区划代码
+               ''                                         "DZSZZ",--	地址-省(自治区、直辖市)	VARCHAR	70
+               ''                                         "DZSZZDM",--	地址-省(自治区、直辖市)代码	VARCHAR	20
+               ''                                         "DZSDZ",--	地址-市(地区、州)	VARCHAR	70
+               ''                                         "DZSDZDM",--	地址-市(地区、州)代码	VARCHAR	20
+               ''                                         "DZXQ",--	地址-县(区)	VARCHAR	70
+               ''                                         "DZXQDM",--	地址-县(区)代码	VARCHAR	20
+               ''                                         "DZXZJ",--	地址-乡(镇、街道办事处)	VARCHAR	70
+               ''                                         "DZXZJDM",--	地址-乡(镇、街道办事处)代码	VARCHAR	20
+               ''                                         "DZCJN",--	地址-村(街、路、弄等)	VARCHAR	70
+               ''                                         "DZMPHM",--	地址-门牌号码	VARCHAR	70
+               g.item_id                                  "ZYLBDM",--	职业类别代码	VARCHAR	2		GB/T 2261.4-2003 职业分类与代码
+               to_char(a.indate, 'YYYY-MM-DD HH24:MM:SS') "RYRQSJ",--	入院日期时间	DATETIME		必填	格式：YYYY-MM-DD HH:MM:SS
+               d.LINKMANNAME                              "BSCSZXM",--	病史陈述者姓名	VARCHAR	50
+               nvl(h.item_id,'9')                                  "CSZYHZDGXDM",--	陈述者与患者的关系代码	VARCHAR	1		参见GB/T 4761-2008 1.配偶 2.子 3.女 4.孙子、孙女或外孙子、外孙女 5.父母 6.祖父母或外祖父母 7.兄、弟、姐、妹 9.其他
+               ''                                         "CSNRKKBZ",--	陈述内容可靠标志	VARCHAR	1		参见 ZD_SFWZBZ 是否未知标志
+               ''                                         "ZS",--	主诉	VARCHAR	1024
+               ''                                         "XBS",--	现病史	VARCHAR	1024		有多项时用英文分号“;”分割
+               ''                                         "YBJKZKBZ",--	一般健康状况标志	VARCHAR	1		参见CVA01.00.001是否标志
+               ''                                         "JBS",--	疾病史（含外伤）	varchar	1024
+               ''                                         "CRBBZ",--	传染病标志	varchar	1		参见CVA01.00.001是否标志
+               ''                                         "CRBS",--	传染病史	VARCHAR	1024
+               ''                                         "YFJZS",--	预防接种史	VARCHAR	1024
+               ''                                         "SSS",--	手术史	VARCHAR	1024
+               ''                                         "SXS",--	输血史	VARCHAR	1024
+               ''                                         "GMS",--	过敏史	VARCHAR	1024
+               ''                                         "GRS",--	个人史	VARCHAR	1024
+               ''                                         "HYS",--	婚育史	VARCHAR	1024
+               ''                                         "YJS",--	月经史	VARCHAR	1024
+               ''                                         "JZS",--	家族史	VARCHAR	1024
+               ''                                         "TW",--	体格检查--体温（℃）	NUMERIC	4,1
+               ''                                         "ML",--	体格检查--脉率（次/min）	NUMERIC	3
+               ''                                         "HXPL",--	体格检查--呼吸频率（次/min）	NUMERIC	3
+               ''                                         "SSY",--	体格检查--收缩压（mmHg）	NUMERIC	3
+               ''                                         "SZY",--	体格检查--舒张压（mmHg）	NUMERIC	3
+               ''                                         "SG",--	体格检查--身高（cm）	NUMERIC	5,1
+               ''                                         "TZ",--	体格检查--体重（kg）	NUMERIC	6,2
+               ''                                         "YBZKJCJG",--	体格检查--一般状况检查结果	VARCHAR	1024
+               ''                                         "PFHNMJCJG",--	体格检查--皮肤和黏膜检查结果	VARCHAR	1024
+               ''                                         "QSQBLBJJCJG",--	体格检查--全身浅表淋巴结检查结果	VARCHAR	1024
+               ''                                         "TBJQQGJCJG",--	体格检查--头部及其器官检查结果	VARCHAR	1024
+               ''                                         "JBJCJG",--	体格检查--颈部检查结果	VARCHAR	1024
+               ''                                         "XBJCJG",--	体格检查--胸部检查结果	VARCHAR	1024
+               ''                                         "FBJCJG",--	体格检查--腹部检查结果	VARCHAR	1024
+               ''                                         "ZCGMJCJGMS",--	体格检查--直肠肛门检查结果描述	VARCHAR	1024
+               ''                                         "WSZQJCJG",--	体格检查--外生殖器检查结果	VARCHAR	1024
+               ''                                         "JZJCJG",--	体格检查--脊柱检查结果	VARCHAR	1024
+               ''                                         "SZJCJG",--	体格检查--四肢检查结果	VARCHAR	1024
+               ''                                         "SJXTJCJG",--	体格检查--神经系统检查结果	VARCHAR	1024
+               ''                                         "ZKQK",--	专科情况	VARCHAR	1024
+               case
+                   when o.DISE_TYPE = '1' and o.MAIN_FLAG = '1' then i.item_id
+                   else ''
+                   end                                    "CBXYZDDM"
+                ,--	初步诊断--西医诊断编码	VARCHAR	64		ICD-10
+               case
+                   when o.DISE_TYPE = '1' and o.MAIN_FLAG = '1' then i.item_name
+                   else ''
+                   end                                    "CBXYZDMC"
+                ,--	初步诊断--西医诊断名称	VARCHAR	512
+               ''                                         "CBZYBMDM",--	初步诊断--中医病名代码	VARCHAR	64		GB/T 15657-2021中医病证分类代码
+               ''                                         "CBZYBMMC",--	初步诊断--中医病名名称	VARCHAR	512
+               ''                                         "CBZYZHDM",--	初步诊断--中医症候代码	VARCHAR	64		GB/T 15657-2021中医病证分类代码
+               ''                                         "CBZYZHMC",--	初步诊断--中医症候名称	VARCHAR	512
+               case
+                   when o.DISE_TYPE = '1' and o.MAIN_FLAG = '1' then to_char(o.crte_time, 'yyyy-mm-dd hh24:mi:ss')
+                   end                                    "CBZDRQ",--	初步诊断日期	DATETIME
+               ''                                         "XZXYZDDM",--	修正诊断--西医诊断编码	VARCHAR	64		ICD-10
+               ''                                         "XZXYZDMC",--	修正诊断--西医诊断名称	VARCHAR	512
+               ''                                         "XZZYBMDM",--	修正诊断--中医病名代码	VARCHAR	64		GB/T 15657-2021中医病证分类代码
+               ''                                         "XZZYBMMC",--	修正诊断--中医病名名称	VARCHAR	512
+               ''                                         "XZZYZHDM",--	修正诊断--中医症候代码	VARCHAR	64		GB/T 15657-2021中医病证分类代码
+               ''                                         "XZZYZHMC",--	修正诊断--中医症候名称	VARCHAR	512
+               ''                                         "XZZDRQ",--	修正诊断日期	DATETIME
+               case
+                   when o.DISE_TYPE = '1' and o.MAIN_FLAG = '1' then i.item_id
+                   else ''
+                   end                                    "QDXYZDDM"
+                ,--	确定诊断-西医诊断代码	VARCHAR	64
+               case
+                   when o.DISE_TYPE = '1' and o.MAIN_FLAG = '1' then i.item_name
+                   else ''
+                   end                                    "QDXYZDMC"
+                ,--	确定诊断-西医诊断名称	VARCHAR	512
+               ''                                         "QDZYBMDM",--	确定诊断-中医病名代码	VARCHAR	64
+               ''                                         "QDZYBMMC",--	确定诊断-中医病名名称	VARCHAR	512
+               ''                                         "QDZYZHDM",--	确定诊断-中医证候代码	VARCHAR	64
+               ''                                         "QDZYZHMC",--	确定诊断-中医证候名称	VARCHAR	512
+               case
+                   when o.DISE_TYPE = '1' and o.MAIN_FLAG = '1' then to_char(o.crte_time, 'yyyy-mm-dd hh24:mi:ss')
+                   end                                    "QDZDRQ",--	确定诊断日期	DATETIME
+
+               ''                                         "BCZDDM",--	补充诊断代码	VARCHAR	64
+               ''                                         "BCZDMC",--	补充诊断名称	VARCHAR	512
+               ''                                         "BCZDRQ",--	补充诊断日期	DATETIME
+               ''                                         "RYZDSW",--	入院诊断顺位	VARCHAR	50		表示入院诊断的顺位及其从属关系
+               b.INOPNM                                   "JZYSQM",--	接诊医师签名	VARCHAR	50
+               b.INOPCD                                   "JZYSGH",--	接诊医师工号	VARCHAR	64
+               b.CHADR_NAME                               "ZYYSQM",--	住院医师签名	VARCHAR	50
+               b.CHADR_NO                                   "ZYYSGH",--	住院医师工号	VARCHAR	64
+               b.INDR_NAME                                "ZZYSQM",--	主治医师签名	VARCHAR	50
+               b.INDR_NO                                  "ZZYSGH",--	主治医师工号	VARCHAR	64
+               b.CHIFDR_NAME                              "ZRYSQM",--	主任医师签名	VARCHAR	50
+               b.CHIFDR_NO                                "ZRYSGH",--	主任医师工号	VARCHAR	64
+               to_char(sysdate, 'YYYY-MM-DD')             "TBRQ" --  填报日期  DATETIME   必填 本条数据采集时间，格式YYYY-MM-DD
+        from ipr_inpatientinfo a
+                 left join (select a.item_id, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202310101521161149402900000000') e on e.his_item_id = a.PSNCERTTYPE,
+             INR_RECEIVEINFO b,
+             COM_BEDINFO c,
+             com_patientinfo d
+                 left join (select a.item_id, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202311011354491261411600000000') f on f.his_item_id = d.MARRIED
+                 left join (select a.item_id, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202311281553021393182200000000') g on g.his_item_id = d.PROFCODE
+                 left join (select a.item_id, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202311161530191338672700000000') h on h.his_item_id = d.RELACODE,
+             ipr_diagnose o
+                 left join (select a.item_id, a.item_name, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202311281105131392640900000000') i on i.his_item_id = o.DISE_CODE
+        where a.orgcode = b.orgcode
+          and a.inid = b.inid
+          and a.instate  &lt;&gt; '0'
+          and b.orgcode = c.orgcode
+          and b.bedno = c.bedno
+          and a.orgcode = d.orgcode
+          and a.patientid = d.patientid
+          and a.inhosno = d.inhosno
+          and a.orgcode = o.orgcode
+          and a.inid = o.inid
+          and o.isvalid = '1'
+          and o.DISE_CLINICD='3'
+          and a.orgcode =
+              #{orgcode}
+          and a
+                  .
+                  indate
+            &gt;=
+              to_date
+                  (
+                      #{begtime},
+                      'YYYY-MM-DD HH24:MI:SS'
+                  )
+          and a
+                  .
+                  indate
+            &lt;=
+              to_date
+                  (
+                      #{endtime},
+                      'YYYY-MM-DD HH24:MI:SS'
+                  )
+    </select>
+
+</mapper>

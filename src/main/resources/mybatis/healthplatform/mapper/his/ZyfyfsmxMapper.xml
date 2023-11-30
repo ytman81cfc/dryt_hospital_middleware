@@ -12,7 +12,7 @@
                b.certno                                         "ZJHM",--	证件号码	VARCHAR	32
                b.patientname                                    "XM",--	姓名	VARCHAR	50	必填
                to_char(a.FEEOPTDATE, 'YYYY-MM-DD HH24:MI:SS')   "STFSJ",--	收退费时间	DATETIME		必填
-               a.invocode                                       "MXFYLB",--	明细费用类别	VARCHAR	2	必填	编码：参见CVA5105明细费用类别
+               j.item_id                                       "MXFYLB",--	明细费用类别	VARCHAR	2	必填	编码：参见CVA5105明细费用类别
                decode(a.ITEMTYPE, '1', '0', '2', '1', '3', '1') "MXXMLB",--	明细项目类别	VARCHAR	1	必填	0：药品 1：项目
                a.ITEMCODE                                       "MXXMBM",--	明细项目编码	VARCHAR	32	必填
                a.ITEMNAME                                       "MXXMMC",--	明细项目名称	VARCHAR	128	必填
@@ -48,6 +48,15 @@
                        join com_feetype c on c.orgcode = b.orgcode and c.feecode = b.feecode
                        join com_fee_invo_compare d
                             on d.orgcode = c.orgcode and d.feecode = c.feecode and d.statcode = 'ZY01') a
+                 left join (select a.item_id, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202311271641491389287500000000') j
+                           on j.his_item_id = a.invocode
                  left join fin_item_compare i on i.orgcode = a.orgcode and i.ITEMCODE = a.ITEMCODE
                  left join com_dictcodeinfo e on e.typecode = 'MINUNIT' and e.dictcode = a.PRICEUNIT,
              com_patientinfo c

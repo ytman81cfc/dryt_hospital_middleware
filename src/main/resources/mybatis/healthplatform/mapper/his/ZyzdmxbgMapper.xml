@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hospital.middleware.healthplatform.dao.his.HealthplatfromDAO">
+    <select id="queryZyzdmxbg" resultType="java.util.HashMap">
+        select a.orgcode                                     "YLJGDM",--	医疗机构代码 	VARCHAR	22	必填	复合主键：采用22位“卫生机构代码”
+               a.rid                                         "ZYZDLSH",--	诊断流水号 	VARCHAR 	32	必填 	复合主键：见说明（1）
+               a.regid                                       "JZLSH",--	就诊流水号 	VARCHAR 	32	必填 	用于与住院就诊记录表或门诊就诊记录表关联的外键
+               '1'                                           "MZZYBZ",--	门诊/住院标志 	VARCHAR 	2	必填 	ZD_MZZYBZ 门急诊住院标志
+               b.rid                                         "KH",--	卡号 	VARCHAR 	64	必填
+               '1'                                           "KLX",--	卡类型 	VARCHAR 	16	必填 	参见CVA5104就诊卡类型
+               c.certno                                      "ZJHM",--	证件号码	VARCHAR	32
+               d.item_id                                     "ZJLX",--	证件类型	VARCHAR	2		参见CV02.01.101身份证件类别代码
+               a.dise_type                                   "ZDLXQF",--	诊断类型区分 	VARCHAR 	1	必填 	编码。第一位，1：西医、2：中医
+               case
+                   when a.dise_type = '1' then '2'
+                   when a.dise_type = '2' then '1'
+                   end                                       "ZDLB",--	诊断类别代码 	VARCHAR 	2	必填 	西医参见CV5502.20   中医参见CV5502.21   病案填写（1：出院诊断 2：门诊诊断 9：.病理诊断）
+               to_char(a.CRTE_TIME, 'YYYY-MM-DD HH24:MI:SS') "ZDSJ",--	诊断时间 	DATETIME
+               'ICD10'                                       "BMLX",--	诊断编码类型 	VARCHAR 	2	必填 	01：ICD10 02：国标-21
+               case
+                   when a.dise_type = '2' and a.MAIN_FLAG = '1' then '1'
+                   else ''
+                   end                                       "ZYZBZZBZ",--	中医主病主证标志	VARCHAR 	1	 	中医诊断必填，1：主病 2：主证
+               case
+                   when a.dise_type = '1' then e.item_id
+                   when a.dise_type = '2' then ''
+                   end                                       "ZDBM",--	诊断编码 	VARCHAR 	64	必填 	西医：参见《疾病分类与代码(ICD-10)》 中医：参见 GB/T 15657-2021
+               a.DISE_REMARK                                 "ZDSM",--	诊断说明 	VARCHAR 	512	必填 	文字描述
+               case
+                   when a.MAIN_FLAG = '1' then '1'
+                   else '2' end                              "ZYZDBZ",--	主要诊断标志 	VARCHAR 	1	必填 	1：第一诊断 2：第二诊断 3：第三诊断
+               a.SUS_FLAG                                    "YZDBZ",--	疑似诊断标志 	VARCHAR 	1	必填 	参见 CV05.01.002 诊断状态代码表
+               ''                                            "CYQKBM",--	出院情况编码 	VARCHAR 	1		1：治愈 2：好转 3：未愈 4：死亡 5：其它 出院诊断时必填
+               ''                                            "RYBQDM",--	入院病情代码	VARCHAR 	1		1：有明确诊断 2：临床未确定 3：情况不明 4：无法确定 出院诊断时必填
+               to_char(sysdate, 'YYYY-MM-DD')                "TBRQ" --  填报日期  DATETIME   必填 本条数据采集时间，格式YYYY-MM-DD
+        from opm_diagnose a
+                 left join (select a.item_id, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202311281105131392640900000000') e on e.his_item_id = a.DISE_CODE,
+             com_patientinfo b,
+             opr_register c
+                 left join (select a.item_id, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202310101521161149402900000000') d on d.his_item_id = c.PSNCERTTYPE
+        where a.orgcode = c.orgcode
+          and a.regid = c.regid
+          and c.REGISTSTATE = '1'
+          and c.orgcode = b.orgcode
+          and c.patientno = b.patientno
+          and c.patientid = b.patientid
+          and a.orgcode = #{orgcode}
+          and a.CRTE_TIME &gt;= to_date(#{begtime}, 'YYYY-MM-DD HH24:MI:SS')
+          and a.CRTE_TIME &lt;= to_date(#{endtime}, 'YYYY-MM-DD HH24:MI:SS')
+        union all
+        select a.orgcode                                     "YLJGDM",--	医疗机构代码 	VARCHAR	22	必填	复合主键：采用22位“卫生机构代码”
+               a.rid                                         "ZYZDLSH",--	诊断流水号 	VARCHAR 	32	必填 	复合主键：见说明（1）
+               a.inid                                        "JZLSH",--	就诊流水号 	VARCHAR 	32	必填 	用于与住院就诊记录表或门诊就诊记录表关联的外键
+               '2'                                           "MZZYBZ",--	门诊/住院标志 	VARCHAR 	2	必填 	ZD_MZZYBZ 门急诊住院标志
+               b.rid                                         "KH",--	卡号 	VARCHAR 	64	必填
+               '1'                                           "KLX",--	卡类型 	VARCHAR 	16	必填 	参见CVA5104就诊卡类型
+               c.certno                                      "ZJHM",--	证件号码	VARCHAR	32
+               d.item_id                                     "ZJLX",--	证件类型	VARCHAR	2		参见CV02.01.101身份证件类别代码
+               a.dise_type                                   "ZDLXQF",--	诊断类型区分 	VARCHAR 	1	必填 	编码。第一位，1：西医、2：中医
+               case
+                   when a.dise_type = '1' then '2'
+                   when a.dise_type = '2' then '1'
+                   end                                       "ZDLB",--	诊断类别代码 	VARCHAR 	2	必填 	西医参见CV5502.20   中医参见CV5502.21   病案填写（1：出院诊断 2：门诊诊断 9：.病理诊断）
+               to_char(a.CRTE_TIME, 'YYYY-MM-DD HH24:MI:SS') "ZDSJ",--	诊断时间 	DATETIME
+               'ICD10'                                       "BMLX",--	诊断编码类型 	VARCHAR 	2	必填 	01：ICD10 02：国标-21
+               case
+                   when a.dise_type = '2' and a.MAIN_FLAG = '1' then '1'
+                   else ''
+                   end                                       "ZYZBZZBZ",--	中医主病主证标志	VARCHAR 	1	 	中医诊断必填，1：主病 2：主证
+               case
+                   when a.dise_type = '1' then e.item_id
+                   when a.dise_type = '2' then ''
+                   end                                       "ZDBM",--	诊断编码 	VARCHAR 	64	必填 	西医：参见《疾病分类与代码(ICD-10)》 中医：参见 GB/T 15657-2021
+               a.DISE_REMARK                                 "ZDSM",--	诊断说明 	VARCHAR 	512	必填 	文字描述
+               case
+                   when a.MAIN_FLAG = '1' then '1'
+                   else '2' end                              "ZYZDBZ",--	主要诊断标志 	VARCHAR 	1	必填 	1：第一诊断 2：第二诊断 3：第三诊断
+               a.SUS_FLAG                                    "YZDBZ",--	疑似诊断标志 	VARCHAR 	1	必填 	参见 CV05.01.002 诊断状态代码表
+               ''                                            "CYQKBM",--	出院情况编码 	VARCHAR 	1		1：治愈 2：好转 3：未愈 4：死亡 5：其它 出院诊断时必填
+               a.ADM_COND                                    "RYBQDM",--	入院病情代码	VARCHAR 	1		1：有明确诊断 2：临床未确定 3：情况不明 4：无法确定 出院诊断时必填
+               to_char(sysdate, 'YYYY-MM-DD')                "TBRQ" --  填报日期  DATETIME   必填 本条数据采集时间，格式YYYY-MM-DD
+        from ipr_diagnose a
+                 left join (select a.item_id, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202311281105131392640900000000') e on e.his_item_id = a.DISE_CODE,
+             com_patientinfo b,
+             ipr_inpatientinfo c
+                 left join (select a.item_id, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202310101521161149402900000000') d on d.his_item_id = c.PSNCERTTYPE
+        where a.orgcode = c.orgcode
+          and a.inid = c.inid
+          and c.instate &lt;&gt; '0'
+          and c.orgcode = b.orgcode
+          and c.inhosno = b.inhosno
+          and c.patientid = b.patientid
+          and a.orgcode = #{orgcode}
+          and a.CRTE_TIME &gt;= to_date(#{begtime}, 'YYYY-MM-DD HH24:MI:SS')
+          and a.CRTE_TIME &lt;= to_date(#{endtime}, 'YYYY-MM-DD HH24:MI:SS')
+    </select>
+
+</mapper>

@@ -72,4 +72,26 @@ public interface HealthplatfromDAO {
     //ZYFYFSMX 住院费用发生明细
     List<Map> queryZyfyfsmx(String orgcode,String begtime,String endtime);
 
+    //BA_SYSSK 西医病案首页手术
+    List<Map> queryBa_syssk(String orgcode,String begtime,String endtime);
+    //BA_SYZDK 西医病案首页出院诊断
+    List<Map> queryBa_syzdk(String orgcode,String begtime,String endtime);
+
+    //ZYZDMXBG 诊断明细报告
+    List<Map> queryZyzdmxbg(String orgcode,String begtime,String endtime);
+
+    //EMR_MJZBL 门(急)诊病历
+    List<Map> queryEmr_mjzbl(String orgcode,String begtime,String endtime);
+
+    //EMR_RYJL 入院记录
+    List<Map> queryEmr_ryjl(String orgcode,String begtime,String endtime);
+    //EMR_CRYJL 24h内入出院记录
+    List<Map> queryEmr_cryjl(String orgcode,String begtime,String endtime);
+    //EMR_ZYSWJL 24h内入院死亡记录
+    List<Map> queryEmr_zyswjl(String orgcode,String begtime,String endtime);
+
+    //TJ_SSYW_CWZYQK 床位占用情况表
+    List<Map> queryTj_ssyw_cwzyqk(String orgcode,String begtime,String endtime);
+    
+
 }

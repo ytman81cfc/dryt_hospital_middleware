@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hospital.middleware.healthplatform.dao.his.HealthplatfromDAO">
+    <select id="queryEmr_cryjl" resultType="java.util.HashMap">
+        select a.orgcode                                      "YLJGDM",--	医疗机构代码 	VARCHAR	22	必填	复合主键：采用22位“卫生机构代码”
+               a.inid                                         "ZYJZLSH",--	住院就诊流水号	VARCHAR	32	必填	复合主键
+               d.rid                                          "KH",--	卡号	VARCHAR	64	必填
+               '1'                                            "KLX",--	卡类型	VARCHAR	16	必填	参照CVA5104就诊卡类型
+               a.patientname                                  "HZXM",--	患者姓名	VARCHAR	50	必填
+               a.sexcode                                      "XBDM",--	性别代码	VARCHAR	1	必填	编码。按国标GB/T 2261.1-2003执行
+               case
+                   when extract(year from a.indate) - extract(year from a.BIRTHDAY) &gt; 1
+                       then floor(extract(year from a.indate) - extract(year from a.BIRTHDAY))
+                   else 0 end                                 "NLS",--	年龄(岁)	NUMERIC	3
+               case
+                   when extract(year from a.indate) - extract(year from a.BIRTHDAY) &lt; 1 and
+                        months_between(a.indate, a.BIRTHDAY) &gt; 1 then floor(months_between(a.indate, a.BIRTHDAY))
+                   else 0 end                                 "NLY",--	年龄(月)	NUMERIC	3
+               case
+                   when months_between(a.indate, a.BIRTHDAY) &lt; 1 then floor(a.indate - a.BIRTHDAY)
+                   else 0 end                                 "NLR",--	年龄(日)	NUMERIC	3
+               case
+                   when a.indate - a.BIRTHDAY &lt; 1 then floor(a.indate - a.BIRTHDAY) * 24
+                   else 0
+                   end                                        "NLXS",--	年龄(小时)	NUMERIC	3
+               d.NATY                                         "MZ",--	民族	VARCHAR	2		参见GB/T 3304-1991
+               f.item_id                                      "HYZKDM",--	婚姻状况代码	VARCHAR	2	必填	参见GB/T 2261.2-2003 个人基本信息分类与代码第2 部分：婚姻状况代码
+               ''                                             "XZQHDM",--	行政区划代码	VARCHAR	12	必填	参照GB/T 2260-2007 中华人民共和国行政区划代码
+               ''                                             "DZSZZ",--	地址-省(自治区、直辖市)	VARCHAR	70
+               ''                                             "DZSZZDM",--	地址-省(自治区、直辖市)代码	VARCHAR	20
+               ''                                             "DZSDZ",--	地址-市(地区、州)	VARCHAR	70
+               ''                                             "DZSDZDM",--	地址-市(地区、州)代码	VARCHAR	20
+               ''                                             "DZXQ",--	地址-县(区)	VARCHAR	70
+               ''                                             "DZXQDM",--	地址-县(区)代码	VARCHAR	20
+               ''                                             "DZXZJ",--	地址-乡(镇、街道办事处)	VARCHAR	70
+               ''                                             "DZXZJDM",--	地址-乡(镇、街道办事处)代码	VARCHAR	20
+               ''                                             "DZCJN",--	地址-村(街、路、弄等)	VARCHAR	70
+               ''                                             "DZMPHM",--	地址-门牌号码	VARCHAR	70
+               g.item_id                                             "ZYLBDM",--	职业类别代码	VARCHAR	2		GB/T 2261.4-2003 职业分类与代码
+               d.LINKMANNAME                                  "BSCSZXM",--	病史陈述者姓名	VARCHAR	50
+               nvl(h.item_id, '9')                            "CSZYHZDGXDM",--	陈述者与患者的关系代码	VARCHAR	1		1.配偶 2.子 3.女 4.孙子、孙女或外孙子、外孙女 5.父母 6.祖父母或外祖父母 7.兄、弟、姐、妹 9.其他	GB/T 4761-2008
+               ''                                             "CSNRKKBZ",--	陈述内容可靠标志	VARCHAR	1		参见 ZD_SFWZBZ 是否未知标志
+               to_char(a.indate, 'YYYY-MM-DD HH24:MM:SS')     "RYRQSJ",--	入院日期时间	DATETIME		必填	格式：YYYY-MM-DD HH:MM:SS
+               to_char(a.out_date, 'YYYY-MM-DD HH24:MM:SS')   "CYRQSJ",--	出院日期时间	DATETIME		必填	格式：YYYY-MM-DD HH:MM:SS
+               ''                                             "ZS",--	主诉	VARCHAR	1024
+               ''                                             "XBS",--	现病史	VARCHAR	1024		有多项时用英文分号“;”分割
+               ''                                             "RYQK",--	入院情况	VARCHAR	2000
+               ''                                             "ZZMC",--	症状名称	VARCHAR	50
+               ''                                             "ZZMS",--	症状描述	VARCHAR	1024
+               ''                                             "ZLGCMS",--	诊疗过程描述	VARCHAR	2000
+               ''                                             "SZGCJG",--	中医“四诊”观察结果	VARCHAR	1024
+               ''                                             "ZZZF",--	治则治法	VARCHAR	100		字典：GB/T 16751_3-1997
+               b.code                                         "RXYZDDM",--	入院诊断-西医诊断编码	VARCHAR	64	必填	ICD-10多个用英文分号“;”分割
+               b.name                                         "RXYZDMC",--	入院诊断-西医诊断名称	VARCHAR	512	必填
+               ''                                             "RZYBMDM",--	入院诊断-中医病名代码	VARCHAR	64		GB/T 15657-2021中医病证分类代码，多个用英文分号“;”分割
+               ''                                             "RZYBMMC",--	入院诊断-中医病名名称	VARCHAR	512
+               ''                                             "RZYZHDM",--	入院诊断-中医症候代码	VARCHAR	64		GB/T 15657-2021中医病证分类代码，多个用英文分号“;”分割
+               ''                                             "RZYZHMC",--	入院诊断-中医症候名称	VARCHAR	512
+               q.code                                         "CXYZDDM",--	出院诊断-西医诊断编码	VARCHAR	64	必填	ICD-10多个用英文分号“;”分割
+               q.name                                         "CXYZDMC",--	出院诊断-西医诊断名称	VARCHAR	512	必填
+               ''                                             "CZYBMDM",--	出院诊断-中医病名代码	VARCHAR	64		GB/T GB/T 15657-2021中医病证分类代码，多个用英文分号“;”分割
+               ''                                             "CZYBMMC",--	出院诊断-中医病名名称	VARCHAR	512
+               ''                                             "CZYZHDM",--	出院诊断-中医症候代码	VARCHAR	64		GB/T GB/T 15657-2021中医病证分类代码，多个用英文分号“;”分割
+               ''                                             "CZYZHMC",--	出院诊断-中医症候名称	VARCHAR	512
+               ''                                             "CYQK",--	出院情况	VARCHAR	2000
+               ''                                             "CYYZ",--	出院医嘱	VARCHAR	1024
+               o.DOCTNAME                                     "CYYZKLRQM",--	出院医嘱开立人签名	VARCHAR	50	必填
+               to_char(o.RECORDDATE, 'YYYY-MM-DD HH24:MM:SS') "CYYZKLRQSJ",--	出院医嘱开立日期时间	DATETIME		必填	格式：YYYY-MM-DD HH:MM:SS
+               r.INOPNM                                       "JZYSQM",--	接诊医师签名	VARCHAR	50
+               r.INOPCD                                       "JZYSGH",--	接诊医师工号	VARCHAR	64
+               r.CHADR_NAME                                   "ZYYSQM",--	住院医师签名	VARCHAR	50
+               r.CHADR_NO                                     "ZYYSGH",--	住院医师工号	VARCHAR	64
+               r.INDR_NAME                                    "ZZYSQM",--	主治医师签名	VARCHAR	50
+               r.INDR_NO                                      "ZZYSGH",--	主治医师工号	VARCHAR	64
+               r.CHIFDR_NAME                                  "ZRYSQM",--	主任医师签名	VARCHAR	50
+               r.CHIFDR_NO                                    "ZRYSGH",--	主任医师工号	VARCHAR	64
+               to_char(a.out_date, 'YYYY-MM-DD HH24:MM:SS')   "GXSJ",--	更新时间	DATETIME		必填	格式：YYYY-MM-DD HH:MM:SS
+               to_char(sysdate, 'YYYY-MM-DD')                 "TBRQ" --  填报日期  DATETIME   必填 本条数据采集时间，格式YYYY-MM-DD
+        from ipr_inpatientinfo a
+                 left join (select a.item_id, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202310101521161149402900000000') e on e.his_item_id = a.PSNCERTTYPE
+                 left join (select listagg(c.item_id, ';') within group (order by c.item_id)code,
+                     listagg(c.item_name,';') within
+                            group (order by c.item_name) name, a.orgcode, a.inid
+                            from ipr_diagnose a
+                                left join (select a.item_id, a.item_name, b.his_item_id
+                                from si_yt_report_item a,
+                                si_yt_report_item_compare b
+                                where a.module_rid = b.module_rid
+                                and a.type_rid = b.type_rid
+                                and a.rid = b.item_rid
+                                and a.module_rid = '202310101511361148853000000000'
+                                and a.type_rid = '202311281105131392640900000000') c
+                            on c.his_item_id = a.dise_code
+                            where DISE_CLINICD = '3'
+                            group by a.orgcode, a.inid) b on a.orgcode = b.orgcode and a.inid = b.inid
+                 left join (select listagg(c.item_id, ';') within group (order by c.item_id)code,
+                     listagg(c.item_name,';') within
+                            group (order by c.item_name) name, a.orgcode, a.inid
+                            from ipr_diagnose a
+                                left join (select a.item_id, a.item_name, b.his_item_id
+                                from si_yt_report_item a,
+                                si_yt_report_item_compare b
+                                where a.module_rid = b.module_rid
+                                and a.type_rid = b.type_rid
+                                and a.rid = b.item_rid
+                                and a.module_rid = '202310101511361148853000000000'
+                                and a.type_rid = '202311281105131392640900000000') c
+                            on c.his_item_id = a.dise_code
+                            where DISE_CLINICD = '1'
+                            group by a.orgcode, a.inid) q on a.orgcode = q.orgcode and a.inid = q.inid,
+             com_patientinfo d
+                 left join (select a.item_id, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202311011354491261411600000000') f on f.his_item_id = d.MARRIED
+                 left join (select a.item_id, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202311281553021393182200000000') g on g.his_item_id = d.PROFCODE
+                 left join (select a.item_id, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202311161530191338672700000000') h on h.his_item_id = d.RELACODE,
+             ipm_order_info o,
+             INR_RECEIVEINFO r
+        where a.instate &lt;&gt; '0'
+          and a.orgcode = d.orgcode
+          and a.patientid = d.patientid
+          and a.inhosno = d.inhosno
+          and a.orgcode = r.orgcode
+          and a.inid = r.inid
+          and a.orgcode = o.orgcode
+          and a.inid = o.inid
+          and o.itemname = '今日出院'
+          and o.ORDERSTATUS &lt;&gt; '3'
+          and a.out_date - a.indate &lt; 1
+          and a.orgcode =
+              #{orgcode}
+          and a
+                  .
+                  out_date
+            &gt;=
+              to_date
+                  (
+                      #{begtime},
+                      'YYYY-MM-DD HH24:MI:SS'
+                  )
+          and a
+                  .
+                  out_date
+            &lt;=
+              to_date
+                  (
+                      #{endtime},
+                      'YYYY-MM-DD HH24:MI:SS'
+                  )
+    </select>
+
+</mapper>
