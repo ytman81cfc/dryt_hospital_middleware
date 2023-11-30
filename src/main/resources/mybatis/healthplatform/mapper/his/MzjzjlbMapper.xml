@@ -9,19 +9,19 @@
                ''                                                                              "FYMC",--	分院名称	VARCHAR	120	条件必填	分院代码不为0时必填
                '1'                                                                             "KLXDM",--	卡类型	VARCHAR	16	必填	请按照以下优先级顺序填写：1：患者主索引号、2：身份证号、3：医保卡号，如果都没有则填写门诊就诊流水号
                c.rid                                                                           "KHM",--	卡号	VARCHAR	64	必填
-               a.patientname                                                                   "XM",--	姓名	VARCHAR	50	必填
-               to_number(extract(year from a.reg_time)) - to_number(extract(year from a.BRDY)) "NL",--	年龄(岁)	NUMERIC	3	必填	就诊时的年龄，1岁以内填0
+               SUBSTR(a.patientname, 0, 5)                                                                   "XM",--	姓名	VARCHAR	50	必填
+               nvl(to_number(extract(year from a.reg_time)) - to_number(extract(year from a.BRDY)), 0) "NL",--	年龄(岁)	NUMERIC	3	必填	就诊时的年龄，1岁以内填0
                g.item_id                                                                       "ZJLX",--	证件类型	VARCHAR	2		参见CV02.01.101-2022修订版 身份证件类别代码优先使用身份证
                a.CERTNO                                                                        "ZJHM",--	证件号码	VARCHAR	32
-               decode(a.YNFR, '1', '0', '0', '1')                                              "CFZBZ",--	初复诊标志	VARCHAR	1	必填	0：初诊 1：复诊
+               nvl(decode(a.YNFR, '1', '0', '0', '1'), 0)                                              "CFZBZ",--	初复诊标志	VARCHAR	1	必填	0：初诊 1：复诊
                '100'                                                                           "JZLXDM",--	就诊类型代码	VARCHAR	3	必填	参见CVA5101_01就诊类型代码
                a.DEPTCODE                                                                      "YNJZKSDM",--	院内就诊科室代码	VARCHAR	50	必填
-               a.DEPTNAME                                                                      "YNJZKSMC",--	院内就诊科室名称	VARCHAR	100	必填
+               nvl(a.DEPTNAME, '无')                                                                      "YNJZKSMC",--	院内就诊科室名称	VARCHAR	100	必填
                i.item_id                                                                       "JZKSDM",--	中心就诊科室代码	VARCHAR	50	必填	参见《全民健康信息平台科室分类代码表》
                i.item_name                                                                     "JZKSMC",--	中心就诊科室名称	VARCHAR	100	必填	参见《全民健康信息平台科室分类代码表》
                to_char(a.reg_time, 'YYYY-MM-DD')                                               "JZSJ",--	首次就诊时间	DATETIME		必填	时间格式YYYY-MM-DD
                a.DOCCODE                                                                       "ZDYSDM",--	就诊医师工号	VARCHAR	64	必填
-               a.DOCNAME                                                                       "ZDYSXM",--	就诊医师姓名	VARCHAR	50	必填
+               nvl(a.DOCNAME, '-')                                                                       "ZDYSXM",--	就诊医师姓名	VARCHAR	50	必填
                d.certno                                                                        "JZYSSFZHM",--	就诊医生身份证号码	VARCHAR	18	必填
                e.DISE_CODE                                                                     "YNJBZDDM",--	院内西医主要诊断疾病编码	VARCHAR	200
                e.DISE_NAME                                                                     "YNJBZDMC",--	院内西医主要诊断疾病名称	VARCHAR	2000

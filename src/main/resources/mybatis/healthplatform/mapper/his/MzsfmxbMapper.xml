@@ -15,9 +15,9 @@
                         c.rid                                            "KH",--	卡号	VARCHAR	64	必填
                         f.item_id                                        "ZJLX",--	证件类型	VARCHAR	2		参见CV02.01.101-2022修订版 身份证件类别代码		优先使用身份证
                         d.certno                                         "ZJHM",--	证件号码	VARCHAR	32
-                        e.NAME                                           "XM",--	姓名	VARCHAR	50	必填
+                        substr(e.NAME, 0, 10)                                           "XM",--	姓名	VARCHAR	50	必填
                         d.DEPTCODE                                       "YNJZKSDM",--	院内费用发生科室代码	VARCHAR	50	必填
-                        d.DEPTNAME                                       "YNJZKSMC",--	院内费用发生科室名称	VARCHAR	100	必填
+                        nvl(d.DEPTNAME, '-')                                       "YNJZKSMC",--	院内费用发生科室名称	VARCHAR	100	必填
                         '-'                                              "JZKSDM",--	中心费用发生科室代码	VARCHAR	50	必填	参见《全民健康信息平台科室分类代码表》
                         '-'                                              "JZKSMC",--	中心费用发生科室名称	VARCHAR	100	必填	参见《全民健康信息平台科室分类代码表》
                         a.EXECDPCD                                       "YNZXKSBM",--	院内执行科室编码	VARCHAR	50
@@ -38,13 +38,13 @@
                         a.ITEMNAME                                       "MXXMMC",--	院内明细项目名称	VARCHAR	128	必填
                         nvl(replace(i.MED_LIST_CODG, '_SI', ''), '999')  "ZXDM",--	中心明细项目代码	VARCHAR	32	必填	耗材、服务项目参见《全民健康信息平台医疗服务项目价格表》药品参见医保码		草药和自制剂参见《全民健康信息平台制剂、中草药医保编码》。	其他填写999
                         nvl(i.SERVITEM_NAME, a.itemname)                 "ZXMC",--	中心明细项目名称	VARCHAR	200	必填
-                        a.SPECS                                          "MXXMGG",--	明细项目规格	VARCHAR	32	必填
+                        nvl(a.SPECS, '-')                                          "MXXMGG",--	明细项目规格	VARCHAR	32	必填
                         a.PRICEUNIT                                      "MXXMDW",--	明细项目单位	VARCHAR	32	必填
                         round(a.UNITPRICE, 3)                            "MXXMDJ",--	明细项目单价	NUMERIC	18,3	必填
                         round(a.QTY, 3)                                  "MXXMSL",--	明细项目数量	NUMERIC	10,3	必填
                         round(a.TOTCOST, 3)                              "MXXMJE",--	明细项目金额	NUMERIC	18,3	必填	退费标志为2（退费）时，传负数
                         a.FEEOPCD                                        "SFCZYGH",--	收费操作员工号	VARCHAR	64	必填
-                        a.FEENAME                                        "SFCZYXM",--	收费操作员姓名	VARCHAR	50	必填
+                        nvl(a.FEENAME, '-')                                        "SFCZYXM",--	收费操作员姓名	VARCHAR	50	必填
                         g.certno                                         "SFCZYSFZHM",--	收费操作员身份证号码	VARCHAR	18
                         to_char(sysdate, 'YYYY-MM-DD')                   "TBRQ" --	填报日期	DATETIME	 必填	本条数据采集时间，格式YYYY-MM-DD
         from (select a.*, d.invocode, b.GJYPID, h.orgname
@@ -120,9 +120,9 @@
                         c.rid                                            "KH",--	卡号	VARCHAR	64	必填
                         f.item_id                                        "ZJLX",--	证件类型	VARCHAR	2		参见CV02.01.101-2022修订版 身份证件类别代码		优先使用身份证
                         d.certno                                         "ZJHM",--	证件号码	VARCHAR	32
-                        e.NAME                                           "XM",--	姓名	VARCHAR	50	必填
+                        substr(e.NAME, 0, 10)                                           "XM",--	姓名	VARCHAR	50	必填
                         d.DEPTCODE                                       "YNJZKSDM",--	院内费用发生科室代码	VARCHAR	50	必填
-                        d.DEPTNAME                                       "YNJZKSMC",--	院内费用发生科室名称	VARCHAR	100	必填
+                        nvl(d.DEPTNAME, '-')                                       "YNJZKSMC",--	院内费用发生科室名称	VARCHAR	100	必填
                         '-'                                              "JZKSDM",--	中心费用发生科室代码	VARCHAR	50	必填	参见《全民健康信息平台科室分类代码表》
                         '-'                                              "JZKSMC",--	中心费用发生科室名称	VARCHAR	100	必填	参见《全民健康信息平台科室分类代码表》
                         a.EXECDPCD                                       "YNZXKSBM",--	院内执行科室编码	VARCHAR	50
@@ -143,13 +143,13 @@
                         a.ITEMNAME                                       "MXXMMC",--	院内明细项目名称	VARCHAR	128	必填
                         nvl(replace(i.MED_LIST_CODG, '_SI', ''), '999')  "ZXDM",--	中心明细项目代码	VARCHAR	32	必填	耗材、服务项目参见《全民健康信息平台医疗服务项目价格表》药品参见医保码		草药和自制剂参见《全民健康信息平台制剂、中草药医保编码》。	其他填写999
                         nvl(i.SERVITEM_NAME, a.itemname)                 "ZXMC",--	中心明细项目名称	VARCHAR	200	必填
-                        a.SPECS                                          "MXXMGG",--	明细项目规格	VARCHAR	32	必填
+                        nvl(a.SPECS, '-')                                          "MXXMGG",--	明细项目规格	VARCHAR	32	必填
                         a.PRICEUNIT                                      "MXXMDW",--	明细项目单位	VARCHAR	32	必填
                         round(a.UNITPRICE, 3)                            "MXXMDJ",--	明细项目单价	NUMERIC	18,3	必填
                         round(a.QTY, 3)                                  "MXXMSL",--	明细项目数量	NUMERIC	10,3	必填
                         round(a.TOTCOST, 3)                              "MXXMJE",--	明细项目金额	NUMERIC	18,3	必填	退费标志为2（退费）时，传负数
                         a.FEEOPCD                                        "SFCZYGH",--	收费操作员工号	VARCHAR	64	必填
-                        a.FEENAME                                        "SFCZYXM",--	收费操作员姓名	VARCHAR	50	必填
+                        nvl(a.FEENAME, '-')                                        "SFCZYXM",--	收费操作员姓名	VARCHAR	50	必填
                         g.certno                                         "SFCZYSFZHM",--	收费操作员身份证号码	VARCHAR	18
                         to_char(sysdate, 'YYYY-MM-DD')                   "TBRQ" --	填报日期	DATETIME	 必填	本条数据采集时间，格式YYYY-MM-DD
         from (select a.*, d.invocode, b.GJYPID, h.orgname
