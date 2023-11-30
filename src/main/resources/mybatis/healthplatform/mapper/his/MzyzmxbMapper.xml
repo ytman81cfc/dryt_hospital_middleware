@@ -12,8 +12,8 @@
                '100'                                           "JZLXDM",      --  就诊类型代码  VARCHAR 3 必填  参见CVA5101_01就诊类型代码（100：普通门诊 102：专家门诊 103：特需门诊 200：急诊 300：急诊观察 400：普通住院 401：特需住院 500：家床 600：体检 999：其他）
                c.DEPTCODE                                      "JZKSDM",      --  院内就诊科室代码  VARCHAR 50  必填
                c.DEPTNAME                                      "JZKSMC",      --  院内就诊科室名称  VARCHAR 100 必填
-               y.item_id                                       "ZXJZKSDM",    -- 中心就诊科室代码  VARCHAR 50  必填  参见 《全民健康信息平台科室分类代码表》
-               y.item_name                                     "ZXJZKSMC",    -- 中心就诊科室名称  VARCHAR 100 必填  参见 《全民健康信息平台科室分类代码表》
+               nvl(y.item_id, '-')                                       "ZXJZKSDM",    -- 中心就诊科室代码  VARCHAR 50  必填  参见 《全民健康信息平台科室分类代码表》
+               nvl(y.item_name, '-')                                     "ZXJZKSMC",    -- 中心就诊科室名称  VARCHAR 100 必填  参见 《全民健康信息平台科室分类代码表》
                c.PATIENTNAME                                   "XM",          --  姓名  VARCHAR 50  必填
                e.item_id                                       "XB",          --  性别  VARCHAR 1 必填  参见 GB/T 2261.1-2003 性别代码表
                to_char(c.BRDY, 'YYYY-MM-DD')                   "CSRQ",        --  出生日期  DATETIME    必填  YYYY-MM-DD
@@ -31,8 +31,8 @@
                    else
                        '99'
                    end                                         "BXLX",        --  医疗费用支付方式  VARCHAR 4 必填  参见CV07.10.003-2022修订版 医疗费用来源类别
-               x.item_id                                       "YZXMLXDM",    --  医嘱项目类型代码  VARCHAR 2 必填  参见CV06.00.229 （01：药品类医嘱 02：检查类医嘱 03：检验类医嘱 04：手术类医嘱 05：处置类医嘱 06：材料类医嘱 07：嘱托医嘱）
-               x.item_name                                     "YZXMLXMC",    --  医嘱项目类型名称  VARCHAR 32  必填
+               nvl(x.item_id, '-')                                       "YZXMLXDM",    --  医嘱项目类型代码  VARCHAR 2 必填  参见CV06.00.229 （01：药品类医嘱 02：检查类医嘱 03：检验类医嘱 04：手术类医嘱 05：处置类医嘱 06：材料类医嘱 07：嘱托医嘱）
+               nvl(x.item_name, '-')                                     "YZXMLXMC",    --  医嘱项目类型名称  VARCHAR 32  必填
                a.rid                                           "CFXMMXHM",    --  医嘱项目明细唯一标识  VARCHAR 64  必填  "药品类医嘱填写药品处方明细唯一标识 检查类医嘱填写检查明细唯一标识检验类医嘱填写检验明细唯一标识手术类医嘱填写手术医嘱明细唯一标识处置类医嘱填写处置医嘱明细唯一标识材料类医嘱填写材料医嘱明细唯一标识嘱托医嘱填写嘱托医嘱明细唯一标识如无以上标志，则填写医嘱明细流水号"
                a.DOCTCODE                                      "KFSSGH",      --  医嘱开立医师工号  VARCHAR 64  必填
                a.DOCTNAME                                      "KFYSXM",      --  医嘱开立医师姓名  VARCHAR 50  必填
@@ -558,8 +558,8 @@
                '100'                                           "JZLXDM",      --  就诊类型代码  VARCHAR 3 必填  参见CVA5101_01就诊类型代码（100：普通门诊 102：专家门诊 103：特需门诊 200：急诊 300：急诊观察 400：普通住院 401：特需住院 500：家床 600：体检 999：其他）
                c.DEPTCODE                                      "JZKSDM",      --  院内就诊科室代码  VARCHAR 50  必填
                c.DEPTNAME                                      "JZKSMC",      --  院内就诊科室名称  VARCHAR 100 必填
-               y.item_id                                       "ZXJZKSDM",    -- 中心就诊科室代码  VARCHAR 50  必填  参见 《全民健康信息平台科室分类代码表》
-               y.item_name                                     "ZXJZKSMC",    -- 中心就诊科室名称  VARCHAR 100 必填  参见 《全民健康信息平台科室分类代码表》
+               nvl(y.item_id, '-')                                       "ZXJZKSDM",    -- 中心就诊科室代码  VARCHAR 50  必填  参见 《全民健康信息平台科室分类代码表》
+               nvl(y.item_name, '-')                                     "ZXJZKSMC",    -- 中心就诊科室名称  VARCHAR 100 必填  参见 《全民健康信息平台科室分类代码表》
                c.PATIENTNAME                                   "XM",          --  姓名  VARCHAR 50  必填
                e.item_id                                       "XB",          --  性别  VARCHAR 1 必填  参见 GB/T 2261.1-2003 性别代码表
                to_char(c.BRDY, 'YYYY-MM-DD')                   "CSRQ",        --  出生日期  DATETIME    必填  YYYY-MM-DD
@@ -577,8 +577,8 @@
                    else
                        '99'
                    end                                         "BXLX",        --  医疗费用支付方式  VARCHAR 4 必填  参见CV07.10.003-2022修订版 医疗费用来源类别
-               x.item_id                                       "YZXMLXDM",    --  医嘱项目类型代码  VARCHAR 2 必填  参见CV06.00.229 （01：药品类医嘱 02：检查类医嘱 03：检验类医嘱 04：手术类医嘱 05：处置类医嘱 06：材料类医嘱 07：嘱托医嘱）
-               x.item_name                                     "YZXMLXMC",    --  医嘱项目类型名称  VARCHAR 32  必填
+               nvl(x.item_id, '-')                                       "YZXMLXDM",    --  医嘱项目类型代码  VARCHAR 2 必填  参见CV06.00.229 （01：药品类医嘱 02：检查类医嘱 03：检验类医嘱 04：手术类医嘱 05：处置类医嘱 06：材料类医嘱 07：嘱托医嘱）
+               nvl(x.item_name, '-')                                     "YZXMLXMC",    --  医嘱项目类型名称  VARCHAR 32  必填
                a.rid                                           "CFXMMXHM",    --  医嘱项目明细唯一标识  VARCHAR 64  必填  "药品类医嘱填写药品处方明细唯一标识 检查类医嘱填写检查明细唯一标识检验类医嘱填写检验明细唯一标识手术类医嘱填写手术医嘱明细唯一标识处置类医嘱填写处置医嘱明细唯一标识材料类医嘱填写材料医嘱明细唯一标识嘱托医嘱填写嘱托医嘱明细唯一标识如无以上标志，则填写医嘱明细流水号"
                a.DOCTCODE                                      "KFSSGH",      --  医嘱开立医师工号  VARCHAR 64  必填
                a.DOCTNAME                                      "KFYSXM",      --  医嘱开立医师姓名  VARCHAR 50  必填
@@ -1062,8 +1062,8 @@
                '100'                                           "JZLXDM",      --  就诊类型代码  VARCHAR 3 必填  参见CVA5101_01就诊类型代码（100：普通门诊 102：专家门诊 103：特需门诊 200：急诊 300：急诊观察 400：普通住院 401：特需住院 500：家床 600：体检 999：其他）
                c.DEPTCODE                                      "JZKSDM",      --  院内就诊科室代码  VARCHAR 50  必填
                c.DEPTNAME                                      "JZKSMC",      --  院内就诊科室名称  VARCHAR 100 必填
-               y.item_id                                       "ZXJZKSDM",    -- 中心就诊科室代码  VARCHAR 50  必填  参见 《全民健康信息平台科室分类代码表》
-               y.item_name                                     "ZXJZKSMC",    -- 中心就诊科室名称  VARCHAR 100 必填  参见 《全民健康信息平台科室分类代码表》
+               nvl(y.item_id, '-')                                       "ZXJZKSDM",    -- 中心就诊科室代码  VARCHAR 50  必填  参见 《全民健康信息平台科室分类代码表》
+               nvl(y.item_name, '-')                                     "ZXJZKSMC",    -- 中心就诊科室名称  VARCHAR 100 必填  参见 《全民健康信息平台科室分类代码表》
                c.PATIENTNAME                                   "XM",          --  姓名  VARCHAR 50  必填
                e.item_id                                       "XB",          --  性别  VARCHAR 1 必填  参见 GB/T 2261.1-2003 性别代码表
                to_char(c.BRDY, 'YYYY-MM-DD')                   "CSRQ",        --  出生日期  DATETIME    必填  YYYY-MM-DD
@@ -1081,8 +1081,8 @@
                    else
                        '99'
                    end                                         "BXLX",        --  医疗费用支付方式  VARCHAR 4 必填  参见CV07.10.003-2022修订版 医疗费用来源类别
-               x.item_id                                       "YZXMLXDM",    --  医嘱项目类型代码  VARCHAR 2 必填  参见CV06.00.229 （01：药品类医嘱 02：检查类医嘱 03：检验类医嘱 04：手术类医嘱 05：处置类医嘱 06：材料类医嘱 07：嘱托医嘱）
-               x.item_name                                     "YZXMLXMC",    --  医嘱项目类型名称  VARCHAR 32  必填
+               nvl(x.item_id, '-')                                       "YZXMLXDM",    --  医嘱项目类型代码  VARCHAR 2 必填  参见CV06.00.229 （01：药品类医嘱 02：检查类医嘱 03：检验类医嘱 04：手术类医嘱 05：处置类医嘱 06：材料类医嘱 07：嘱托医嘱）
+               nvl(x.item_name, '-')                                     "YZXMLXMC",    --  医嘱项目类型名称  VARCHAR 32  必填
                a.rid                                           "CFXMMXHM",    --  医嘱项目明细唯一标识  VARCHAR 64  必填  "药品类医嘱填写药品处方明细唯一标识 检查类医嘱填写检查明细唯一标识检验类医嘱填写检验明细唯一标识手术类医嘱填写手术医嘱明细唯一标识处置类医嘱填写处置医嘱明细唯一标识材料类医嘱填写材料医嘱明细唯一标识嘱托医嘱填写嘱托医嘱明细唯一标识如无以上标志，则填写医嘱明细流水号"
                a.DOCTCODE                                      "KFSSGH",      --  医嘱开立医师工号  VARCHAR 64  必填
                a.DOCTNAME                                      "KFYSXM",      --  医嘱开立医师姓名  VARCHAR 50  必填
