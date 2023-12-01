@@ -11,7 +11,10 @@
                d.num                                          "SFMXSL",--	收费明细数量	INT		必填	住院收费明细表(已结算)(ZYSFMXB)中关联数据的数量
                '3'                                            "JSBZ",--	结算标志	VARCHAR	1	必填	0：出院结算 1：在院结算 2：非住院的结算 3：未结算
                ''                                             "FPH",--	发票号	VARCHAR	64	条件必填	结算标志不是3时必填，多个发票号以“/”分隔
-               '1'                                            "KLX",--	卡类型	VARCHAR	16	必填	请按照以下优先级顺序填写：1：患者主索引号、2：身份证号、3：医保卡号，如果都没有则填写住院就诊流水号 c.rid "KH",--	卡号	VARCHAR	64	必填 f.item_id "ZJLX",--	证件类型	VARCHAR	2		参见CV02.01.101-2022修订版 身份证件类别代码 	优先使用身份证 a.certno "ZJHM",--	证件号码	VARCHAR	32
+               '1'                                            "KLX",--	卡类型	VARCHAR	16	必填	请按照以下优先级顺序填写：1：患者主索引号、2：身份证号、3：医保卡号，如果都没有则填写住院就诊流水号
+               nvl(c.rid, '-')                                          "KH", --	卡号	VARCHAR	64	必填
+               f.item_id                                      "ZJLX",--	证件类型	VARCHAR	2		参见CV02.01.101-2022修订版 身份证件类别代码 	优先使用身份证
+               a.certno                                       "ZJHM",--	证件号码	VARCHAR	32
                a.patientname                                  "XM",--	姓名	VARCHAR	50	必填
                case
                    when
@@ -22,8 +25,8 @@
                to_char(d.FEEOPTDATE, 'YYYY-MM-DD HH24:MI:SS') "SFSJ",--	收费时间	DATETIME			以最后一次收费时间为准
                a.OUTDEPTCODE                                  "YNXDKSBM",--	院内费用发生科室编码	VARCHAR	50	必填
                a.OUTDEPTNAME                                  "YNXDKSMC",--	院内费用发生科室名称	VARCHAR	100	必填
-               j.item_id                                      "XDKSBM",--	中心费用发生科室编码	VARCHAR	50	必填	参见《全民健康信息平台科室分类代码表》
-               j.item_name                                    "XDKSMC",--	中心费用发生科室名称	VARCHAR	100	必填	参见《全民健康信息平台科室分类代码表》
+               nvl(j.item_id, '-')                                      "XDKSBM",--	中心费用发生科室编码	VARCHAR	50	必填	参见《全民健康信息平台科室分类代码表》
+               nvl(j.item_name, '-')                                    "XDKSMC",--	中心费用发生科室名称	VARCHAR	100	必填	参见《全民健康信息平台科室分类代码表》
                nvl(round(d.TOTCOST, 3), 0)                    "ZJE",--	总金额	NUMERIC	18,3	必填	退费标志为2（退费）时，传负数
                0                                              "YBJE",--	医保结算范围金额	NUMERIC	18,3	必填	医保结算范围金额
                nvl(round(d.PUBCOST, 3), 0)                    "YBZFJE",--	医保支付金额	NUMERIC	18,3	必填	医保实际报销支付金额 		退费标志为2（退费）时，传负数
@@ -149,7 +152,10 @@
                h.num                                            "SFMXSL",--	收费明细数量	INT		必填	住院收费明细表(已结算)(ZYSFMXB)中关联数据的数量
                '0'                                              "JSBZ",--	结算标志	VARCHAR	1	必填	0：出院结算 1：在院结算 2：非住院的结算 3：未结算
                d.invoiceno                                      "FPH",--	发票号	VARCHAR	64	条件必填	结算标志不是3时必填，多个发票号以“/”分隔
-               '1'                                              "KLX",--	卡类型	VARCHAR	16	必填	请按照以下优先级顺序填写：1：患者主索引号、2：身份证号、3：医保卡号，如果都没有则填写住院就诊流水号 c.rid KH,--	卡号	VARCHAR	64	必填 f.item_id ZJLX,--	证件类型	VARCHAR	2		参见CV02.01.101-2022修订版 身份证件类别代码 	优先使用身份证 a.certno "ZJHM",--	证件号码	VARCHAR	32
+               '1'                                              "KLX",--	卡类型	VARCHAR	16	必填	请按照以下优先级顺序填写：1：患者主索引号、2：身份证号、3：医保卡号，如果都没有则填写住院就诊流水号
+               nvl(c.rid, '-')                                            "KH",--	卡号	VARCHAR	64	必填
+               f.item_id                                        "ZJLX",--	证件类型	VARCHAR	2		参见CV02.01.101-2022修订版 身份证件类别代码 	优先使用身份证
+               a.certno                                         "ZJHM",--	证件号码	VARCHAR	32
                a.patientname                                    "XM", --	姓名	VARCHAR	50	必填
                case
                    when
@@ -160,8 +166,8 @@
                to_char(a.BANLANCEDATE, 'YYYY-MM-DD HH24:MI:SS') "SFSJ",--	收费时间	DATETIME			以最后一次收费时间为准
                a.OUTDEPTCODE                                    "YNXDKSBM",--	院内费用发生科室编码	VARCHAR	50	必填
                a.OUTDEPTNAME                                    "YNXDKSMC",--	院内费用发生科室名称	VARCHAR	100	必填
-               j.item_id                                        "XDKSBM",--	中心费用发生科室编码	VARCHAR	50	必填	参见《全民健康信息平台科室分类代码表》
-               j.item_name                                      "XDKSMC",--	中心费用发生科室名称	VARCHAR	100	必填	参见《全民健康信息平台科室分类代码表》
+               nvl(j.item_id, '-')                                        "XDKSBM",--	中心费用发生科室编码	VARCHAR	50	必填	参见《全民健康信息平台科室分类代码表》
+               nvl(j.item_name, '-')                                      "XDKSMC",--	中心费用发生科室名称	VARCHAR	100	必填	参见《全民健康信息平台科室分类代码表》
                nvl(round(d.TOTCOST, 3), 0)                      "ZJE",--	总金额	NUMERIC	18,3	必填	退费标志为2（退费）时，传负数
                nvl(round(s.YBINSCP_SCP_AMT, 3), 0)              "YBJE",--	医保结算范围金额	NUMERIC	18,3	必填	医保结算范围金额
                nvl(round(d.PUBCOST, 3), 0)                      "YBZFJE",--	医保支付金额	NUMERIC	18,3	必填	医保实际报销支付金额 		退费标志为2（退费）时，传负数
