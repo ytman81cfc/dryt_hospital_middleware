@@ -111,7 +111,7 @@
                                                and out_date &gt;= to_date(#{endtime}, 'yyyy-mm-dd hh24:mi:ss')
                                               or out_date is null)
                               and PATIENTLEVEL = '3'
-                            group by orgcode) K on K.orgcode = a.orgcode
+                            group by orgcode) k on k.orgcode = a.orgcode
                  left join (select count(orgcode) num, orgcode
                             from INR_RECEIVEINFO
                             where inid in (select inid
@@ -402,8 +402,6 @@
                               and a.UPDT_TIME &gt;= to_date(#{begtime}, 'yyyy-mm-dd hh24:mi:ss')
                               and a.UPDT_TIME &lt;= to_date(#{endtime}, 'yyyy-mm-dd hh24:mi:ss')
                             group by a.orgcode) ab on ab.orgcode = a.orgcode
-
-
         where a.orgcode = #{orgcode}
     </select>
 
