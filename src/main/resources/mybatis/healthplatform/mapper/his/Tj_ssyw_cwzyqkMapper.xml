@@ -2,8 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hospital.middleware.healthplatform.dao.his.HealthplatfromDAO">
     <select id="queryTj_ssyw_cwzyqk" resultType="java.util.HashMap">
-        select c.orgcode                                 "YLJGDM",--  医疗机构代码  VARCHAR 22  必填  复合主键：采用22位“卫生机构代码”
-               to_char(to_date(#{begtime}, 'YYYY-MM-DD'), 'YYYY-MM-DD')            "CJRQ",--  采集日期  VARCHAR 10  必填  复合主键：格式为YYYY-MM-DD
+        select distinct c.orgcode                                 "YLJGDM",--  医疗机构代码  VARCHAR 22  必填  复合主键：采用22位“卫生机构代码”
+               to_char(to_date(#{begtime}, 'YYYY-MM-DD  hh24:mi:ss'), 'YYYY-MM-DD')            "CJRQ",--  采集日期  VARCHAR 10  必填  复合主键：格式为YYYY-MM-DD
                #{begtime}  "CJSJ",--  采集时间  DATETIME    必填  复合主键
                c.deptcode                                "BQBM",--  病区(科室)代码  VARCHAR 20  必填  复合主键：若医院以科室进行划分，则填写科室代码；若以病区划分的则填写病区代码。通常是按病区划分的
                p.deptname                                "BQMC",--  病区(科室)名称  VARCHAR 100 必填  若医院以科室进行划分，则填写科室名称；若以病区划分的则填写病区名称。通常是按病区划分的

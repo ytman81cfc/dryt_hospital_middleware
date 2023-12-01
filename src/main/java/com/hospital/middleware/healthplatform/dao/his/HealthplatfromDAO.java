@@ -92,6 +92,8 @@ public interface HealthplatfromDAO {
 
     //TJ_SSYW_CWZYQK 床位占用情况表
     List<Map> queryTj_ssyw_cwzyqk(String orgcode,String begtime,String endtime);
-    
+    //TJ_ZY_RB 住院统计表（日报）
+    List<Map> queryTj_zy_rb(String orgcode,String begtime,String endtime);
+
 
 }
