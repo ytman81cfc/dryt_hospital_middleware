@@ -90,10 +90,13 @@ public interface HealthplatfromDAO {
     //EMR_ZYSWJL 24h内入院死亡记录
     List<Map> queryEmr_zyswjl(String orgcode,String begtime,String endtime);
 
-    //TJ_SSYW_CWZYQK 床位占用情况表
-    List<Map> queryTj_ssyw_cwzyqk(String orgcode,String begtime,String endtime);
+    //TJ_MJZ_RB 门（急）诊统计表（日报）
+    List<Map> queryTj_mjz_rb(String orgcode,String begtime,String endtime);
     //TJ_ZY_RB 住院统计表（日报）
     List<Map> queryTj_zy_rb(String orgcode,String begtime,String endtime);
-
+    //TJ_ZYGZL_KS_RB 住院工作量及病床分科统计表（日报）
+    List<Map> queryTj_zygzl_ks_rb(String orgcode,String begtime,String endtime);
+    //TJ_SSYW_CWZYQK 床位占用情况表
+    List<Map> queryTj_ssyw_cwzyqk(String orgcode,String begtime,String endtime);
 
 }
