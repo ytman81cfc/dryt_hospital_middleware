@@ -2,45 +2,45 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hospital.middleware.healthplatform.dao.his.HealthplatfromDAO">
     <select id="queryTj_zy_rb" resultType="java.util.HashMap">
-        select a.orgcode                                                      "YLJGDM",-- 医疗机构代码 VARCHAR 22 必填 复合主键：采用22位“卫生机构代码”
-               to_char(to_date(#{begtime}, 'YYYY-MM-DD  hh24:mi:ss'), 'YYYYMMDD')           "YWRQ",-- 统计日期 VARCHAR 8 必填 复合主键：是指业务发生的日期YYYYMMDD
-               a.orgname                                                      "YLJGMC",-- 医疗机构名称 VARCHAR 70 必填 医院执业许可第一名称
-               '0'                                                            "FYDM",-- 分院代码 VARCHAR 20 必填 记录分院代码（内码）,如无分院，则传0
-               ''                                                             "FYMC",-- 分院名称 VARCHAR 120 条件必填 分院代码不为0时必填
-               c.num                                                          "HDCWZS",-- 核定（编制）床位总数 NUMERIC 15 必填
-               d.num                                                          "SJKFCWZS",-- 实际开放床位总数 NUMERIC 15 必填
-               nvl(e.num, 0)                                                  "RYRS",-- 入院人数 NUMERIC 15 必填
-               nvl(f.num, 0)                                                  "CYRS",-- 出院人数 NUMERIC 15 必填
-               nvl(round(g.num / f.num,0), 0)                                   "CYHZPJZYL",-- 出院患者平均住院日 NUMERIC 15 必填
-               round(h.totcost / f.num, 2)                                    "CYHZJCFY",-- 出院患者均次费用 NUMERIC 18,2 必填
-               nvl(i.num, 0)                                                  "ZYSSTS",-- 住院手术台数 NUMERIC 15 必填
-               nvl(j.num, 0)                                                  "ZYRS",-- 在院人数 NUMERIC 15 必填
-               nvl(k.num, 0)                                                  "BWRS",-- 其中：病危人数 NUMERIC 15 必填
-               nvl(l.num, 0)                                                  "BZRS",-- 其中：病重人数 NUMERIC 15 必填
-               nvl(m.num, 0)                                                  "TJHLRS",-- 其中：特级护理人数 NUMERIC 15 必填 每天晚上12点统计的数值
-               nvl(n.num, 0)                                                  "YJHLRS",-- 其中：一级护理人数 NUMERIC 15 必填 每天晚上12点统计的数值
-               nvl(o.num, 0)                                                  "EJHLRS",-- 其中：二级护理人数 NUMERIC 15 必填 每天晚上12点统计的数值
-               0                                                              "ZZJKSRS",-- 其中：重症监护室人数 NUMERIC 15 必填
-               round(nvl(p.totcost, 0), 2)                                    "ZFY",-- 住院总费用 NUMERIC 18,2 必填
-               round(nvl(q.totcost, 0), 2)                                    "YPFY",-- 其中：药品费用 NUMERIC 18,2 必填
-               round(nvl(r.totcost, 0), 2)                                    "JBYWFY",-- 其中：基本药物费用 NUMERIC 18,2 必填
-               round(nvl(s.totcost, 0), 2)                                    "JCYWFY",-- 其中：集采药物费用 NUMERIC 18,2 必填
-               round(nvl(t.totcost, 0), 2)                                    "YLFWFY",-- 其中：医疗服务费用 NUMERIC 18,2 必填
-               round(nvl(u.totcost, 0), 2)                                    "HCFY",-- 其中：耗材费用 NUMERIC 18,2 必填
-               nvl(v.num, 0)                                                  "JYBGDS",-- 检验报告单数 NUMERIC 15 必填
-               nvl(w.num, 0)                                                  "LCJYBGDS",-- 其中：临床检验报告单数 NUMERIC 15 必填
-               0                                                              "BLJYBGDS",-- 其中：病理检验报告单数 NUMERIC 15 必填
-               0                                                              "HYXJYBGDS",-- 其中：核医学检验报告单数 NUMERIC 15 必填
-               nvl(v.num, 0) - nvl(w.num, 0)                                  "QTJYBGDS",-- 其中：其他检验报告单数 NUMERIC 15 必填
-               nvl(x.num, 0)                                                  "JCBGDS",-- 检查报告单数 NUMERIC 15 必填
-               nvl(y.num, 0)                                                  "XDLBGDS",-- 其中：心电类报告单数 NUMERIC 15 必填
-               nvl(z.num, 0)                                                  "FSLBGDS",-- 其中：放射类报告单数 NUMERIC 15 必填
-               nvl(aa.num, 0)                                                 "CSLBGDS",-- 其中：超声类报告单数 NUMERIC 15 必填
-               0                                                              "NJLBGDS",-- 其中：内镜类报告单数 NUMERIC 15 必填
-               nvl(ab.num, 0)                                                 "CTLBGDS",-- 其中：CT类报告单数 NUMERIC 15 必填
-               0                                                              "HCLBGDS",-- 其中：核磁类报告单数 NUMERIC 15 必填
-               nvl(x.num, 0) - nvl(y.num, 0) - nvl(z.num, 0) - nvl(aa.num, 0) "QTLBGDS",-- 其中：其他类报    告单数 NUMERIC 15 必填
-               to_char(sysdate, 'YYYY-MM-DD')                                 "TBRQ" -- 填报日期 DATETIME 必填 本条数据采集时间，格式YYYY-MM-DD
+        select a.orgcode                                                                       "YLJGDM",-- 医疗机构代码 VARCHAR 22 必填 复合主键：采用22位“卫生机构代码”
+               to_char(to_date(#{begtime}, 'YYYY-MM-DD  hh24:mi:ss'), 'YYYYMMDD')              "YWRQ",-- 统计日期 VARCHAR 8 必填 复合主键：是指业务发生的日期YYYYMMDD
+               a.orgname                                                                       "YLJGMC",-- 医疗机构名称 VARCHAR 70 必填 医院执业许可第一名称
+               '0'                                                                             "FYDM",-- 分院代码 VARCHAR 20 必填 记录分院代码（内码）,如无分院，则传0
+               ''                                                                              "FYMC",-- 分院名称 VARCHAR 120 条件必填 分院代码不为0时必填
+               c.num                                                                           "HDCWZS",-- 核定（编制）床位总数 NUMERIC 15 必填
+               d.num                                                                           "SJKFCWZS",-- 实际开放床位总数 NUMERIC 15 必填
+               nvl(e.num, 0)                                                                   "RYRS",-- 入院人数 NUMERIC 15 必填
+               nvl(f.num, 0)                                                                   "CYRS",-- 出院人数 NUMERIC 15 必填
+               nvl(round(g.num / f.num, 0), 0)                                                 "CYHZPJZYL",-- 出院患者平均住院日 NUMERIC 15 必填
+               round(h.totcost / f.num, 2)                                                     "CYHZJCFY",-- 出院患者均次费用 NUMERIC 18,2 必填
+               nvl(i.num, 0)                                                                   "ZYSSTS",-- 住院手术台数 NUMERIC 15 必填
+               nvl(j.num, 0)                                                                   "ZYRS",-- 在院人数 NUMERIC 15 必填
+               nvl(k.num, 0)                                                                   "BWRS",-- 其中：病危人数 NUMERIC 15 必填
+               nvl(l.num, 0)                                                                   "BZRS",-- 其中：病重人数 NUMERIC 15 必填
+               nvl(m.num, 0)                                                                   "TJHLRS",-- 其中：特级护理人数 NUMERIC 15 必填 每天晚上12点统计的数值
+               nvl(n.num, 0)                                                                   "YJHLRS",-- 其中：一级护理人数 NUMERIC 15 必填 每天晚上12点统计的数值
+               nvl(o.num, 0)                                                                   "EJHLRS",-- 其中：二级护理人数 NUMERIC 15 必填 每天晚上12点统计的数值
+               0                                                                               "ZZJKSRS",-- 其中：重症监护室人数 NUMERIC 15 必填
+               round(nvl(p.totcost, 0), 2)                                                     "ZFY",-- 住院总费用 NUMERIC 18,2 必填
+               round(nvl(q.totcost, 0), 2)                                                     "YPFY",-- 其中：药品费用 NUMERIC 18,2 必填
+               round(nvl(r.totcost, 0), 2)                                                     "JBYWFY",-- 其中：基本药物费用 NUMERIC 18,2 必填
+               round(nvl(s.totcost, 0), 2)                                                     "JCYWFY",-- 其中：集采药物费用 NUMERIC 18,2 必填
+               round(nvl(t.totcost, 0), 2)                                                     "YLFWFY",-- 其中：医疗服务费用 NUMERIC 18,2 必填
+               round(nvl(u.totcost, 0), 2)                                                     "HCFY",-- 其中：耗材费用 NUMERIC 18,2 必填
+               nvl(v.num, 0)                                                                   "JYBGDS",-- 检验报告单数 NUMERIC 15 必填
+               nvl(w.num, 0)                                                                   "LCJYBGDS",-- 其中：临床检验报告单数 NUMERIC 15 必填
+               0                                                                               "BLJYBGDS",-- 其中：病理检验报告单数 NUMERIC 15 必填
+               0                                                                               "HYXJYBGDS",-- 其中：核医学检验报告单数 NUMERIC 15 必填
+               nvl(v.num, 0) - nvl(w.num, 0)                                                   "QTJYBGDS",-- 其中：其他检验报告单数 NUMERIC 15 必填
+               nvl(x.num, 0)                                                                   "JCBGDS",-- 检查报告单数 NUMERIC 15 必填
+               nvl(y.num, 0)                                                                   "XDLBGDS",-- 其中：心电类报告单数 NUMERIC 15 必填
+               nvl(z.num, 0)                                                                   "FSLBGDS",-- 其中：放射类报告单数 NUMERIC 15 必填
+               nvl(aa.num, 0)                                                                  "CSLBGDS",-- 其中：超声类报告单数 NUMERIC 15 必填
+               0                                                                               "NJLBGDS",-- 其中：内镜类报告单数 NUMERIC 15 必填
+               nvl(ab.num, 0)                                                                  "CTLBGDS",-- 其中：CT类报告单数 NUMERIC 15 必填
+               0                                                                               "HCLBGDS",-- 其中：核磁类报告单数 NUMERIC 15 必填
+               nvl(x.num, 0) - nvl(y.num, 0) - nvl(z.num, 0) - nvl(aa.num, 0) - nvl(ab.num, 0) "QTLBGDS",-- 其中：其他类报    告单数 NUMERIC 15 必填
+               to_char(sysdate, 'YYYY-MM-DD')                                                  "TBRQ" -- 填报日期 DATETIME 必填 本条数据采集时间，格式YYYY-MM-DD
         from com_hospitalinfo a
                  left join (select count(orgcode) num, orgcode from COM_BEDINFO group by orgcode) c
                            on c.orgcode = a.orgcode
@@ -63,7 +63,8 @@
                  left join (select sum(num) num, orgcode
                             from (select case
                                              when floor(out_date - indate) &lt;= 1 then 1
-                                             else floor(out_date - indate) + 1 end as num  , orgcode
+                                             else floor(out_date - indate) + 1 end as num,
+                                         orgcode
                                   from IPR_INPATIENTINFO
                                   where instate &lt;&gt; '0'
                                     and out_date &gt;= to_date(#{begtime}
@@ -86,7 +87,7 @@
                               and b.out_date &gt;= to_date(#{begtime}, 'yyyy-mm-dd hh24:mi:ss')
                               and b.out_date &lt;= to_date(#{endtime}, 'yyyy-mm-dd hh24:mi:ss')
                             group by a.orgcode) h on h.orgcode = a.orgcode
-                 left join (select count(orgcode) num,  orgcode
+                 left join (select count(orgcode) num, orgcode
                             from emr_operationinfo
                             where visit_id in (select inid
                                                from IPR_INPATIENTINFO
@@ -111,7 +112,7 @@
                                                and out_date &gt;= to_date(#{endtime}, 'yyyy-mm-dd hh24:mi:ss')
                                               or out_date is null)
                               and PATIENTLEVEL = '3'
-                            group by orgcode) K on K.orgcode = a.orgcode
+                            group by orgcode) k on k.orgcode = a.orgcode
                  left join (select count(orgcode) num, orgcode
                             from INR_RECEIVEINFO
                             where inid in (select inid
@@ -233,7 +234,7 @@
                               and a.orgcode = c.orgcode
                               and a.itemcode = c.itemcode
                               and b.instate &lt;&gt; '0'
-                               and a.FEEOPTDATE &gt;= to_date(#{begtime}, 'yyyy-mm-dd hh24:mi:ss')
+                              and a.FEEOPTDATE &gt;= to_date(#{begtime}, 'yyyy-mm-dd hh24:mi:ss')
                               and a.FEEOPTDATE &lt;= to_date(#{endtime}, 'yyyy-mm-dd hh24:mi:ss')
                             group by a.orgcode) t on t.orgcode = a.orgcode
                  left join (select sum(a.totcost) totcost, a.orgcode
@@ -250,7 +251,7 @@
                               and a.orgcode = c.orgcode
                               and a.itemcode = c.MEDLISTCODG
                               and b.instate &lt;&gt; '0'
-                               and a.FEEOPTDATE &gt;= to_date(#{begtime}, 'yyyy-mm-dd hh24:mi:ss')
+                              and a.FEEOPTDATE &gt;= to_date(#{begtime}, 'yyyy-mm-dd hh24:mi:ss')
                               and a.FEEOPTDATE &lt;= to_date(#{endtime}, 'yyyy-mm-dd hh24:mi:ss')
                             group by a.orgcode) u on u.orgcode = a.orgcode
                  left join (select count(a.orgcode) num, a.orgcode
@@ -402,8 +403,6 @@
                               and a.UPDT_TIME &gt;= to_date(#{begtime}, 'yyyy-mm-dd hh24:mi:ss')
                               and a.UPDT_TIME &lt;= to_date(#{endtime}, 'yyyy-mm-dd hh24:mi:ss')
                             group by a.orgcode) ab on ab.orgcode = a.orgcode
-
-
         where a.orgcode = #{orgcode}
     </select>
 

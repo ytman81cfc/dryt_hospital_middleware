@@ -1,0 +1,801 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hospital.middleware.healthplatform.dao.his.HealthplatfromDAO">
+    <select id="queryTj_mjz_rb" resultType="java.util.HashMap">
+        select a.orgcode                                                                               "YLJGDM",--	医疗机构代码 	VARCHAR	22	必填	复合主键：采用22位“卫生机构代码”
+               to_char(to_date(#{begtime}, 'YYYY-MM-DD  hh24:mi:ss'), 'yyyymmdd')                      "YWRQ",--	统计日期	VARCHAR	8	必填	复合主键：是指业务发生的日期YYYYMMDD
+               a.orgname                                                                               "YLJGMC",--	医疗机构名称	VARCHAR	70	必填	医院执业许可第一名称
+               '0'                                                                                     "FYDM",--	分院代码	VARCHAR	20	必填	记录分院代码（内码）,如无分院，则传0
+               ''                                                                                      "FYMC",--	分院名称	VARCHAR	120	条件必填	分院代码不为0时必填
+               nvl(b.num, 0)                                                                           "GHRC",--	1. 门（急）诊挂号人次	NUMERIC	15	必填	门诊挂号人次+急诊挂号人次+健康体检挂号人次，不包含退号
+               nvl(c.num, 0)                                                                           "YJZRC",--	其中：已就诊人次	NUMERIC	15	必填
+               nvl(d.num, 0)                                                                           "YBRC",--	  其中：医保人次	NUMERIC	15	必填
+               nvl(e.num, 0)                                                                           "ZFRC",--	其中：自费人次	NUMERIC	15	必填
+               0                                                                                       "ZZHSRC",--	其中：只做核酸人次	NUMERIC	15	必填
+               0                                                                                       "YYZLRC",--	其中：预约诊疗人次	NUMERIC	15	必填
+               0                                                                                       "FRMZRC",--	其中：发热门诊人次	NUMERIC	15	必填
+               0                                                                                       "EKRC",--	其中：儿科人次	NUMERIC	15	必填	儿科必填，其他科室不用填写
+               0                                                                                       "CDKRC",--	其中：肠道科人次	NUMERIC	15	必填	肠道必填，其他科室不用填写
+               nvl(f.num, 0)                                                                           "SYZSYWRC",--	  其中：使用注射药物人次	NUMERIC	15	必填
+               0                                                                                       "JSZYZLRC",--	  其中：接受中医治疗人次	NUMERIC	15	必填
+               nvl(g.num, 0)                                                                           "SYKJYWRC",--	  其中：使用抗菌药物人次	NUMERIC	15	必填
+               nvl(h.num, 0)                                                                           "MZ_GHRC",--	1.1. 门诊挂号人次	NUMERIC	15	必填	不包含退号
+               nvl(j.num, 0)                                                                           "MZ_YJZRC",--	其中：已就诊人次	NUMERIC	15	必填
+               nvl(k.num, 0)                                                                           "MZ_YBRC",--	其中：医保人次	NUMERIC	15	必填
+               nvl(l.num, 0)                                                                           "MZ_ZFRC",--	其中：自费人次	NUMERIC	15	必填
+               0                                                                                       "MZ_YYZLRC",--	其中：预约诊疗人次	NUMERIC	15	必填
+               nvl(m.num, 0)                                                                           "MZ_PDJHRC",--	其中：排队叫号人次	NUMERIC	15	必填
+               0                                                                                       "MZ_FRMZRC",--	其中：发热门诊人次	NUMERIC	15	必填
+               0                                                                                       "MZ_ZJMZRC",--	其中：专家门诊人次	NUMERIC	15	必填
+               0                                                                                       "MZ_GTZJRC",--	  其中：国特专家人次	NUMERIC	15	必填
+               0                                                                                       "MZ_ZRYSRC",--	  其中：主任医师人次	NUMERIC	15	必填
+               0                                                                                       "MZ_FZRYSRC",--	  其中：副主任医师	NUMERIC	15	必填
+               0                                                                                       "MZ_EKRC",--	其中：儿科人次	NUMERIC	15	必填	儿科必填，其他科室不用填写
+               0                                                                                       "MZ_CDKRC",--	其中：肠道科人次	NUMERIC	15	必填	肠道必填，其他科室不用填写
+               nvl(n.num, 0)                                                                           "MZ_SYZSYWRC",--	  其中：使用注射药物人次	NUMERIC	15	必填
+               0                                                                                       "MZ_JSZYZLRC",--	  其中：接受中医治疗人次	NUMERIC	15	必填
+               nvl(o.num, 0)                                                                           "MZ_SYKJYWRC",--	  其中：使用抗菌药物人次	NUMERIC	15	必填
+               nvl(p.num, 0)                                                                           "JZ_GHRC",--	1.2. 急诊挂号人次	NUMERIC	15	必填	不包含退号
+               nvl(q.num, 0)                                                                           "JZ_YJZRC",--	其中：已就诊人次	NUMERIC	15	必填
+               nvl(r.num, 0)                                                                           "JZ_YBRC",--	其中：医保人次	NUMERIC	15	必填
+               nvl(s.num, 0)                                                                           "JZ_ZFRC",--	其中：自费人次	NUMERIC	15	必填
+               0                                                                                       "JZ_EKRC",--	其中：儿科人次	NUMERIC	15	必填	儿科必填，其他科室不用填写
+               0                                                                                       "JZ_CDKRC",--	其中：肠道科人次	NUMERIC	15	必填	肠道必填，其他科室不用填写
+               nvl(t.num, 0)                                                                           "JZ_SYZSYWRC",--	  其中：使用注射药物人次	NUMERIC	15	必填
+               0                                                                                       "JZ_JSZYZLRC",--	  其中：接受中医治疗人次	NUMERIC	15	必填
+               nvl(u.num, 0)                                                                           "JZ_SYKJYWRC",--	  其中：使用抗菌药物人次	NUMERIC	15	必填
+               0                                                                                       "TJ_GHRC",--	1.3. 健康体检挂号人次	NUMERIC	15	必填	当日体检挂号数，如无法获取则填0
+               0                                                                                       "TJ_YBRC",--	其中：医保人次	NUMERIC	15	必填
+               0                                                                                       "TJ_ZFRC",--	其中：自费人次	NUMERIC	15	必填	单位或第三方付款属于也属于自费
+               nvl(v.num, 0)                                                                           "THRC",--	2. 门（急）诊退号人次	NUMERIC	15	必填	退号人次数
+               nvl(w.num, 0)                                                                           "MZ_THRC",--	其中：门诊退号人次	NUMERIC	15	必填	退号人次数
+               nvl(x.num, 0)                                                                           "JZ_THRC",--	其中：急诊退号人次	NUMERIC	15	必填	退号人次数
+               0                                                                                       "TJ_THRC",--	  其中：健康体检退号人次	NUMERIC	15	必填	如无法获取则填0
+               nvl(round(y.totcost, 2), 0.00)                                                          "ZFY",--	3. 门（急）诊总费用	NUMERIC	18,2	必填
+               nvl(round(z.totcost, 2), 0.00)                                                          "YBFY",--	  其中：医保费用	NUMERIC	18,2	必填
+               nvl(round(aa.totcost, 2), 0.00)                                                         "ZFFY",--	  其中：自费	NUMERIC	18,2	必填
+               nvl(round(ab.totcost, 2), 0.00)                                                         "ZCF",--	其中：诊察费	NUMERIC	18,2	必填
+               nvl(round(ac.totcost, 2), 0.00)                                                         "YPFY",--	  其中：药品费用	NUMERIC	18,2	必填
+               nvl(round(ad.totcost, 2), 0.00)                                                         "JBYWFY",--	    其中：基本药物费用	NUMERIC	18,2	必填
+               nvl(round(ae.totcost, 2), 0.00)                                                         "JCYWFY",--	    其中：集采药物费用	NUMERIC	18,2	必填
+               nvl(round(af.totcost, 2), 0.00)                                                         "YLFWFY",--	  其中：医疗服务费用	NUMERIC	18,2	必填
+               nvl(round(ag.totcost, 2), 0.00)                                                         "HCFY",--	  其中：耗材费用	NUMERIC	18,2	必填
+               nvl(round(ah.totcost, 2), 0.00)                                                         "MZ_ZFY",--	3.1. 门诊总费用	NUMERIC	18,2	必填
+               nvl(round(ai.totcost, 2), 0.00)                                                         "MZ_YBFY",--	  其中：医保费用	NUMERIC	18,2	必填
+               nvl(round(aj.totcost, 2), 0.00)                                                         "MZ_ZFFY",--	  其中：自费	NUMERIC	18,2	必填
+               nvl(round(ak.totcost, 2), 0.00)                                                         "MZ_ZCF",--	其中：诊察费	NUMERIC	18,2	必填
+               nvl(round(al.totcost, 2), 0.00)                                                         "MZ_YPFY",--	  其中：药品费用	NUMERIC	18,2	必填
+               nvl(round(am.totcost, 2), 0.00)                                                         "MZ_JBYWFY",--	    其中：基本药物费用	NUMERIC	18,2	必填
+               nvl(round(an.totcost, 2), 0.00)                                                         "MZ_JCYWFY",--	    其中：集采药物费用	NUMERIC	18,2	必填
+               nvl(round(ao.totcost, 2), 0.00)                                                         "MZ_YLFWFY",--	  其中：医疗服务费用	NUMERIC	18,2	必填
+               nvl(round(ap.totcost, 2), 0.00)                                                         "MZ_HCFY",--	  其中：耗材费用	NUMERIC	18,2	必填
+               nvl(round(aq.totcost, 2), 0.00)                                                         "JZ_ZFY",--	3.2. 急诊总费用	NUMERIC	18,2	必填
+               nvl(round(ar.totcost, 2), 0.00)                                                         "JZ_YBFY",--	  其中：医保费用	NUMERIC	18,2	必填
+               nvl(round(au.totcost, 2), 0.00)                                                         "JZ_ZFFY",--	  其中：自费	NUMERIC	18,2	必填
+               nvl(round(av.totcost, 2), 0.00)                                                         "JZ_ZCF",--	其中：诊察费	NUMERIC	18,2	必填
+               nvl(round(aw.totcost, 2), 0.00)                                                         "JZ_YPFY",--	  其中：药品费用	NUMERIC	18,2	必填
+               nvl(round(ax.totcost, 2), 0.00)                                                         "JZ_JBYWFY",--	    其中：基本药物费用	NUMERIC	18,2	必填
+               nvl(round(ay.totcost, 2), 0.00)                                                         "JZ_JCYWFY",--	    其中：集采药物费用	NUMERIC	18,2	必填
+               nvl(round(az.totcost, 2), 0.00)                                                         "JZ_YLFWFY",--	  其中：医疗服务费用	NUMERIC	18,2	必填
+               nvl(round(aaa.totcost, 2), 0.00)                                                        "JZ_HCFY",--	  其中：耗材费用	NUMERIC	18,2	必填
+               0.00                                                                                    "TJ_ZFY",--	3.3. 健康体检总费用	NUMERIC	18,2	必填
+               0.00                                                                                    "TJ_YBFY",--	  其中：医保费用	NUMERIC	18,2	必填
+               0.00                                                                                    "TJ_ZFFY",--	  其中：自费	NUMERIC	18,2	必填
+               nvl(aab.num, 0)                                                                         "JYBGDS",--	检验报告单数	NUMERIC	15	必填
+               nvl(aac.num, 0)                                                                         "LCJYBGDS",--	其中：临床检验报告单数	NUMERIC	15	必填
+               0                                                                                       "BLJYBGDS",--	其中：病理检验报告单数	NUMERIC	15	必填
+               0                                                                                       "HYXJYBGDS",--	  其中：核医学检验报告单数	NUMERIC	15	必填
+               nvl(aab.num, 0) - nvl(aac.num, 0)                                                       "QTJYBGDS",--	  其中：其他检验报告单数	NUMERIC	15	必填
+               nvl(aad.num, 0)                                                                         "JCBGDS",--	检查报告单数	NUMERIC	15	必填
+               nvl(aae.num, 0)                                                                         "XDLBGDS",--	  其中：心电类报告单数	NUMERIC	15	必填
+               nvl(aaf.num, 0)                                                                         "FSLBGDS",--	  其中：放射类报告单数	NUMERIC	15	必填
+               nvl(aag.num, 0)                                                                         "CSLBGDS",--	  其中：超声类报告单数	NUMERIC	15	必填
+               0                                                                                       "NJLBGDS",--	  其中：内镜类报告单数	NUMERIC	15	必填
+               nvl(aah.num, 0)                                                                         "CTLBGDS",--	  其中：CT类报告单数	NUMERIC	15	必填
+               0                                                                                       "HCLBGDS",--	  其中：核磁类报告单数	NUMERIC	15	必填
+               nvl(aad.num, 0) - nvl(aae.num, 0) - nvl(aaf.num, 0) - nvl(aag.num, 0) - nvl(aah.num, 0) "QTLBGDS",--	  其中：其他类报告单数	NUMERIC	15	必填
+               to_char(sysdate, 'YYYY-MM-DD')                                                          "TBRQ" --  填报日期  DATETIME   必填 本条数据采集时间，格式YYYY-MM-DD
+        from com_hospitalinfo a
+                 left join (select count(orgcode) num, orgcode
+                            from opr_register
+                            where REGISTSTATE = '1'
+                              and reg_time &gt;= to_date(#{begtime}, 'yyyy-mm-dd hh24:mi:ss')
+                              and reg_time &lt;= to_date(#{endtime}, 'yyyy-mm-dd hh24:mi:ss')
+                            group by orgcode) b on b.orgcode = a.orgcode
+                 left join (select count(orgcode) num, orgcode
+                            from opr_register
+                            where REGISTSTATE = '1'
+                              and YNSEE &lt;&gt; '0'
+                              and reg_time &gt;= to_date(#{begtime}, 'yyyy-mm-dd hh24:mi:ss')
+                              and reg_time &lt;= to_date(#{endtime}, 'yyyy-mm-dd hh24:mi:ss')
+                            group by orgcode) c on c.orgcode = a.orgcode
+                 left join (select count(orgcode) num, orgcode
+                            from opr_register
+                            where REGISTSTATE = '1'
+                              and PAYKINDCODE = '02'
+                              and reg_time &gt;= to_date(#{begtime}, 'yyyy-mm-dd hh24:mi:ss')
+                              and reg_time &lt;= to_date(#{endtime}, 'yyyy-mm-dd hh24:mi:ss')
+                            group by orgcode) d on d.orgcode = a.orgcode
+                 left join (select count(orgcode) num, orgcode
+                            from opr_register
+                            where REGISTSTATE = '1'
+                              and PAYKINDCODE = '01'
+                              and reg_time &gt;= to_date(#{begtime}, 'yyyy-mm-dd hh24:mi:ss')
+                              and reg_time &lt;= to_date(#{endtime}, 'yyyy-mm-dd hh24:mi:ss')
+                            group by orgcode) e on e.orgcode = a.orgcode
+                 left join (select count(a.orgcode) num, a.orgcode
+                            from opr_register a,
+                                 (select orgcode, regid, USAGECODE
+                                  from OPB_FEEDETAIL
+                                  group by orgcode, regid, USAGECODE) b,
+                                 com_dictcodeinfo c
+                            where a.orgcode = b.orgcode
+                              and a.regid = b.regid
+                              and c.typecode = 'DRUG_MEDC_WAY_CODE'
+                              and c.dictcode = b.USAGECODE
+                              and c.dictname like '%注射'
+                              and a.REGISTSTATE = '1'
+                              and a.reg_time &gt;= to_date(#{begtime}, 'yyyy-mm-dd hh24:mi:ss')
+                              and a.reg_time &lt;= to_date(#{endtime}, 'yyyy-mm-dd hh24:mi:ss')
+                            group by a.orgcode) f on f.orgcode = a.orgcode
+                 left join (select count(a.orgcode) num, a.orgcode
+                            from opr_register a,
+                                 (select a.orgcode, a.regid
+                                  from OPB_FEEDETAIL a,
+                                       pha_druginfo b
+                                  where a.orgcode = b.orgcode
+                                    and b.drugcode = a.itemcode
+                                    and b.ANTILEVLE is not null
+                                  group by a.orgcode, a.regid) b
+                            where a.orgcode = b.orgcode
+                              and a.regid = b.regid
+                              and a.REGISTSTATE = '1'
+                              and a.reg_time &gt;= to_date(#{begtime}, 'yyyy-mm-dd hh24:mi:ss')
+                              and a.reg_time &lt;= to_date(#{endtime}, 'yyyy-mm-dd hh24:mi:ss')
+                            group by a.orgcode) g on g.orgcode = a.orgcode
+                 left join (select count(orgcode) num, orgcode
+                            from opr_register
+                            where REGISTSTATE = '1'
+                              and ISEMERGENCY = '0'
+                              and reg_time &gt;= to_date(#{begtime}, 'yyyy-mm-dd hh24:mi:ss')
+                              and reg_time &lt;= to_date(#{endtime}, 'yyyy-mm-dd hh24:mi:ss')
+                            group by orgcode) h on h.orgcode = a.orgcode
+                 left join (select count(orgcode) num, orgcode
+                            from opr_register
+                            where REGISTSTATE = '1'
+                              and ISEMERGENCY = '0'
+                              and YNSEE &lt;&gt; '0'
+                              and reg_time &gt;= to_date(#{begtime}, 'yyyy-mm-dd hh24:mi:ss')
+                              and reg_time &lt;= to_date(#{endtime}, 'yyyy-mm-dd hh24:mi:ss')
+                            group by orgcode) j on j.orgcode = a.orgcode
+                 left join (select count(orgcode) num, orgcode
+                            from opr_register
+                            where REGISTSTATE = '1'
+                              and ISEMERGENCY = '0'
+                              and PAYKINDCODE = '02'
+                              and reg_time &gt;= to_date(#{begtime}, 'yyyy-mm-dd hh24:mi:ss')
+                              and reg_time &lt;= to_date(#{endtime}, 'yyyy-mm-dd hh24:mi:ss')
+                            group by orgcode) k on k.orgcode = a.orgcode
+                 left join (select count(orgcode) num, orgcode
+                            from opr_register
+                            where REGISTSTATE = '1'
+                              and ISEMERGENCY = '0'
+                              and PAYKINDCODE = '01'
+                              and reg_time &gt;= to_date(#{begtime}, 'yyyy-mm-dd hh24:mi:ss')
+                              and reg_time &lt;= to_date(#{endtime}, 'yyyy-mm-dd hh24:mi:ss')
+                            group by orgcode) l on l.orgcode = a.orgcode
+                 left join (select count(orgcode) num, orgcode
+                            from opr_register
+                            where REGISTSTATE = '1'
+                              and ISEMERGENCY = '0'
+                              and CALL_STAT is not null
+                              and reg_time &gt;= to_date(#{begtime}, 'yyyy-mm-dd hh24:mi:ss')
+                              and reg_time &lt;= to_date(#{endtime}, 'yyyy-mm-dd hh24:mi:ss')
+                            group by orgcode) m on m.orgcode = a.orgcode
+                 left join (select count(a.orgcode) num, a.orgcode
+                            from opr_register a,
+                                 (select orgcode, regid, USAGECODE
+                                  from OPB_FEEDETAIL
+                                  group by orgcode, regid, USAGECODE) b,
+                                 com_dictcodeinfo c
+                            where a.orgcode = b.orgcode
+                              and a.regid = b.regid
+                              and c.typecode = 'DRUG_MEDC_WAY_CODE'
+                              and c.dictcode = b.USAGECODE
+                              and c.dictname like '%注射'
+                              and a.REGISTSTATE = '1'
+                              and a.ISEMERGENCY = '0'
+                              and a.reg_time &gt;= to_date(#{begtime}, 'yyyy-mm-dd hh24:mi:ss')
+                              and a.reg_time &lt;= to_date(#{endtime}, 'yyyy-mm-dd hh24:mi:ss')
+                            group by a.orgcode) n on n.orgcode = a.orgcode
+                 left join (select count(a.orgcode) num, a.orgcode
+                            from opr_register a,
+                                 (select a.orgcode, a.regid
+                                  from OPB_FEEDETAIL a,
+                                       pha_druginfo b
+                                  where a.orgcode = b.orgcode
+                                    and b.drugcode = a.itemcode
+                                    and b.ANTILEVLE is not null
+                                  group by a.orgcode, a.regid) b
+                            where a.orgcode = b.orgcode
+                              and a.regid = b.regid
+                              and a.REGISTSTATE = '1'
+                              and a.ISEMERGENCY = '0'
+                              and a.reg_time &gt;= to_date(#{begtime}, 'yyyy-mm-dd hh24:mi:ss')
+                              and a.reg_time &lt;= to_date(#{endtime}, 'yyyy-mm-dd hh24:mi:ss')
+                            group by a.orgcode) o on o.orgcode = a.orgcode
+                 left join (select count(orgcode) num, orgcode
+                            from opr_register
+                            where REGISTSTATE = '1'
+                              and ISEMERGENCY = '1'
+                              and reg_time &gt;= to_date(#{begtime}, 'yyyy-mm-dd hh24:mi:ss')
+                              and reg_time &lt;= to_date(#{endtime}, 'yyyy-mm-dd hh24:mi:ss')
+                            group by orgcode) p on p.orgcode = a.orgcode
+                 left join (select count(orgcode) num, orgcode
+                            from opr_register
+                            where REGISTSTATE = '1'
+                              and ISEMERGENCY = '1'
+                              and YNSEE &lt;&gt; '0'
+                              and reg_time &gt;= to_date(#{begtime}, 'yyyy-mm-dd hh24:mi:ss')
+                              and reg_time &lt;= to_date(#{endtime}, 'yyyy-mm-dd hh24:mi:ss')
+                            group by orgcode) q on q.orgcode = a.orgcode
+                 left join (select count(orgcode) num, orgcode
+                            from opr_register
+                            where REGISTSTATE = '1'
+                              and ISEMERGENCY = '1'
+                              and PAYKINDCODE = '02'
+                              and reg_time &gt;= to_date(#{begtime}, 'yyyy-mm-dd hh24:mi:ss')
+                              and reg_time &lt;= to_date(#{endtime}, 'yyyy-mm-dd hh24:mi:ss')
+                            group by orgcode) r on r.orgcode = a.orgcode
+                 left join (select count(orgcode) num, orgcode
+                            from opr_register
+                            where REGISTSTATE = '1'
+                              and ISEMERGENCY = '1'
+                              and PAYKINDCODE = '01'
+                              and reg_time &gt;= to_date(#{begtime}, 'yyyy-mm-dd hh24:mi:ss')
+                              and reg_time &lt;= to_date(#{endtime}, 'yyyy-mm-dd hh24:mi:ss')
+                            group by orgcode) s on s.orgcode = a.orgcode
+                 left join (select count(a.orgcode) num, a.orgcode
+                            from opr_register a,
+                                 (select orgcode, regid, USAGECODE
+                                  from OPB_FEEDETAIL
+                                  group by orgcode, regid, USAGECODE) b,
+                                 com_dictcodeinfo c
+                            where a.orgcode = b.orgcode
+                              and a.regid = b.regid
+                              and c.typecode = 'DRUG_MEDC_WAY_CODE'
+                              and c.dictcode = b.USAGECODE
+                              and c.dictname like '%注射'
+                              and a.REGISTSTATE = '1'
+                              and a.ISEMERGENCY = '1'
+                              and a.reg_time &gt;= to_date(#{begtime}, 'yyyy-mm-dd hh24:mi:ss')
+                              and a.reg_time &lt;= to_date(#{endtime}, 'yyyy-mm-dd hh24:mi:ss')
+                            group by a.orgcode) t on t.orgcode = a.orgcode
+                 left join (select count(a.orgcode) num, a.orgcode
+                            from opr_register a,
+                                 (select a.orgcode, a.regid
+                                  from OPB_FEEDETAIL a,
+                                       pha_druginfo b
+                                  where a.orgcode = b.orgcode
+                                    and b.drugcode = a.itemcode
+                                    and b.ANTILEVLE is not null
+                                  group by a.orgcode, a.regid) b
+                            where a.orgcode = b.orgcode
+                              and a.regid = b.regid
+                              and a.REGISTSTATE = '1'
+                              and a.ISEMERGENCY = '1'
+                              and a.reg_time &gt;= to_date(#{begtime}, 'yyyy-mm-dd hh24:mi:ss')
+                              and a.reg_time &lt;= to_date(#{endtime}, 'yyyy-mm-dd hh24:mi:ss')
+                            group by a.orgcode) u on u.orgcode = a.orgcode
+                 left join (select count(orgcode) num, orgcode
+                            from opr_register
+                            where REGISTSTATE = '0'
+                              and reg_time &gt;= to_date(#{begtime}, 'yyyy-mm-dd hh24:mi:ss')
+                              and reg_time &lt;= to_date(#{endtime}, 'yyyy-mm-dd hh24:mi:ss')
+                            group by orgcode) v on v.orgcode = a.orgcode
+                 left join (select count(orgcode) num, orgcode
+                            from opr_register
+                            where REGISTSTATE = '0'
+                              and ISEMERGENCY = '0'
+                              and reg_time &gt;= to_date(#{begtime}, 'yyyy-mm-dd hh24:mi:ss')
+                              and reg_time &lt;= to_date(#{endtime}, 'yyyy-mm-dd hh24:mi:ss')
+                            group by orgcode) w on w.orgcode = a.orgcode
+                 left join (select count(orgcode) num, orgcode
+                            from opr_register
+                            where REGISTSTATE = '0'
+                              and ISEMERGENCY = '1'
+                              and reg_time &gt;= to_date(#{begtime}, 'yyyy-mm-dd hh24:mi:ss')
+                              and reg_time &lt;= to_date(#{endtime}, 'yyyy-mm-dd hh24:mi:ss')
+                            group by orgcode) x on x.orgcode = a.orgcode
+                 left join (select sum(a.totcost) totcost, a.orgcode
+                            from OPB_FEEDETAIL a,
+                                 opr_register b
+                            where a.orgcode = b.orgcode
+                              and a.regid = b.regid
+                              and b.REGISTSTATE = '1'
+                              and a.FEEDATE &gt;= to_date(#{begtime}, 'yyyy-mm-dd hh24:mi:ss')
+                              and a.FEEDATE &lt;= to_date(#{endtime}, 'yyyy-mm-dd hh24:mi:ss')
+                            group by a.orgcode) y on y.orgcode = a.orgcode
+                 left join (select sum(a.totcost) totcost, a.orgcode
+                            from OPB_FEEDETAIL a,
+                                 opr_register b
+                            where a.orgcode = b.orgcode
+                              and a.regid = b.regid
+                              and b.REGISTSTATE = '1'
+                              and b.PAYKINDCODE = '02'
+                              and a.FEEDATE &gt;= to_date(#{begtime}, 'yyyy-mm-dd hh24:mi:ss')
+                              and a.FEEDATE &lt;= to_date(#{endtime}, 'yyyy-mm-dd hh24:mi:ss')
+                            group by a.orgcode) z on z.orgcode = a.orgcode
+                 left join (select sum(a.totcost) totcost, a.orgcode
+                            from OPB_FEEDETAIL a,
+                                 opr_register b
+                            where a.orgcode = b.orgcode
+                              and a.regid = b.regid
+                              and b.REGISTSTATE = '1'
+                              and b.PAYKINDCODE = '01'
+                              and a.FEEDATE &gt;= to_date(#{begtime}, 'yyyy-mm-dd hh24:mi:ss')
+                              and a.FEEDATE &lt;= to_date(#{endtime}, 'yyyy-mm-dd hh24:mi:ss')
+                            group by a.orgcode) aa on aa.orgcode = a.orgcode
+                 left join (select sum(a.totcost) totcost, a.orgcode
+                            from OPB_FEEDETAIL a,
+                                 (
+                                     select orgcode, itemcode, feecode
+                                     from fin_undruginfo
+                                     union all
+                                     select orgcode, drugcode, feecode
+                                     from pha_druginfo
+                                     union all
+                                     select orgcode, MEDLISTCODG, feecode
+                                     from pha_medcon
+                                 ) b,
+                                 com_feetype c,
+                                 opr_register d
+                            where a.orgcode = b.orgcode
+                              and a.itemcode = b.itemcode
+                              and b.orgcode = c.orgcode
+                              and b.feecode = c.feecode
+                              and c.feecode = '24'
+                              and a.orgcode = d.orgcode
+                              and a.regid = d.regid
+                              and d.REGISTSTATE = '1'
+                              and a.FEEDATE &gt;= to_date(#{begtime}, 'yyyy-mm-dd hh24:mi:ss')
+                              and a.FEEDATE &lt;= to_date(#{endtime}, 'yyyy-mm-dd hh24:mi:ss')
+                            group by a.orgcode) ab on ab.orgcode = a.orgcode
+                 left join (select sum(a.totcost) totcost, a.orgcode
+                            from OPB_FEEDETAIL a,
+                                 opr_register b
+                            where a.orgcode = b.orgcode
+                              and a.regid = b.regid
+                              and b.REGISTSTATE = '1'
+                              and a.DRUGFLAG = '1'
+                              and a.FEEDATE &gt;= to_date(#{begtime}, 'yyyy-mm-dd hh24:mi:ss')
+                              and a.FEEDATE &lt;= to_date(#{endtime}, 'yyyy-mm-dd hh24:mi:ss')
+                            group by a.orgcode) ac on ac.orgcode = a.orgcode
+                 left join (select sum(a.totcost) totcost, a.orgcode
+                            from OPB_FEEDETAIL a,
+                                 opr_register b,
+                                 pha_druginfo c
+                            where a.orgcode = b.orgcode
+                              and a.regid = b.regid
+                              and b.REGISTSTATE = '1'
+                              and a.orgcode = c.orgcode
+                              and a.itemcode = c.drugcode
+                              and c.ESSDRUG = '1'
+                              and a.DRUGFLAG = '1'
+                              and a.FEEDATE &gt;= to_date(#{begtime}, 'yyyy-mm-dd hh24:mi:ss')
+                              and a.FEEDATE &lt;= to_date(#{endtime}, 'yyyy-mm-dd hh24:mi:ss')
+                            group by a.orgcode) ad on ad.orgcode = a.orgcode
+                 left join (select sum(a.totcost) totcost, a.orgcode
+                            from OPB_FEEDETAIL a,
+                                 opr_register b,
+                                 pha_druginfo c
+                            where a.orgcode = b.orgcode
+                              and a.regid = b.regid
+                              and b.REGISTSTATE = '1'
+                              and a.orgcode = c.orgcode
+                              and a.itemcode = c.drugcode
+                              and c.CENPURCH = '1'
+                              and a.DRUGFLAG = '1'
+                              and a.FEEDATE &gt;= to_date(#{begtime}, 'yyyy-mm-dd hh24:mi:ss')
+                              and a.FEEDATE &lt;= to_date(#{endtime}, 'yyyy-mm-dd hh24:mi:ss')
+                            group by a.orgcode) ae on ae.orgcode = a.orgcode
+                 left join (select sum(a.totcost) totcost, a.orgcode
+                            from OPB_FEEDETAIL a,
+                                 opr_register b,
+                                 FIN_UNDRUGINFO c
+                            where a.orgcode = b.orgcode
+                              and a.regid = b.regid
+                              and b.REGISTSTATE = '1'
+                              and a.orgcode = c.orgcode
+                              and a.itemcode = c.itemcode
+                              and a.FEEDATE &gt;= to_date(#{begtime}, 'yyyy-mm-dd hh24:mi:ss')
+                              and a.FEEDATE &lt;= to_date(#{endtime}, 'yyyy-mm-dd hh24:mi:ss')
+                            group by a.orgcode) af on af.orgcode = a.orgcode
+                 left join (select sum(a.totcost) totcost, a.orgcode
+                            from OPB_FEEDETAIL a,
+                                 opr_register b,
+                                 pha_medcon c
+                            where a.orgcode = b.orgcode
+                              and a.regid = b.regid
+                              and b.REGISTSTATE = '1'
+                              and a.orgcode = c.orgcode
+                              and a.itemcode = c.MEDLISTCODG
+                              and a.FEEDATE &gt;= to_date(#{begtime}, 'yyyy-mm-dd hh24:mi:ss')
+                              and a.FEEDATE &lt;= to_date(#{endtime}, 'yyyy-mm-dd hh24:mi:ss')
+                            group by a.orgcode) ag on ag.orgcode = a.orgcode
+                 left join (select sum(a.totcost) totcost, a.orgcode
+                            from OPB_FEEDETAIL a,
+                                 opr_register b
+                            where a.orgcode = b.orgcode
+                              and a.regid = b.regid
+                              and b.REGISTSTATE = '1'
+                              and b.ISEMERGENCY = '0'
+                              and a.FEEDATE &gt;= to_date(#{begtime}, 'yyyy-mm-dd hh24:mi:ss')
+                              and a.FEEDATE &lt;= to_date(#{endtime}, 'yyyy-mm-dd hh24:mi:ss')
+                            group by a.orgcode) ah on ah.orgcode = a.orgcode
+                 left join (select sum(a.totcost) totcost, a.orgcode
+                            from OPB_FEEDETAIL a,
+                                 opr_register b
+                            where a.orgcode = b.orgcode
+                              and a.regid = b.regid
+                              and b.REGISTSTATE = '1'
+                              and b.ISEMERGENCY = '0'
+                              and b.PAYKINDCODE = '02'
+                              and a.FEEDATE &gt;= to_date(#{begtime}, 'yyyy-mm-dd hh24:mi:ss')
+                              and a.FEEDATE &lt;= to_date(#{endtime}, 'yyyy-mm-dd hh24:mi:ss')
+                            group by a.orgcode) ai on ai.orgcode = a.orgcode
+                 left join (select sum(a.totcost) totcost, a.orgcode
+                            from OPB_FEEDETAIL a,
+                                 opr_register b
+                            where a.orgcode = b.orgcode
+                              and a.regid = b.regid
+                              and b.REGISTSTATE = '1'
+                              and b.ISEMERGENCY = '0'
+                              and b.PAYKINDCODE = '01'
+                              and a.FEEDATE &gt;= to_date(#{begtime}, 'yyyy-mm-dd hh24:mi:ss')
+                              and a.FEEDATE &lt;= to_date(#{endtime}, 'yyyy-mm-dd hh24:mi:ss')
+                            group by a.orgcode) aj on aj.orgcode = a.orgcode
+                 left join (select sum(a.totcost) totcost, a.orgcode
+                            from OPB_FEEDETAIL a,
+                                 (
+                                     select orgcode, itemcode, feecode
+                                     from fin_undruginfo
+                                     union all
+                                     select orgcode, drugcode, feecode
+                                     from pha_druginfo
+                                     union all
+                                     select orgcode, MEDLISTCODG, feecode
+                                     from pha_medcon
+                                 ) b,
+                                 com_feetype c,
+                                 opr_register d
+                            where a.orgcode = b.orgcode
+                              and a.itemcode = b.itemcode
+                              and b.orgcode = c.orgcode
+                              and b.feecode = c.feecode
+                              and c.feecode = '24'
+                              and a.orgcode = d.orgcode
+                              and a.regid = d.regid
+                              and d.REGISTSTATE = '1'
+                              and a.FEEDATE &gt;= to_date(#{begtime}, 'yyyy-mm-dd hh24:mi:ss')
+                              and a.FEEDATE &lt;= to_date(#{endtime}, 'yyyy-mm-dd hh24:mi:ss')
+                            group by a.orgcode) ak on ak.orgcode = a.orgcode
+                 left join (select sum(a.totcost) totcost, a.orgcode
+                            from OPB_FEEDETAIL a,
+                                 opr_register b
+                            where a.orgcode = b.orgcode
+                              and a.regid = b.regid
+                              and b.REGISTSTATE = '1'
+                              and b.ISEMERGENCY = '0'
+                              and a.DRUGFLAG = '1'
+                              and a.FEEDATE &gt;= to_date(#{begtime}, 'yyyy-mm-dd hh24:mi:ss')
+                              and a.FEEDATE &lt;= to_date(#{endtime}, 'yyyy-mm-dd hh24:mi:ss')
+                            group by a.orgcode) al on al.orgcode = a.orgcode
+                 left join (select sum(a.totcost) totcost, a.orgcode
+                            from OPB_FEEDETAIL a,
+                                 opr_register b,
+                                 pha_druginfo c
+                            where a.orgcode = b.orgcode
+                              and a.regid = b.regid
+                              and b.REGISTSTATE = '1'
+                              and b.ISEMERGENCY = '0'
+                              and a.orgcode = c.orgcode
+                              and a.itemcode = c.drugcode
+                              and c.ESSDRUG = '1'
+                              and a.DRUGFLAG = '1'
+                              and a.FEEDATE &gt;= to_date(#{begtime}, 'yyyy-mm-dd hh24:mi:ss')
+                              and a.FEEDATE &lt;= to_date(#{endtime}, 'yyyy-mm-dd hh24:mi:ss')
+                            group by a.orgcode) am on am.orgcode = a.orgcode
+                 left join (select sum(a.totcost) totcost, a.orgcode
+                            from OPB_FEEDETAIL a,
+                                 opr_register b,
+                                 pha_druginfo c
+                            where a.orgcode = b.orgcode
+                              and a.regid = b.regid
+                              and b.REGISTSTATE = '1'
+                              and b.ISEMERGENCY = '0'
+                              and a.orgcode = c.orgcode
+                              and a.itemcode = c.drugcode
+                              and c.CENPURCH = '1'
+                              and a.DRUGFLAG = '1'
+                              and a.FEEDATE &gt;= to_date(#{begtime}, 'yyyy-mm-dd hh24:mi:ss')
+                              and a.FEEDATE &lt;= to_date(#{endtime}, 'yyyy-mm-dd hh24:mi:ss')
+                            group by a.orgcode) an on an.orgcode = a.orgcode
+                 left join (select sum(a.totcost) totcost, a.orgcode
+                            from OPB_FEEDETAIL a,
+                                 opr_register b,
+                                 FIN_UNDRUGINFO c
+                            where a.orgcode = b.orgcode
+                              and a.regid = b.regid
+                              and b.REGISTSTATE = '1'
+                              and b.ISEMERGENCY = '0'
+                              and a.orgcode = c.orgcode
+                              and a.itemcode = c.itemcode
+                              and a.FEEDATE &gt;= to_date(#{begtime}, 'yyyy-mm-dd hh24:mi:ss')
+                              and a.FEEDATE &lt;= to_date(#{endtime}, 'yyyy-mm-dd hh24:mi:ss')
+                            group by a.orgcode) ao on ao.orgcode = a.orgcode
+                 left join (select sum(a.totcost) totcost, a.orgcode
+                            from OPB_FEEDETAIL a,
+                                 opr_register b,
+                                 pha_medcon c
+                            where a.orgcode = b.orgcode
+                              and a.regid = b.regid
+                              and b.REGISTSTATE = '1'
+                              and b.ISEMERGENCY = '0'
+                              and a.orgcode = c.orgcode
+                              and a.itemcode = c.MEDLISTCODG
+                              and a.FEEDATE &gt;= to_date(#{begtime}, 'yyyy-mm-dd hh24:mi:ss')
+                              and a.FEEDATE &lt;= to_date(#{endtime}, 'yyyy-mm-dd hh24:mi:ss')
+                            group by a.orgcode) ap on ap.orgcode = a.orgcode
+                 left join (select sum(a.totcost) totcost, a.orgcode
+                            from OPB_FEEDETAIL a,
+                                 opr_register b
+                            where a.orgcode = b.orgcode
+                              and a.regid = b.regid
+                              and b.REGISTSTATE = '1'
+                              and b.ISEMERGENCY = '1'
+                              and a.FEEDATE &gt;= to_date(#{begtime}, 'yyyy-mm-dd hh24:mi:ss')
+                              and a.FEEDATE &lt;= to_date(#{endtime}, 'yyyy-mm-dd hh24:mi:ss')
+                            group by a.orgcode) aq on aq.orgcode = a.orgcode
+                 left join (select sum(a.totcost) totcost, a.orgcode
+                            from OPB_FEEDETAIL a,
+                                 opr_register b
+                            where a.orgcode = b.orgcode
+                              and a.regid = b.regid
+                              and b.REGISTSTATE = '1'
+                              and b.ISEMERGENCY = '1'
+                              and b.PAYKINDCODE = '02'
+                              and a.FEEDATE &gt;= to_date(#{begtime}, 'yyyy-mm-dd hh24:mi:ss')
+                              and a.FEEDATE &lt;= to_date(#{endtime}, 'yyyy-mm-dd hh24:mi:ss')
+                            group by a.orgcode) ar on ar.orgcode = a.orgcode
+                 left join (select sum(a.totcost) totcost, a.orgcode
+                            from OPB_FEEDETAIL a,
+                                 opr_register b
+                            where a.orgcode = b.orgcode
+                              and a.regid = b.regid
+                              and b.REGISTSTATE = '1'
+                              and b.ISEMERGENCY = '1'
+                              and b.PAYKINDCODE = '01'
+                              and a.FEEDATE &gt;= to_date(#{begtime}, 'yyyy-mm-dd hh24:mi:ss')
+                              and a.FEEDATE &lt;= to_date(#{endtime}, 'yyyy-mm-dd hh24:mi:ss')
+                            group by a.orgcode) au on au.orgcode = a.orgcode
+                 left join (select sum(a.totcost) totcost, a.orgcode
+                            from OPB_FEEDETAIL a,
+                                 (
+                                     select orgcode, itemcode, feecode
+                                     from fin_undruginfo
+                                     union all
+                                     select orgcode, drugcode, feecode
+                                     from pha_druginfo
+                                     union all
+                                     select orgcode, MEDLISTCODG, feecode
+                                     from pha_medcon
+                                 ) b,
+                                 com_feetype c,
+                                 opr_register d
+                            where a.orgcode = b.orgcode
+                              and a.itemcode = b.itemcode
+                              and b.orgcode = c.orgcode
+                              and b.feecode = c.feecode
+                              and c.feecode = '24'
+                              and a.orgcode = d.orgcode
+                              and a.regid = d.regid
+                              and d.REGISTSTATE = '1'
+                              and a.FEEDATE &gt;= to_date(#{begtime}, 'yyyy-mm-dd hh24:mi:ss')
+                              and a.FEEDATE &lt;= to_date(#{endtime}, 'yyyy-mm-dd hh24:mi:ss')
+                            group by a.orgcode) av on av.orgcode = a.orgcode
+                 left join (select sum(a.totcost) totcost, a.orgcode
+                            from OPB_FEEDETAIL a,
+                                 opr_register b
+                            where a.orgcode = b.orgcode
+                              and a.regid = b.regid
+                              and b.REGISTSTATE = '1'
+                              and b.ISEMERGENCY = '1'
+                              and a.DRUGFLAG = '1'
+                              and a.FEEDATE &gt;= to_date(#{begtime}, 'yyyy-mm-dd hh24:mi:ss')
+                              and a.FEEDATE &lt;= to_date(#{endtime}, 'yyyy-mm-dd hh24:mi:ss')
+                            group by a.orgcode) aw on aw.orgcode = a.orgcode
+                 left join (select sum(a.totcost) totcost, a.orgcode
+                            from OPB_FEEDETAIL a,
+                                 opr_register b,
+                                 pha_druginfo c
+                            where a.orgcode = b.orgcode
+                              and a.regid = b.regid
+                              and b.REGISTSTATE = '1'
+                              and b.ISEMERGENCY = '1'
+                              and a.orgcode = c.orgcode
+                              and a.itemcode = c.drugcode
+                              and c.ESSDRUG = '1'
+                              and a.DRUGFLAG = '1'
+                              and a.FEEDATE &gt;= to_date(#{begtime}, 'yyyy-mm-dd hh24:mi:ss')
+                              and a.FEEDATE &lt;= to_date(#{endtime}, 'yyyy-mm-dd hh24:mi:ss')
+                            group by a.orgcode) ax on ax.orgcode = a.orgcode
+                 left join (select sum(a.totcost) totcost, a.orgcode
+                            from OPB_FEEDETAIL a,
+                                 opr_register b,
+                                 pha_druginfo c
+                            where a.orgcode = b.orgcode
+                              and a.regid = b.regid
+                              and b.REGISTSTATE = '1'
+                              and b.ISEMERGENCY = '1'
+                              and a.orgcode = c.orgcode
+                              and a.itemcode = c.drugcode
+                              and c.CENPURCH = '1'
+                              and a.DRUGFLAG = '1'
+                              and a.FEEDATE &gt;= to_date(#{begtime}, 'yyyy-mm-dd hh24:mi:ss')
+                              and a.FEEDATE &lt;= to_date(#{endtime}, 'yyyy-mm-dd hh24:mi:ss')
+                            group by a.orgcode) ay on ay.orgcode = a.orgcode
+                 left join (select sum(a.totcost) totcost, a.orgcode
+                            from OPB_FEEDETAIL a,
+                                 opr_register b,
+                                 FIN_UNDRUGINFO c
+                            where a.orgcode = b.orgcode
+                              and a.regid = b.regid
+                              and b.REGISTSTATE = '1'
+                              and b.ISEMERGENCY = '1'
+                              and a.orgcode = c.orgcode
+                              and a.itemcode = c.itemcode
+                              and a.FEEDATE &gt;= to_date(#{begtime}, 'yyyy-mm-dd hh24:mi:ss')
+                              and a.FEEDATE &lt;= to_date(#{endtime}, 'yyyy-mm-dd hh24:mi:ss')
+                            group by a.orgcode) az on az.orgcode = a.orgcode
+                 left join (select sum(a.totcost) totcost, a.orgcode
+                            from OPB_FEEDETAIL a,
+                                 opr_register b,
+                                 pha_medcon c
+                            where a.orgcode = b.orgcode
+                              and a.regid = b.regid
+                              and b.REGISTSTATE = '1'
+                              and b.ISEMERGENCY = '1'
+                              and a.orgcode = c.orgcode
+                              and a.itemcode = c.MEDLISTCODG
+                              and a.FEEDATE &gt;= to_date(#{begtime}, 'yyyy-mm-dd hh24:mi:ss')
+                              and a.FEEDATE &lt;= to_date(#{endtime}, 'yyyy-mm-dd hh24:mi:ss')
+                            group by a.orgcode) aaa on aaa.orgcode = a.orgcode
+                 left join (select count(a.orgcode) num, a.orgcode
+                            from MET_CHECKAPPLY_INFO a,
+                                 opr_register b
+                            where a.orgcode = b.orgcode
+                              and a.PATIENTBUSIID = b.regid
+                              and b.REGISTSTATE = '1'
+                              and a.APPLYTYPE = '1'
+                              and a.APPLYSOURCE = '1'
+                              and a.EXECFLAG = '3'
+                              and a.UPDT_TIME &gt;= to_date(#{begtime}, 'yyyy-mm-dd hh24:mi:ss')
+                              and a.UPDT_TIME &lt;= to_date(#{endtime}, 'yyyy-mm-dd hh24:mi:ss')
+                            group by a.orgcode) aab on aab.orgcode = a.orgcode
+                 left join (select count(a.orgcode) num, a.orgcode
+                            from MET_CHECKAPPLY_INFO a,
+                                 opr_register b,
+                                 OPB_FEEDETAIL c,
+                                 FIN_UNDRUGINFO d
+                            where a.orgcode = b.orgcode
+                              and a.PATIENTBUSIID = b.regid
+                              and b.REGISTSTATE = '1'
+                              and a.orgcode = c.orgcode
+                              and a.PATIENTBUSIID = c.regid
+                              and a.applyid = c.applyid
+                              and c.orgcode = d.orgcode
+                              and c.itemcode = d.itemcode
+                              and d.EXAMINETYPE = '13'
+                              and a.APPLYTYPE = '1'
+                              and a.APPLYSOURCE = '1'
+                              and a.EXECFLAG = '3'
+                              and a.UPDT_TIME &gt;= to_date(#{begtime}, 'yyyy-mm-dd hh24:mi:ss')
+                              and a.UPDT_TIME &lt;= to_date(#{endtime}, 'yyyy-mm-dd hh24:mi:ss')
+                            group by a.orgcode) aac on aac.orgcode = a.orgcode
+                 left join (select count(a.orgcode) num, a.orgcode
+                            from MET_CHECKAPPLY_INFO a,
+                                 opr_register b
+                            where a.orgcode = b.orgcode
+                              and a.PATIENTBUSIID = b.regid
+                              and b.REGISTSTATE = '1'
+                              and a.APPLYTYPE = '2'
+                              and a.APPLYSOURCE = '1'
+                              and a.EXECFLAG = '3'
+                              and a.UPDT_TIME &gt;= to_date(#{begtime}, 'yyyy-mm-dd hh24:mi:ss')
+                              and a.UPDT_TIME &lt;= to_date(#{endtime}, 'yyyy-mm-dd hh24:mi:ss')
+                            group by a.orgcode) aad on aad.orgcode = a.orgcode
+                 left join (select count(a.orgcode) num, a.orgcode
+                            from MET_CHECKAPPLY_INFO a,
+                                 opr_register b,
+                                 OPB_FEEDETAIL c,
+                                 FIN_UNDRUGINFO d
+                            where a.orgcode = b.orgcode
+                              and a.PATIENTBUSIID = b.regid
+                              and b.REGISTSTATE = '1'
+                              and a.orgcode = c.orgcode
+                              and a.PATIENTBUSIID = c.regid
+                              and a.applyid = c.applyid
+                              and c.orgcode = d.orgcode
+                              and c.itemcode = d.itemcode
+                              and d.EXAMINETYPE = '16'
+                              and a.APPLYTYPE = '2'
+                              and a.APPLYSOURCE = '1'
+                              and a.EXECFLAG = '3'
+                              and a.UPDT_TIME &gt;= to_date(#{begtime}, 'yyyy-mm-dd hh24:mi:ss')
+                              and a.UPDT_TIME &lt;= to_date(#{endtime}, 'yyyy-mm-dd hh24:mi:ss')
+                            group by a.orgcode) aae on aae.orgcode = a.orgcode
+                 left join (select count(a.orgcode) num, a.orgcode
+                            from MET_CHECKAPPLY_INFO a,
+                                 opr_register b,
+                                 OPB_FEEDETAIL c,
+                                 FIN_UNDRUGINFO d
+                            where a.orgcode = b.orgcode
+                              and a.PATIENTBUSIID = b.regid
+                              and a.orgcode = c.orgcode
+                              and a.PATIENTBUSIID = c.regid
+                              and a.applyid = c.applyid
+                              and c.orgcode = d.orgcode
+                              and c.itemcode = d.itemcode
+                              and d.EXAMINETYPE = '3'
+                              and b.REGISTSTATE = '1'
+                              and a.APPLYTYPE = '2'
+                              and a.APPLYSOURCE = '1'
+                              and a.EXECFLAG = '3'
+                              and a.UPDT_TIME &gt;= to_date(#{begtime}, 'yyyy-mm-dd hh24:mi:ss')
+                              and a.UPDT_TIME &lt;= to_date(#{endtime}, 'yyyy-mm-dd hh24:mi:ss')
+                            group by a.orgcode) aaf on aaf.orgcode = a.orgcode
+                 left join (select count(a.orgcode) num, a.orgcode
+                            from MET_CHECKAPPLY_INFO a,
+                                 opr_register b,
+                                 OPB_FEEDETAIL c,
+                                 FIN_UNDRUGINFO d
+                            where a.orgcode = b.orgcode
+                              and a.PATIENTBUSIID = b.regid
+                              and a.orgcode = c.orgcode
+                              and a.PATIENTBUSIID = c.regid
+                              and a.applyid = c.applyid
+                              and c.orgcode = d.orgcode
+                              and c.itemcode = d.itemcode
+                              and d.EXAMINETYPE = '7'
+                              and b.REGISTSTATE = '1'
+                              and a.APPLYTYPE = '2'
+                              and a.APPLYSOURCE = '1'
+                              and a.EXECFLAG = '3'
+                              and a.UPDT_TIME &gt;= to_date(#{begtime}, 'yyyy-mm-dd hh24:mi:ss')
+                              and a.UPDT_TIME &lt;= to_date(#{endtime}, 'yyyy-mm-dd hh24:mi:ss')
+                            group by a.orgcode) aag on aag.orgcode = a.orgcode
+                 left join (select count(a.orgcode) num, a.orgcode
+                            from MET_CHECKAPPLY_INFO a,
+                                 opr_register b,
+                                 OPB_FEEDETAIL c,
+                                 FIN_UNDRUGINFO d
+                            where a.orgcode = b.orgcode
+                              and a.PATIENTBUSIID = b.regid
+                              and a.orgcode = c.orgcode
+                              and a.PATIENTBUSIID = c.regid
+                              and a.applyid = c.applyid
+                              and c.orgcode = d.orgcode
+                              and c.itemcode = d.itemcode
+                              and d.EXAMINETYPE = '22'
+                              and b.REGISTSTATE = '1'
+                              and a.APPLYTYPE = '2'
+                              and a.APPLYSOURCE = '1'
+                              and a.EXECFLAG = '3'
+                              and a.UPDT_TIME &gt;= to_date(#{begtime}, 'yyyy-mm-dd hh24:mi:ss')
+                              and a.UPDT_TIME &lt;= to_date(#{endtime}, 'yyyy-mm-dd hh24:mi:ss')
+                            group by a.orgcode) aah on aah.orgcode = a.orgcode
+        where a.orgcode = #{orgcode}
+    </select>
+
+</mapper>

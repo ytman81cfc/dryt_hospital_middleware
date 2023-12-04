@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hospital.middleware.healthplatform.dao.his.HealthplatfromDAO">
+    <select id="queryTj_zygzl_ks_rb" resultType="java.util.HashMap">
+        select a.orgcode                                                          "YLJGDM",--  医疗机构代码  VARCHAR 22  必填  复合主键：采用22位“卫生机构代码”
+               a.deptcode                                                         "KSBM",--	科室编码	VARCHAR	50	必填	复合主键：编码。见科室字典表
+               to_char(to_date(#{begtime}, 'YYYY-MM-DD  hh24:mi:ss'), 'yyyymmdd') "YWRQ",--	业务日期	VARCHAR	8	必填	复合主键：是指业务发生的日期yyyymmdd
+               a.deptname                                                         "KSMC",--	科室名称	VARCHAR	100	必填	医院科室名称
+               b.item_id                                                          "BZKSBM",--	标准科室编码	VARCHAR	50	必填	CVA2101.09 医疗机构诊疗科室
+               b.item_name                                                        "BZKSMC",--	标准科室名称	VARCHAR	100	必填	如消化内科专业
+               nvl(c.num, 0)                                                      "HDCWZS",--	核定（编制）床位总数	NUMERIC	15	必填
+               nvl(d.num, 0)                                                      "SJKFCWZS",--	实际开放床位总数	NUMERIC	15	必填
+               0                                                                  "BRJCS",--	本日加床数	NUMERIC	15	必填
+               0                                                                  "BRKCS",--	本日空床数	NUMERIC	15	必填
+               nvl(e.num, 0)                                                      "ZRLYRS",--	期初留院人数（昨日留院）	NUMERIC	15	必填
+               nvl(f.num, 0)                                                      "RYRS",--	期内入院人数（今日入院）	NUMERIC	15	必填
+               0                                                                  "TKZRRS",--	同科转入人数	NUMERIC	15	必填
+               nvl(g.num, 0)                                                      "TAKZRRS",--	他科转入人数	NUMERIC	15	必填
+               nvl(round(h.num / g.num, 0), 0)                                    "CYHZZYCRS",--	出院患者占用床日数	NUMERIC	15	必填
+               nvl(i.num, 0)                                                      "CYRS",--	期内出院人数（今日出院）	NUMERIC	15	必填
+               nvl(j.num, 0)                                                      "CYRS_ZYRS",--	出院人数其中：治愈人数	NUMERIC	15	必填
+               nvl(k.num, 0)                                                      "CYRS_HZRS",--	出院人数其中：好转人数	NUMERIC	15	必填
+               nvl(l.num, 0)                                                      "CYYS_WYRS",--	出院人数其中：未愈人数	NUMERIC	15	必填
+               nvl(m.num, 0)                                                      "CYRS_SWRS",--	出院人数其中：死亡人数	NUMERIC	15	必填
+               nvl(n.num, 0)                                                      "CYRS_QTRS",--	出院人数其中：其他人数	NUMERIC	15	必填
+               nvl(o.num, 0)                                                      "CYRS_YZLYRS",--	出院人数其中：医嘱离院人数	NUMERIC	15	必填
+               nvl(p.num, 0)                                                      "CYRS_YZZYRS",--	出院人数其中：医嘱转院人数	NUMERIC	15	必填
+               nvl(q.num, 0)                                                      "CYRS_YZZSQRS",--	出院人数其中：医嘱转社区卫生服务机构/乡镇卫生院人数	NUMERIC	15	必填
+               nvl(r.num, 0)                                                      "CYRS_FYZLYRS",--	出院人数其中：非医嘱离院人数	NUMERIC	15	必填
+               nvl(s.num, 0)                                                      "JJBARS",--	甲级病案人数	NUMERIC	15	必填
+               nvl(t.num, 0)                                                      "YJBARS",--	乙级病案人数	NUMERIC	15	必填
+               nvl(u.num, 0)                                                      "BJBARS",--	丙级病案人数	NUMERIC	15	必填
+               0                                                                  "CYRS_ZYZLRS",--	住院人员接受中医治疗人数	NUMERIC	15	必填	中西医结合所有科室、其他医院中医科住院人次
+               0                                                                  "CYRS_FYWZYZLRS",--	出院者使用非药物中医技术诊疗人数	NUMERIC	15	必填
+               nvl(v.num, 0)                                                      "CYRS_ZCAORS",--	出院者使用中草药人数	NUMERIC	15	必填
+               nvl(w.num, 0)                                                      "CYRS_ZCHYRS",--	出院者使用中成药人数	NUMERIC	15	必填
+               0                                                                  "CYRS_ZYFYWRS",--	出院者使用中医非药物人数	NUMERIC	15	必填
+               0                                                                  "ZWTKRS",--	转往同科人数	NUMERIC	15	必填
+               nvl(x.num, 0)                                                      "ZWTAKRS",--	转往他科人数	NUMERIC	15	必填
+               nvl(y.num, 0)                                                      "ZYRS",--	期内留院(在院)人数(今日留院，实际占用床日数)	NUMERIC	15	必填
+               0                                                                  "PKRS",--	陪客人数	NUMERIC	15	必填
+               nvl(z.num, 0)                                                      "WZRS",--	危重病人数	NUMERIC	15	必填
+               0                                                                  "ZYWZBR_QJRC",--	住院危重病人抢救人次数	NUMERIC	15	必填
+               0                                                                  "ZYWZBR_QJCGRC",--	其中：抢救成功人次数	NUMERIC	15	必填
+               0                                                                  "CYBRGRRS",--	出院病人医院感染人（例）数	NUMERIC	15	必填
+               0                                                                  "CYBRSSGRRS",--	出院病人手术相关感染人数	NUMERIC	15	必填
+               to_char(sysdate, 'YYYY-MM-DD')                                     "TBRQ" --  填报日期  DATETIME   必填 本条数据采集时间，格式YYYY-MM-DD
+        from com_deptinfo a
+                 left join (select a.item_id, a.item_name, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202311141512391328016800000000') b
+                           on b.his_item_id = a.DEPTCODE
+                 left join (select count(deptcode) num, deptcode, orgcode
+                            from COM_BEDINFO
+                            group by deptcode, orgcode) c on c.orgcode = a.orgcode and c.deptcode = a.deptcode
+                 left join (select count(deptcode) num, deptcode, orgcode
+                            from COM_BEDINFO
+                            where BEDSTATE &lt;&gt; '9'
+                            group by deptcode, orgcode) d on d.orgcode = a.orgcode and d.deptcode = a.deptcode
+                 left join (select count(outDEPTCODE) num, outDEPTCODE, orgcode
+                            from IPR_INPATIENTINFO
+                            where instate &lt;&gt; '0'
+                                and to_char(out_date, 'yyyy-mm-dd hh24:mi:ss') &gt;= #{begtime}
+                               or out_date is null
+                            group by outDEPTCODE, orgcode) e on e.orgcode = a.orgcode and e.OUTDEPTCODE = a.deptcode
+                 left join (select count(INDEPTCODE) num, INDEPTCODE, orgcode
+                            from IPR_INPATIENTINFO
+                            where instate &lt;&gt; '0'
+                              and to_char(indate, 'yyyy-mm-dd hh24:mi:ss') &gt;= #{begtime}
+                              and to_char(indate, 'yyyy-mm-dd hh24:mi:ss') &lt;= #{endtime}
+                            group by INDEPTCODE, orgcode) f on f.orgcode = a.orgcode and f.INDEPTCODE = a.deptcode
+                 left join (select count(a.NEWSUBJECTCODE) num, a.NEWSUBJECTCODE, a.orgcode
+                            from ipr_shiftinfo a,
+                                 IPR_INPATIENTINFO b
+                            where a.orgcode = b.orgcode
+                              and a.inid = b.inid
+                              and b.instate &lt;&gt; '0'
+                              and a.SHIFTTYPE = 'RD'
+                              and a.SHIFT_STATE = '2'
+                              and to_char(a.UPDT_TIME, 'yyyy-mm-dd hh24:mi:ss') &gt;= #{begtime}
+                              and to_char(a.UPDT_TIME, 'yyyy-mm-dd hh24:mi:ss') &lt;= #{endtime}
+                            group by a.NEWSUBJECTCODE, a.orgcode) g
+                           on g.orgcode = a.orgcode and g.NEWSUBJECTCODE = a.deptcode
+                 left join (select sum(num) num, orgcode
+                            from (select case
+                                             when floor(out_date - indate) &lt;= 1 then 1
+                                             else floor(out_date - indate) + 1 end as num,
+                                         orgcode
+                                  from IPR_INPATIENTINFO
+                                  where instate &lt;&gt; '0'
+                                    and out_date &gt;= to_date(#{begtime}
+                                      , 'yyyy-mm-dd hh24:mi:ss')
+                                    and out_date &lt;= to_date(#{endtime}
+                                      , 'yyyy-mm-dd hh24:mi:ss')
+                                 )
+                            group by orgcode) h on h.orgcode = a.orgcode
+                 left join (select count(OUTDEPTCODE) num, OUTDEPTCODE, orgcode
+                            from IPR_INPATIENTINFO
+                            where instate &lt;&gt; '0'
+                              and to_char(out_date, 'yyyy-mm-dd hh24:mi:ss') &gt;= #{begtime}
+                              and to_char(out_date, 'yyyy-mm-dd hh24:mi:ss') &lt;= #{endtime}
+                            group by OUTDEPTCODE, orgcode) i on i.orgcode = a.orgcode and i.OUTDEPTCODE = a.deptcode
+                 left join (select count(OUTDEPTCODE) num, OUTDEPTCODE, orgcode
+                            from IPR_INPATIENTINFO
+                            where instate &lt;&gt; '0'
+                              and OUTREASON = '1'
+                              and to_char(out_date, 'yyyy-mm-dd hh24:mi:ss') &gt;= #{begtime}
+                              and to_char(out_date, 'yyyy-mm-dd hh24:mi:ss') &lt;= #{endtime}
+                            group by OUTDEPTCODE, orgcode) j on j.orgcode = a.orgcode and j.OUTDEPTCODE = a.deptcode
+                 left join (select count(OUTDEPTCODE) num, OUTDEPTCODE, orgcode
+                            from IPR_INPATIENTINFO
+                            where instate &lt;&gt; '0'
+                              and OUTREASON = '2'
+                              and to_char(out_date, 'yyyy-mm-dd hh24:mi:ss') &gt;= #{begtime}
+                              and to_char(out_date, 'yyyy-mm-dd hh24:mi:ss') &lt;= #{endtime}
+                            group by OUTDEPTCODE, orgcode) k on k.orgcode = a.orgcode and k.OUTDEPTCODE = a.deptcode
+                 left join (select count(OUTDEPTCODE) num, OUTDEPTCODE, orgcode
+                            from IPR_INPATIENTINFO
+                            where instate &lt;&gt; '0'
+                              and OUTREASON = '3'
+                              and to_char(out_date, 'yyyy-mm-dd hh24:mi:ss') &gt;= #{begtime}
+                              and to_char(out_date, 'yyyy-mm-dd hh24:mi:ss') &lt;= #{endtime}
+                            group by OUTDEPTCODE, orgcode) l on l.orgcode = a.orgcode and l.OUTDEPTCODE = a.deptcode
+                 left join (select count(OUTDEPTCODE) num, OUTDEPTCODE, orgcode
+                            from IPR_INPATIENTINFO
+                            where instate &lt;&gt; '0'
+                              and OUTREASON = '4'
+                              and to_char(out_date, 'yyyy-mm-dd hh24:mi:ss') &gt;= #{begtime}
+                              and to_char(out_date, 'yyyy-mm-dd hh24:mi:ss') &lt;= #{endtime}
+                            group by OUTDEPTCODE, orgcode) m on m.orgcode = a.orgcode and m.OUTDEPTCODE = a.deptcode
+                 left join (select count(OUTDEPTCODE) num, OUTDEPTCODE, orgcode
+                            from IPR_INPATIENTINFO
+                            where instate &lt;&gt; '0'
+                              and OUTREASON = '9'
+                              and to_char(out_date, 'yyyy-mm-dd hh24:mi:ss') &gt;= #{begtime}
+                              and to_char(out_date, 'yyyy-mm-dd hh24:mi:ss') &lt;= #{endtime}
+                            group by OUTDEPTCODE, orgcode) n on n.orgcode = a.orgcode and n.OUTDEPTCODE = a.deptcode
+                 left join (select count(OUTDEPTCODE) num, OUTDEPTCODE, orgcode
+                            from IPR_INPATIENTINFO
+                            where instate &lt;&gt; '0'
+                              and DSCG_WAY = '1'
+                              and to_char(out_date, 'yyyy-mm-dd hh24:mi:ss') &gt;= #{begtime}
+                              and to_char(out_date, 'yyyy-mm-dd hh24:mi:ss') &lt;= #{endtime}
+                            group by OUTDEPTCODE, orgcode) o on o.orgcode = a.orgcode and o.OUTDEPTCODE = a.deptcode
+                 left join (select count(OUTDEPTCODE) num, OUTDEPTCODE, orgcode
+                            from IPR_INPATIENTINFO
+                            where instate &lt;&gt; '0'
+                              and DSCG_WAY = '2'
+                              and to_char(out_date, 'yyyy-mm-dd hh24:mi:ss') &gt;= #{begtime}
+                              and to_char(out_date, 'yyyy-mm-dd hh24:mi:ss') &lt;= #{endtime}
+                            group by OUTDEPTCODE, orgcode) p on p.orgcode = a.orgcode and p.OUTDEPTCODE = a.deptcode
+                 left join (select count(OUTDEPTCODE) num, OUTDEPTCODE, orgcode
+                            from IPR_INPATIENTINFO
+                            where instate &lt;&gt; '0'
+                              and DSCG_WAY = '3'
+                              and to_char(out_date, 'yyyy-mm-dd hh24:mi:ss') &gt;= #{begtime}
+                              and to_char(out_date, 'yyyy-mm-dd hh24:mi:ss') &lt;= #{endtime}
+                            group by OUTDEPTCODE, orgcode) q on q.orgcode = a.orgcode and q.OUTDEPTCODE = a.deptcode
+                 left join (select count(OUTDEPTCODE) num, OUTDEPTCODE, orgcode
+                            from IPR_INPATIENTINFO
+                            where instate &lt;&gt; '0'
+                              and DSCG_WAY = '4'
+                              and to_char(out_date, 'yyyy-mm-dd hh24:mi:ss') &gt;= #{begtime}
+                              and to_char(out_date, 'yyyy-mm-dd hh24:mi:ss') &lt;= #{endtime}
+                            group by OUTDEPTCODE, orgcode) r on r.orgcode = a.orgcode and r.OUTDEPTCODE = a.deptcode
+                 left join (select count(b.OUTDEPTCODE) num, b.OUTDEPTCODE, a.orgcode
+                            from EMR_MEDICALDOCTOR a,
+                                 IPR_INPATIENTINFO b
+                            where a.orgcode = b.orgcode
+                              and a.visit_id = b.inid
+                              and b.instate &lt;&gt; '0'
+                              and a.MR_QUALITY = '1'
+                              and to_char(a.CRTE_TIME, 'yyyy-mm-dd hh24:mi:ss') &gt;= #{begtime}
+                              and to_char(a.CRTE_TIME, 'yyyy-mm-dd hh24:mi:ss') &lt;= #{endtime}
+                            group by b.OUTDEPTCODE, a.orgcode) s on s.orgcode = a.orgcode and s.OUTDEPTCODE = a.deptcode
+                 left join (select count(b.OUTDEPTCODE) num, b.OUTDEPTCODE, a.orgcode
+                            from EMR_MEDICALDOCTOR a,
+                                 IPR_INPATIENTINFO b
+                            where a.orgcode = b.orgcode
+                              and a.visit_id = b.inid
+                              and b.instate &lt;&gt; '0'
+                              and a.MR_QUALITY = '2'
+                              and to_char(a.CRTE_TIME, 'yyyy-mm-dd hh24:mi:ss') &gt;= #{begtime}
+                              and to_char(a.CRTE_TIME, 'yyyy-mm-dd hh24:mi:ss') &lt;= #{endtime}
+                            group by b.OUTDEPTCODE, a.orgcode) t on t.orgcode = a.orgcode and t.OUTDEPTCODE = a.deptcode
+                 left join (select count(b.OUTDEPTCODE) num, b.OUTDEPTCODE, a.orgcode
+                            from EMR_MEDICALDOCTOR a,
+                                 IPR_INPATIENTINFO b
+                            where a.orgcode = b.orgcode
+                              and a.visit_id = b.inid
+                              and b.instate &lt;&gt; '0'
+                              and a.MR_QUALITY = '3'
+                              and to_char(a.CRTE_TIME, 'yyyy-mm-dd hh24:mi:ss') &gt;= #{begtime}
+                              and to_char(a.CRTE_TIME, 'yyyy-mm-dd hh24:mi:ss') &lt;= #{endtime}
+                            group by b.OUTDEPTCODE, a.orgcode) u on u.orgcode = a.orgcode and u.OUTDEPTCODE = a.deptcode
+                 left join (select count(a.inid) num, a.INDEPTCODE, a.orgcode
+                            from (select orgcode, inid, drugtype, INDEPTCODE
+                                  from ips_feedetail
+                                  group by orgcode, inid, drugtype, INDEPTCODE
+                                  union all
+                                  select orgcode, inid, drugtype, INDEPTCODE
+                                  from ips_outfeedetail
+                                  group by orgcode, inid, drugtype, INDEPTCODE
+                                 ) a,
+                                 IPR_INPATIENTINFO b
+                            where a.orgcode = b.orgcode
+                              and a.inid = b.inid
+                              and b.instate &lt;&gt; '0'
+                              and a.drugtype = '3'
+                              and to_char(b.out_date, 'yyyy-mm-dd hh24:mi:ss') &gt;= #{begtime}
+                              and to_char(b.out_date, 'yyyy-mm-dd hh24:mi:ss') &lt;= #{endtime}
+                            group by a.INDEPTCODE, a.orgcode) v on v.orgcode = a.orgcode and v.INDEPTCODE = a.deptcode
+                 left join (select count(a.inid) num, a.INDEPTCODE, a.orgcode
+                            from (select orgcode, inid, drugtype, INDEPTCODE
+                                  from ips_feedetail
+                                  group by orgcode, inid, drugtype, INDEPTCODE
+                                  union all
+                                  select orgcode, inid, drugtype, INDEPTCODE
+                                  from ips_outfeedetail
+                                  group by orgcode, inid, drugtype, INDEPTCODE
+                                 ) a,
+                                 IPR_INPATIENTINFO b
+                            where a.orgcode = b.orgcode
+                              and a.inid = b.inid
+                              and b.instate &lt;&gt; '0'
+                              and a.drugtype = '2'
+                              and to_char(b.out_date, 'yyyy-mm-dd hh24:mi:ss') &gt;= #{begtime}
+                              and to_char(b.out_date, 'yyyy-mm-dd hh24:mi:ss') &lt;= #{endtime}
+                            group by a.INDEPTCODE, a.orgcode) w on w.orgcode = a.orgcode and w.INDEPTCODE = a.deptcode
+                 left join (select count(a.OLDSUBJECTCODE) num, a.OLDSUBJECTCODE, a.orgcode
+                            from ipr_shiftinfo a,
+                                 IPR_INPATIENTINFO b
+                            where a.orgcode = b.orgcode
+                              and a.inid = b.inid
+                              and b.instate &lt;&gt; '0'
+                              and a.SHIFTTYPE = 'RD'
+                              and to_char(a.CRTE_TIME, 'yyyy-mm-dd hh24:mi:ss') &gt;= #{begtime}
+                              and to_char(a.CRTE_TIME, 'yyyy-mm-dd hh24:mi:ss') &lt;= #{endtime}
+                            group by a.OLDSUBJECTCODE, a.orgcode) x
+                           on x.orgcode = a.orgcode and x.OLDSUBJECTCODE = a.deptcode
+                 left join (select count(outDEPTCODE) num, outDEPTCODE, orgcode
+                            from IPR_INPATIENTINFO
+                            where instate &lt;&gt; '0'
+                                and to_char(out_date, 'yyyy-mm-dd hh24:mi:ss') &gt;= #{endtime}
+                               or out_date is null
+                            group by outDEPTCODE, orgcode) y on y.orgcode = a.orgcode and y.OUTDEPTCODE = a.deptcode
+                 left join (select count(b.outdeptcode) num, b.outdeptcode, a.orgcode
+                            from INR_RECEIVEINFO a,
+                                 IPR_INPATIENTINFO b
+                            where a.orgcode = b.orgcode
+                              and a.inid = b.inid
+                              and b.instate &lt;&gt; '0'
+                              and a.INTIME &gt;= to_date(#{begtime}, 'yyyy-mm-dd hh24:mi:ss')
+                              and a.INTIME &lt;= to_date(#{endtime}, 'yyyy-mm-dd hh24:mi:ss')
+                              and a.PATIENTLEVEL in ('2', '3')
+                            group by b.outdeptcode, a.orgcode) z
+                           on z.orgcode = a.orgcode and z.OUTDEPTCODE = a.deptcode
+        where  a.depttype = 'I'
+          and a.isvalid='1'
+          and a.orgcode = #{orgcode}
+    </select>
+
+</mapper>
