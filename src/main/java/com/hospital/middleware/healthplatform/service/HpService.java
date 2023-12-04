@@ -180,6 +180,47 @@ public class HpService {
                 result = gson.toJson(queryResult);
                 genSqlString("ZYFYFSMX", queryResult.get(0));
             }
+
+            //西医病案首页
+            if("BA_SYJBK".equals(dataType.toUpperCase())){
+
+            }
+
+            //西医病案首页手术
+            if("BA_SYSSK".equals(dataType.toUpperCase())){
+                List<Map> queryResult = hpfDAO.queryBa_syssk(orgCode, begtime, endtime);
+                result = gson.toJson(queryResult);
+                genSqlString("BA_SYSSK", queryResult.get(0));
+            }
+
+            //西医病案首页出院诊断
+            if("BA_SYZDK".equals(dataType.toUpperCase())){
+                List<Map> queryResult = hpfDAO.queryBa_syzdk(orgCode, begtime, endtime);
+                result = gson.toJson(queryResult);
+                genSqlString("BA_SYZDK", queryResult.get(0));
+            }
+
+            //诊断明细报告
+            if("ZYZDMXBG".equals(dataType.toUpperCase())){
+                List<Map> queryResult = hpfDAO.queryZyzdmxbg(orgCode, begtime, endtime);
+                result = gson.toJson(queryResult);
+                genSqlString("ZYZDMXBG", queryResult.get(0));
+            }
+
+            //门(急)诊病历
+            if("EMR_MJZBL".equals(dataType.toUpperCase())){
+                List<Map> queryResult = hpfDAO.queryEmr_mjzbl(orgCode, begtime, endtime);
+                result = gson.toJson(queryResult);
+                genSqlString("EMR_MJZBL", queryResult.get(0));
+            }
+
+            //入院记录
+            if("EMR_RYJL".equals(dataType.toUpperCase())){
+                List<Map> queryResult = hpfDAO.queryEmr_ryjl(orgCode, begtime, endtime);
+                result = gson.toJson(queryResult);
+                genSqlString("EMR_RYJL", queryResult.get(0));
+            }
+
         } catch (Exception e){
             System.out.println("-------------------------------------------");
             System.out.println(dataType);
