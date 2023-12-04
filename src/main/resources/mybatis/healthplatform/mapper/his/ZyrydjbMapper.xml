@@ -77,26 +77,9 @@
           and a.orgcode = r.orgcode
           and a.inid = r.inid
           and a.instate &lt;&gt; '0'
-          and a.orgcode =
-              #{orgcode}
-          and to_char
-                  (
-                      a
-                          .
-                          indate,
-                      'yyyy-mm-dd hh24:mi:ss'
-                  )
-            &gt;=
-              #{begtime}
-          and to_char
-                  (
-                      a
-                          .
-                          indate,
-                      'yyyy-mm-dd hh24:mi:ss'
-                  )
-            &lt;=
-              #{endtime}
+          and a.orgcode = #{orgcode}
+          and to_char(a.indate, 'yyyy-mm-dd hh24:mi:ss') &gt;= #{begtime}
+          and to_char(a.indate, 'yyyy-mm-dd hh24:mi:ss') &lt;= #{endtime}
 
     </select>
 
