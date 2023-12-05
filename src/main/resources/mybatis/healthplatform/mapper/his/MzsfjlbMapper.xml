@@ -2,55 +2,55 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hospital.middleware.healthplatform.dao.his.HealthplatfromDAO">
     <select id="queryMzsfjlbsf" resultType="java.util.HashMap">
-        select a.orgcode                                                                       "YLJGDM",--  医疗机构代码  VARCHAR 22  必填  复合主键：采用22位“卫生机构代码”
-               a.CHRG_BCHNO                                                                    "SFLSH",-- 收费流水号 VARCHAR 64  必填  复合主键
-               a.TRANSTYPE                                                                     "TFBZ",--  退费标志  VARCHAR 1 必填  复合主键：   “1”：正常收费情况的费用   “2”：对已填报的某一条具有相同“收费流水号”的正常收费进行退费
-               a.regid                                                                         "JZLSH",-- 就诊流水号 VARCHAR 32  必填  复合主键：关联《门诊就诊记录表》
-               b.orgname                                                                       "YLJGMC",--  医疗机构名称  VARCHAR 70  必填  医院执业许可第一名称
-               '0'                                                                             "FYDM",--  分院代码  VARCHAR 20  必填  记录分院代码（内码）,如无分院，则传0
-               ''                                                                              "FYMC",--  分院名称  VARCHAR 120 条件必填  分院代码不为0时必填
-               a.INVOICENO                                                                     "FPH",-- 发票号 VARCHAR 64  必填  超过一张发票时，用英文分号“;”分割
-               '1'                                                                             "KLX",-- 卡类型 VARCHAR 16  必填  请按照以下优先级顺序填写：1：患者主索引号、2：身份证号、3：医保卡号，如果都没有则填写门诊就诊流水号
-               c.rid                                                                           "KH",--  卡号  VARCHAR 64  必填
-               f.item_id                                                                       "ZJLX",--  证件类型  VARCHAR 2   参见CV02.01.101-2022修订版 身份证件类别代码  优先使用身份证
-               d.certno                                                                        "ZJHM",--  证件号码  VARCHAR 32
-               a.NAME                                                                          "XM",--  姓名  VARCHAR 50  必填
-               '100'                                                                           "JZLXDM",--  就诊类型代码  VARCHAR 3 必填  见CVA5101_01就诊类型代码
+        select a.orgcode                                                     "YLJGDM",--  医疗机构代码  VARCHAR 22  必填  复合主键：采用22位“卫生机构代码”
+               a.CHRG_BCHNO                                                  "SFLSH",-- 收费流水号 VARCHAR 64  必填  复合主键
+               a.TRANSTYPE                                                   "TFBZ",--  退费标志  VARCHAR 1 必填  复合主键：   “1”：正常收费情况的费用   “2”：对已填报的某一条具有相同“收费流水号”的正常收费进行退费
+               a.regid                                                       "JZLSH",-- 就诊流水号 VARCHAR 32  必填  复合主键：关联《门诊就诊记录表》
+               b.orgname                                                     "YLJGMC",--  医疗机构名称  VARCHAR 70  必填  医院执业许可第一名称
+               '0'                                                           "FYDM",--  分院代码  VARCHAR 20  必填  记录分院代码（内码）,如无分院，则传0
+               ''                                                            "FYMC",--  分院名称  VARCHAR 120 条件必填  分院代码不为0时必填
+               a.INVOICENO                                                   "FPH",-- 发票号 VARCHAR 64  必填  超过一张发票时，用英文分号“;”分割
+               '1'                                                           "KLX",-- 卡类型 VARCHAR 16  必填  请按照以下优先级顺序填写：1：患者主索引号、2：身份证号、3：医保卡号，如果都没有则填写门诊就诊流水号
+               c.rid                                                         "KH",--  卡号  VARCHAR 64  必填
+               f.item_id                                                     "ZJLX",--  证件类型  VARCHAR 2   参见CV02.01.101-2022修订版 身份证件类别代码  优先使用身份证
+               d.certno                                                      "ZJHM",--  证件号码  VARCHAR 32
+               a.NAME                                                        "XM",--  姓名  VARCHAR 50  必填
+               '100'                                                         "JZLXDM",--  就诊类型代码  VARCHAR 3 必填  见CVA5101_01就诊类型代码
                case
                    when a.PAYKINDCODE = '01' then '07'
                    when a.PAYKINDCODE = '02' and d.INSUTYPE = 'A' then '01'
                    when a.PAYKINDCODE = '02' and d.INSUTYPE = 'B' then '02'
-                   else '99' end                                                               "BXLX",--  医疗费用支付方式  VARCHAR 4 必填  参见CV07.10.003-2022修订版 医疗费用来源类别
-               nvl(a.MCARDNO, '-')                                                                       "YBZHBZ",--  医保账户标识  VARCHAR 64  条件必填  医保账号，医保患者必填
-               decode(d.PERSON_AREA_FLAG, '1', '1', '2', '2', '3', '2', '5')                   "WDBZ",--  外地标志  VARCHAR 1   1：本市 2：外地 3：境外（港澳台） 4：外国 5：未知
-               to_char(a.CRTE_TIME, 'YYYY-MM-DD HH24:MI:SS') "SFSJ",--  收费时间  DATETIME    必填
-               ''                                                                              "TFSJ",--  退费时间  DATETIME
-               d.DEPTCODE                                                                      "YNJZKSDM",--  院内费用发生科室代码  VARCHAR 50  必填
-               nvl(d.DEPTNAME, '-')                                                                      "YNJZKSMC",--  院内费用发生科室名称  VARCHAR 100 必填
-               nvl(h.item_id, '-')                                                                       "JZKSDM",--  中心费用发生科室代码  VARCHAR 50  必填  《全民健康信息平台科室分类代码表》
-               nvl(h.item_name, '-')                                                                     "JZKSMC",--  中心费用发生科室名称  VARCHAR 100 必填  《全民健康信息平台科室分类代码表》
-               nvl(round(a.totcost, 3), 0)                                                     "ZJE",-- 总金额 NUMERIC 18,3  必填  医院实际收取的费用     退费标志为2（退费）时，传负数
-               nvl(s.YBINSCP_SCP_AMT, 0)                                                       "YBJE",--  医保结算范围金额  NUMERIC 18,3  必填  医保结算范围金额
-               nvl(round(a.PUBCOST, 3), 0)                                                     "YBZFJE",--  医保支付金额  NUMERIC 18,3  必填  医保实际报销支付金额，如无，则填写0  退费标志为2（退费）时，传负数
-               nvl(round(a.OWNCOST, 3), 0)                                                     "ZFJE",--  个人现金支付金额  NUMERIC 18,3  必填  非医保报销范围，由患者个人自付的医疗费用总额  退费标志为2（退费）时，传负数
-               nvl(round(a.PAYCOST, 3), 0)                                                     "FLZJJE",--  个人账户支付金额  NUMERIC 18,3  必填  医疗保险患者的费用中属于个人支付部分的金额   退费标志为2（退费）时，传负数
-               nvl(round(d.reg_cost, 3), 0)                                                    "GHF",-- 挂号费 NUMERIC 18,3    退费标志为2（退费）时，传负数
-               e.ZCF                                                                           "ZCF",-- 诊察费 NUMERIC 18,3  必填  退费标志为2（退费）时，传负数
-               e.JCF                                                                           "JCF",-- 检查费 NUMERIC 18,3  必填  退费标志为2（退费）时，传负数
-               e.HYF                                                                           "HYF",-- 化验费 NUMERIC 18,3  必填  退费标志为2（退费）时，传负数
-               e.ZHILF                                                                         "ZHILF",-- 治疗费 NUMERIC 18,3  必填  退费标志为2（退费）时，传负数
-               e.SSF                                                                           "SSF",-- 手术费 NUMERIC 18,3  必填  退费标志为2（退费）时，传负数
-               e.WSCLF                                                                         "WSCLF",-- 卫生材料费 NUMERIC 18,3  必填  退费标志为2（退费）时，传负数
-               e.XYF                                                                           "XYF",-- 西药费 NUMERIC 18,3  必填  退费标志为2（退费）时，传负数
-               0                                                                               "YMF",-- 疫苗费 NUMERIC 18,3  必填  退费标志为2（退费）时，传负数
-               e.ZYYPF                                                                         "ZYYPF",-- 中药饮片费 NUMERIC 18,3  必填  退费标志为2（退费）时，传负数
-               e.ZCHYF                                                                         "ZCHYF",-- 中成药费  NUMERIC 18,3  必填  退费标志为2（退费）时，传负数
-               e.ZHENLF                                                                        "ZHENLF",--  一般诊疗费 NUMERIC 18,3  必填  退费标志为2（退费）时，传负数
-               e.QTF                                                                           "QTF",-- 其他门急诊费  NUMERIC 18,3  必填  除以上费用外的其他门急诊费用  退费标志为2（退费）时，传负数
-               a.OPTER_CODE                                                                    "SFCZYGH",-- 收费操作员工号 VARCHAR 64  必填
-               a.OPTER_NAME                                                                    "SFCZYXM",-- 收费操作员姓名 VARCHAR 50  必填
-               g.certno                                                                        "SFCZYSFZHM",--  收费操作员身份证号码  VARCHAR 18
-               to_char(sysdate, 'YYYY-MM-DD')                                                  "TBRQ" --  填报日期  DATETIME   必填 本条数据采集时间，格式YYYY-MM-DD
+                   else '99' end                                             "BXLX",--  医疗费用支付方式  VARCHAR 4 必填  参见CV07.10.003-2022修订版 医疗费用来源类别
+               nvl(a.MCARDNO, '-')                                           "YBZHBZ",--  医保账户标识  VARCHAR 64  条件必填  医保账号，医保患者必填
+               decode(d.PERSON_AREA_FLAG, '1', '1', '2', '2', '3', '2', '5') "WDBZ",--  外地标志  VARCHAR 1   1：本市 2：外地 3：境外（港澳台） 4：外国 5：未知
+               to_char(a.CRTE_TIME, 'YYYY-MM-DD HH24:MI:SS')                 "SFSJ",--  收费时间  DATETIME    必填
+               ''                                                            "TFSJ",--  退费时间  DATETIME
+               d.DEPTCODE                                                    "YNJZKSDM",--  院内费用发生科室代码  VARCHAR 50  必填
+               nvl(d.DEPTNAME, '-')                                          "YNJZKSMC",--  院内费用发生科室名称  VARCHAR 100 必填
+               nvl(h.item_id, '-')                                           "JZKSDM",--  中心费用发生科室代码  VARCHAR 50  必填  《全民健康信息平台科室分类代码表》
+               nvl(h.item_name, '-')                                         "JZKSMC",--  中心费用发生科室名称  VARCHAR 100 必填  《全民健康信息平台科室分类代码表》
+               nvl(round(a.totcost, 3), 0)                                   "ZJE",-- 总金额 NUMERIC 18,3  必填  医院实际收取的费用     退费标志为2（退费）时，传负数
+               nvl(s.YBINSCP_SCP_AMT, 0)                                     "YBJE",--  医保结算范围金额  NUMERIC 18,3  必填  医保结算范围金额
+               nvl(round(a.PUBCOST, 3), 0)                                   "YBZFJE",--  医保支付金额  NUMERIC 18,3  必填  医保实际报销支付金额，如无，则填写0  退费标志为2（退费）时，传负数
+               nvl(round(a.OWNCOST, 3), 0)                                   "ZFJE",--  个人现金支付金额  NUMERIC 18,3  必填  非医保报销范围，由患者个人自付的医疗费用总额  退费标志为2（退费）时，传负数
+               nvl(round(a.PAYCOST, 3), 0)                                   "FLZJJE",--  个人账户支付金额  NUMERIC 18,3  必填  医疗保险患者的费用中属于个人支付部分的金额   退费标志为2（退费）时，传负数
+               nvl(round(d.reg_cost, 3), 0)                                  "GHF",-- 挂号费 NUMERIC 18,3    退费标志为2（退费）时，传负数
+               e.ZCF                                                         "ZCF",-- 诊察费 NUMERIC 18,3  必填  退费标志为2（退费）时，传负数
+               e.JCF                                                         "JCF",-- 检查费 NUMERIC 18,3  必填  退费标志为2（退费）时，传负数
+               e.HYF                                                         "HYF",-- 化验费 NUMERIC 18,3  必填  退费标志为2（退费）时，传负数
+               e.ZHILF                                                       "ZHILF",-- 治疗费 NUMERIC 18,3  必填  退费标志为2（退费）时，传负数
+               e.SSF                                                         "SSF",-- 手术费 NUMERIC 18,3  必填  退费标志为2（退费）时，传负数
+               e.WSCLF                                                       "WSCLF",-- 卫生材料费 NUMERIC 18,3  必填  退费标志为2（退费）时，传负数
+               e.XYF                                                         "XYF",-- 西药费 NUMERIC 18,3  必填  退费标志为2（退费）时，传负数
+               0                                                             "YMF",-- 疫苗费 NUMERIC 18,3  必填  退费标志为2（退费）时，传负数
+               e.ZYYPF                                                       "ZYYPF",-- 中药饮片费 NUMERIC 18,3  必填  退费标志为2（退费）时，传负数
+               e.ZCHYF                                                       "ZCHYF",-- 中成药费  NUMERIC 18,3  必填  退费标志为2（退费）时，传负数
+               e.ZHENLF                                                      "ZHENLF",--  一般诊疗费 NUMERIC 18,3  必填  退费标志为2（退费）时，传负数
+               e.QTF                                                         "QTF",-- 其他门急诊费  NUMERIC 18,3  必填  除以上费用外的其他门急诊费用  退费标志为2（退费）时，传负数
+               a.OPTER_CODE                                                  "SFCZYGH",-- 收费操作员工号 VARCHAR 64  必填
+               a.OPTER_NAME                                                  "SFCZYXM",-- 收费操作员姓名 VARCHAR 50  必填
+               g.certno                                                      "SFCZYSFZHM",--  收费操作员身份证号码  VARCHAR 18
+               to_char(sysdate, 'YYYY-MM-DD')                                "TBRQ" --  填报日期  DATETIME   必填 本条数据采集时间，格式YYYY-MM-DD
         from com_hospitalinfo b,
              com_patientinfo c,
              (select orgcode,
@@ -121,7 +121,8 @@
                               and a.type_rid = b.type_rid
                               and a.rid = b.item_rid
                               and a.module_rid = '202310101511361148853000000000'
-                              and a.type_rid = '202311141512391328016800000000') h on h.his_item_id = d.DEPTCODE,
+                              and a.type_rid = '202311141512391328016800000000'
+                              and b.orgcode = #{orgcode}) h on h.his_item_id = d.DEPTCODE,
              SI_OPB_SETLINFO s
         where a.orgcode = b.orgcode
           and a.orgcode = d.orgcode
@@ -142,55 +143,55 @@
           and to_char(a.CRTE_TIME, 'yyyy-mm-dd hh24:mi:ss') &lt;= #{endtime}
     </select>
     <select id="queryMzsfjlbtf" resultType="java.util.HashMap">
-        select a.orgcode                                                                        "YLJGDM",--	医疗机构代码	VARCHAR	22	必填	复合主键：采用22位“卫生机构代码”
-               a.CHRG_BCHNO                                                                     "SFLSH",--	收费流水号	VARCHAR	64	必填	复合主键
-               a.TRANSTYPE                                                                      "TFBZ",--	退费标志	VARCHAR	1	必填	复合主键： 	“1”：正常收费情况的费用 	“2”：对已填报的某一条具有相同“收费流水号”的正常收费进行退费
-               a.regid                                                                          "JZLSH",--	就诊流水号	VARCHAR	32	必填	复合主键：关联《门诊就诊记录表》
-               b.orgname                                                                        "YLJGMC",--	医疗机构名称	VARCHAR	70	必填	医院执业许可第一名称
-               '0'                                                                              "FYDM",--	分院代码	VARCHAR	20	必填	记录分院代码（内码）,如无分院，则传0
-               ''                                                                               "FYMC",--	分院名称	VARCHAR	120	条件必填	分院代码不为0时必填
-               a.INVOICENO                                                                      "FPH",--	发票号	VARCHAR	64	必填	超过一张发票时，用英文分号“;”分割
-               '1'                                                                              "KLX",--	卡类型	VARCHAR	16	必填	请按照以下优先级顺序填写：1：患者主索引号、2：身份证号、3：医保卡号，如果都没有则填写门诊就诊流水号
-               c.rid                                                                            "KH",--	卡号	VARCHAR	64	必填
-               f.item_id                                                                        "ZJLX",--	证件类型	VARCHAR	2		参见CV02.01.101-2022修订版 身份证件类别代码 	优先使用身份证
-               d.certno                                                                         "ZJHM",--	证件号码	VARCHAR	32
-               a.NAME                                                                           "XM",--	姓名	VARCHAR	50	必填
-               '100'                                                                            "JZLXDM",--	就诊类型代码	VARCHAR	3	必填	见CVA5101_01就诊类型代码
+        select a.orgcode                                                     "YLJGDM",--	医疗机构代码	VARCHAR	22	必填	复合主键：采用22位“卫生机构代码”
+               a.CHRG_BCHNO                                                  "SFLSH",--	收费流水号	VARCHAR	64	必填	复合主键
+               a.TRANSTYPE                                                   "TFBZ",--	退费标志	VARCHAR	1	必填	复合主键： 	“1”：正常收费情况的费用 	“2”：对已填报的某一条具有相同“收费流水号”的正常收费进行退费
+               a.regid                                                       "JZLSH",--	就诊流水号	VARCHAR	32	必填	复合主键：关联《门诊就诊记录表》
+               b.orgname                                                     "YLJGMC",--	医疗机构名称	VARCHAR	70	必填	医院执业许可第一名称
+               '0'                                                           "FYDM",--	分院代码	VARCHAR	20	必填	记录分院代码（内码）,如无分院，则传0
+               ''                                                            "FYMC",--	分院名称	VARCHAR	120	条件必填	分院代码不为0时必填
+               a.INVOICENO                                                   "FPH",--	发票号	VARCHAR	64	必填	超过一张发票时，用英文分号“;”分割
+               '1'                                                           "KLX",--	卡类型	VARCHAR	16	必填	请按照以下优先级顺序填写：1：患者主索引号、2：身份证号、3：医保卡号，如果都没有则填写门诊就诊流水号
+               c.rid                                                         "KH",--	卡号	VARCHAR	64	必填
+               f.item_id                                                     "ZJLX",--	证件类型	VARCHAR	2		参见CV02.01.101-2022修订版 身份证件类别代码 	优先使用身份证
+               d.certno                                                      "ZJHM",--	证件号码	VARCHAR	32
+               a.NAME                                                        "XM",--	姓名	VARCHAR	50	必填
+               '100'                                                         "JZLXDM",--	就诊类型代码	VARCHAR	3	必填	见CVA5101_01就诊类型代码
                case
                    when a.PAYKINDCODE = '01' then '07'
                    when a.PAYKINDCODE = '02' and d.INSUTYPE = 'A' then '01'
                    when a.PAYKINDCODE = '02' and d.INSUTYPE = 'B' then '02'
-                   else '99' end                                                                "BXLX",--	医疗费用支付方式	VARCHAR	4	必填	参见CV07.10.003-2022修订版 医疗费用来源类别
-               nvl(a.MCARDNO, '-')                                                                        "YBZHBZ",--	医保账户标识	VARCHAR	64	条件必填	医保账号，医保患者必填
-               decode(d.PERSON_AREA_FLAG, '1', '1', '2', '2', '3', '2', '5')                    "WDBZ",--	外地标志	VARCHAR	1		1：本市 2：外地 3：境外（港澳台） 4：外国 5：未知
-               to_char(a.CRTE_TIME, 'YYYY-MM-DD HH24:MI:SS')                                    "SFSJ",   --	收费时间	DATETIME		必填
-               to_char(a.OPTER_TIME, 'YYYY-MM-DD HH24:MI:SS')                                   "TFSJ",         --	退费时间	DATETIME
-               d.DEPTCODE                                                                       "YNJZKSDM",--	院内费用发生科室代码	VARCHAR	50	必填
-               nvl(d.DEPTNAME, '-')                                                                       "YNJZKSMC",--	院内费用发生科室名称	VARCHAR	100	必填
-               nvl(h.item_id, '-')                                                                        "JZKSDM",--	中心费用发生科室代码	VARCHAR	50	必填	《全民健康信息平台科室分类代码表》
-               nvl(h.item_name, '-')                                                                      "JZKSMC",--	中心费用发生科室名称	VARCHAR	100	必填	《全民健康信息平台科室分类代码表》
-               nvl(round(a.totcost, 3), 0)                                                      "ZJE",-- 总金额 NUMERIC 18,3  必填  医院实际收取的费用     退费标志为2（退费）时，传负数
-               nvl(s.YBINSCP_SCP_AMT, 0)                                                        "YBJE",--  医保结算范围金额  NUMERIC 18,3  必填  医保结算范围金额
-               nvl(round(a.PUBCOST, 3), 0)                                                      "YBZFJE",--  医保支付金额  NUMERIC 18,3  必填  医保实际报销支付金额，如无，则填写0  退费标志为2（退费）时，传负数
-               nvl(round(a.OWNCOST, 3), 0)                                                      "ZFJE",--  个人现金支付金额  NUMERIC 18,3  必填  非医保报销范围，由患者个人自付的医疗费用总额  退费标志为2（退费）时，传负数
-               nvl(round(a.PAYCOST, 3), 0)                                                      "FLZJJE",--  个人账户支付金额  NUMERIC 18,3  必填  医疗保险患者的费用中属于个人支付部分的金额   退费标志为2（退费）时，传负数
-               nvl(round(d.reg_cost, 3), 0)                                                     "GHF",-- 挂号费 NUMERIC 18,3    退费标志为2（退费）时，传负数
-               e.ZCF                                                                            "ZCF",-- 诊察费 NUMERIC 18,3  必填  退费标志为2（退费）时，传负数
-               e.JCF                                                                            "JCF",-- 检查费 NUMERIC 18,3  必填  退费标志为2（退费）时，传负数
-               e.HYF                                                                            "HYF",-- 化验费 NUMERIC 18,3  必填  退费标志为2（退费）时，传负数
-               e.ZHILF                                                                          "ZHILF",-- 治疗费 NUMERIC 18,3  必填  退费标志为2（退费）时，传负数
-               e.SSF                                                                            "SSF",-- 手术费 NUMERIC 18,3  必填  退费标志为2（退费）时，传负数
-               e.WSCLF                                                                          "WSCLF",-- 卫生材料费 NUMERIC 18,3  必填  退费标志为2（退费）时，传负数
-               e.XYF                                                                            "XYF",-- 西药费 NUMERIC 18,3  必填  退费标志为2（退费）时，传负数
-               0                                                                                "YMF",-- 疫苗费 NUMERIC 18,3  必填  退费标志为2（退费）时，传负数
-               e.ZYYPF                                                                          "ZYYPF",-- 中药饮片费 NUMERIC 18,3  必填  退费标志为2（退费）时，传负数
-               e.ZCHYF                                                                          "ZCHYF",-- 中成药费  NUMERIC 18,3  必填  退费标志为2（退费）时，传负数
-               e.ZHENLF                                                                         "ZHENLF",--  一般诊疗费 NUMERIC 18,3  必填  退费标志为2（退费）时，传负数
-               e.QTF                                                                            "QTF",-- 其他门急诊费  NUMERIC 18,3  必填  除以上费用外的其他门急诊费用  退费标志为2（退费）时，传负数
-               a.OPTER_CODE                                                                     "SFCZYGH",--	收费操作员工号	VARCHAR	64	必填
-               a.OPTER_NAME                                                                     "SFCZYXM",--	收费操作员姓名	VARCHAR	50	必填
-               g.certno                                                                         "SFCZYSFZHM",--	收费操作员身份证号码	VARCHAR	18
-               to_char(sysdate, 'YYYY-MM-DD')                            "TBRQ" --	填报日期	DATETIME	 必填	本条数据采集时间，格式YYYY-MM-DD
+                   else '99' end                                             "BXLX",--	医疗费用支付方式	VARCHAR	4	必填	参见CV07.10.003-2022修订版 医疗费用来源类别
+               nvl(a.MCARDNO, '-')                                           "YBZHBZ",--	医保账户标识	VARCHAR	64	条件必填	医保账号，医保患者必填
+               decode(d.PERSON_AREA_FLAG, '1', '1', '2', '2', '3', '2', '5') "WDBZ",--	外地标志	VARCHAR	1		1：本市 2：外地 3：境外（港澳台） 4：外国 5：未知
+               to_char(a.CRTE_TIME, 'YYYY-MM-DD HH24:MI:SS')                 "SFSJ", --	收费时间	DATETIME		必填
+               to_char(a.OPTER_TIME, 'YYYY-MM-DD HH24:MI:SS')                "TFSJ", --	退费时间	DATETIME
+               d.DEPTCODE                                                    "YNJZKSDM",--	院内费用发生科室代码	VARCHAR	50	必填
+               nvl(d.DEPTNAME, '-')                                          "YNJZKSMC",--	院内费用发生科室名称	VARCHAR	100	必填
+               nvl(h.item_id, '-')                                           "JZKSDM",--	中心费用发生科室代码	VARCHAR	50	必填	《全民健康信息平台科室分类代码表》
+               nvl(h.item_name, '-')                                         "JZKSMC",--	中心费用发生科室名称	VARCHAR	100	必填	《全民健康信息平台科室分类代码表》
+               nvl(round(a.totcost, 3), 0)                                   "ZJE",-- 总金额 NUMERIC 18,3  必填  医院实际收取的费用     退费标志为2（退费）时，传负数
+               nvl(s.YBINSCP_SCP_AMT, 0)                                     "YBJE",--  医保结算范围金额  NUMERIC 18,3  必填  医保结算范围金额
+               nvl(round(a.PUBCOST, 3), 0)                                   "YBZFJE",--  医保支付金额  NUMERIC 18,3  必填  医保实际报销支付金额，如无，则填写0  退费标志为2（退费）时，传负数
+               nvl(round(a.OWNCOST, 3), 0)                                   "ZFJE",--  个人现金支付金额  NUMERIC 18,3  必填  非医保报销范围，由患者个人自付的医疗费用总额  退费标志为2（退费）时，传负数
+               nvl(round(a.PAYCOST, 3), 0)                                   "FLZJJE",--  个人账户支付金额  NUMERIC 18,3  必填  医疗保险患者的费用中属于个人支付部分的金额   退费标志为2（退费）时，传负数
+               nvl(round(d.reg_cost, 3), 0)                                  "GHF",-- 挂号费 NUMERIC 18,3    退费标志为2（退费）时，传负数
+               e.ZCF                                                         "ZCF",-- 诊察费 NUMERIC 18,3  必填  退费标志为2（退费）时，传负数
+               e.JCF                                                         "JCF",-- 检查费 NUMERIC 18,3  必填  退费标志为2（退费）时，传负数
+               e.HYF                                                         "HYF",-- 化验费 NUMERIC 18,3  必填  退费标志为2（退费）时，传负数
+               e.ZHILF                                                       "ZHILF",-- 治疗费 NUMERIC 18,3  必填  退费标志为2（退费）时，传负数
+               e.SSF                                                         "SSF",-- 手术费 NUMERIC 18,3  必填  退费标志为2（退费）时，传负数
+               e.WSCLF                                                       "WSCLF",-- 卫生材料费 NUMERIC 18,3  必填  退费标志为2（退费）时，传负数
+               e.XYF                                                         "XYF",-- 西药费 NUMERIC 18,3  必填  退费标志为2（退费）时，传负数
+               0                                                             "YMF",-- 疫苗费 NUMERIC 18,3  必填  退费标志为2（退费）时，传负数
+               e.ZYYPF                                                       "ZYYPF",-- 中药饮片费 NUMERIC 18,3  必填  退费标志为2（退费）时，传负数
+               e.ZCHYF                                                       "ZCHYF",-- 中成药费  NUMERIC 18,3  必填  退费标志为2（退费）时，传负数
+               e.ZHENLF                                                      "ZHENLF",--  一般诊疗费 NUMERIC 18,3  必填  退费标志为2（退费）时，传负数
+               e.QTF                                                         "QTF",-- 其他门急诊费  NUMERIC 18,3  必填  除以上费用外的其他门急诊费用  退费标志为2（退费）时，传负数
+               a.OPTER_CODE                                                  "SFCZYGH",--	收费操作员工号	VARCHAR	64	必填
+               a.OPTER_NAME                                                  "SFCZYXM",--	收费操作员姓名	VARCHAR	50	必填
+               g.certno                                                      "SFCZYSFZHM",--	收费操作员身份证号码	VARCHAR	18
+               to_char(sysdate, 'YYYY-MM-DD')                                "TBRQ" --	填报日期	DATETIME	 必填	本条数据采集时间，格式YYYY-MM-DD
         from com_hospitalinfo b,
              com_patientinfo c,
              (select orgcode,
@@ -261,7 +262,8 @@
                               and a.type_rid = b.type_rid
                               and a.rid = b.item_rid
                               and a.module_rid = '202310101511361148853000000000'
-                              and a.type_rid = '202311141512391328016800000000') h on h.his_item_id = d.DEPTCODE,
+                              and a.type_rid = '202311141512391328016800000000'
+                              and b.orgcode=#{orgcode}) h on h.his_item_id = d.DEPTCODE,
              SI_OPB_SETLINFO s
         where a.orgcode = b.orgcode
           and a.orgcode = d.orgcode

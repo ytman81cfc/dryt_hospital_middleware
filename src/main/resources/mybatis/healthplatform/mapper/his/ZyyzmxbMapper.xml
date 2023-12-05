@@ -137,7 +137,8 @@
                               and a.type_rid = b.type_rid
                               and a.rid = b.item_rid
                               and a.module_rid = '202310101511361148853000000000'
-                              and a.type_rid = '202311141512391328016800000000') de on de.his_item_id = s.DEPTCODE
+                              and a.type_rid = '202311141512391328016800000000'
+                              and b.orgcode=#{orgcode}) de on de.his_item_id = s.DEPTCODE
                  left join (select a.item_id, a.item_name, b.his_item_id
                             from si_yt_report_item a,
                                  si_yt_report_item_compare b
@@ -145,7 +146,8 @@
                               and a.type_rid = b.type_rid
                               and a.rid = b.item_rid
                               and a.module_rid = '202310101511361148853000000000'
-                              and a.type_rid = '202311141512391328016800000000') pt on pt.his_item_id = s.DEPTCODE
+                              and a.type_rid = '202311141512391328016800000000'
+                              and b.orgcode=#{orgcode}) pt on pt.his_item_id = s.DEPTCODE
                  left join com_userinfo g on g.orgcode = s.orgcode and g.usercode = s.DOCTCODE
                  left join com_userinfo j on j.orgcode = s.orgcode and j.usercode = s.CHECKNURSECD
                  left join com_userinfo k on k.orgcode = s.orgcode and k.usercode = s.CONFIRMCODE
@@ -167,7 +169,8 @@
                               and a.type_rid = b.type_rid
                               and a.rid = b.item_rid
                               and a.module_rid = '202310101511361148853000000000'
-                              and a.type_rid = '202310101607011149584800000000') t on t.his_item_id = s.FREQCODE
+                              and a.type_rid = '202310101607011149584800000000'
+             and b.orgcode=#{orgcode}) t on t.his_item_id = s.FREQCODE
                  left join com_dictcodeinfo u
                            on u.typecode = 'MINUNIT'
                                and u.dictcode = s.DOSEUNIT,
