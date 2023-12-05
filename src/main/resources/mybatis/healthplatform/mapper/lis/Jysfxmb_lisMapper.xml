@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hospital.middleware.healthplatform.dao.his.HealthplatfromDAO">
+    <select id="queryJysfxmb_his" resultType="java.util.HashMap">
+        select org_code  orgcode,
+               exe_csqn  applyid,
+               result_date bgrq,
+               patient_id patientid,
+               patient_type,patienttype,
+               inhosno
+         from lis_test_reg
+        where  is_adjustSample='1'
+    and exe_csqn is not null
+    and exe_csqn != ''
+    and result_date is not null
+    and result_date&gt;=to_date(#{begtime},'yyyy-mm-dd hh24:mi:ss')
+    and result_date&lt;=to_date(#{endtime},'yyyy-mm-dd hh24:mi:ss')
+</mapper>
