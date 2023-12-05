@@ -83,7 +83,7 @@ public interface HealthplatfromDAO {
     List<Map> queryZyzdmxbg(String orgcode,String begtime,String endtime);
 
     //JYSFXMB 检验收费项目明细表
-    List<Map> queryJysfxmb(String orgcode,String begtime,String endtime);
+    //List<Map> queryJysfxmb(String orgcode,String begtime,String endtime);
 
     //EMR_MJZBL 门(急)诊病历
     List<Map> queryEmr_mjzbl(String orgcode,String begtime,String endtime);
