@@ -72,6 +72,8 @@ public interface HealthplatfromDAO {
     //ZYFYFSMX 住院费用发生明细
     List<Map> queryZyfyfsmx(String orgcode,String begtime,String endtime);
 
+    //BA_SYJBK BA_SYJBK
+    List<Map> queryBa_syjbk(String orgcode,String begtime,String endtime);
     //BA_SYSSK 西医病案首页手术
     List<Map> queryBa_syssk(String orgcode,String begtime,String endtime);
     //BA_SYZDK 西医病案首页出院诊断
@@ -79,6 +81,9 @@ public interface HealthplatfromDAO {
 
     //ZYZDMXBG 诊断明细报告
     List<Map> queryZyzdmxbg(String orgcode,String begtime,String endtime);
+
+    //JYSFXMB 检验收费项目明细表
+    //List<Map> queryJysfxmb(String orgcode,String begtime,String endtime);
 
     //EMR_MJZBL 门(急)诊病历
     List<Map> queryEmr_mjzbl(String orgcode,String begtime,String endtime);
@@ -98,5 +103,6 @@ public interface HealthplatfromDAO {
     List<Map> queryTj_zygzl_ks_rb(String orgcode,String begtime,String endtime);
     //TJ_SSYW_CWZYQK 床位占用情况表
     List<Map> queryTj_ssyw_cwzyqk(String orgcode,String begtime,String endtime);
+
 
 }

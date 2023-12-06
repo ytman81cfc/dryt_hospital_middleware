@@ -480,7 +480,8 @@
                               and a.type_rid = b.type_rid
                               and a.rid = b.item_rid
                               and a.module_rid = '202310101511361148853000000000'
-                              and a.type_rid = '202310101607011149584800000000') m
+                              and a.type_rid = '202310101607011149584800000000'
+                              and b.orgcode=#{orgcode}) m
                            on m.his_item_id = a.FREQCODE
                  left join (select a.item_id, a.item_name, b.his_item_id
                             from si_yt_report_item a,
@@ -526,7 +527,8 @@
                               and a.type_rid = b.type_rid
                               and a.rid = b.item_rid
                               and a.module_rid = '202310101511361148853000000000'
-                              and a.type_rid = '202311141512391328016800000000') y
+                              and a.type_rid = '202311141512391328016800000000'
+                              and b.orgcode=#{orgcode}) y
                            on y.his_item_id = c.DEPTCODE
         where a.orgcode = i.orgcode
           and a.REGID = i.REGID
@@ -1005,7 +1007,8 @@
                               and a.type_rid = b.type_rid
                               and a.rid = b.item_rid
                               and a.module_rid = '202310101511361148853000000000'
-                              and a.type_rid = '202310121416061161347000000000') v
+                              and a.type_rid = '202310121416061161347000000000'
+             and b.orgcode=#{orgcode}) v
                            on v.his_item_id = a.HERMEDFREQ,
              opr_register c
                  left join (select a.item_id, b.his_item_id
@@ -1033,7 +1036,8 @@
                               and a.type_rid = b.type_rid
                               and a.rid = b.item_rid
                               and a.module_rid = '202310101511361148853000000000'
-                              and a.type_rid = '202311141512391328016800000000') y
+                              and a.type_rid = '202311141512391328016800000000'
+                              and b.orgcode=#{orgcode}) y
                            on y.his_item_id = c.DEPTCODE
         where a.orgcode = i.orgcode
           and a.REGID = i.REGID
@@ -1255,7 +1259,8 @@
                               and a.type_rid = b.type_rid
                               and a.rid = b.item_rid
                               and a.module_rid = '202310101511361148853000000000'
-                              and a.type_rid = '202311141512391328016800000000') y
+                              and a.type_rid = '202311141512391328016800000000'
+                              and b.orgcode=#{orgcode}) y
                            on y.his_item_id = c.DEPTCODE
         where a.orgcode = i.orgcode
           and a.REGID = i.REGID

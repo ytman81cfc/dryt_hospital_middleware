@@ -182,7 +182,8 @@
                               and a.type_rid = b.type_rid
                               and a.rid = b.item_rid
                               and a.module_rid = '202310101511361148853000000000'
-                              and a.type_rid = '202311141512391328016800000000') i on i.his_item_id = a.DEPTCODE
+                              and a.type_rid = '202311141512391328016800000000'
+                              and b.orgcode=#{orgcode}) i on i.his_item_id = a.DEPTCODE
 
         where a.orgcode = b.orgcode
           and a.orgcode = c.orgcode
