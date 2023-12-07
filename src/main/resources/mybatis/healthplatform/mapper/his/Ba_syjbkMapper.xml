@@ -1,0 +1,537 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hospital.middleware.healthplatform.dao.his.HealthplatfromDAO">
+    <select id="queryBa_syjbk" resultType="java.util.HashMap">
+        select a.orgcode                                                          "YLJGDM",      --  医疗机构代码  VARCHAR 22  必填  复合主键：采用22位“卫生机构代码”
+               a.visit_id                                                         "JZLSH",       --  住院就诊流水号 VARCHAR 50  必填  复合主键：医院HIS系统的唯一编号
+               b.orgname                                                          "YLJGMC",      -- 医疗机构名称  VARCHAR 70  必填  医院执业许可第一名称
+               '0'                                                                "FYDM",        -- 分院代码  VARCHAR 20  必填  记录分院代码（内码）,如无分院，则传0
+               ''                                                                 "FYMC",        -- 分院名称  VARCHAR 120 条件必填  分院代码不为0时必填
+               aa.item_id                                                         "JGLB",        -- 机构类别  VARCHAR 12  必填  参见 CVA08.10.001卫生机构（组织）分类代码
+               '1'                                                                "BASYLX",      -- 病案首页类型  VARCHAR 2 必填  1：西医 2：中医 本表填写固定值1（西医）
+               f.item_id                                                          "BRXZ",        -- 医疗费用支付方式代码  VARCHAR 4   参见 CV07.10.005医疗付费方式
+               a.INTIMES                                                          "RYCS",        -- 入院次数  INT
+               a.MEDCASNO                                                         "BAHM",        -- 病案号 VARCHAR 20  必填
+               '1'                                                                "KLX",         --  卡类型 VARCHAR 16  必填  请按照以下优先级顺序填写：1：患者主索引号、2：身份证号、3：医保卡号，如果都没有则填写住院就诊流水号
+               c.rid                                                              "JYKH",        -- 卡号  VARCHAR 64  必填
+               a.HEALTHCARD                                                       "JKKH ",       --  健康卡号  VARCHAR 64
+               a.NAME                                                             "BRXM",        -- 病人姓名  VARCHAR 50  必填
+               g.item_id                                                          "BRXB",        -- 病人性别  VARCHAR 4 必填  参见GB/T 2261.1-2003 性别代码表
+               to_char(a.BIRTH_DATE, 'yyyy-mm-dd hh24:mi:ss')                     "CSNY",        -- 出生日期  DATETIME    必填
+               decode(d.AGE_UNIT, '1', d.AGE, 0)                                  "XSNL",        -- 年龄  NUMERIC 3 必填  单位：岁，患者入院年龄，指患者入院时按照日历计算的历法年龄，应以实足年龄的相应整数填写。大于或等于0的整数，不足1周岁填0
+               decode(d.AGE_UNIT, '2', d.AGE, 0)                                  "NL_BABY",     --  不足1周岁年龄 NUMERIC 3 条件必填  单位：天，不足1周岁的实足天数
+               '01'                                                               "SFZLBDM",     --  身份证类别代码 VARCHAR 4   参见CV02.01.101-2022修订版  身份证件类别代码
+               a.certno                                                           "SFZH",        -- 身份证号  VARCHAR 20
+               h.item_id                                                          "GJDM",        -- 国籍代码  VARCHAR 4 必填  参见 GB/T 2659-2000
+               i.item_id                                                          "MZDM",        -- 民族代码  VARCHAR 4 必填  参见 GB/T 3304-1991-2022修订版 民族代码表
+               j.item_id                                                          "ZYDM",        -- 职业（从业）代码  VARCHAR 4 必填  参见 GB/T 2261.4-2003 职业分类与代码
+               decode(a.MARITAL_STATUS_CODE,
+                      '1',
+                      '10',
+                      '2',
+                      '20',
+                      '3',
+                      '30',
+                      '4',
+                      '40',
+                      '9',
+                      '99')                                                       "HYZK",        -- 婚姻状况  VARCHAR 4 必填  参见 GB/T 2261.2-2003-2022修订版 婚姻状况代码（10：未婚20：已婚 30：丧偶 40：离婚 90：未说明的婚姻状况 99：其他）
+               k.item_id                                                          "XXDM",        -- ABO血型代码 VARCHAR 4 必填  1：A型 2：B型 3：O型 4：AB型 5：不详 6：未查
+               k.item_name                                                        "ABOXX",       --  ABO血型名称 VARCHAR 50  必填
+               d.BLOOD_TYPE_RH                                                    "RHJY",        -- RH血型代码  VARCHAR 4 必填  1：阴性 2：阳性 3：不详 4：未查
+               decode(d.BLOOD_TYPE_RH,
+                      '1',
+                      '阴性',
+                      '2',
+                      '阳性',
+                      '3',
+                      '不详',
+                      '4',
+                      '未查')                                                       "RHXX",        -- RH血型名称  VARCHAR 50  必填
+               a.BABY_BIRTH_WEIGHT                                                "XSECSTZ",     --  新生儿出生体重（1孩） VARCHAR 64  条件必填  新生儿出生后第1小时内第1次称得的体重，产妇病历和新生儿期住院的患儿都写单位（克）
+               ''                                                                 "XSECSTZ2",    -- 新生儿出生体重（2孩） VARCHAR 64  条件必填  产妇病历且为多胎时，填写该字段，单位（克）
+               ''                                                                 "XSECSTZ3",    -- 新生儿出生体重（3孩） VARCHAR 64  条件必填  产妇病历且为多胎时，填写该字段，单位（克）
+               ''                                                                 "XSECSTZ4",    -- 新生儿出生体重（4孩） VARCHAR 64  条件必填  产妇病历且为多胎时，填写该字段，单位（克）
+               ''                                                                 "XSECSTZ5",    -- 新生儿出生体重（5孩） VARCHAR 64  条件必填  产妇病历且为多胎时，填写该字段，单位（克）
+               a.BABY_ADMIN_WEIGHT                                                "XSERYTZ",     --  新生儿入院体重 VARCHAR 64  条件必填  新生儿患儿入院时称得的体重，新生儿期住院的患儿必填写，单位（克）
+               a.BIRTH_PROVINCE                                                   "CSDSSMC",     --  出生地（省市） VARCHAR 70  必填  患者出生地址中的省、自治区或直辖市名称
+               a.BIRTH_CITY                                                       "CSDDSMC",     --  出生地（地市） VARCHAR 70  必填  患者出生地址中的市、地区或州的名称
+               a.BIRTH_COUNTY                                                     "CSDQXMC",     --  出生地（区县） VARCHAR 70  必填  患者出生地址中的县（区）的名称
+               a.NATIVE_PROVINCE                                                  "JGSSMC",      -- 籍贯（省市）  VARCHAR 70  必填  祖居地或原籍所在地的省、自治区或直辖市名称
+               a.NATIVE_CITY                                                      "JGSMC",       --  籍贯（地市）  VARCHAR 70  必填  祖居地或原籍所在地的市、地区或州的名称
+               a.PRESENT_PROVINCE || a.PRESENT_CITY || a.PRESENT_COUNTY ||
+               a.PRESSENT_TOWN || a.PRESSENT_VILLAGE ||
+               a.PRESENT_OTHER                                                    "XZZ",         --  现住详细地址  VARCHAR 128 必填  现住址中的详细地址
+               a.PRESENT_PROVINCE                                                 "XZZSSMC",     --  现住址（省市） VARCHAR 70  必填  现住址中的省、自治区或直辖市名称
+               a.PRESENT_CITY                                                     "XZZSMC",      -- 现住址（地市） VARCHAR 70  必填  现住址中的市、地区或州的名称
+               a.PRESENT_COUNTY                                                   "XZZQXMC",     --  现住址（区县） VARCHAR 70  必填  现住址中的县（区）的名称
+               a.PRESSENT_TOWN                                                    "XZZXMC",      -- 现住址（乡镇、街道）  VARCHAR 70    现住址中的乡、镇或城市的街道办事处名称
+               a.PRESSENT_VILLAGE                                                 "XZZCMC",      -- 现住址（村、街、路、弄）  VARCHAR 70    现住址中的村或城市街、路、里、弄等名称
+               a.PRESENT_OTHER                                                    "XZZXMCMPH",   --  现住址（门牌号码） VARCHAR 70  必填  现住址的门牌号码
+               a.ZIP_CODE                                                         "XZZYB",       --  现住址邮编 VARCHAR 16  必填  现住址的邮政编码
+               ''                                                                 "XZZBM",       --  现住址编码 VARCHAR 6   现住址行政区划编码，有现住址的必须填写现住址编码，至少记录到县区级
+               a.HOME_TEL                                                         "XZZDH",       --  现住址电话 VARCHAR 16  必填  现住址电话
+               a.PERMANENT_PROVINCE || a.PERMANENT_CITY || a.PERMANENT_COUNTY ||
+               a.PERMANENT_TOWN || a.PERMANENT_VILLAGE || a.PERMANENT_OTHER       "HKDZ",        -- 户口地址  VARCHAR 128 必填
+               a.PERMANENT_PROVINCE                                               "HJDZSSMC",    -- 户籍地址（省市）  VARCHAR 70  必填  户籍地址中的省、自治区或直辖市名称
+               a.PERMANENT_CITY                                                   "HJDZSMC",     --  户籍地址（地市）  VARCHAR 70  必填  户籍地址中的市、地区或州的名称
+               a.PERMANENT_COUNTY                                                 "HJDZQXMC",    -- 户籍地址（区县）  VARCHAR 70  必填  户籍地址中的县或区名称
+               a.PERMANENT_TOWN                                                   "HJDZDZXMC",   --  户籍地址（乡镇、街道） VARCHAR 70    户籍地址中的乡、镇或城市的街道办事处名称
+               a.PERMANENT_VILLAGE                                                "HJDZDZCMC",   --  户籍地址（村、街、路、弄） VARCHAR 70    户籍地址中的村或城市的街、路、里、弄等名称
+               a.PERMANENT_OTHER                                                  "HJDZDZMPH",   --  户籍地址（门牌号码）  VARCHAR 70  必填  户籍地址中的门牌号码
+               a.PERMANENTADDRESS_ZIP_CODE                                        "HKYB",        -- 户籍地邮编 VARCHAR 16    户籍地址的邮政编码
+               ''                                                                 "HJDZBM",      -- 户籍地址编码  VARCHAR 6   户籍地行政区划编码，记录到县区级
+               a.SERVICE_AGENCY                                                   "GZDW",        -- 单位名称  VARCHAR 128   如单位名称和单位地址可区分则只传单位名称，否则传单位名称及地址
+               a.WORK_PROVINCE || a.WORK_CITY || a.WORK_COUNTY || a.WORK_TOWN ||
+               a.WORK_VILLAGE ||
+               a.WORK_OTHER                                                       "DWDZ",        -- 单位地址  VARCHAR 128   如单位名称和单位地址可区分则传单位详细地址，否则传单位名称及地址
+               a.WORK_PROVINCE                                                    "GZDWSSMC",    -- 单位地址（省市）  VARCHAR 70    单位地址中的省、自治区或直辖市名称
+               a.WORK_CITY                                                        "GZDWDZSMC",   --  单位地址（地市）  VARCHAR 70    单位地址中的市、地区或州的名称
+               a.WORK_COUNTY                                                      "GZDWDZQXMC",  -- 单位地址（区县）  VARCHAR 70    单位地址中的县（区）的名称
+               a.WORK_TOWN                                                        "GZDWDZXMC",   --  单位地址（乡镇、街道） VARCHAR 70    单位地址中的乡、镇或城市的街道办事处名称
+               a.WORK_VILLAGE                                                     "GZDWDZCMC",   --  单位地址（村、街、路、弄） VARCHAR 70    单位地址中的村或城市的街、路、里、弄等名称
+               a.WORK_OTHER                                                       "GZDWDZMPH",   --  单位地址（门牌号码）  VARCHAR 70    单位地址中的门牌号码
+               a.WORK_ZIP                                                         "DWYB",        -- 单位邮编  VARCHAR 16    单位地址的邮政编码
+               a.WORK_TEL                                                         "DWDH",        -- 单位电话  VARCHAR 16    单位联系电话
+               a.NEXT_OF_KIN                                                      "LXRM",        -- 联系人姓名 VARCHAR 50  必填
+               a.RELATIONSHIP_CODE                                                "LXGX",        -- 联系人关系 VARCHAR 4 必填  参见 GB/T 4761-2008-2022修订版 家庭关系代码表
+               a.NEXT_OF_KIN_PROVINCE || a.NEXT_OF_KIN_CITY || a.NEXT_OF_KIN_COUNTY ||
+               a.NEXT_OF_KIN_TOWN || a.NEXT_OF_KIN_VILLAGE || a.NEXT_OF_KIN_OTHER "LXRDZ",       --  联系人地址 VARCHAR 128
+               a.NEXT_OF_KIN_PROVINCE                                             "LXRDZSSMC",   --  联系人地址（省市） VARCHAR 70    指联系人当前常驻地址或工作单位地址
+               a.NEXT_OF_KIN_CITY                                                 "LXRDZSMC",    -- 联系人地址（地市） VARCHAR 70    联系人地址中的省、自治区或直辖市名称
+               a.NEXT_OF_KIN_COUNTY                                               "LXRDZQXMC",   --  联系人地址（区县） VARCHAR 70    联系人地址中的市、地区或州的名称
+               a.NEXT_OF_KIN_TOWN                                                 "LXRDZXMC",    -- 联系人地址（乡镇、街道）  VARCHAR 70    联系人地址中的县（区）的名称
+               a.NEXT_OF_KIN_VILLAGE                                              "LXRDZCMC",    -- 联系人地址（村、街、路、弄）  VARCHAR 70    联系人地址中的乡、镇或城市的街道办事处名称
+               a.NEXT_OF_KIN_OTHER                                                "LXRDZMPH",    -- 联系人地址（门牌号码） VARCHAR 70    联系人地址中的村或城市的街、路、里、弄等名称
+               a.NEXT_OF_KIN_PHONE                                                "LXDH",        -- 联系人电话 VARCHAR 16  必填
+               l.item_id                                                          "RYTJ",        -- 入院途径  VARCHAR 4 必填  参见 CV09.00.403入院途径 1：急诊 2：门诊 3：其他医疗机构转入 9：其他
+               to_char(d.ADMISSION_DATE_TIME, 'yyyy-mm-dd')                       "RYRQ",        -- 入院日期  DATETIME    必填  YYYY-MM-DD
+               m.item_id                                                          "RYBQYZCD",    -- 入院病情严重程度  VARCHAR 1   1：        危 2：急 3：一般
+               ''                                                                 "RYBQMS",      -- 入院病情描述  VARCHAR 250 条件必填  入院诊断为空时必填
+               r.DISE_CODE                                                        "YNRYZDBM",    -- 院内入院西医诊断编码  VARCHAR 256
+               r.DISE_NAME                                                        "YNRYZDMC",    -- 院内入院西医诊断名称  VARCHAR 512
+               r.item_id                                                          "RYZDBM",      -- 中心入院西医诊断编码  VARCHAR 256   参见《疾病分类与代码(ICD-10)》
+               r.item_name                                                        "RYZDMC",      -- 中心入院西医诊断名称  VARCHAR 512   参见《疾病分类与代码(ICD-10)》
+               to_char(d.ADMISSION_DATE_TIME, 'yyyy-mm-dd')                       "QZRQ",        -- 入院确诊日期  DATETIME      入院诊断确诊日期，YYYY-MM-DD
+               d.DEPT_ADMISSION_TO                                                "YNRYKS",      -- 院内入院科室编码  VARCHAR 64  必填
+               d.DEPT_NAME_ADMISSION_TO                                           "YNRYKSMC",    -- 院内入院科室名称  VARCHAR 200 必填
+               o.item_id                                                          "RYKS",        -- 中心入院科室编码  VARCHAR 64  必填  参见《全民健康信息平台科室分类代码表》
+               o.item_name                                                        "RYKSMC",      -- 中心入院科室名称  VARCHAR 200 必填  参见《全民健康信息平台科室分类代码表》
+               d.WARD_NAME_ADMISSION_TO                                           "RYKBBFMC",    -- 入院病房  VARCHAR 50  必填  填写入院时的病区信息
+               d.TRANSFER_DEPT                                                    "ZKKS",        -- 转科科别  VARCHAR 512   转科科室集合，多次转科都要列出，类似于“内科-&gt;外科-&gt;骨科”，入院科室和出院科室不一致时必填
+               to_char(d.DISCHARGE_DATE_TIME, 'yyyy-mm-dd')                       "CYRQ",        -- 出院日期  DATETIME    必填  YYYY-MM-DD
+               d.DEPT_DISCHARGE_FROM                                              "YNCYKS",      -- 院内出院科室编码  VARCHAR 64  必填
+               d.DEPT_NAME_DISCHARGE_FROM                                         "YNCYKSMC",    -- 院内出院科室名称  VARCHAR 200 必填
+               p.item_id                                                          "CYKS",        -- 中心出院科室编码  VARCHAR 64  必填  参见《全民健康信息平台科室分类代码表》
+               p.item_name                                                        "CYKSMC",      -- 中心出院科室名称  VARCHAR 200 必填  参见《全民健康信息平台科室分类代码表》
+               d.WARD_NAME_DISCHARGE_FROM                                         "CYKBBFMC",    -- 出院病房  VARCHAR 100 必填  填写出院时的病区信息
+               d.IN_HOS_DAYS                                                      "ZYTS",        -- 住院天数  INT   必填
+               u.num                                                              "SSSL",        -- 手术及操作填写数量 INT   必填  含主手术及操作和其他手术及操作   与西医病案首页手术（BA_SYSSK）表关联数据数量
+               t.num                                                              "CYZDSL",      -- 出院诊断填写数量  INT   必填  含主诊断和其他诊断 与西医病案首页诊断（BA_SYZDK）表关联数据数量
+               s.DIAGNOSIS_CODE                                                   "YNZYZD",      -- 院内出院西医主要诊断编码  VARCHAR 256 必填
+               s.DIAGNOSIS_NAME                                                   "YNZYZDMC",    -- 院内出院西医主要诊断名称  VARCHAR 512 必填
+               s.item_id                                                          "ZYZD",        -- 中心出院西医主要诊断编码  VARCHAR 256 必填  参见《疾病分类与代码(ICD-10)》
+               s.item_name                                                        "ZYZDMC",      -- 中心出院西医主要诊断名称  VARCHAR 512 必填  参见《疾病分类与代码(ICD-10)》
+               '4'                                                                "RYSBQ",       --  入院病情（对应西医主要诊断）  VARCHAR 4 必填  参见CV05.10.019入院病情 1：有 2：临床未确定 3：情况不明 4：无
+               decode(s.DISCHARGE_CONDITIONS_ID,
+                      '1',
+                      '1',
+                      '2',
+                      '2',
+                      '4',
+                      '5',
+                      '5',
+                      '9')                                                        "CYZGDM",      -- 出院转归（对应西医主要诊断）  VARCHAR 4 必填  参见CV05.10.010病情转归 1：治愈 2：好转 3：稳定 4：恶化 5：死亡 9：其他
+               d.OUTPATIENT_DIAGNOSIS_CODE                                        "YNMZZDBM",    -- 院内门急诊西医诊断编码 VARCHAR 256 必填
+               d.OUTPATIENT_DIAGNOSIS                                             "YNMJZZDMC",   --  院内门急诊西医诊断名称 VARCHAR 512 必填
+               n.item_id                                                          "MZZDBM",      -- 中心门急诊西医诊断编码 VARCHAR 256 必填  参见《疾病分类与代码(ICD-10)》
+               n.item_name                                                        "MJZZDMC",     --  中心门急诊西医诊断名称 VARCHAR 512 必填  参见《疾病分类与代码(ICD-10)》
+               d.EXT_INJURY_POISON_CODE                                           "YNSSZD",      -- 院内损伤中毒外部原因编码  VARCHAR 64    多选项，使用“/”（左斜杠）进行分隔
+               d.EXT_INJURY_POISON                                                "YNSSZDMC",    -- 院内损伤中毒外部原因  VARCHAR 256   多选项，使用“;”（英文分号）进行分隔
+               q.item_id                                                          "SSZD",        -- 中心损伤中毒外部原因编码  VARCHAR 64    多选项，使用“/”（左斜杠）进行分隔 参见《疾病分类与代码(ICD-10)》
+               q.item_name                                                        "SSWYMC",      -- 中心损伤中毒外部原因  VARCHAR 256   多选项，使用“;”（英文分号）进行分隔 参见《疾病分类与代码(ICD-10)》
+               d.PATHOLOGIC_DIAGNOSIS                                             "YNBLZD",      -- 院内病理诊断  VARCHAR 256   多选项，使用“/”（左斜杠）进行分隔
+               d.PATHOLOGIC_DIAGNOSIS                                             "YNBLZDMC",    -- 院内病理诊断名称  VARCHAR 512   多选项，使用“;”（英文分号）进行分隔
+               v.item_id                                                          "BLZD",        -- 中心病理诊断  VARCHAR 256   多选项，使用“/”（左斜杠）进行分隔 参见《疾病分类与代码(ICD-10)》
+               v.item_name                                                        "BLZDMC",      -- 中心病理诊断名称  VARCHAR 512   多选项，使用“;”（英文分号）进行分隔 参见《疾病分类与代码(ICD-10)》
+               d.PATHOLOGICAL_NUMBER                                              "BLBH",        -- 病理号 VARCHAR 100 条件必填  多选项，使用“/”（左斜杠）进行分隔，有病理诊断时必填
+               d.IS_ALLERGY                                                       "YWGM",        -- 有无药物过敏  VARCHAR 4 必填  1：无 2：有
+               d.ALERGY_DRUGS                                                     "GMYW",        -- 过敏药物名称  VARCHAR 64  条件必填  填写平台药物代码，多项时用英文分号“;”分割 “有无药物过敏”为“有”时必填
+               d.AUTOPSY_INDICATOR                                                "SJQK",        -- 死亡患者尸检情况  VARCHAR 4 条件必填  1：是 2：否 死亡患者必填
+               ''                                                                 "YXGYBMKY",    -- 乙型肝炎表面抗原（HBsAg） VARCHAR 1   0：未做 1：阴性 2：阳性
+               ''                                                                 "BXGYBDKT",    -- 丙型肝炎病毒抗体（HCV-Ab）  VARCHAR 1   0：未做 1：阴性 2：阳性
+               ''                                                                 "AZBBDKT",     --  艾滋病病毒抗体（HIV-Ab） VARCHAR 1   0：未做 1：阴性 2：阳性
+               mm.DIRECTOR_ID                                                     "KZRBM",       --  科主任院内工号 VARCHAR 64  必填
+               mm.DIRECTOR                                                        "KZR",         --  科主任姓名 VARCHAR 50  必填
+               x.certno                                                           "KZRSFZHM",    -- 科主任身份证号码  VARCHAR 18  必填
+               x.praccertino                                                      "KZRZYZSBM",   --  科主任医师执业证书编码 VARCHAR 30  必填
+               mm.CHIEF_DOCTOR_ID                                                 "ZRYSBM",      -- 主（副主）任医师院内工号  VARCHAR 64  必填
+               mm.CHIEF_DOCTOR                                                    "ZRYS",        -- 主（副主）任医师姓名  VARCHAR 50  必填
+               y.certno                                                           "ZRYSSFZHM",   --  主（副主）任医师身份证号码 VARCHAR 18  必填
+               y.praccertino                                                      "ZRYSZYZSBM",  -- 主（副主）任医师执业证书编码  VARCHAR 30  必填
+               mm.ATTENDING_DOCTOR_ID                                             "ZZYSBM",      -- 主治医师院内工号  VARCHAR 64  必填
+               mm.ATTENDING_DOCTOR                                                "ZZYS",        -- 主治医师姓名  VARCHAR 50  必填
+               z.certno                                                           "ZZYSSFZHM",   --  主治医师身份证号码 VARCHAR 18  必填
+               z.praccertino                                                      "ZZYSZYZSBM",  -- 主治医师执业证书编码  VARCHAR 30  必填
+               mm.DOCTOR_IN_CHARGE_ID                                             "ZYYSBM",      -- 住院医师院内工号  VARCHAR 64  必填
+               mm.DOCTOR_IN_CHARGE                                                "ZYYS",        -- 住院医师姓名  VARCHAR 50  必填
+               ab.certno                                                          "ZYYSSFZHM",   --  住院医师身份证号码 VARCHAR 18  必填
+               ab.praccertino                                                     "ZYYSZYZSBM",  -- 住院医师执业证书编码  VARCHAR 30  必填
+               mm.LIABILITY_NURSE_ID                                              "ZRHSBM",      -- 责任护士院内工号  VARCHAR 64  必填
+               mm.LIABILITY_NURSE                                                 "ZRHS",        -- 责任护士姓名  VARCHAR 50  必填
+               ac.certno                                                          "ZRHSSFZHM",   --  责任护士身份证号码 VARCHAR 18  必填
+               ac.praccertino                                                     "ZRHSZYZSBM",  -- 责任护士执业证书编码  VARCHAR 30  必填
+               mm.ADVANCED_STUDIES_DOCTOR_ID                                      "JXYSBM",      -- 进修医师院内工号  VARCHAR 64
+               mm.ADVANCED_STUDIES_DOCTOR                                         "JXYS",        -- 进修医师姓名  VARCHAR 50
+               ad.certno                                                          "JXYSSFZHM",   --  进修医师身份证号码 VARCHAR 18
+               mm.PRACTICE_DOCTOR_OF_GRADUATE_ID                                  "SXYSBM",      -- 实习医师院内工号  VARCHAR 64
+               mm.PRACTICE_DOCTOR_OF_GRADUATE                                     "SXYS2",       --  实习医师姓名  VARCHAR 50
+               ae.certno                                                          "SXYSSFZHM",   --  实习医师身份证号码 VARCHAR 18
+               mm.CATALOGER_ID                                                    "BMYBM",       --  编码员院内工号 VARCHAR 64  必填
+               mm.CATALOGER                                                       "BMY",         --  编码员姓名 VARCHAR 50  必填
+               af.certno                                                          "BMYSFZHM",    -- 编码员身份证号码  VARCHAR 18  必填
+               mm.MR_QUALITY                                                      "BAZL",        -- 病案质量  VARCHAR 4 必填  1：甲 2：乙 3：丙
+               mm.DOCTOR_OF_CONTROL_QUALITY_ID                                    "ZKYSBM",      -- 质控医师院内工号  VARCHAR 64  必填
+               mm.DOCTOR_OF_CONTROL_QUALITY                                       "ZKYS",        -- 质控医师姓名  VARCHAR 50  必填
+               ag.certno                                                          "ZKYSSFZHM",   --  质控医师身份证号码 VARCHAR 18  必填
+               mm.NURSE_OF_CONTROL_QUALITY_ID                                     "ZKHSBM",      -- 质控护士院内工号  VARCHAR 64  必填
+               mm.NURSE_OF_CONTROL_QUALITY                                        "ZKHS",        -- 质控护士姓名  VARCHAR 50  必填
+               ah.certno                                                          "ZKHSSFZHM",   --  质控护士身份证号码 VARCHAR 18  必填
+               to_char(mm.DATE_OF_CONTROL_QUALITY, 'YYYY-MM-DD')                  "BARQ",        -- 质控日期  DATETIME    必填  YYYY-MM-DD
+               w.item_id                                                          "LYFS",        -- 离院方式  VARCHAR 4 必填  参见 CV06.00.226离院方式 1：医嘱离院 2：医嘱转院 3：医嘱转社区卫生服务机构/乡镇卫生院 4：非医嘱离院 5：死亡 9：其他
+               d.TRANSFER_HOSPITAL                                                "JSYLJG1",     --  拟接收机构(医嘱转院) VARCHAR 256 条件必填  “离院方式”为“医嘱转院”时必填
+               d.TRANSFER_GRASSROOTS_HOSPITAL                                     "JSYLJG2",     --  拟接收机构(医嘱转社区医院)  VARCHAR 256 条件必填  “离院方式”为“医嘱转社区医院”时必填
+               d.REHOSPITALIZATION_PLAN                                           "ZZYJH",       --  是否有出院31天内再住院计划  VARCHAR 4 必填  1：无 2：有
+               d.RE_ADMISSION_CAUSE                                               "ZZYMD",       --  再住院目的 VARCHAR 256 条件必填  “是否有出院31天内再住院计划”为“有”时必填
+               d.FIRST_COMA_DAY                                                   "HMDAY1",      -- 颅脑损伤患者入院前昏迷天数 VARCHAR 16  条件必填  颅脑损伤患者必填，大于等于0整数
+               d.FIRST_COMA_HOUR                                                  "HMHOUR1",     --  颅脑损伤患者入院前昏迷小时数  VARCHAR 16  条件必填  颅脑损伤患者必填，大于等于0，小于24整数
+               d.FIRST_COMA_MINUTE                                                "HMMIN1",      -- 颅脑损伤患者入院前昏迷分钟数  VARCHAR 16  条件必填  颅脑损伤患者必填，大于等于0，小于60整数
+               d.BACK_COMA_DAY                                                    "HMDAY2",      -- 颅脑损伤患者入院后昏迷天数 VARCHAR 16  条件必填  颅脑损伤患者必填，大于等于0整数
+               d.BACK_COMA_HOUR                                                   "HMHOUR2",     --  颅脑损伤患者入院后昏迷小时数  VARCHAR 16  条件必填  颅脑损伤患者必填，大于等于0，小于24整数
+               d.BACK_COMA_MINUTE                                                 "HMMIN2",      -- 颅脑损伤患者入院后昏迷分钟数  VARCHAR 16  条件必填  颅脑损伤患者必填，大于等于0，小于60整数
+               round(ff.TOTAL_FEE, 2)                                             "ZFY",         --  总费用 NUMERIC 8,2 必填  患者在住院期间所有项目的费用之和
+               round(ff.PAY_FEE, 2)                                               "ZFJE",        -- 其中：自付金额 NUMERIC 8,2 必填  医保范围内由患者负担的医疗费用
+               round(ff.GENE_SERVICE_FEE, 2)                                      "YBYLFWF",     --  一般医疗服务费 NUMERIC 8,2   【综合医疗服务】一般医疗服务费
+               round(ff.GENE_TREAT_FEE, 2)                                        "YBZLCZF",     --  一般治疗操作费 NUMERIC 8,2   【综合医疗服务】一般治疗操作费
+               round(ff.TREAT_FEE, 2)                                             "HLF",         --  护理费 NUMERIC 8,2   【综合医疗服务】护理费
+               round(ff.OTHER_FEE, 2)                                             "QTF1",        -- 其他医疗服务费用  NUMERIC 8,2   【综合医疗服务】其他费用
+               round(ff.PATH_FEE, 2)                                              "BLZDF",       --  病理诊断费 NUMERIC 8,2   【诊断类】病理诊断费
+               round(ff.LAB_FEE, 2)                                               "SYSZDF",      -- 实验室诊断费  NUMERIC 8,2   【诊断类】实验室诊断费
+               round(ff.IMAG_DIAG_FEE, 2)                                         "YXXZDF",      -- 影像学诊断费  NUMERIC 8,2   【诊断类】影像学诊断费
+               round(ff.CLINICAL_DIAGNOSIS_PROJECT_FEE, 2)                        "LCZDXMF",     --  临床诊断项目费 NUMERIC 8,2   【诊断类】临床诊断项目费
+               round(ff.NO_OPERATION_FEE, 2)                                      "FSSZLXMF",    -- 非手术治疗项目费  NUMERIC 8,2   【治疗费】非手术治疗项目费
+               round(ff.PHYS_FEE, 2)                                              "LCWLZLF",     --  其中：临床物理治疗费  NUMERIC 8,2   【治疗费】非手术临床物理治疗费
+               round(ff.OPERATION_TREAT_FEE, 2)                                   "SSZLF",       --  手术治疗费 NUMERIC 8,2   【治疗费】手术治疗费
+               round(ff.ANES_FEE, 2)                                              "MZF",         --  其中：麻醉费  NUMERIC 8,2   【治疗费】麻醉费
+               round(ff.OPER_FEE, 2)                                              "SSF",         --  其中：手术费  NUMERIC 8,2   【治疗费】手术费
+               round(ff.RECO_FEE, 2)                                              "KFF",         --  康复费 NUMERIC 8,2   【康复费】
+               round(ff.TRAD_TREAT_FEE, 2)                                        "ZYZLF",       --  中医治疗费 NUMERIC 8,2   【中医类】
+               round(ff.WEST_DRUG_FEE, 2)                                         "XYF",         --  西药费 NUMERIC 8,2   【西药类】西药费
+               round(ff.ANTI_DRUG_FEE, 2)                                         "KJYWF",       --  其中：抗菌药物费用 NUMERIC 8,2   【西药类】抗菌药物费用
+               round(ff.TRAD_DRUG_FEE, 2)                                         "CHENGYF",     --  中成药费  NUMERIC 8,2   【中药类】中成药费
+               round(ff.HERB_FEE, 2)                                              "CAOYF",       --  中草药费  NUMERIC 8,2   【中药类】中草药费
+               round(ff.BLOOD_FEE, 2)                                             "SXF",         --  血费  NUMERIC 8,2   【血液类】血费
+               round(ff.ALBU_FEE, 2)                                              "BDBLZPF",     --  白蛋白类制品费 NUMERIC 8,2   【血液类】白蛋白类制品费
+               round(ff.GLOB_FEE, 2)                                              "QDBLZPF",     --  球蛋白类制品费 NUMERIC 8,2   【血液类】球蛋白类制品费
+               round(ff.COAG_FEE, 2)                                              "NXYZLZPF",    -- 凝血因子类制品费  NUMERIC 8,2   【血液类】凝血因子类制品费
+               round(ff.CYTO_FEE, 2)                                              "XBYZLZPF",    -- 细胞因子类制品费  NUMERIC 8,2   【血液类】细胞因子类制品费
+               round(ff.EXAM_MATE_FEE, 2)                                         "JCYYCXCLF",   --  检查用一次性医用材料费 NUMERIC 8,2   【耗材类】检查用一次性医用材料费
+               round(ff.TREAT_MATE_FEE, 2)                                        "ZLYYCXCLF",   --  治疗用一次性医用材料费 NUMERIC 8,2   【耗材类】治疗用一次性医用材料费
+               round(ff.OPER_MATE_FEE, 2)                                         "SSYYCXCLF",   --  手术用一次性医用材料费 NUMERIC 8,2   【耗材类】手术用一次性医用材料费
+               round(ff.OTHER, 2)                                                 "QTF2",        -- 其他费 NUMERIC 8,2   【其他费用】
+               d.DAYOPERATION_DAY                                                 "YCHXJSYSJ",   --  有创呼吸机使用时间 NUMERIC 6   大于等于0的整数，单位（小时），指患者住院期间有创呼吸机累计使用时间，全麻期间使用有创呼吸机的时间除外，不足1小时按1小时计算
+               ''                                                                 "YNZZJHSBM1",  -- 院内重症监护室编码1  VARCHAR 8
+               ''                                                                 "YNZZJHSMC1",  -- 院内重症监护室名称1  VARCHAR 50
+               ''                                                                 "ZZJHSBM1",    -- 中心重症监护室编码1  VARCHAR 2   参见 CVA08.03.017 重症监护室（ICU）分类编码
+               ''                                                                 "ZZJHSMC1",    -- 中心重症监护室名称1  VARCHAR 50
+               ''                                                                 "JRZZJHSSJ1",  -- 进入重症监护室时间1  DATETIME      YYYY-MM-DD HH24:MI:SS
+               ''                                                                 "ZCZZJHSSJ1",  -- 转出重症监护室时间1  DATETIME      YYYY-MM-DD HH24:MI:SS
+               ''                                                                 "YNZZJHSBM2",  -- 院内重症监护室编码2  VARCHAR 8
+               ''                                                                 "YNZZJHSMC2",  -- 院内重症监护室名称2  VARCHAR 50
+               ''                                                                 "ZZJHSBM2",    -- 中心重症监护室编码2  VARCHAR 2   参见 CVA08.03.017 重症监护室（ICU）分类编码
+               ''                                                                 "ZZJHSMC2",    -- 中心重症监护室名称2  VARCHAR 50
+               ''                                                                 "JRZZJHSSJ2",  -- 进入重症监护室时间2  DATETIME      YYYY-MM-DD HH24:MI:SS
+               ''                                                                 "ZCZZJHSSJ2",  -- 转出重症监护室时间2  DATETIME      YYYY-MM-DD HH24:MI:SS
+               ''                                                                 "YNZZJHSBM3",  -- 院内重症监护室编码3  VARCHAR 8
+               ''                                                                 "YNZZJHSMC3",  -- 院内重症监护室名称3  VARCHAR 50
+               ''                                                                 "ZZJHSBM3",    -- 中心重症监护室编码3  VARCHAR 2   参见 CVA08.03.017 重症监护室（ICU）分类编码
+               ''                                                                 "ZZJHSMC3",    -- 中心重症监护室名称3  VARCHAR 50
+               ''                                                                 "JRZZJHSSJ3",  -- 进入重症监护室时间3  DATETIME      YYYY-MM-DD HH24:MI:SS
+               ''                                                                 "ZCZZJHSSJ3",  -- 转出重症监护室时间3  DATETIME      YYYY-MM-DD HH24:MI:SS
+               ''                                                                 "YNZZJHSBM4",  -- 院内重症监护室编码4  VARCHAR 8
+               ''                                                                 "YNZZJHSMC4",  -- 院内重症监护室名称4  VARCHAR 50
+               ''                                                                 "ZZJHSBM4",    -- 中心重症监护室编码4  VARCHAR 2   参见 CVA08.03.017 重症监护室（ICU）分类编码
+               ''                                                                 "ZZJHSMC4",    -- 中心重症监护室名称4  VARCHAR 50
+               ''                                                                 "JRZZJHSSJ4",  -- 进入重症监护室时间4  DATETIME      YYYY-MM-DD HH24:MI:SS
+               ''                                                                 "ZCZZJHSSJ4",  -- 转出重症监护室时间4  DATETIME      YYYY-MM-DD HH24:MI:SS
+               ''                                                                 "YNZZJHSBM5",  -- 院内重症监护室编码5  VARCHAR 8
+               ''                                                                 "YNZZJHSMC5",  -- 院内重症监护室名称5  VARCHAR 50
+               ''                                                                 "ZZJHSBM5",    -- 中心重症监护室编码5  VARCHAR 2   参见 CVA08.03.017 重症监护室（ICU）分类编码
+               ''                                                                 "ZZJHSMC5",    -- 中心重症监护室名称5  VARCHAR 50
+               ''                                                                 "JRZZJHSSJ5",  -- 进入重症监护室时间5  DATETIME      YYYY-MM-DD HH24:MI:SS
+               ''                                                                 "ZCZZJHSSJ5",  -- 转出重症监护室时间5  DATETIME      YYYY-MM-DD HH24:MI:SS
+               '0'                                                                "SFWZBL",      -- 是否危重病例  VARCHAR 1 必填  0：否 1：是
+               '0'                                                                "SFYNBL",      -- 是否疑难病例  VARCHAR 1 必填  0：否 1：是
+               '0'                                                                "SFMDTBL",     --  是否MDT病例 VARCHAR 1 必填  0：否 1：是
+               '0'                                                                "SFDBZBL",     --  是否单病种病例 VARCHAR 1 必填  0：否 1：是
+               decode(d.DAYOPERATION, '1', '1', '2', '0')                         "SFRJSSBL",    -- 是否日间手术病例  VARCHAR 1 必填  0：否 1：是
+               '0'                                                                "SFJXCFBL",    -- 是否教学查房病例  VARCHAR 1 必填  0：否 1：是
+               '0'                                                                "CRBBG",       --  是否是传染病病例  VARCHAR 1 必填  0：否 1：是
+               '0'                                                                "MZCYZDFHQK",  -- 门诊与出院诊断符合情况 VARCHAR 1 必填  0：未作 1：符合 2：不符合 3：不肯定
+               '0'                                                                "RYCYZDFHQK",  -- 入院与出院诊断符合情况 VARCHAR 1 必填  0：未作 1：符合 2：不符合 3：不肯定
+               '0'                                                                "SQYSHZDFHQK", --  术前与术后诊断符合情况 VARCHAR 1 必填  0：未作 1：符合 2：不符合 3：不肯定
+               '0'                                                                "LCYBLZDFHQK", --  临床与病理诊断符合情况 VARCHAR 1 必填  0：未作 1：符合 2：不符合 3：不肯定
+               '0'                                                                "FSYBLZDFHQK", --  放射与病理诊断符合情况 VARCHAR 1 必填  0：未作 1：符合 2：不符合 3：不肯定
+               nvl(d.EMER_TREAT_TIMES, 0)                                         "QJCS",        -- 抢救次数  INT   必填  没有填0
+               nvl(d.ESC_EMER_TIMES, 0)                                           "CGCS",        -- 抢救成功次数  INT   必填  没有填0
+               '1'                                                                "LCLJGLDM",    -- 临床路径管理代码  VARCHAR 1 必填  1：完成 2：变异 3：退出 4：未入
+               to_char(mm.PAPER_MR_RECEIVE_DATE, 'YYYY-MM-DD HH24:MI:SS')         "GDRQSJ",      -- 归档日期时间  DATETIME    必填  记录（更新）日期时间 YYYY-MM-DD HH:MI:SS
+               d.NURSCAREDAYS                                                     "TJHLTS",      -- 特级护理天数  NUMERIC 3   单位（天）
+               d.NURSCAREFDAYS                                                    "YJHLTS",      -- 一级护理天数  NUMERIC 3   单位（天）
+               d.NURSCARESDAYS                                                    "EJHLTS",      -- 二级护理天数  NUMERIC 3   单位（天）
+               d.NURSCARETDAYS                                                    "SJHLTS",      -- 三级护理天数  NUMERIC 3   单位（天）
+               ''                                                                 "SXFY",        -- 输血反应  VARCHAR 4   0：未输 1：有 2：无
+               ''                                                                 "HXB",         --  红细胞 NUMERIC 4,1   输血患者填写，单位（单位）
+               ''                                                                 "XXB",         --  血小板 NUMERIC 4,1   输血患者填写，单位（治疗量）
+               ''                                                                 "XJ",          -- 血浆  NUMERIC 6,1   输血患者填写，单位（毫升）
+               ''                                                                 "QX",          -- 全血  NUMERIC 6,1   输血患者填写，单位（毫升）
+               ''                                                                 "ZTXHS",       --  自体血回输 NUMERIC 4,1   自体血回输患者填写，单位（单位）
+               to_char(sysdate, 'YYYY-MM-DD')                                     "TBRQ"         --  填报日期  DATETIME   必填 本条数据采集时间，格式YYYY-MM-DD
+        from EMR_PATIENTINFO a
+                 left join (select a.item_id, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202310101745521149750000000000') f
+                           on f.his_item_id = a.MEDICAL_PAYMENT_METHOD
+                 left join (select a.item_id, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202310101602441149584100000000') g
+                           on g.his_item_id = a.SEX_CODE
+                 left join (select a.item_id, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202311281522551393107200000000') h
+                           on h.his_item_id = a.CITIZENSHIP
+                 left join (select a.item_id, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202312040850191416618200000000') i
+                           on i.his_item_id = a.NATION_CODE
+                 left join (select a.item_id, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202311281553021393182200000000') j
+                           on j.his_item_id = a.OCCUPATION_CODE,
+             com_hospitalinfo b
+                 left join (select a.item_id, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202312021726271411620600000000') aa
+                           on aa.his_item_id = b.HOSTYPE,
+             com_patientinfo c,
+             EMR_INPATIENTINFO d
+                 left join (select a.item_id, a.item_name, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202312040859511416712200000000') k
+                           on k.his_item_id = d.BLOOD_TYPE
+                 left join (select a.item_id, a.item_name, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202310101743311149749700000000') l
+                           on l.his_item_id = d.PATIENT_CLASS
+                 left join (select a.item_id, a.item_name, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202310101743311149749700000000') m
+                           on m.his_item_id = d.ADM_COND_CODE
+                 left join (select a.item_id, a.item_name, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202311281105131392640900000000') n
+                           on n.his_item_id = d.OUTPATIENT_DIAGNOSIS_CODE
+                 left join (select a.item_id, a.item_name, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202311141512391328016800000000'
+                              and b.orgcode = #{orgcode}) o
+                           on o.his_item_id = d.DEPT_ADMISSION_TO
+                 left join (select a.item_id, a.item_name, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202311141512391328016800000000') p
+                           on p.his_item_id = d.DEPT_DISCHARGE_FROM
+                 left join (select a.item_id, a.item_name, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202311281105131392640900000000') q
+                           on q.his_item_id = d.EXT_INJURY_POISON_CODE
+                 left join (select a.*, p.item_id, p.item_name
+                            from IPR_DIAGNOSE a
+                                     left join (select a.item_id, a.item_name, b.his_item_id
+                                                from si_yt_report_item a,
+                                                     si_yt_report_item_compare b
+                                                where a.module_rid = b.module_rid
+                                                  and a.type_rid = b.type_rid
+                                                  and a.rid = b.item_rid
+                                                  and a.module_rid =
+                                                      '202310101511361148853000000000'
+                                                  and a.type_rid =
+                                                      '202311141512391328016800000000') p
+                                               on p.his_item_id = a.DISE_CODE
+                            where a.DISE_TYPE = '1'
+                              and a.MAIN_FLAG = '1'
+                              and a.DISE_CLINICD = '3') r
+                           on r.orgcode = d.orgcode and r.inid = d.visit_id
+                 left join (select a.*, p.item_id, p.item_name
+                            from EMR_DIAGNOSE a
+                                     left join (select a.item_id, a.item_name, b.his_item_id
+                                                from si_yt_report_item a,
+                                                     si_yt_report_item_compare b
+                                                where a.module_rid = b.module_rid
+                                                  and a.type_rid = b.type_rid
+                                                  and a.rid = b.item_rid
+                                                  and a.module_rid =
+                                                      '202310101511361148853000000000'
+                                                  and a.type_rid =
+                                                      '202311141512391328016800000000') p
+                                               on p.his_item_id = a.DIAGNOSIS_CODE
+                            where a.DIAGNOSIS_TYPE = '1'
+                              and a.MAIN_FLAG = '1'
+                              and a.DIAGNOSIS_CLASS = '3') s
+                           on s.orgcode = d.orgcode
+                               and s.visit_id = d.visit_id
+                 left join (select orgcode, count(visit_id) num, visit_id
+                            from EMR_DIAGNOSE
+                            group by orgcode, visit_id) t
+                           on t.orgcode = d.orgcode
+                               and t.visit_id = d.visit_id
+                 left join (select orgcode, count(visit_id) num, visit_id
+                            from emr_operationinfo
+                            group by orgcode, visit_id) u
+                           on u.orgcode = d.orgcode
+                               and u.visit_id = d.visit_id
+                 left join (select a.item_id, a.item_name, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202311281105131392640900000000') v
+                           on v.his_item_id = d.PATHOLOGIC_DIAGNOSIS_CODE
+                 left join (select a.item_id, a.item_name, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202312041051431419254700000000') w
+                           on w.his_item_id = d.DISCHARGE_DISPOSITION,
+             emr_medicaldoctor mm
+                 left join com_userinfo x
+                           on x.orgcode = mm.orgcode
+                               and x.usercode = mm.DIRECTOR_ID
+                 left join com_userinfo y
+                           on y.orgcode = mm.orgcode
+                               and y.usercode = mm.CHIEF_DOCTOR_ID
+                 left join com_userinfo z
+                           on z.orgcode = mm.orgcode
+                               and z.usercode = mm.ATTENDING_DOCTOR_ID
+                 left join com_userinfo ab
+                           on ab.orgcode = mm.orgcode
+                               and ab.usercode = mm.DOCTOR_IN_CHARGE_ID
+                 left join com_userinfo ac
+                           on ac.orgcode = mm.orgcode
+                               and ac.usercode = mm.LIABILITY_NURSE_ID
+                 left join com_userinfo ad
+                           on ad.orgcode = mm.orgcode
+                               and ad.usercode = mm.ADVANCED_STUDIES_DOCTOR_ID
+                 left join com_userinfo ae
+                           on ae.orgcode = mm.orgcode
+                               and ae.usercode = mm.PRACTICE_DOCTOR_OF_GRADUATE_ID
+                 left join com_userinfo af
+                           on af.orgcode = mm.orgcode
+                               and af.usercode = mm.CATALOGER_ID
+                 left join com_userinfo ag
+                           on ag.orgcode = mm.orgcode
+                               and ag.usercode = mm.DOCTOR_OF_CONTROL_QUALITY_ID
+                 left join com_userinfo ah
+                           on ah.orgcode = mm.orgcode
+                               and ah.usercode = mm.NURSE_OF_CONTROL_QUALITY_ID,
+             emr_feeinfo ff,
+             ipr_inpatientinfo e
+        where e.orgcode = a.orgcode
+          and e.inid = a.visit_id
+          and e.instate &lt;&gt; '0'
+          and e.orgcode = b.orgcode
+          and e.orgcode = c.orgcode
+          and e.inhosno = c.inhosno
+          and e.patientid = c.patientid
+          and a.orgcode = d.orgcode
+          and a.visit_id = d.visit_id
+          and d.orgcode = mm.orgcode
+          and d.visit_id = mm.visit_id
+          and d.orgcode = ff.orgcode
+          and d.visit_id = ff.visit_id
+          and e.orgcode = #{orgcode}
+          and a.crte_time &gt;= to_date(#{begtime}, 'yyyy-mm-dd hh24:mi:ss')
+          and a.crte_time &lt;= to_date(#{endtime}, 'yyyy-mm-dd hh24:mi:ss')
+
+    </select>
+
+</mapper>

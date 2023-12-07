@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hospital.middleware.healthplatform.dao.his.HealthplatfromDAO">
+    <select id="queryJcjlb" resultType="java.util.HashMap">
+        select a.orgcode                                      "YLJGDM",--  医疗机构代码  VARCHAR 22  必填  复合主键：采用22位“卫生机构代码”
+               a.applyid                                      "JCLSH",--  检查报告流水号 VARCHAR 36  必填  复合主键：业务主键
+               b.orgname                                      "YLJGMC",-- 医疗机构名称  VARCHAR 70  必填  医院执业许可第一名称
+               '0'                                            "FYDM",-- 分院代码  VARCHAR 20  必填  记录分院代码（内码）,如无分院，则传0
+               ''                                             "FYMC",-- 分院名称  VARCHAR 120 条件必填  分院代码不为0时必填
+               a.PATIENTBUSIID                                "JZLSH",--  就诊流水号 VARCHAR 32  必填  门诊：填写门诊就诊记录表流水号；  住院：填写住院就诊记录表流水号；体检：填写体检就诊记录表流水号；
+               a.APPLYSOURCE                                  "JLLB",-- 记录类别  VARCHAR 1 必填  0：急诊 1：门诊 2：住院 3：体检 4：妇幼保健 5：社区医疗 9：其他
+               '1'                                            "KLX",--  卡类型 VARCHAR 16  必填  请按照以下优先级顺序填写：1：患者主索引号、2：身份证号、3：医保卡号，如果都没有则填写门诊/住院/体检就诊流水号　
+               c.rid                                          "KH",-- 卡号  VARCHAR 64  必填
+               f.item_id                                      "ZJLX",-- 证件类型  VARCHAR 2   参见CV02.01.101-2022修订版 身份证件类别代码 优先使用身份证
+               d.certno                                       "ZJHM",-- 证件号码  VARCHAR 32
+               a.PATIENTNAME                                  "XM",-- 姓名  VARCHAR 50  必填
+               g.item_id                                      "XB",-- 性别  VARCHAR 1 必填  参见GB/T 2261.1-2003  性别代码表
+               ''                                             "NL",-- 年龄  NUMERIC 3 必填
+               h.EXAMINETYPE                                  "JCLXDM",-- 检查类型代码  VARCHAR 16  必填  参见CVA5103_01检查类型字典表
+               h.dictname                                     "JCLXMC",-- 检查类型名称  VARCHAR 50  必填
+               e.itemcode                                     "JCXMDM",-- 院内检查组套编码  VARCHAR 64  必填  医院内部使用检查套餐（医嘱组套）编码
+               e.itemname                                     "JCXMMC",-- 院内检查组套名称  VARCHAR 250 必填  医院内部使用检查套餐（医嘱组套）名称
+               ''                                             "PTJCZTBM",-- 中心检查组套编码  VARCHAR 64  必填  参见 《全民健康信息平台检查分类编码标准》
+               ''                                             "PTJCZTMC",-- 中心检查组套名称  VARCHAR 250 必填  参见 《全民健康信息平台检查分类编码标准》
+               a.orgcode                                      "SQYLJGDM",-- 申请医疗机构代码  VARCHAR 22
+               b.orgname                                      "SQYLJGMC",-- 申请医疗机构名称  VARCHAR 100
+               a.LISTDPCD                                     "YNSQKSBM",-- 院内申请科室编码  VARCHAR 50  必填
+               a.LISTDPNM                                     "YNSQKSMC",-- 院内申请科室名称  VARCHAR 100 必填
+               i.item_id                                      "SQKSBM",-- 中心申请科室编码  VARCHAR 50  必填  参见《全民健康信息平台科室分类代码表》
+               i.item_name                                    "SQKSMC",-- 中心申请科室名称  VARCHAR 100 必填  参见《全民健康信息平台科室分类代码表》
+               a.DOCTCODE                                     "SQYSGH",-- 申请医生工号  VARCHAR 64  必填
+               a.DOCTNAME                                     "SQYSXM",-- 申请医生姓名  VARCHAR 50  必填
+               k.certno                                       "SQYSSFZHM",--  申请医生身份证号码 VARCHAR 18  必填
+               to_char(a.RECORDDATE, 'YYYY-MM-DD HH24:MI:SS') "SQRQ",-- 申请时间  DATETIME    必填  YYYY-MM-DD HH24:MI:SS
+               a.applyid                                      "SQDH",-- 申请单号  VARCHAR 32  必填
+               ''                                             "JCYLJGDM",-- 检查医疗机构代码  VARCHAR 22
+               ''                                             "JCYLJGMC",-- 检查医疗机构名称  VARCHAR 100
+               a.EXEDPCD                                      "YNJCKSBM",-- 院内检查科室编码  VARCHAR 50
+               a.EXEDPNM                                      "YNJCKSMC",-- 院内检查科室名称  VARCHAR 100
+               j.item_id                                      "JCKSBM",-- 中心检查科室编码  VARCHAR 50    参见《全民健康信息平台科室分类代码表》
+               j.item_name                                    "JCKSMC",-- 中心检查科室名称  VARCHAR 100   参见《全民健康信息平台科室分类代码表》
+               a.EXEOPERCODE                                  "JCYSGH",-- 检查医生工号  VARCHAR 64
+               a.EXEOPERNAME                                  "JCYSXM",-- 检查医生姓名  VARCHAR 50
+               l.certno                                       "JCYSSFZHM",--  检查医生身份证号码 VARCHAR 18
+               ''                                             "JCJSBH",-- 检查技师工号  VARCHAR 64
+               ''                                             "JCJSXM",-- 检查技师姓名  VARCHAR 50
+               ''                                             "JCJSSFZHM",--  检查技师身份证号码 VARCHAR 18
+               '-'                                            "JCRQSJ",-- 检查时间  DATETIME    必填  YYYY-MM-DD HH24:MI:SS
+               a.orgcode                                      "BGYLJGDM",-- 报告医疗机构代码  VARCHAR 22  必填  采用22位“卫生机构代码”
+               b.orgname                                      "BGYLJGMC",-- 报告医疗机构名称  VARCHAR 100 必填
+               '-'                                            "YNBGKSBM",-- 院内报告科室编码  VARCHAR 50  必填
+               '-'                                            "YNBGKSMC",-- 院内报告科室名称  VARCHAR 100 必填
+               '-'                                            "BGKSBM",-- 中心报告科室编码  VARCHAR 50  必填  参见《全民健康信息平台科室分类代码表》
+               '-'                                            "BGKSMC",-- 中心报告科室名称  VARCHAR 100 必填  参见《全民健康信息平台科室分类代码表》
+               '-'                                            "BGYSGH",-- 报告医生工号  VARCHAR 64  必填
+               '-'                                            "BGYSXM",-- 报告医生姓名  VARCHAR 50  必填
+               '-'                                            "BGYSSFZHM",--  报告医生身份证号码 VARCHAR 18  必填
+               '-'                                            "BGRQ",-- 报告时间  DATETIME    必填  YYYY-MM-DD HH24:MI:SS
+               '-'                                            "BGDBH",--  报告单编号 VARCHAR 20  必填  报告单唯一编号
+               ''                                             "SHYSGH",-- 审核医生工号  VARCHAR 64
+               ''                                             "SHYSXM",-- 审核医生姓名  VARCHAR 50
+               ''                                             "SHYSSFZHM",--  审核医生身份证号码 VARCHAR 18
+               ''                                             "SHRQSJ",-- 审核时间  DATETIME      YYYY-MM-DD HH24:MI:SS
+               '-'                                            "JCJGDM",-- 检查结果代码  VARCHAR 1 必填  参见CVA5103.02检查/检验结果代码 1：异常 2：正常 3：不详
+               ''                                             "JCJGDX",-- 检查结果(定性)  VARCHAR 4000
+               ''                                             "JCJGDL",-- 检查结果(定量)  VARCHAR 10
+               ''                                             "JCJLDW",-- 检查计量单位  VARCHAR 20
+               '-'                                            "SFSWJZ",-- 是否是危急值  VARCHAR 1 必填  0：否 1：是
+               ''                                             "WJZMS",--  危急值描述 VARCHAR 1024
+               ''                                             "BCKGSJ",-- 检查所见  VARCHAR 4000
+               ''                                             "BCZGTS",-- 诊断名称或检查提示 VARCHAR 4000    主要诊断疾病名称或检查提示 病理、心电图、影像、内镜等检查等有诊断的必须填写。出现多个诊断时采用“，”分隔。
+               ''                                             "BGJY",-- 报告建议  VARCHAR 4000
+               '-'                                            "YXBZ",-- 是否有影像 VARCHAR 1 必填  1：有 2：无
+               '-'                                            "YXFWQDZ",--  影像服务器地址/内网医生端调阅地址 VARCHAR 4000  条件必填  填写影像服务器地址。如使用URL调阅影像，则填写具体URL
+               '-'                                            "JCUID",--  影像UID VARCHAR 512 条件必填  如使用URL调阅影像，且URL可直接调阅到该报告单的影像，则该字段不填
+               '-'                                            "YXURL",--  影像URL（互联网患者端调阅地址） VARCHAR 4000  条件必填  【影像调阅方式】为“2”时，填写影像调阅URL,多个URL用英文分号“;”分割;
+               '-'                                            "KZBGSL",-- 快照报告数量  INT   必填
+               '-'                                            "TWBGTXSL",-- 图文报告图像数量  INT   必填
+               to_char(sysdate, 'YYYY-MM-DD')                 "TBRQ"-- 填报日期  DATETIME    必填  本条数据采集时间，格式YYYY-MM-DD
+        from MET_CHECKAPPLY_INFO a
+                 left join (select a.item_id, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202310101602441149584100000000') g on g.his_item_id = a.SEXCODE
+                 left join (select a.item_id, a.item_name, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202311141512391328016800000000'
+                              and b.orgcode = #{orgcode}) i on i.his_item_id = a.LISTDPCD
+                 left join (select a.item_id, a.item_name, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202311141512391328016800000000'
+                              and b.orgcode = #{orgcode}) j on j.his_item_id = a.EXEDPCD
+                 left join com_userinfo k on k.orgcode = a.orgcode and k.usercode = a.DOCTCODE
+                 left join com_userinfo l on l.orgcode = a.orgcode and l.usercode = a.EXEOPERCODE,
+             com_hospitalinfo b,
+             com_patientinfo c,
+             opr_register d
+                 left join (select a.item_id, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202310101521161149402900000000') f on f.his_item_id = d.PSNCERTTYPE,
+             opb_feedetail e
+                 left join (select a.orgcode, a.itemcode, a.EXAMINETYPE, b.dictname
+                            from fin_undruginfo a
+                                     left join com_dictcodeinfo b
+                                               on b.typecode = 'EXAMINETYPE' and b.dictcode = a.EXAMINETYPE) h
+                           on h.orgcode = e.orgcode and h.itemcode = e.itemcode
+        where a.orgcode = b.orgcode
+          and a.orgcode = d.orgcode
+          and a.PATIENTBUSIID = d.regid
+          and d.REGISTSTATE = '1'
+          and d.orgcode = c.orgcode
+          and d.patientno = c.patientno
+          and d.patientid = c.patientid
+          and a.orgcode = e.orgcode
+          and a.PATIENTBUSIID = e.regid
+          and a.applyid = e.applyid
+          and a.APPLYSOURCE = '1'
+          and a.APPLYTYPE = '2'
+          and a.orgcode = #{orgcode}
+          and a.RECORDDATE &gt;= to_date(#{begtime}, 'yyyy-mm-dd hh24:mi:ss')
+          and a.RECORDDATE &lt;= to_date(#{endtime}, 'yyyy-mm-dd hh24:mi:ss')
+        union all
+        select a.orgcode                                      "YLJGDM",--	医疗机构代码	VARCHAR	22	必填	复合主键：采用22位“卫生机构代码”
+               a.applyid                                      "JCLSH",--	检查报告流水号	VARCHAR	36	必填	复合主键：业务主键
+               b.orgname                                      "YLJGMC",--	医疗机构名称	VARCHAR	70	必填	医院执业许可第一名称
+               '0'                                            "FYDM",--	分院代码	VARCHAR	20	必填	记录分院代码（内码）,如无分院，则传0
+               ''                                             "FYMC",--	分院名称	VARCHAR	120	条件必填	分院代码不为0时必填
+               a.PATIENTBUSIID                                "JZLSH",--	就诊流水号	VARCHAR	32	必填	门诊：填写门诊就诊记录表流水号；  住院：填写住院就诊记录表流水号；体检：填写体检就诊记录表流水号；
+               a.APPLYSOURCE                                  "JLLB",--	记录类别	VARCHAR	1	必填	0：急诊 1：门诊 2：住院 3：体检 4：妇幼保健 5：社区医疗 9：其他
+               '1'                                            "KLX",--	卡类型	VARCHAR	16	必填	请按照以下优先级顺序填写：1：患者主索引号、2：身份证号、3：医保卡号，如果都没有则填写门诊/住院/体检就诊流水号　
+               c.rid                                          "KH",--	卡号	VARCHAR	64	必填
+               f.item_id                                      "ZJLX",--	证件类型	VARCHAR	2		参见CV02.01.101-2022修订版 身份证件类别代码 优先使用身份证
+               d.certno                                       "ZJHM",--	证件号码	VARCHAR	32
+               a.PATIENTNAME                                  "XM",--	姓名	VARCHAR	50	必填
+               g.item_id                                      "XB",--	性别	VARCHAR	1	必填	参见GB/T 2261.1-2003  性别代码表
+               ''                                             "NL",--	年龄	NUMERIC	3	必填
+               h.EXAMINETYPE                                  "JCLXDM",--	检查类型代码	VARCHAR	16	必填	参见CVA5103_01检查类型字典表
+               h.dictname                                     "JCLXMC",--	检查类型名称	VARCHAR	50	必填
+               e.itemcode                                     "JCXMDM",--	院内检查组套编码	VARCHAR	64	必填	医院内部使用检查套餐（医嘱组套）编码
+               e.itemname                                     "JCXMMC",--	院内检查组套名称	VARCHAR	250	必填	医院内部使用检查套餐（医嘱组套）名称
+               ''                                             "PTJCZTBM",--	中心检查组套编码	VARCHAR	64	必填	参见 《全民健康信息平台检查分类编码标准》
+               ''                                             "PTJCZTMC",--	中心检查组套名称	VARCHAR	250	必填	参见 《全民健康信息平台检查分类编码标准》
+               a.orgcode                                      "SQYLJGDM",--	申请医疗机构代码	VARCHAR	22
+               b.orgname                                      "SQYLJGMC",--	申请医疗机构名称	VARCHAR	100
+               a.LISTDPCD                                     "YNSQKSBM",--	院内申请科室编码	VARCHAR	50	必填
+               a.LISTDPNM                                     "YNSQKSMC",--	院内申请科室名称	VARCHAR	100	必填
+               i.item_id                                      "SQKSBM",--	中心申请科室编码	VARCHAR	50	必填	参见《全民健康信息平台科室分类代码表》
+               i.item_name                                    "SQKSMC",--	中心申请科室名称	VARCHAR	100	必填	参见《全民健康信息平台科室分类代码表》
+               a.DOCTCODE                                     "SQYSGH",--	申请医生工号	VARCHAR	64	必填
+               a.DOCTNAME                                     "SQYSXM",--	申请医生姓名	VARCHAR	50	必填
+               k.certno                                       "SQYSSFZHM",--	申请医生身份证号码	VARCHAR	18	必填
+               to_char(a.RECORDDATE, 'YYYY-MM-DD HH24:MI:SS') "SQRQ",--	申请时间	DATETIME		必填	YYYY-MM-DD HH24:MI:SS
+               a.applyid                                      "SQDH",--	申请单号	VARCHAR	32	必填
+               ''                                             "JCYLJGDM",--	检查医疗机构代码	VARCHAR	22
+               ''                                             "JCYLJGMC",--	检查医疗机构名称	VARCHAR	100
+               a.EXEDPCD                                      "YNJCKSBM",--	院内检查科室编码	VARCHAR	50
+               a.EXEDPNM                                      "YNJCKSMC",--	院内检查科室名称	VARCHAR	100
+               j.item_id                                      "JCKSBM",--	中心检查科室编码	VARCHAR	50		参见《全民健康信息平台科室分类代码表》
+               j.item_name                                    "JCKSMC",--	中心检查科室名称	VARCHAR	100		参见《全民健康信息平台科室分类代码表》
+               a.EXEOPERCODE                                  "JCYSGH",--	检查医生工号	VARCHAR	64
+               a.EXEOPERNAME                                  "JCYSXM",--	检查医生姓名	VARCHAR	50
+               l.certno                                       "JCYSSFZHM",--	检查医生身份证号码	VARCHAR	18
+               ''                                             "JCJSBH",--	检查技师工号	VARCHAR	64
+               ''                                             "JCJSXM",--	检查技师姓名	VARCHAR	50
+               ''                                             "JCJSSFZHM",--	检查技师身份证号码	VARCHAR	18
+               '-'                                            "JCRQSJ",--	检查时间	DATETIME		必填	YYYY-MM-DD HH24:MI:SS
+               a.orgcode                                      "BGYLJGDM",--	报告医疗机构代码	VARCHAR	22	必填	采用22位“卫生机构代码”
+               b.orgname                                      "BGYLJGMC",--	报告医疗机构名称	VARCHAR	100	必填
+               '-'                                            "YNBGKSBM",--	院内报告科室编码	VARCHAR	50	必填
+               '-'                                            "YNBGKSMC",--	院内报告科室名称	VARCHAR	100	必填
+               '-'                                            "BGKSBM",--	中心报告科室编码	VARCHAR	50	必填	参见《全民健康信息平台科室分类代码表》
+               '-'                                            "BGKSMC",--	中心报告科室名称	VARCHAR	100	必填	参见《全民健康信息平台科室分类代码表》
+               '-'                                            "BGYSGH",--	报告医生工号	VARCHAR	64	必填
+               '-'                                            "BGYSXM",--	报告医生姓名	VARCHAR	50	必填
+               '-'                                            "BGYSSFZHM",--	报告医生身份证号码	VARCHAR	18	必填
+               '-'                                            "BGRQ",--	报告时间	DATETIME		必填	YYYY-MM-DD HH24:MI:SS
+               '-'                                            "BGDBH",--	报告单编号	VARCHAR	20	必填	报告单唯一编号
+               ''                                             "SHYSGH",--	审核医生工号	VARCHAR	64
+               ''                                             "SHYSXM",--	审核医生姓名	VARCHAR	50
+               ''                                             "SHYSSFZHM",--	审核医生身份证号码	VARCHAR	18
+               ''                                             "SHRQSJ",--	审核时间	DATETIME			YYYY-MM-DD HH24:MI:SS
+               '-'                                            "JCJGDM",--	检查结果代码	VARCHAR	1	必填	参见CVA5103.02检查/检验结果代码 1：异常 2：正常 3：不详
+               ''                                             "JCJGDX",--	检查结果(定性)	VARCHAR	4000
+               ''                                             "JCJGDL",--	检查结果(定量)	VARCHAR	10
+               ''                                             "JCJLDW",--	检查计量单位	VARCHAR	20
+               '-'                                            "SFSWJZ",--	是否是危急值	VARCHAR	1	必填	0：否 1：是
+               ''                                             "WJZMS",--	危急值描述	VARCHAR	1024
+               ''                                             "BCKGSJ",--	检查所见	VARCHAR	4000
+               ''                                             "BCZGTS",--	诊断名称或检查提示	VARCHAR	4000		主要诊断疾病名称或检查提示 病理、心电图、影像、内镜等检查等有诊断的必须填写。出现多个诊断时采用“，”分隔。
+               ''                                             "BGJY",--	报告建议	VARCHAR	4000
+               '-'                                            "YXBZ",--	是否有影像	VARCHAR	1	必填	1：有 2：无
+               '-'                                            "YXFWQDZ",--	影像服务器地址/内网医生端调阅地址	VARCHAR	4000	条件必填	填写影像服务器地址。如使用URL调阅影像，则填写具体URL
+               '-'                                            "JCUID",--	影像UID	VARCHAR	512	条件必填	如使用URL调阅影像，且URL可直接调阅到该报告单的影像，则该字段不填
+               '-'                                            "YXURL",--	影像URL（互联网患者端调阅地址）	VARCHAR	4000	条件必填	【影像调阅方式】为“2”时，填写影像调阅URL,多个URL用英文分号“;”分割;
+               '-'                                            "KZBGSL",--	快照报告数量	INT		必填
+               '-'                                            "TWBGTXSL",--	图文报告图像数量	INT		必填
+               to_char(sysdate, 'YYYY-MM-DD')                 "TBRQ"--	填报日期	DATETIME		必填	本条数据采集时间，格式YYYY-MM-DD
+        from MET_CHECKAPPLY_INFO a
+                 left join (select a.item_id, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202310101602441149584100000000') g on g.his_item_id = a.SEXCODE
+                 left join (select a.item_id, a.item_name, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202311141512391328016800000000'
+                              and b.orgcode = #{orgcode}) i on i.his_item_id = a.LISTDPCD
+                 left join (select a.item_id, a.item_name, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202311141512391328016800000000'
+                              and b.orgcode = #{orgcode}) j on j.his_item_id = a.EXEDPCD
+                 left join com_userinfo k on k.orgcode = a.orgcode and k.usercode = a.DOCTCODE
+                 left join com_userinfo l on l.orgcode = a.orgcode and l.usercode = a.EXEOPERCODE,
+             com_hospitalinfo b,
+             com_patientinfo c,
+             ipr_inpatientinfo d
+                 left join (select a.item_id, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202310101521161149402900000000') f on f.his_item_id = d.PSNCERTTYPE,
+             (select orgcode, inid, applyid, itemcode, itemname
+              from ips_feedetail
+              union all
+              select orgcode, inid, applyid, itemcode, itemname
+              from ips_outfeedetail) e
+                 left join (select a.orgcode, a.itemcode, a.EXAMINETYPE, b.dictname
+                            from fin_undruginfo a
+                                     left join com_dictcodeinfo b
+                                               on b.typecode = 'EXAMINETYPE' and b.dictcode = a.EXAMINETYPE) h
+                           on h.orgcode = e.orgcode and h.itemcode = e.itemcode
+        where a.orgcode = b.orgcode
+          and a.orgcode = d.orgcode
+          and a.PATIENTBUSIID = d.inid
+          and d.instate &lt;&gt; '0'
+          and d.orgcode = c.orgcode
+          and d.inhosno = c.inhosno
+          and d.patientid = c.patientid
+          and a.orgcode = e.orgcode
+          and a.PATIENTBUSIID = e.inid
+          and a.applyid = e.applyid
+          and a.APPLYSOURCE = '2'
+          and a.APPLYTYPE = '2'
+          and a.orgcode = #{orgcode}
+          and a.RECORDDATE &gt;= to_date(#{begtime}, 'yyyy-mm-dd hh24:mi:ss')
+          and a.RECORDDATE &lt;= to_date(#{endtime}, 'yyyy-mm-dd hh24:mi:ss')
+
+    </select>
+
+</mapper>

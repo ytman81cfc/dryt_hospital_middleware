@@ -2,6 +2,7 @@ package com.hospital.middleware.healthplatform.service;
 
 import com.google.gson.Gson;
 import com.hospital.middleware.healthplatform.dao.his.HealthplatfromDAO;
+import com.hospital.middleware.healthplatform.dao.lis.Healthplatform_lisDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,7 @@ import java.util.Map;
 public class HpService {
     @Autowired
     private HealthplatfromDAO hpfDAO;
+    private Healthplatform_lisDAO hpf_lisDAO;
 
     public String queryData(String begtime, String endtime, String dataType){
         String orgCode = "H37068300546";
@@ -180,6 +182,16 @@ public class HpService {
                 result = gson.toJson(queryResult);
                 genSqlString("ZYFYFSMX", queryResult.get(0));
             }
+            //检验收费项目明细表
+            if ("JYSFXMB".equals(dataType.toUpperCase())) {
+                List<Map> lis=hpf_lisDAO.queryJysfxmb_lis(orgCode, begtime, endtime);
+                hpfDAO.delete(orgCode, begtime, endtime);
+                hpfDAO.add(orgCode, begtime, endtime);
+                List<Map> queryResult = hpfDAO.queryJysfxmb_his(orgCode, begtime, endtime);
+                result = gson.toJson(queryResult);
+                genSqlString("JYSFXMB", queryResult.get(0));
+            }
+
         } catch (Exception e){
             System.out.println("-------------------------------------------");
             System.out.println(dataType);

@@ -2,29 +2,22 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hospital.middleware.healthplatform.dao.lis.Healthplatform_lisDAO">
     <select id="queryJysfxmb_lis" resultType="java.util.HashMap">
-        select a.org_code     orgcode,
-               b.exe_csqn     applyid,
-               b.result_date  bgrq,
-               a.patient_id   patientid,
-               a.patient_type patienttype,
-               a.inhosno
+        select a.org_code                                orgcode,
+               b.exe_csqn                                applyid,
+               date_format(a.result_date, '%Y-%m-%d %T') bgrq,
+               a.patient_type                            patienttype,
+               a.inhosno,
+               b.in_id                                   regid
         from lis_test_reg a,
              lis_test_reg_his_item_detail b
         where a.org_code = b.org_code
           and a.reg_id = b.reg_id
           and a.is_adjustSample = '1'
           and b.exe_csqn is not null
-          and b.exe_csqn != ''
-    and b.result_date is not null
-    and b.result_date&gt;=to_date(#{begtime}
-            , 'yyyy-mm-dd hh24:mi:ss')
-          and b.result_date&lt;=to_date(#{endtime}
-            , 'yyyy-mm-dd hh24:mi:ss')
-        group by a.org_code,
-            b.exe_csqn,
-            b.result_date,
-            a.patient_id,
-            a.patient_type,
-            a.inhosno
+          and b.exe_csqn &lt;&gt; ''
+          and a.result_date is not null
+          and a.org_code = #{orgcode}
+          and a.result_date &gt;= str_to_date(#{begtime}, '%Y-%m-%d %T')
+          and a.result_date &lt;= str_to_date(#{endtime}, '%Y-%m-%d %T')
     </select>
 </mapper>
