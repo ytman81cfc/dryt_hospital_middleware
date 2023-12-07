@@ -2,6 +2,7 @@ package com.hospital.middleware.healthplatform.service;
 
 import com.google.gson.Gson;
 import com.hospital.middleware.healthplatform.dao.his.HealthplatfromDAO;
+import com.hospital.middleware.healthplatform.dao.lis.Healthplatform_lisDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,7 @@ import java.util.Map;
 public class HpService {
     @Autowired
     private HealthplatfromDAO hpfDAO;
+    private Healthplatform_lisDAO hpf_lisDAO;
 
     public String queryData(String begtime, String endtime, String dataType){
         String orgCode = "H37068300546";
@@ -180,45 +182,14 @@ public class HpService {
                 result = gson.toJson(queryResult);
                 genSqlString("ZYFYFSMX", queryResult.get(0));
             }
-
-            //西医病案首页
-            if("BA_SYJBK".equals(dataType.toUpperCase())){
-
-            }
-
-            //西医病案首页手术
-            if("BA_SYSSK".equals(dataType.toUpperCase())){
-                List<Map> queryResult = hpfDAO.queryBa_syssk(orgCode, begtime, endtime);
+            //检验收费项目明细表
+            if ("JYSFXMB".equals(dataType.toUpperCase())) {
+                List<Map> lis=hpf_lisDAO.queryJysfxmb_lis(orgCode, begtime, endtime);
+                hpfDAO.delete(orgCode, begtime, endtime);
+                hpfDAO.add(orgCode, begtime, endtime);
+                List<Map> queryResult = hpfDAO.queryJysfxmb_his(orgCode, begtime, endtime);
                 result = gson.toJson(queryResult);
-                genSqlString("BA_SYSSK", queryResult.get(0));
-            }
-
-            //西医病案首页出院诊断
-            if("BA_SYZDK".equals(dataType.toUpperCase())){
-                List<Map> queryResult = hpfDAO.queryBa_syzdk(orgCode, begtime, endtime);
-                result = gson.toJson(queryResult);
-                genSqlString("BA_SYZDK", queryResult.get(0));
-            }
-
-            //诊断明细报告
-            if("ZYZDMXBG".equals(dataType.toUpperCase())){
-                List<Map> queryResult = hpfDAO.queryZyzdmxbg(orgCode, begtime, endtime);
-                result = gson.toJson(queryResult);
-                genSqlString("ZYZDMXBG", queryResult.get(0));
-            }
-
-            //门(急)诊病历
-            if("EMR_MJZBL".equals(dataType.toUpperCase())){
-                List<Map> queryResult = hpfDAO.queryEmr_mjzbl(orgCode, begtime, endtime);
-                result = gson.toJson(queryResult);
-                genSqlString("EMR_MJZBL", queryResult.get(0));
-            }
-
-            //入院记录
-            if("EMR_RYJL".equals(dataType.toUpperCase())){
-                List<Map> queryResult = hpfDAO.queryEmr_ryjl(orgCode, begtime, endtime);
-                result = gson.toJson(queryResult);
-                genSqlString("EMR_RYJL", queryResult.get(0));
+                genSqlString("JYSFXMB", queryResult.get(0));
             }
 
         } catch (Exception e){
