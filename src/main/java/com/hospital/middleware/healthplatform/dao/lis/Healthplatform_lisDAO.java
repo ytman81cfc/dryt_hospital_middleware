@@ -10,4 +10,5 @@ public interface Healthplatform_lisDAO {
 
     //
     List<Map> queryJysfxmb_lis(String orgcode, String begtime, String endtime);
+    List<Map> queryJymxb_lis(String orgcode, String begtime, String endtime);
 }

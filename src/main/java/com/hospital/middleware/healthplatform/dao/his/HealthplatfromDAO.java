@@ -82,9 +82,13 @@ public interface HealthplatfromDAO {
     //ZYZDMXBG 诊断明细报告
     List<Map> queryZyzdmxbg(String orgcode,String begtime,String endtime);
 
+    //JYMXB 检验明细表
+    void deleteJymxb (String orgcode );
+    void addJymxb (Map<String,String> map);
+    List<Map> queryJymxb_his(String orgcode,String begtime,String endtime);
     //JYSFXMB 检验收费项目明细表
-    void delete (String orgcode,String begtime,String endtime);
-    void add (String orgcode,String begtime,String endtime);
+    void deleteJysfxmb (String orgcode );
+    void addJysfxmb (Map<String,String> map);
     List<Map> queryJysfxmb_his(String orgcode,String begtime,String endtime);
     //检查记录表 JCJLB
     List<Map> queryJcjlb(String orgcode,String begtime,String endtime);

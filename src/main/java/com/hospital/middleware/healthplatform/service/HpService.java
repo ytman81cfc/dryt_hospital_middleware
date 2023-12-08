@@ -179,11 +179,24 @@ public class HpService {
                 result = gson.toJson(queryResult);
             }
 
+            //检验明细表
+            if ("JYMXB".equals(dataType.toUpperCase())) {
+                List<Map> lis=hpf_lisDAO.queryJymxb_lis(orgCode, begtime, endtime);
+                hpfDAO.deleteJymxb(orgCode);
+                for(int i = 0; i < lis.size(); i++){
+                    hpfDAO.addJymxb(lis.get(i));
+                }
+                List<Map> queryResult = hpfDAO.queryJymxb_his(orgCode, begtime, endtime);
+                result = gson.toJson(queryResult);
+                genSqlString("JYMXB", queryResult.get(0));
+            }
             //检验收费项目明细表
             if ("JYSFXMB".equals(dataType.toUpperCase())) {
                 List<Map> lis=hpf_lisDAO.queryJysfxmb_lis(orgCode, begtime, endtime);
-                hpfDAO.delete(orgCode, begtime, endtime);
-                hpfDAO.add(orgCode, begtime, endtime);
+                hpfDAO.deleteJysfxmb(orgCode);
+                for(int i = 0; i < lis.size(); i++){
+                    hpfDAO.addJysfxmb(lis.get(i));
+                }
                 List<Map> queryResult = hpfDAO.queryJysfxmb_his(orgCode, begtime, endtime);
                 result = gson.toJson(queryResult);
                 genSqlString("JYSFXMB", queryResult.get(0));

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hospital.middleware.healthplatform.dao.lis.Healthplatform_lisDAO">
+    <select id="queryJymxb_lis" resultType="java.util.HashMap">
+ SELECT
+        c.rid,
+        c.org_code orgcode,
+        DATE_FORMAT( a.result_date, '%Y-%m-%d %T' ) bgrq,
+        b.adjustsampletester_code adjustcode,
+        b.adjustsampletester_name adjustname,
+        c.machine_no machineno,
+        c.item_name machinename,
+        d.type,
+        c.result,
+        f.dict_name  unit,
+        c.range_value normalrange,
+        c.upvalue normalup,
+        c.downvalue normaldown,
+        a.iscritical ,
+        c.item_code printcode,
+        a.patient_type patienttype,
+        a.inhosno,
+        b.in_id regid,
+        b.exe_csqn applyid,
+        e.range_value crisisscope,
+        e.up_value crisisup,
+        e.down_value crisisdown,
+        c.flag
+        FROM
+        lis_test_reg a
+        LEFT JOIN lis_test_reg_his_item_detail b ON a.org_code = b.org_code
+        AND a.reg_id = b.reg_id
+        AND b.exe_csqn IS NOT NULL
+        AND b.exe_csqn &lt;&gt; ''
+        LEFT JOIN lis_result c ON a.org_code = c.org_code
+        AND a.reg_id = c.reg_id
+        AND a.machine_code = c.machine_code
+        AND a.test_form_no = c.test_form_no
+        LEFT JOIN lis_item d ON c.org_code = d.org_code
+        AND c.machine_no = d.machine_item_code
+        AND c.machine_code = d.machine_code
+        left join lis_result_warning e on e.org_code=a.org_code and e.reg_id=a.reg_id AND a.machine_code = e.machine_code
+        AND a.test_form_no =e.test_form_no
+        left join lis_dictionary_detail f   on f.type_code = 'LIS_ITEM_UNIT' and f.dict_code=c.unit
+        WHERE
+        a.is_adjustSample = '1'
+        AND a.org_code = 'H37068300546'
+        AND a.result_date &gt;= str_to_date( '2023-12-07 00:00:00', '%Y-%m-%d %T' )
+        AND a.result_date &lt;= str_to_date( '2023-12-08 00:00:00', '%Y-%m-%d %T' )
+
+    </select>
+</mapper>

@@ -2,15 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hospital.middleware.healthplatform.dao.his.HealthplatfromDAO">
 
-    <delete id="delete">
+    <delete id="deleteJysfxmb">
         delete
         from PRO_JYSFXMB
         where orgcode = #{orgcode}
-          and BGRQ &gt;= #{begtime}
-          and BGRQ &lt;= #{endtime}
     </delete>
 
-    <insert id="add">
+    <insert id="addJysfxmb">
         insert into PRO_JYSFXMB(orgcode, applyid, bgrq, patienttype, inhosno, regid)
         values (#{orgcode}, #{applyid}, #{bgrq}, #{patienttype}, #{inhosno}, #{regid,jdbcType=VARCHAR})
     </insert>
