@@ -173,7 +173,11 @@ public class HpService {
                 List<Map> queryResult = hpfDAO.queryBa_syzdk(orgCode, begtime, endtime);
                 result = gson.toJson(queryResult);
             }
-
+            //诊断明细报告
+            if ("ZYZDMXBG".equals(dataType.toUpperCase())) {
+                List<Map> queryResult = hpfDAO.queryZyzdmxbg(orgCode, begtime, endtime);
+                result = gson.toJson(queryResult);
+            }
 
             //检验收费项目明细表
             if ("JYSFXMB".equals(dataType.toUpperCase())) {
