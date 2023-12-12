@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hospital.middleware.healthplatform.dao.his.HealthplatfromDAO">
+
+    <select id="queryEmr_rcbcjl" resultType="java.util.HashMap">
+        select a.orgcode                                      "YLJGDM",--	医疗机构代码	VARCHAR	22	必填	复合主键：填写医疗机构组织机构代码
+               e.DOCNUMBER                                    "RCBCJLLSH",--	日常病程记录流水号	VARCHAR	64	必填	复合主键
+               a.inid                                         "ZYJZLSH",--	住院就诊流水号	VARCHAR	32	必填	医院HIS系统的唯一编号,在同一家医院内应保证不重复。一次就诊的完整过程由一个作为HIS系统索引号的“就诊流水号”予以标识
+               b.orgname                                      "YLJGMC",--	医疗机构名称	VARCHAR	70	必填	医院执业许可第一名称
+               '0'                                            "FYDM",--	分院代码	VARCHAR	20	必填	记录分院代码（内码）,如无分院，则传0
+               ''                                             "FYMC",--	分院名称	VARCHAR	120	条件必填	分院代码不为0时必填
+               '1'                                            "KLX",--	卡类型	VARCHAR	16	必填	参照CVA5104就诊卡类型
+               c.rid                                          "KH",--	卡号	VARCHAR	64	必填
+               a.outdeptcode                                  "YNKSBM",--	院内科室编码	VARCHAR	50	必填
+               a.outdeptname                                  "YNKSMC",--	院内科室名称	VARCHAR	100	必填
+               g.item_id                                      "KSMC",--	科室名称	VARCHAR	100	必填
+               g.item_name                                    "KSBM",--	科室编码	VARCHAR	50	必填	编码。见科室字典表
+               d.NURSECELLNAME                                "BQMC",--	病区名称	VARCHAR	50	必填
+               ''                                             "BFH",--	病房号	VARCHAR	10
+               d.bedno                                        "BCH",--	病床号	VARCHAR	10
+               to_char(e.CREATETIME, 'YYYY-MM-DD HH24:mi:SS') "JLRQSJ",--	记录日期时间	DATETIME		必填	格式：YYYY-MM-DD HH:MM:SS
+               a.patientname                                  "HZXM",--	患者姓名	VARCHAR	50	必填
+               h.item_id                                      "XBDM",--	性别代码	VARCHAR	1	必填	编码。按国标GB/T 2261.1-2003执行
+               a.BIRTHDAY                                     "CSRQ",--	出生日期	DATETIME		必填	格式：YYYY-MM-DD
+               case
+                   when extract(year from a.indate) - extract(year from a.BIRTHDAY) &gt; 1
+                       then floor(extract(year from a.indate) - extract(year from a.BIRTHDAY))
+                   else 0 end                                 "NLS",--	年龄(岁)	NUMERIC	3
+               case
+                   when extract(year from a.indate) - extract(year from a.BIRTHDAY) &lt; 1 and
+                        months_between(a.indate, a.BIRTHDAY) &gt; 1 then floor(months_between(a.indate, a.BIRTHDAY))
+                   else 0 end                                 "NLY",--	年龄(月)	NUMERIC	3
+               case
+                   when months_between(a.indate, a.BIRTHDAY) &lt; 1 then floor(a.indate - a.BIRTHDAY)
+                   else 0 end                                 "NLR",--	年龄(日)	NUMERIC	3
+               case
+                   when months_between(a.indate, a.BIRTHDAY) &lt; 1 then floor(a.indate - a.BIRTHDAY)
+                   else 0 end                                 "NLXS",--	年龄(小时)	NUMERIC	3
+               f.content                                      "ZYBC",--	住院病程	VARCHAR	2000	必填
+               ''                                             "YZNR",--	医嘱内容	VARCHAR	1024
+               ''                                             "ZYSZGCJG",--	中医“四诊”观察结果	VARCHAR	1024
+               ''                                             "BZLZ",--	辨证论治详细描述	VARCHAR	1024
+               ''                                             "ZYJZFF",--	中药煎煮方法	VARCHAR	100
+               ''                                             "ZYYYFF",--	中药用药方法	VARCHAR	100
+               ''                                             "ZYJSZWLBDM",--	专业技术职务类别代码	VARCHAR	32		1：正高 2：副高 3：中级 4：师级/助理 5：士级 6：待聘 7：社区正高 8：社区副高，多个用英文分号“;”分割。
+               e.UPDATECODE                                   "YSGH",--	医师工号	VARCHAR	64
+               e.UPDATENAME                                   "YSQM",--	医师签名	VARCHAR	50
+               i.certno                                       "YSSFZHM",--	医师身份证号码	VARCHAR	18
+               to_char(e.UPDATETIME, 'YYYY-MM-DD HH24:mi:SS') "QMRQSJ",--	签名日期时间	DATETIME		必填	格式：YYYY-MM-DD HH:MM:SS
+               to_char(sysdate, 'YYYY-MM-DD')                 "TBRQ" --	填报日期	DATETIME		必填	本条数据采集时间，格式YYYY-MM-DD
+        from ipr_inpatientinfo a
+                 left join (select a.item_id, a.item_name, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202311141512391328016800000000'
+                              and b.orgcode = #{orgcode}) g on g.his_item_id = a.OUTDEPTCODE
+                 left join (select a.item_id, a.item_name, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202310101602441149584100000000'
+        ) h on h.his_item_id = a.sexcode,
+             com_hospitalinfo b,
+             com_patientinfo c,
+             inr_receiveinfo d,
+             EMR_DOCUMENT e
+                 left join com_userinfo i on i.orgcode = e.orgcode and i.usercode = e.UPDATECODE
+                 left join EMR_RESOURCES f on e.RID_BODY = f.rid
+        where a.orgcode = b.orgcode
+          and a.orgcode = c.orgcode
+          and a.inhosno = c.inhosno
+          and a.patientid = c.patientid
+          and a.instate &lt;&gt; '0'
+          and a.orgcode = d.orgcode
+          and a.inid = d.inid
+          and a.orgcode = e.orgcode
+          and a.inid = e.REGISTERNO
+          and e.DTYPE = '1'
+          and a.orgcode = #{orgcode}
+          and e.CREATETIME &gt;= to_date(#{begtime}, 'YYYY-MM-DD HH24:mi:SS')
+          and e.CREATETIME &lt;= to_date(#{endtime}, 'YYYY-MM-DD HH24:mi:SS')
+          and e.typecode = 'TR00020'
+          and e.TEMPLATECODE = 'T0000000193'
+          and e.isvalid = '1'
+
+    </select>
+
+</mapper>

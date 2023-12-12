@@ -30,16 +30,16 @@
                               crisisup,
                               crisisdown,
                               flag)
-        values (#{map.orgcode,jdbcType=VARCHAR}, #{map.applyid,jdbcType=VARCHAR}, #{map.bgrq,jdbcType=VARCHAR},
-                #{map.patienttype,jdbcType=VARCHAR}, #{map.inhosno,jdbcType=VARCHAR}, #{map.regid,jdbcType=VARCHAR},
-                #{map.rid,jdbcType=VARCHAR}, #{map.machineno,jdbcType=VARCHAR}, #{map.machinename,jdbcType=VARCHAR},
-                #{map.type,jdbcType=VARCHAR}, #{map.result,jdbcType=VARCHAR}, #{map.unit,jdbcType=VARCHAR},
-                #{map.normalrange,jdbcType=VARCHAR}, #{map.normalup,jdbcType=VARCHAR},
-                #{map.normaldown,jdbcType=VARCHAR},
-                #{map.iscritical,jdbcType=VARCHAR}, #{map.printcode,jdbcType=VARCHAR},
-                #{map.crisisscope,jdbcType=VARCHAR},
-                #{map.crisisup,jdbcType=VARCHAR}, #{map.crisisdown,jdbcType=VARCHAR},
-                #{map.flag,jdbcType=VARCHAR})
+        values (#{orgcode,jdbcType=VARCHAR}, #{applyid,jdbcType=VARCHAR}, #{bgrq,jdbcType=VARCHAR},
+                #{patienttype,jdbcType=VARCHAR}, #{inhosno,jdbcType=VARCHAR}, #{regid,jdbcType=VARCHAR},
+                #{rid,jdbcType=VARCHAR}, #{machineno,jdbcType=VARCHAR}, #{machinename,jdbcType=VARCHAR},
+                #{type,jdbcType=VARCHAR}, #{result,jdbcType=VARCHAR}, #{unit,jdbcType=VARCHAR},
+                #{normalrange,jdbcType=VARCHAR}, #{normalup,jdbcType=VARCHAR},
+                #{normaldown,jdbcType=VARCHAR},
+                #{iscritical,jdbcType=VARCHAR}, #{printcode,jdbcType=VARCHAR},
+                #{crisisscope,jdbcType=VARCHAR},
+                #{crisisup,jdbcType=VARCHAR}, #{crisisdown,jdbcType=VARCHAR},
+                #{flag,jdbcType=VARCHAR})
     </insert>
 
     <select id="queryJymxb_his" resultType="java.util.HashMap">

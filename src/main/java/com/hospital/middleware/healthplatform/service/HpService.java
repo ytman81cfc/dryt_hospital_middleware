@@ -3,18 +3,23 @@ package com.hospital.middleware.healthplatform.service;
 import com.google.gson.Gson;
 import com.hospital.middleware.healthplatform.dao.his.HealthplatfromDAO;
 import com.hospital.middleware.healthplatform.dao.lis.Healthplatform_lisDAO;
+import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.sql.Clob;
+import java.sql.SQLException;
+import java.util.*;
+import java.util.zip.GZIPInputStream;
 
 @Service
 public class HpService {
     @Autowired
     private HealthplatfromDAO hpfDAO;
+    @Autowired
     private Healthplatform_lisDAO hpf_lisDAO;
 
     public String queryData(String begtime, String endtime, String dataType){
@@ -184,12 +189,11 @@ public class HpService {
                 List<Map> lis=hpf_lisDAO.queryJymxb_lis(orgCode, begtime, endtime);
                 hpfDAO.deleteJymxb(orgCode);
                 for(int i = 0; i < lis.size(); i++){
-                    hpfDAO.addJymxb(lis.get(i));
+                hpfDAO.addJymxb(lis.get(i));
                 }
                 List<Map> queryResult = hpfDAO.queryJymxb_his(orgCode, begtime, endtime);
                 result = gson.toJson(queryResult);
-                genSqlString("JYMXB", queryResult.get(0));
-            }
+             }
             //检验收费项目明细表
             if ("JYSFXMB".equals(dataType.toUpperCase())) {
                 List<Map> lis=hpf_lisDAO.queryJysfxmb_lis(orgCode, begtime, endtime);
@@ -199,7 +203,67 @@ public class HpService {
                 }
                 List<Map> queryResult = hpfDAO.queryJysfxmb_his(orgCode, begtime, endtime);
                 result = gson.toJson(queryResult);
-                genSqlString("JYSFXMB", queryResult.get(0));
+             }
+            //检查记录表
+            if ("JCJLB".equals(dataType.toUpperCase())) {
+                List<Map> queryResult = hpfDAO.queryJcjlb(orgCode, begtime, endtime);
+                result = gson.toJson(queryResult);
+            }
+            //检查收费项目明细表
+            if ("JCJLZB".equals(dataType.toUpperCase())) {
+                List<Map> queryResult = hpfDAO.queryJcjlzb_his(orgCode, begtime, endtime);
+                result = gson.toJson(queryResult);
+            }
+            //门(急)诊病历
+            if ("EMR_MJZBL".equals(dataType.toUpperCase())) {
+                List<Map> queryResult = hpfDAO.queryEmr_mjzbl(orgCode, begtime, endtime);
+                result = gson.toJson(queryResult);
+            }
+            //入院记录
+            if ("EMR_RYJL".equals(dataType.toUpperCase())) {
+                List<Map> queryResult = hpfDAO.queryEmr_ryjl(orgCode, begtime, endtime);
+                result = gson.toJson(queryResult);
+            }
+            //24h内入出院记录
+            if ("EMR_CRYJL".equals(dataType.toUpperCase())) {
+                List<Map> queryResult = hpfDAO.queryEmr_cryjl(orgCode, begtime, endtime);
+                result = gson.toJson(queryResult);
+            }
+            //24h内入院死亡记录
+            if ("EMR_ZYSWJL".equals(dataType.toUpperCase())) {
+                List<Map> queryResult = hpfDAO.queryEmr_zyswjl(orgCode, begtime, endtime);
+                result = gson.toJson(queryResult);
+            }
+            //门（急）诊统计表（日报）
+            if ("TJ_MJZ_RB".equals(dataType.toUpperCase())) {
+                List<Map> queryResult = hpfDAO.queryTj_mjz_rb(orgCode, begtime, endtime);
+                result = gson.toJson(queryResult);
+            }
+            //住院统计表（日报）
+            if ("TJ_ZY_RB".equals(dataType.toUpperCase())) {
+                List<Map> queryResult = hpfDAO.queryTj_zy_rb(orgCode, begtime, endtime);
+                result = gson.toJson(queryResult);
+            }
+            //住院工作量及病床分科统计表（日报）
+            if ("TJ_ZYGZL_KS_RB".equals(dataType.toUpperCase())) {
+                List<Map> queryResult = hpfDAO.queryTj_zygzl_ks_rb(orgCode, begtime, endtime);
+                result = gson.toJson(queryResult);
+            }
+            //床位占用情况表
+            if ("TJ_SSYW_CWZYQK".equals(dataType.toUpperCase())) {
+                List<Map> queryResult = hpfDAO.queryTj_ssyw_cwzyqk(orgCode, begtime, endtime);
+                result = gson.toJson(queryResult);
+            }
+            //首次病程记录
+            if ("EMR_SCBCJL".equals(dataType.toUpperCase())) {
+                List<Map> list=this.queryScbc(orgCode, begtime, endtime);
+                //List<Map> queryResult = hpfDAO.queryJysfxmb_his(orgCode, begtime, endtime);
+                result = gson.toJson(list);
+            }
+            //日常病程记录
+            if ("EMR_RCBCJL".equals(dataType.toUpperCase())) {
+                List<Map> list=this.queryRcbc(orgCode, begtime, endtime);
+                result = gson.toJson(list);
             }
 
         } catch (Exception e){
@@ -253,5 +317,102 @@ public class HpService {
         System.out.println(sql);
         System.out.println("</insert>");
         System.out.println("-------------------------------------------");
+    }
+    public static String decodeBase64AndGZip(String input) {
+        byte[] bytes;
+        String out = input;
+
+        try (ByteArrayInputStream bis = new ByteArrayInputStream(Base64.getDecoder().decode(input));
+             GZIPInputStream gzip = new GZIPInputStream(bis);
+             ByteArrayOutputStream bos = new ByteArrayOutputStream()) {
+            byte[] buf = new byte[1024];
+            int num;
+            while ((num = gzip.read(buf, 0, buf.length)) != -1) {
+                bos.write(buf, 0, num);
+            }
+            bytes = bos.toByteArray();
+            out = new String(bytes, StandardCharsets.UTF_8);
+            bos.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return out;
+    }
+    public List<Map> queryScbc(String orgcode ,String begtime, String endtime) {
+        List<Map> list1=hpfDAO.queryZs(orgcode,begtime,endtime);
+        hpfDAO.delete();
+        for (int i = 0; i < list1.size(); i++) {
+            Clob clob = null;
+            String text = "";
+            String result = "";
+            try {
+                if (list1.get(i).containsKey("TEXT2")) {
+                    clob = (Clob) list1.get(i).get("TEXT2");
+                    text = clob.getSubString(1, (int) clob.length());
+                    String info2 = this.decodeBase64AndGZip(text);
+                    result=info2.replaceAll("<.*?>", "");
+                    String zs=result.substring(result.indexOf("诉：")+2,result.indexOf("现病史：")).replace("&nbsp;", "");;
+                    list1.get(i).remove("TEXT2");
+                    list1.get(i).put("ZS", zs);
+                    hpfDAO.add(list1.get(i).get("INID").toString(),list1.get(i).get("ORGCODE").toString(),list1.get(i).get("ZS").toString());
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        /*List<Map> list2 = hpfDAO.query(orgcode);
+        for (int i = 0; i < list2.size(); i++) {
+            Clob clob = null;
+            String text = "";
+            String result = "";
+            try {
+                if (list2.get(i).containsKey("TEXT2")) {
+                    clob = (Clob) list2.get(i).get("TEXT2");
+                    text = clob.getSubString(1, (int) clob.length());
+                    String info = this.decodeBase64AndGZip(text);
+                    result=info.replaceAll("<.*?>", "");
+                    String bltd=result.substring(result.indexOf("病例特点：")+5,result.indexOf("初步诊断"));
+                    String zdyj=result.substring(result.indexOf("鉴别诊断：")+5,result.indexOf("诊疗计划")).replace("&nbsp;", "");
+                    String zljh=result.substring(result.indexOf("诊疗计划：")+5).replace("&nbsp;", "");
+                    list2.get(i).remove("TEXT2");
+                    list2.get(i).put("BLTD", bltd);
+                    list2.get(i).put("ZDYJ", zdyj);
+                    list2.get(i).put("ZLJH", zljh);
+                    Map<String,String> map=new HashMap<>();
+                    map.put("ORGCODE",list2.get(i).get("ORGCODE").toString());
+                    map.put("INID",list2.get(i).get("INID").toString());
+                    map.put("JLRQSJ",list2.get(i).get("JLRQSJ").toString());
+                    map.put("BLTD",list2.get(i).get("BLTD").toString());
+                    map.put("ZDYJ",list2.get(i).get("ZDYJ").toString());
+                    map.put("ZLJH",list2.get(i).get("ZLJH").toString());
+                    hpfDAO.update(map);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }*/
+        List<Map> list=hpfDAO.queryEmr_scbcjl(orgcode);
+        return list;
+    }
+    public List<Map> queryRcbc(String orgcode ,String begtime, String endtime) {
+        List<Map> list1=hpfDAO.queryEmr_rcbcjl(orgcode,begtime,endtime);
+        // hpfDAO.delete();
+        for (int i = 0; i < list1.size(); i++) {
+            Clob clob = null;
+            String text = "";
+            String result = "";
+            try {
+                if (list1.get(i).containsKey("ZYBC")) {
+                    clob = (Clob) list1.get(i).get("ZYBC");
+                    text = clob.getSubString(1, (int) clob.length());
+                    String info2 = this.decodeBase64AndGZip(text);
+                    result=info2.replaceAll("<.*?>", "");
+                    list1.get(i).put("ZYBC",result.replace("&nbsp;",""));
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return list1;
     }
 }

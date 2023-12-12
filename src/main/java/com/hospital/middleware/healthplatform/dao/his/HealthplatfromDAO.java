@@ -84,7 +84,7 @@ public interface HealthplatfromDAO {
 
     //JYMXB 检验明细表
     void deleteJymxb (String orgcode );
-    void addJymxb (Map<String,String> map);
+    void addJymxb (Map map);
     List<Map> queryJymxb_his(String orgcode,String begtime,String endtime);
     //JYSFXMB 检验收费项目明细表
     void deleteJysfxmb (String orgcode );
@@ -114,5 +114,13 @@ public interface HealthplatfromDAO {
     //TJ_SSYW_CWZYQK 床位占用情况表
     List<Map> queryTj_ssyw_cwzyqk(String orgcode,String begtime,String endtime);
 
-
+    //EMR_SCBCJL 首次病程记录
+    List<Map> query (String orgcode);
+    List<Map> queryZs (String orgcode,String begtime,String endtime);
+    void delete();
+    void add(String inid,String orgcode,String zs);
+    void update(Map<String,String> map);
+    List<Map> queryEmr_scbcjl(String orgcode);
+    //EMR_RCBCJL 日常病程记录
+    List<Map> queryEmr_rcbcjl (String orgcode,String begtime,String endtime);
 }
