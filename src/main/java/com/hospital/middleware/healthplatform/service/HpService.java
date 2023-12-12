@@ -183,7 +183,17 @@ public class HpService {
                 List<Map> queryResult = hpfDAO.queryZyzdmxbg(orgCode, begtime, endtime);
                 result = gson.toJson(queryResult);
             }
-
+            //检验记录表
+            if ("JYJLB".equals(dataType.toUpperCase())) {
+                List<Map> lis=hpf_lisDAO.queryJyjlb_lis(orgCode, begtime, endtime);
+                hpfDAO.deleteJyjlb(orgCode);
+                for(int i = 0; i < lis.size(); i++){
+                    hpfDAO.addJyjlb(lis.get(i));
+                }
+                //List<Map> queryResult = hpfDAO.queryJymxb_his(orgCode, begtime, endtime);
+                //result = gson.toJson(queryResult);
+                //genSqlString("JYJLB", queryResult.get(0));
+            }
             //检验明细表
             if ("JYMXB".equals(dataType.toUpperCase())) {
                 List<Map> lis=hpf_lisDAO.queryJymxb_lis(orgCode, begtime, endtime);

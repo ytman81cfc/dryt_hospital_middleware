@@ -81,7 +81,9 @@ public interface HealthplatfromDAO {
 
     //ZYZDMXBG 诊断明细报告
     List<Map> queryZyzdmxbg(String orgcode,String begtime,String endtime);
-
+    //JYJLB 检验记录表
+    void deleteJyjlb (String orgcode );
+    void addJyjlb (Map<String,String> map);
     //JYMXB 检验明细表
     void deleteJymxb (String orgcode );
     void addJymxb (Map map);

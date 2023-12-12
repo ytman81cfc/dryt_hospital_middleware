@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hospital.middleware.healthplatform.dao.lis.Healthplatform_lisDAO">
+    <select id="queryJyjlb_lis" resultType="java.util.HashMap">
+        select
+            a.org_code		"YLJGDM",
+            a.exe_csqn		"JYJLLSH",
+            DATE_FORMAT(a.result_date, '%Y-%m-%d %T' ) 	"BGRQ",
+            b.org_name		"YLJGMC",
+            '0'				"FYDM",
+            ''				"FYMC",
+            case when a.patient_type = 'C' THEN '1'
+                 WHEN a.patient_type = 'I' THEN '2'
+                 ELSE '9' END 	"JLLB",
+            a.patient_name	"XM",
+            a.sex			"XB",
+            a.age			"NL",
+            case when a.patient_type = 'I' then a.ward_name
+                 when a.patient_type = 'C' then ''
+                 else '' end		"BQMC",
+            case when a.patient_type = 'I' then a.bed_no
+                 when a.patient_type = 'C' then ''
+                 else '' end		"CH",
+            a.sample_type	"BBDM",
+            a.org_code		"SQYLJGDM",
+            b.org_name		"SQYLJGMC",
+            a.dept_id		"YNSQKSBM",
+            a.dept_name		"YNSQKSMC",
+            a.doctor_code	"SQYSGH",
+            a.doctor_name	"SQYSXM",
+            c.certno		"SQYSSFZHM",
+            DATE_FORMAT(a.test_date,'%Y-%m-%d %H:%i:%s')			"SQSJ",
+            DATE_FORMAT(a.sample_time,'%Y-%m-%d %H:%i:%s')			"CJSJ",
+            DATE_FORMAT(a.sample_accept_time,'%Y-%m-%d %H:%i:%s')	"JSBBSJ",
+            DATE_FORMAT(a.get_sample_date,'%Y-%m-%d %H:%i:%s')		"JYRQ",
+            DATE_FORMAT(a.result_date,'%Y-%m-%d %H:%i:%s')			"SHRQ",
+            a.get_sample_tester_id		"BGYSGH",
+            a.get_sample_tester_name	"BGYSXM",
+            d.certno					"BGYSSFZHM",
+            a.adjustsample_tester_id	"SHYSGH",
+            a.adjustsample_tester_name	"SHYSXM",
+            e.certno					"SHYSSFZHM",
+            a.exe_csqn		"JYBGBH",
+            '-'				"JYBGMC",
+            '9999'				"BGDLBBM",
+            '其他'				"BGDLBMC",
+            a.memo			"BGBZ"
+
+        from lis_test_reg a
+                 left join lis_hospitalinfo b on a.org_code = b.org_code
+                 left join lis_doctor c on a.org_code = c.org_code and a.doctor_code = c.doctor_code
+                 left join lis_doctor d on a.org_code = d.org_code and a.get_sample_tester_id = d.doctor_code
+                 left join lis_doctor e on a.org_code = e.org_code and a.adjustsample_tester_id = e.doctor_code
+
+        WHERE
+           a.org_code = 'H37068300546'
+          AND a.result_date >= str_to_date( '2023-11-30 00:00:00', '%Y-%m-%d %T' )
+          AND a.result_date &lt;= str_to_date( '2023-12-12 00:00:00', '%Y-%m-%d %T' )
+
+    </select>
+</mapper>

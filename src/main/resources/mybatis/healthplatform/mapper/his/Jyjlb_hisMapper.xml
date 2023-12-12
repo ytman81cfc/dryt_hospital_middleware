@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hospital.middleware.healthplatform.dao.his.HealthplatfromDAO">
+
+    <delete id="deleteJyjlb">
+        delete
+        from PRO_JYJLB
+        where orgcode = #{orgcode}
+    </delete>
+
+    <insert id="addJyjlb">
+        insert into PRO_JYJLB(orgcode,
+                              jyjllsh,
+                              bgrq,
+                              yljgmc,
+                              fydm,
+                              fymc,
+                              jllb,
+                              xm,
+                              xb,
+                              nl,
+                              ch,
+                              bbdm,
+                              ynsqksbm,
+                              ynsqksmc,
+                              sqysgh,
+                              sqysxm,
+                              sqyssfzhm,
+                              sqsj,
+                              cjsj,
+                              jsbbsj,
+                              jyrq,
+                              shrq,
+                              bgysgh,
+                              bgysxm,
+                              bgyssfzhm,
+                              shysgh,
+                              shysxm,
+                              shyssfzhm,
+                              jybgbh,
+                              jybgmc,
+                              bgdlbbm,
+                              bgdlbmc,
+                              bgbz,
+                              jymxsl,
+                              rid)
+        values (#{map.orgcode,jdbcType=VARCHAR}, #{map.JYJLLSH,jdbcType=VARCHAR}, #{map.bgrq,jdbcType=VARCHAR},
+                #{map.patienttype,jdbcType=VARCHAR}, #{map.inhosno,jdbcType=VARCHAR}, #{map.regid,jdbcType=VARCHAR},
+                #{map.rid,jdbcType=VARCHAR}, #{map.machineno,jdbcType=VARCHAR}, #{map.machinename,jdbcType=VARCHAR},
+                #{map.type,jdbcType=VARCHAR}, #{map.result,jdbcType=VARCHAR}, #{map.unit,jdbcType=VARCHAR},
+                #{map.normalrange,jdbcType=VARCHAR}, #{map.normalup,jdbcType=VARCHAR},
+                #{map.normaldown,jdbcType=VARCHAR},
+                #{map.iscritical,jdbcType=VARCHAR}, #{map.printcode,jdbcType=VARCHAR},
+                #{map.crisisscope,jdbcType=VARCHAR},
+                #{map.crisisup,jdbcType=VARCHAR}, #{map.crisisdown,jdbcType=VARCHAR},
+                #{map.flag,jdbcType=VARCHAR})
+    </insert>
+
+
+</mapper>
