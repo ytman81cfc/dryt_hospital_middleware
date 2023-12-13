@@ -190,9 +190,8 @@ public class HpService {
                 for(int i = 0; i < lis.size(); i++){
                     hpfDAO.addJyjlb(lis.get(i));
                 }
-                //List<Map> queryResult = hpfDAO.queryJymxb_his(orgCode, begtime, endtime);
-                //result = gson.toJson(queryResult);
-                //genSqlString("JYJLB", queryResult.get(0));
+                List<Map> queryResult = hpfDAO.queryJyjlb_his(orgCode);
+                result = gson.toJson(queryResult);
             }
             //检验明细表
             if ("JYMXB".equals(dataType.toUpperCase())) {

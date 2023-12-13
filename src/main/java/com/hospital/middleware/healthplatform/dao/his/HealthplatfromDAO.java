@@ -83,7 +83,8 @@ public interface HealthplatfromDAO {
     List<Map> queryZyzdmxbg(String orgcode,String begtime,String endtime);
     //JYJLB 检验记录表
     void deleteJyjlb (String orgcode );
-    void addJyjlb (Map<String,String> map);
+    void addJyjlb (Map map);
+    List<Map> queryJyjlb_his(String orgcode);
     //JYMXB 检验明细表
     void deleteJymxb (String orgcode );
     void addJymxb (Map map);

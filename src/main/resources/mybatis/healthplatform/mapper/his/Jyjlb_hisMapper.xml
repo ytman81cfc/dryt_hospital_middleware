@@ -10,19 +10,17 @@
 
     <insert id="addJyjlb">
         insert into PRO_JYJLB(orgcode,
-                              jyjllsh,
+                              applyid,
                               bgrq,
-                              yljgmc,
-                              fydm,
-                              fymc,
                               jllb,
-                              xm,
-                              xb,
                               nl,
+                              bqmc,
                               ch,
+                              yyjytcbm,
+                              yyjytcmc,
                               bbdm,
-                              ynsqksbm,
-                              ynsqksmc,
+                              bbmc,
+                              jybbh,
                               sqysgh,
                               sqysxm,
                               sqyssfzhm,
@@ -38,23 +36,229 @@
                               shysxm,
                               shyssfzhm,
                               jybgbh,
-                              jybgmc,
-                              bgdlbbm,
-                              bgdlbmc,
-                              bgbz,
-                              jymxsl,
-                              rid)
-        values (#{map.orgcode,jdbcType=VARCHAR}, #{map.JYJLLSH,jdbcType=VARCHAR}, #{map.bgrq,jdbcType=VARCHAR},
-                #{map.patienttype,jdbcType=VARCHAR}, #{map.inhosno,jdbcType=VARCHAR}, #{map.regid,jdbcType=VARCHAR},
-                #{map.rid,jdbcType=VARCHAR}, #{map.machineno,jdbcType=VARCHAR}, #{map.machinename,jdbcType=VARCHAR},
-                #{map.type,jdbcType=VARCHAR}, #{map.result,jdbcType=VARCHAR}, #{map.unit,jdbcType=VARCHAR},
-                #{map.normalrange,jdbcType=VARCHAR}, #{map.normalup,jdbcType=VARCHAR},
-                #{map.normaldown,jdbcType=VARCHAR},
-                #{map.iscritical,jdbcType=VARCHAR}, #{map.printcode,jdbcType=VARCHAR},
-                #{map.crisisscope,jdbcType=VARCHAR},
-                #{map.crisisup,jdbcType=VARCHAR}, #{map.crisisdown,jdbcType=VARCHAR},
-                #{map.flag,jdbcType=VARCHAR})
+                              inhosno,
+                              regid,
+                              num)
+        values (#{ORGCODE,jdbcType=VARCHAR}, #{APPLYID,jdbcType=VARCHAR}, #{BGRQ,jdbcType=VARCHAR},
+                #{JLLB,jdbcType=VARCHAR},
+                #{NL,jdbcType=VARCHAR}, #{BQMC,jdbcType=VARCHAR}, #{CH,jdbcType=VARCHAR},
+                #{YYJYTCBM,jdbcType=VARCHAR}, #{YYJYTCMC,jdbcType=VARCHAR},
+                #{BBDM,jdbcType=VARCHAR}, #{BBMC,jdbcType=VARCHAR},
+                #{JYBBH,jdbcType=VARCHAR},
+                #{SQYSGH,jdbcType=VARCHAR},
+                #{SQYSXM,jdbcType=VARCHAR},
+                #{SQYSSFZHM,jdbcType=VARCHAR}, #{SQSJ,jdbcType=VARCHAR},
+                #{CJSJ,jdbcType=VARCHAR},
+                #{JSBBSJ,jdbcType=VARCHAR}, #{JYRQ,jdbcType=VARCHAR},
+                #{SHRQ,jdbcType=VARCHAR}, #{BGYSGH,jdbcType=VARCHAR}, #{BGYSXM,jdbcType=VARCHAR},
+                #{BGYSSFZHM,jdbcType=VARCHAR}, #{SHYSGH,jdbcType=VARCHAR},
+                #{SHYSXM,jdbcType=VARCHAR}, #{SHYSSFZHM,jdbcType=VARCHAR},
+                #{JYBGBH,jdbcType=VARCHAR},
+                #{INHOSNO,jdbcType=VARCHAR}, #{REGID,jdbcType=VARCHAR}, #{NUM,jdbcType=VARCHAR})
     </insert>
 
 
+    <select id="queryJyjlb_his"  resultType="java.util.HashMap">
+        select a.orgcode                      "YLJGDM",--	医疗机构代码	VARCHAR	22	必填	复合主键：采用22位“卫生机构代码”
+               a.applyid                      "JYJLLSH",--	检验流水号	VARCHAR	64	必填	复合主键：检验报告单唯一标识
+               e.bgrq                         "BGRQ",--	报告日期	DATETIME		必填	复合主键：报告日期，无报告日期则使用审核日期
+               b.orgname                      "YLJGMC",--	医疗机构名称	VARCHAR	70	必填	医院执业许可第一名称
+               '0'                            "FYDM",--	分院代码	VARCHAR	20	必填	记录分院代码（内码）,如无分院，则传0
+               ''                             "FYMC",--	分院名称	VARCHAR	120	条件必填	分院代码不为0时必填
+               e.jllb                         "JLLB",--	患者标识	VARCHAR	1	必填	0：急诊 1：门诊 2：住院 3：体检 4：妇幼保健 5：社区医疗 9：其他
+               a.PATIENTBUSIID                "JZLSH",--	就诊流水号	VARCHAR	32	必填	门诊：填写门诊就诊记录表流水号	 住院：填写住院就诊记录表流水号	 体检：填写体检就诊记录表流水号
+               '1'                            "KLX",--	卡类型	VARCHAR	16	必填	请按照以下优先级顺序填写：1：患者主索引号、2：身份证号、3：医保卡号，如果都没有则填写门诊/住院/体检就诊流水号
+               c.rid                          "KH",--	卡号	VARCHAR	64	必填
+               f.item_id                      "ZJLX",--	证件类型	VARCHAR	2		参见CV02.01.101-2022修订版 身份证件类别代码  优先填写身份证号
+               d.certno                       "ZJHM",--	证件号码	VARCHAR	32
+               d.patientname                  "XM",--	姓名	VARCHAR	50	必填
+               d.sexcode                      "XB",--	性别	VARCHAR	1	必填	参见 GB/T 2261.1-2003 性别代码表
+               e.nl                           "NL",--	年龄	NUMERIC	3	必填
+               e.bqmc                         "BQMC",--	申请病区名称	VARCHAR	64	条件必填
+               e.ch                           "CH",--	患者床号	VARCHAR	20	条件必填	住院患者必填
+               e.yyjytcbm                     "YYJYTCBM",--	医院检验套餐编码	VARCHAR	36	必填	医院内部使用检验套餐编码
+               e.yyjytcmc                     "YYJYTCMC",--	医院检验套餐名称	VARCHAR	100	必填	医院内部使用检验套餐名称
+               e.bbdm                         "BBDM",--	标本代码	VARCHAR	4	必填	参见 CVA5200 标本字典
+               e.bbmc                         "BBMC",--	标本名称	VARCHAR	64	必填	填写具体的标本名称。
+               e.jybbh                        "JYBBH",--	检验标本号	VARCHAR	20
+               ''                             "JYFFMC",--	检验方法	VARCHAR	100
+               a.orgcode                      "SQYLJGDM",--	申请医疗机构代码	VARCHAR	22	必填
+               b.orgname                      "SQYLJGMC",--	申请医疗机构名称	VARCHAR	100	必填
+               a.LISTDPCD                     "YNSQKSBM",--	院内申请科室编码	VARCHAR	50	必填
+               a.LISTDPNM                     "YNSQKSMC",--	院内申请科室名称	VARCHAR	100	必填
+               g.item_id                      "SQKSBM",--	中心申请科室编码	VARCHAR	50	必填	参见《全民健康信息平台科室分类代码表》
+               g.item_name                    "SQKSMC",--	中心申请科室名称	VARCHAR	100	必填	参见《全民健康信息平台科室分类代码表》
+               e.sqysgh                       "SQYSGH",--	申请医生工号	VARCHAR	64	必填
+               e.sqysxm                       "SQYSXM",--	申请医生姓名	VARCHAR	50	必填
+               e.sqyssfzhm                    "SQYSSFZHM",--	申请医生身份证号码	VARCHAR	18	必填
+               e.sqsj                         "SQSJ",--	申请时间	DATETIME		必填	YYYY-MM-DD HH24:MI:SS　
+               e.cjsj                         "CJSJ",--	采样时间	DATETIME		必填	YYYY-MM-DD HH24:MI:SS
+               e.jsbbsj                       "JSBBSJ",--	接收标本时间	DATETIME		必填	YYYY-MM-DD HH24:MI:SS
+               e.jyrq                         "JYRQ",--	检验时间	DATETIME		必填	YYYY-MM-DD HH24:MI:SS
+               e.shrq                         "SHRQ",--	出报告审核时间	DATETIME			YYYY-MM-DD HH24:MI:SS 无审核时间可用报告时间
+               ''                             "BGYLJGDM",--	检验医疗机构代码	VARCHAR	22	条件必填	外送项目必填
+               ''                             "BGYLJGMC",--	检验医疗机构名称	VARCHAR	100	条件必填	外送项目必填
+               a.EXEDPCD                      "YNBGKSBM",--	院内检验科室编码	VARCHAR	50	必填
+               a.EXEDPNM                      "YNBGKSMC",--	院内检验科室名称	VARCHAR	100	必填
+               h.item_id                      "BGKSBM",--	中心检验科室编码	VARCHAR	50	必填	参见《全民健康信息平台科室分类代码表》
+               h.item_name                    "BGKSMC",--	中心检验科室名称	VARCHAR	100	必填	参见《全民健康信息平台科室分类代码表》
+               e.bgysgh                       "BGYSGH",--	检验医师工号	VARCHAR	64	必填
+               e.bgysxm                       "BGYSXM",--	检验医师姓名	VARCHAR	50	必填
+               e.bgyssfzhm                    "BGYSSFZHM",--	检验医师身份证号	VARCHAR	18	必填
+               e.shysgh                       "SHYSGH",--	审核医师工号	VARCHAR	64	必填
+               e.shysxm                       "SHYSXM",--	审核医师姓名	VARCHAR	50	必填
+               e.shyssfzhm                    "SHYSSFZHM",--	审核医师身份证号码	VARCHAR	18	必填
+               e.jybgbh                       "JYBGBH",--	检验报告编号	VARCHAR	36	必填	检验报告唯一编号
+               '-'                            "JYBGMC",--	检验报告名称	VARCHAR	80	必填	报告标题，用于展示
+               '9999'                         "BGDLBBM",--	报告单类别编码	VARCHAR	4	必填	1：一般临床检验 2：血液学检查 3：临床化学检查 4：临床免疫学检查 5：临床微生物学检查 6：临床寄生虫学检查 7：分子生物学检查 9999：其它
+               '其它'                           "BGDLBMC",--	报告单类别名称	VARCHAR	100	必填
+               ''                             "BGBZ",--	报告备注	VARCHAR	1024
+               e.num                          "JYMXSL",--	检验明细数量	VARCHAR	64	必填	该张报告单有多少条检验明细，与检验明细表 (JYMXB)校验
+               to_char(sysdate, 'YYYY-MM-DD') "TBRQ" --	填报日期	DATETIME		必填	本条数据采集时间，格式YYYY-MM-DD
+        from MET_CHECKAPPLY_INFO a
+                 left join (select a.item_id, a.item_name, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202311141512391328016800000000'
+                              and b.orgcode = #{orgcode}) g on g.his_item_id = a.LISTDPCD
+                 left join (select a.item_id, a.item_name, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202311141512391328016800000000'
+                              and b.orgcode = #{orgcode}) h on h.his_item_id = a.LISTDPCD,
+             com_hospitalinfo b,
+             com_patientinfo c,
+             ipr_inpatientinfo d
+                 left join (select a.item_id, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202310101521161149402900000000') f on f.his_item_id = d.PSNCERTTYPE
+                ,
+             PRO_JYJLB e
+        where a.orgcode = b.orgcode
+          and a.orgcode = d.orgcode
+          and a.PATIENTBUSIID = d.inid
+          and d.instate &lt;&gt;  '0'
+          and d.orgcode = c.orgcode
+          and d.inhosno = c.inhosno
+          and d.patientid = c.patientid
+          and a.orgcode = e.orgcode
+          and a.applyid = e.applyid
+          and a.APPLYTYPE = '1'
+          and a.APPLYSOURCE = '2'
+          and a.orgcode = #{orgcode}
+        union all
+        select a.orgcode                      "YLJGDM",--	医疗机构代码	VARCHAR	22	必填	复合主键：采用22位“卫生机构代码”
+               a.applyid                      "JYJLLSH",--	检验流水号	VARCHAR	64	必填	复合主键：检验报告单唯一标识
+               e.bgrq                         "BGRQ",--	报告日期	DATETIME		必填	复合主键：报告日期，无报告日期则使用审核日期
+               b.orgname                      "YLJGMC",--	医疗机构名称	VARCHAR	70	必填	医院执业许可第一名称
+               '0'                            "FYDM",--	分院代码	VARCHAR	20	必填	记录分院代码（内码）,如无分院，则传0
+               ''                             "FYMC",--	分院名称	VARCHAR	120	条件必填	分院代码不为0时必填
+               e.jllb                         "JLLB",--	患者标识	VARCHAR	1	必填	0：急诊 1：门诊 2：住院 3：体检 4：妇幼保健 5：社区医疗 9：其他
+               a.PATIENTBUSIID                "JZLSH",--	就诊流水号	VARCHAR	32	必填	门诊：填写门诊就诊记录表流水号	 住院：填写住院就诊记录表流水号	 体检：填写体检就诊记录表流水号
+               '1'                            "KLX",--	卡类型	VARCHAR	16	必填	请按照以下优先级顺序填写：1：患者主索引号、2：身份证号、3：医保卡号，如果都没有则填写门诊/住院/体检就诊流水号
+               c.rid                          "KH",--	卡号	VARCHAR	64	必填
+               f.item_id                      "ZJLX",--	证件类型	VARCHAR	2		参见CV02.01.101-2022修订版 身份证件类别代码  优先填写身份证号
+               d.certno                       "ZJHM",--	证件号码	VARCHAR	32
+               d.patientname                  "XM",--	姓名	VARCHAR	50	必填
+               d.sexcode                      "XB",--	性别	VARCHAR	1	必填	参见 GB/T 2261.1-2003 性别代码表
+               e.nl                           "NL",--	年龄	NUMERIC	3	必填
+               e.bqmc                         "BQMC",--	申请病区名称	VARCHAR	64	条件必填
+               e.ch                           "CH",--	患者床号	VARCHAR	20	条件必填	住院患者必填
+               e.yyjytcbm                     "YYJYTCBM",--	医院检验套餐编码	VARCHAR	36	必填	医院内部使用检验套餐编码
+               e.yyjytcmc                     "YYJYTCMC",--	医院检验套餐名称	VARCHAR	100	必填	医院内部使用检验套餐名称
+               e.bbdm                         "BBDM",--	标本代码	VARCHAR	4	必填	参见 CVA5200 标本字典
+               e.bbmc                         "BBMC",--	标本名称	VARCHAR	64	必填	填写具体的标本名称。
+               e.jybbh                        "JYBBH",--	检验标本号	VARCHAR	20
+               ''                             "JYFFMC",--	检验方法	VARCHAR	100
+               a.orgcode                      "SQYLJGDM",--	申请医疗机构代码	VARCHAR	22	必填
+               b.orgname                      "SQYLJGMC",--	申请医疗机构名称	VARCHAR	100	必填
+               a.LISTDPCD                     "YNSQKSBM",--	院内申请科室编码	VARCHAR	50	必填
+               a.LISTDPNM                     "YNSQKSMC",--	院内申请科室名称	VARCHAR	100	必填
+               g.item_id                      "SQKSBM",--	中心申请科室编码	VARCHAR	50	必填	参见《全民健康信息平台科室分类代码表》
+               g.item_name                    "SQKSMC",--	中心申请科室名称	VARCHAR	100	必填	参见《全民健康信息平台科室分类代码表》
+               e.sqysgh                       "SQYSGH",--	申请医生工号	VARCHAR	64	必填
+               e.sqysxm                       "SQYSXM",--	申请医生姓名	VARCHAR	50	必填
+               e.sqyssfzhm                    "SQYSSFZHM",--	申请医生身份证号码	VARCHAR	18	必填
+               e.sqsj                         "SQSJ",--	申请时间	DATETIME		必填	YYYY-MM-DD HH24:MI:SS　
+               e.cjsj                         "CJSJ",--	采样时间	DATETIME		必填	YYYY-MM-DD HH24:MI:SS
+               e.jsbbsj                       "JSBBSJ",--	接收标本时间	DATETIME		必填	YYYY-MM-DD HH24:MI:SS
+               e.jyrq                         "JYRQ",--	检验时间	DATETIME		必填	YYYY-MM-DD HH24:MI:SS
+               e.shrq                         "SHRQ",--	出报告审核时间	DATETIME			YYYY-MM-DD HH24:MI:SS 无审核时间可用报告时间
+               ''                             "BGYLJGDM",--	检验医疗机构代码	VARCHAR	22	条件必填	外送项目必填
+               ''                             "BGYLJGMC",--	检验医疗机构名称	VARCHAR	100	条件必填	外送项目必填
+               a.EXEDPCD                      "YNBGKSBM",--	院内检验科室编码	VARCHAR	50	必填
+               a.EXEDPNM                      "YNBGKSMC",--	院内检验科室名称	VARCHAR	100	必填
+               h.item_id                      "BGKSBM",--	中心检验科室编码	VARCHAR	50	必填	参见《全民健康信息平台科室分类代码表》
+               h.item_name                    "BGKSMC",--	中心检验科室名称	VARCHAR	100	必填	参见《全民健康信息平台科室分类代码表》
+               e.bgysgh                       "BGYSGH",--	检验医师工号	VARCHAR	64	必填
+               e.bgysxm                       "BGYSXM",--	检验医师姓名	VARCHAR	50	必填
+               e.bgyssfzhm                    "BGYSSFZHM",--	检验医师身份证号	VARCHAR	18	必填
+               e.shysgh                       "SHYSGH",--	审核医师工号	VARCHAR	64	必填
+               e.shysxm                       "SHYSXM",--	审核医师姓名	VARCHAR	50	必填
+               e.shyssfzhm                    "SHYSSFZHM",--	审核医师身份证号码	VARCHAR	18	必填
+               e.jybgbh                       "JYBGBH",--	检验报告编号	VARCHAR	36	必填	检验报告唯一编号
+               '-'                            "JYBGMC",--	检验报告名称	VARCHAR	80	必填	报告标题，用于展示
+               '9999'                         "BGDLBBM",--	报告单类别编码	VARCHAR	4	必填	1：一般临床检验 2：血液学检查 3：临床化学检查 4：临床免疫学检查 5：临床微生物学检查 6：临床寄生虫学检查 7：分子生物学检查 9999：其它
+               '其它'                           "BGDLBMC",--	报告单类别名称	VARCHAR	100	必填
+               ''                             "BGBZ",--	报告备注	VARCHAR	1024
+               e.num                          "JYMXSL",--	检验明细数量	VARCHAR	64	必填	该张报告单有多少条检验明细，与检验明细表 (JYMXB)校验
+               to_char(sysdate, 'YYYY-MM-DD') "TBRQ" --	填报日期	DATETIME		必填	本条数据采集时间，格式YYYY-MM-DD
+        from MET_CHECKAPPLY_INFO a
+                 left join (select a.item_id, a.item_name, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202311141512391328016800000000'
+                              and b.orgcode = #{orgcode}) g on g.his_item_id = a.LISTDPCD
+                 left join (select a.item_id, a.item_name, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202311141512391328016800000000'
+                              and b.orgcode = #{orgcode}) h on h.his_item_id = a.LISTDPCD,
+             com_hospitalinfo b,
+             com_patientinfo c,
+             opr_register d
+                 left join (select a.item_id, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202310101521161149402900000000') f on f.his_item_id = d.PSNCERTTYPE
+                ,
+             PRO_JYJLB e
+        where a.orgcode = b.orgcode
+          and a.orgcode = d.orgcode
+          and a.PATIENTBUSIID = d.regid
+          and d.REGISTSTATE = '1'
+          and d.orgcode = c.orgcode
+          and d.patientno = c.patientno
+          and d.patientid = c.patientid
+          and a.orgcode = e.orgcode
+          and a.applyid = e.applyid
+          and a.APPLYTYPE = '1'
+          and a.APPLYSOURCE = '1'
+          and a.orgcode = #{orgcode}
+    </select>
 </mapper>

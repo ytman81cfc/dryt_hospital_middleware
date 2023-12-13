@@ -122,6 +122,92 @@
           and a.orgcode = c.orgcode
           and a.PATIENTBUSIID= c.regid
           and a.applyid= c.applyid
+          and a.APPLYSOURCE='1'
+          and a.APPLYTYPE = '1'
+          and a.orgcode=#{orgcode}
+          and c.bgrq&gt;=#{begtime}
+          and c.bgrq&lt;=#{endtime}
+union all
+        select a.orgcode                      "YLJGDM",-- 医疗机构代码  VARCHAR 22  必填  复合主键：采用22位“卫生机构代码”
+               c.rid                          "JYMXLSH",--  检验明细流水号 VARCHAR 64  必填  复合主键：医院内部唯一标识此检验明细的一个序号，必须保证在本医院内不重复。如医院内的序号是循环使用的，可以采用在前面加日期的方式避免重复（格式：YYYYMMDD）
+               b.orgname                      "YLJGMC",-- 医疗机构名称  VARCHAR 70  必填  医院执业许可第一名称
+               '0'                            "FYDM",-- 分院代码  VARCHAR 20  必填  记录分院代码（内码）,如无分院，则传0
+               ''                             "FYMC",-- 分院名称  VARCHAR 120 条件必填  分院代码不为0时必填
+               a.PATIENTBUSIID                "JYLSH",--  检验流水号 VARCHAR 64  必填  关联《1.2 检验记录表》
+               c.bgrq                         "BGRQ",-- 报告日期  DATETIME    必填  无报告日期，则上传审核日期
+               a.EXEDPCD                      "YNJCKSBM",-- 院内检测科室编码  VARCHAR 50
+               a.EXEDPNM                      "YNJCKSMC",-- 院内检测科室名称  VARCHAR 100
+               f.item_id                      "JCKSBM",-- 中心检测科室编码  VARCHAR 50    参见《全民健康信息平台科室分类代码表》
+               f.item_name                    "JCKSMC",-- 中心检测科室名称  VARCHAR 100   参见《全民健康信息平台科室分类代码表》
+               a.EXEDPCD                      "JCRGH",--  检测人工号 VARCHAR 64  必填
+               a.EXEDPNM                      "JCRXM",--  检测人姓名 VARCHAR 50  必填
+               k.certno                       "JCRSFZHM",-- 检测人身份证号码  VARCHAR 18  必填
+               ''                             "SHRGH",--  审核人工号 VARCHAR 64  必填
+               ''                             "SHRXM",--  审核人姓名 VARCHAR 50  必填
+               ''                             "SHRSFZHM",-- 审核人身份证号码  VARCHAR 18  必填
+               '3'                            "JYLBDM",-- 检验类别代码  VARCHAR 1 必填  参见CV5199.01检查/检验类别代码   1：问询 2：物理 3：实验室 9：影像    该表填写固定值3
+               c.machineno                    "JYXMDM",-- 医院检验项目编码  VARCHAR 32  必填  医院可按实际情况填写，可填写通用的英文简称（如：“红细胞计数”的英文缩写为RBC）也可以是各医院系统里的唯一编码
+               c.machinename                  "JYXMMC",-- 医院检验项目名称  VARCHAR 200 必填
+               case
+                   when c.type = '0' then '1'
+                   else
+                       case
+                           when c.result like '%阴性%' or c.result like '%阳性%' then '2'
+                           else '3'
+                           end
+                   end                        "JYJGLX",-- 检验结果类型  VARCHAR 1 必填  检验结果的类型 1：数值型 2：阴阳型 3：文本型
+               c.result                       "JYJG",-- 检验结果  VARCHAR 1000  必填  检验结果类型为1时，填写具体的数值  检验结果类型为2时，填写阴性或者阳性   检验结果类型为3时，填写具体的检验结果文本描述
+               c.unit                         "JYJLDW",-- 检验计量单位  VARCHAR 20
+               case
+                   when c.flag = '↓' then '4'
+                   when c.flag = '↑' then '3'
+                   when c.flag is null or c.flag = '' then '1'
+                   end                        "JGTS",-- 检验结果提示  VARCHAR 2 必填  1：正常 2：其他异常 3：异常偏高 4：异常偏低 9：不详
+               c.NORMALRANGE                  "CKZFW",--  参考值范围 VARCHAR 512 条件必填
+               case
+                   when c.type = '0' then  round(to_number(c.NORMALUP), 3)
+                   else null
+                   end                        "CKZSX",--  参考值上限 NUMERIC 18,3  条件必填  检验结果类型是数值型必填
+               case
+                   when c.type = '0' then round(to_number(c.NORMALDOWN), 3)
+                   else null
+                   end                        "CKZXX",--  参考值下限 NUMERIC 18,3  条件必填  检验结果类型是数值型必填
+               c.iscritical                   "SFSWJZ",-- 是否是危急值  VARCHAR 1 必填  0：否 1：是
+               case
+                   when c.iscritical = '1' and c.type &lt;&gt; '0' then c.CRISISSCOPE
+                   else '' end                "WJZZCKZFW",--  危急重值参考值范围 VARCHAR 512 条件必填  是否是危急值为1，且检验结果是非数值型才填
+               case
+                   when c.iscritical = '1' and c.type = '0' then round(to_number(c.CRISISUP), 3)
+                   else null end                "WJZZSX",-- 危急重值上限  NUMERIC 18,3  条件必填  是否是危急值为1，且检验结果是数值型才填
+               case
+                   when c.iscritical = '1' and c.type = '0' then round(to_number(c.CRISISDOWN), 3)
+                   else null end                "WJZZXX",-- 危急重值下限  NUMERIC 18,3  条件必填  是否是危急值为1，且检验结果是数值型才填
+               c.PRINTCODE                    "DYXH",-- 打印序号  VARCHAR 64  必填  细项在报告单打印时的排序
+               to_char(sysdate, 'YYYY-MM-DD') "TBRQ"--  填报日期  DATETIME    必填  本条数据采集时间，格式YYYY-MM-DD
+        from met_checkapply_info a
+                 left join (select a.item_id, a.item_name, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202311141512391328016800000000'
+                              and b.orgcode =
+                                  #{orgcode}) f
+                           on f.his_item_id = a.LISTDPCD
+                 left join com_userinfo k on k.orgcode =a.orgcode and k.usercode=a.EXEDPCD,
+             com_hospitalinfo b,
+             PRO_JYMXB c,
+             ipr_inpatientinfo d
+        where a.orgcode=d.orgcode
+          and a.PATIENTBUSIID=d.inid
+          and d.instate &gt;&lt; '0'
+          and a.orgcode =b.orgcode
+          and a.orgcode = c.orgcode
+          and a.applyid= c.applyid
+          and a.APPLYSOURCE='2'
+          and a.APPLYTYPE = '1'
           and a.orgcode=#{orgcode}
           and c.bgrq&gt;=#{begtime}
           and c.bgrq&lt;=#{endtime}
