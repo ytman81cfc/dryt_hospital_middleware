@@ -7,7 +7,7 @@
                a.regid                                       "JZLSH",--	就诊流水号 	VARCHAR 	32	必填 	用于与住院就诊记录表或门诊就诊记录表关联的外键
                '1'                                           "MZZYBZ",--	门诊/住院标志 	VARCHAR 	2	必填 	ZD_MZZYBZ 门急诊住院标志
                b.rid                                         "KH",--	卡号 	VARCHAR 	64	必填
-               '1'                                           "KLX",--	卡类型 	VARCHAR 	16	必填 	参见CVA5104就诊卡类型
+               '8'                                           "KLX",--	卡类型 	VARCHAR 	16	必填 	参见CVA5104就诊卡类型
                c.certno                                      "ZJHM",--	证件号码	VARCHAR	32
                d.item_id                                     "ZJLX",--	证件类型	VARCHAR	2		参见CV02.01.101身份证件类别代码
                a.dise_type                                   "ZDLXQF",--	诊断类型区分 	VARCHAR 	1	必填 	编码。第一位，1：西医、2：中医
@@ -67,7 +67,7 @@
                a.inid                                        "JZLSH",--	就诊流水号 	VARCHAR 	32	必填 	用于与住院就诊记录表或门诊就诊记录表关联的外键
                '2'                                           "MZZYBZ",--	门诊/住院标志 	VARCHAR 	2	必填 	ZD_MZZYBZ 门急诊住院标志
                b.rid                                         "KH",--	卡号 	VARCHAR 	64	必填
-               '1'                                           "KLX",--	卡类型 	VARCHAR 	16	必填 	参见CVA5104就诊卡类型
+               '8'                                           "KLX",--	卡类型 	VARCHAR 	16	必填 	参见CVA5104就诊卡类型
                c.certno                                      "ZJHM",--	证件号码	VARCHAR	32
                d.item_id                                     "ZJLX",--	证件类型	VARCHAR	2		参见CV02.01.101身份证件类别代码
                a.dise_type                                   "ZDLXQF",--	诊断类型区分 	VARCHAR 	1	必填 	编码。第一位，1：西医、2：中医

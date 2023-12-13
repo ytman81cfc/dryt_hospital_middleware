@@ -7,7 +7,7 @@
                b.orgname                                                                       "YLJGMC",--	医疗机构名称	VARCHAR	70	必填	医院执业许可第一名称
                '0'                                                                             "FYDM",--	分院代码	VARCHAR	20	必填	记录分院代码（内码）,如无分院，则传0
                ''                                                                              "FYMC",--	分院名称	VARCHAR	120	条件必填	分院代码不为0时必填
-               '1'                                                                             "KLXDM",--	卡类型	VARCHAR	16	必填	请按照以下优先级顺序填写：1：患者主索引号、2：身份证号、3：医保卡号，如果都没有则填写门诊就诊流水号
+               '8'                                                                             "KLXDM",--	卡类型	VARCHAR	16	必填	请按照以下优先级顺序填写：1：患者主索引号、2：身份证号、3：医保卡号，如果都没有则填写门诊就诊流水号
                c.rid                                                                           "KHM",--	卡号	VARCHAR	64	必填
                SUBSTR(a.patientname, 0, 5)                                                                   "XM",--	姓名	VARCHAR	50	必填
                nvl(to_number(extract(year from a.reg_time)) - to_number(extract(year from a.BRDY)), 0) "NL",--	年龄(岁)	NUMERIC	3	必填	就诊时的年龄，1岁以内填0

@@ -9,7 +9,7 @@
                b.orgname                                      "YLJGMC",--	医疗机构名称	VARCHAR	70	必填	医院执业许可第一名称
                '0'                                            "FYDM",--	分院代码	VARCHAR	20	必填	记录分院代码（内码）,如无分院，则传0
                ''                                             "FYMC",--	分院名称	VARCHAR	120	条件必填	分院代码不为0时必填
-               '1'                                            "KLX",--	卡类型	VARCHAR	16	必填	参照CVA5104就诊卡类型
+               '8'                                            "KLX",--	卡类型	VARCHAR	16	必填	参照CVA5104就诊卡类型
                c.rid                                          "KH",--	卡号	VARCHAR	64	必填
                a.outdeptcode                                  "YNKSBM",--	院内科室编码	VARCHAR	50	必填
                a.outdeptname                                  "YNKSMC",--	院内科室名称	VARCHAR	100	必填

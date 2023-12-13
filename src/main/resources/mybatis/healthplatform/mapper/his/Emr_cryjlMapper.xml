@@ -5,7 +5,7 @@
         select a.orgcode                                      "YLJGDM",--	医疗机构代码 	VARCHAR	22	必填	复合主键：采用22位“卫生机构代码”
                a.inid                                         "ZYJZLSH",--	住院就诊流水号	VARCHAR	32	必填	复合主键
                d.rid                                          "KH",--	卡号	VARCHAR	64	必填
-               '1'                                            "KLX",--	卡类型	VARCHAR	16	必填	参照CVA5104就诊卡类型
+               '8'                                            "KLX",--	卡类型	VARCHAR	16	必填	参照CVA5104就诊卡类型
                a.patientname                                  "HZXM",--	患者姓名	VARCHAR	50	必填
                a.sexcode                                      "XBDM",--	性别代码	VARCHAR	1	必填	编码。按国标GB/T 2261.1-2003执行
                case

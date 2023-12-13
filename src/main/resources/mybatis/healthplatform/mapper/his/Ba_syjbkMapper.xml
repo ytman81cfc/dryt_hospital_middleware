@@ -12,7 +12,7 @@
                f.item_id                                                          "BRXZ",        -- 医疗费用支付方式代码  VARCHAR 4   参见 CV07.10.005医疗付费方式
                a.INTIMES                                                          "RYCS",        -- 入院次数  INT
                a.MEDCASNO                                                         "BAHM",        -- 病案号 VARCHAR 20  必填
-               '1'                                                                "KLX",         --  卡类型 VARCHAR 16  必填  请按照以下优先级顺序填写：1：患者主索引号、2：身份证号、3：医保卡号，如果都没有则填写住院就诊流水号
+               '8'                                                                "KLX",         --  卡类型 VARCHAR 16  必填  请按照以下优先级顺序填写：1：患者主索引号、2：身份证号、3：医保卡号，如果都没有则填写住院就诊流水号
                c.rid                                                              "JYKH",        -- 卡号  VARCHAR 64  必填
                a.HEALTHCARD                                                       "JKKH ",       --  健康卡号  VARCHAR 64
                a.NAME                                                             "BRXM",        -- 病人姓名  VARCHAR 50  必填

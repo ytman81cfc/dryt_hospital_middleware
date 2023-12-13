@@ -30,7 +30,7 @@
                a.DEPTNAME                                   "KSMC",--	科室名称	VARCHAR	100	必填
                a.DEPTCODE                                   "KSBM",--	科室编码	VARCHAR	20	必填	院内科室编码，见《科室信息(JBKSXXB)》表
                e.rid                                        "KH",--	卡号	VARCHAR	64	必填
-               '1'                                          "KLX",--	卡类型	VARCHAR	16	必填	参见CVA5104就诊卡类型
+               '8'                                          "KLX",--	卡类型	VARCHAR	16	必填	参见CVA5104就诊卡类型
                a.ISEMERGENCY                                "MJZLB",--	门（急）诊类别	VARCHAR	1	必填	0：门诊 1：急诊
                a.patientno                                  "MZBLH",--	门（急）诊病历号	VARCHAR	50	必填
                a.PAYKINDNAME                                "MZFYLBMC",--	门诊费用类别名称	VARCHAR	20		患者发生的门诊费用种类名称，例如“医保”“自费”等

@@ -5,8 +5,8 @@
         select a.orgcode                                   "YLJGDM",--  医疗机构代码  VARCHAR 22  必填  复合主键：采用22位“卫生机构代码”
                a.INVOICENO                                 "SFLSH",--	收费流水号	VARCHAR	64	必填	复合主键
                a.inid                                      "JZLSH",--	就诊流水号	VARCHAR	32	必填	关联《就诊记录表》
-               '1'                                         "KH",--	卡号	VARCHAR	64	必填
-               c.rid                                       "KLX",--	卡类型	VARCHAR	16	必填	参见CVA5104就诊卡类型
+               c.rid                                       "KH",--	卡号	VARCHAR	64	必填
+               '8'                                         "KLX",--	卡类型	VARCHAR	16	必填	参见CVA5104就诊卡类型
                f.item_id                                   "ZJLX",--	证件类型	VARCHAR	2		参见CV02.01.101身份证件类别代码
                b.certno                                    "ZJHM",--	证件号码	VARCHAR	32
                a.INVOICENO                                 "XM",--	姓名	VARCHAR	50	必填
