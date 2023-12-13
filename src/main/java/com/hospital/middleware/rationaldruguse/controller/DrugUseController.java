@@ -123,12 +123,12 @@ public class DrugUseController {
         }
         if ("msLabInfo_zy".equals(map.get("viewCode"))){
             List<Map> list = msLabInfo_zy_lisDAO.queryMsLabInfo_zy_lis(map);
-            msLabInfo_zy_hisDAO.deleteAll(map.get("Hoscode"));
+            msLabInfo_zy_hisDAO.deleteAll(map);
             for (int i = 0; i < list.size(); i++) {
                 msLabInfo_zy_hisDAO.add(list.get(i));
             }
-            msLabInfo_zy_hisDAO.updateAll(map.get("Hoscode"));
-            List<Map> resultList = msLabInfo_zy_hisDAO.queryMsLabInfo_zy_his(map.get("Hoscode"));
+            msLabInfo_zy_hisDAO.updateAll(map);
+            List<Map> resultList = msLabInfo_zy_hisDAO.queryMsLabInfo_zy_his(map);
             return resultList;
         }
         if("msLabPatho_zy".equals(map.get("viewCode"))){

@@ -3,7 +3,8 @@
 <mapper namespace="com.hospital.middleware.rationaldruguse.dao.his.MsLabInfo_zy_hisDAO">
 
     <delete id="deleteAll">
-        delete from SI_MSLABINFO_ZY where orgcode=#{Hoscode}
+        delete from SI_MSLABINFO_ZY where orgcode=#{map.Hoscode} and labdate&gt;=#{map.beginDate}
+                                      and labdate&lt;=#{map.endDate}
     </delete>
 
     <insert id="add">
@@ -16,7 +17,7 @@
 
     <update id="updateAll">
     update  SI_MSLABINFO_ZY a SET a.SYH =(select b.PATIENTBUSIID  from MET_CHECKAPPLY_INFO b where a.orgcode=b.orgcode and b.patientid=a.blcode and b.applyid=a.labno)
-    where a.orgcode =#{Hoscode}
+    where a.orgcode =#{map.Hoscode} and a.labdate&gt;=#{map.beginDate} and a.labdate&lt;=#{map.endDate}
     </update>
 
     <select id="queryMsLabInfo_zy_his" resultType="java.util.HashMap">
@@ -32,6 +33,7 @@
         FROM
             SI_MSLABINFO_ZY
         WHERE
-         orgcode = #{Hoscode}
+         orgcode = #{map.Hoscode}
+          and  labdate&gt;=#{map.beginDate} and  labdate&lt;=#{map.endDate}
     </select>
 </mapper>
