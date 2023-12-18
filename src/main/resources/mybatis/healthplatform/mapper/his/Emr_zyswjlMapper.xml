@@ -86,7 +86,7 @@
                                 and a.type_rid = b.type_rid
                                 and a.rid = b.item_rid
                                 and a.module_rid = '202310101511361148853000000000'
-                                and a.type_rid = '202311281105131392640900000000') c
+                                and a.type_rid = '202311281105131392640900000000' and b.orgcode=#{orgcode}) c
                             on c.his_item_id = a.dise_code
                             where DISE_CLINICD = '3'
                             group by a.orgcode, a.inid) b on a.orgcode = b.orgcode and a.inid = b.inid
@@ -101,7 +101,7 @@
                                 and a.type_rid = b.type_rid
                                 and a.rid = b.item_rid
                                 and a.module_rid = '202310101511361148853000000000'
-                                and a.type_rid = '202311281105131392640900000000') c
+                                and a.type_rid = '202311281105131392640900000000' and b.orgcode=#{orgcode}) c
                             on c.his_item_id = a.dise_code
                             where DISE_CLINICD = '1'
                             group by a.orgcode, a.inid) q on a.orgcode = q.orgcode and a.inid = q.inid,
@@ -130,7 +130,7 @@
                               and a.rid = b.item_rid
                               and a.module_rid = '202310101511361148853000000000'
                               and a.type_rid = '202311161530191338672700000000') h on h.his_item_id = d.RELACODE,
-              INR_RECEIVEINFO r
+             INR_RECEIVEINFO r
         where a.instate &lt;&gt; '0'
           and a.orgcode = d.orgcode
           and a.patientid = d.patientid

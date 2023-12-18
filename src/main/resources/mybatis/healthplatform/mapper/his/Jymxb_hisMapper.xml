@@ -202,7 +202,7 @@ union all
              ipr_inpatientinfo d
         where a.orgcode=d.orgcode
           and a.PATIENTBUSIID=d.inid
-          and d.instate &gt;&lt; '0'
+          and d.instate &lt;&gt; '0'
           and a.orgcode =b.orgcode
           and a.orgcode = c.orgcode
           and a.applyid= c.applyid

@@ -42,7 +42,7 @@
                g.item_id                                  "ZYLBDM",--	职业类别代码	VARCHAR	2		GB/T 2261.4-2003 职业分类与代码
                to_char(a.indate, 'YYYY-MM-DD HH24:MM:SS') "RYRQSJ",--	入院日期时间	DATETIME		必填	格式：YYYY-MM-DD HH:MM:SS
                d.LINKMANNAME                              "BSCSZXM",--	病史陈述者姓名	VARCHAR	50
-               nvl(h.item_id,'9')                                  "CSZYHZDGXDM",--	陈述者与患者的关系代码	VARCHAR	1		参见GB/T 4761-2008 1.配偶 2.子 3.女 4.孙子、孙女或外孙子、外孙女 5.父母 6.祖父母或外祖父母 7.兄、弟、姐、妹 9.其他
+               nvl(h.item_id, '9')                        "CSZYHZDGXDM",--	陈述者与患者的关系代码	VARCHAR	1		参见GB/T 4761-2008 1.配偶 2.子 3.女 4.孙子、孙女或外孙子、外孙女 5.父母 6.祖父母或外祖父母 7.兄、弟、姐、妹 9.其他
                ''                                         "CSNRKKBZ",--	陈述内容可靠标志	VARCHAR	1		参见 ZD_SFWZBZ 是否未知标志
                ''                                         "ZS",--	主诉	VARCHAR	1024
                ''                                         "XBS",--	现病史	VARCHAR	1024		有多项时用英文分号“;”分割
@@ -127,7 +127,7 @@
                b.INOPNM                                   "JZYSQM",--	接诊医师签名	VARCHAR	50
                b.INOPCD                                   "JZYSGH",--	接诊医师工号	VARCHAR	64
                b.CHADR_NAME                               "ZYYSQM",--	住院医师签名	VARCHAR	50
-               b.CHADR_NO                                   "ZYYSGH",--	住院医师工号	VARCHAR	64
+               b.CHADR_NO                                 "ZYYSGH",--	住院医师工号	VARCHAR	64
                b.INDR_NAME                                "ZZYSQM",--	主治医师签名	VARCHAR	50
                b.INDR_NO                                  "ZZYSGH",--	主治医师工号	VARCHAR	64
                b.CHIFDR_NAME                              "ZRYSQM",--	主任医师签名	VARCHAR	50
@@ -177,10 +177,11 @@
                               and a.type_rid = b.type_rid
                               and a.rid = b.item_rid
                               and a.module_rid = '202310101511361148853000000000'
-                              and a.type_rid = '202311281105131392640900000000') i on i.his_item_id = o.DISE_CODE
+                              and a.type_rid = '202311281105131392640900000000'
+                              and b.orgcode = #{orgcode}) i on i.his_item_id = o.DISE_CODE
         where a.orgcode = b.orgcode
           and a.inid = b.inid
-          and a.instate  &lt;&gt; '0'
+          and a.instate &lt;&gt; '0'
           and b.orgcode = c.orgcode
           and b.bedno = c.bedno
           and a.orgcode = d.orgcode
@@ -189,7 +190,7 @@
           and a.orgcode = o.orgcode
           and a.inid = o.inid
           and o.isvalid = '1'
-          and o.DISE_CLINICD='3'
+          and o.DISE_CLINICD = '3'
           and a.orgcode =
               #{orgcode}
           and a

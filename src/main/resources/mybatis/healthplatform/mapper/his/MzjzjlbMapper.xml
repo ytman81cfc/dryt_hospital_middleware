@@ -160,7 +160,8 @@
                                                   and a.type_rid = b.type_rid
                                                   and a.rid = b.item_rid
                                                   and a.module_rid = '202310101511361148853000000000'
-                                                  and a.type_rid = '202311281105131392640900000000') j
+                                                  and a.type_rid = '202311281105131392640900000000'
+                                                  and b.orgcode = #{orgcode}) j
                                                on j.his_item_id = a.DISE_CODE) e
                            on a.orgcode = e.orgcode and a.regid = e.regid and e.main_flag = '1' and
                               e.dise_type = '1' and e.isvalid = '1'

@@ -14,7 +14,7 @@
                h.item_id                                            "ZJLX",-- 证件类型  VARCHAR 2   参见CV02.01.101-2022修订版 身份证件类别代码   优先使用身份证
                d.certno                                             "ZJHM",-- 证件号码  VARCHAR 32
                d.PATIENTNAME                                        "XM",-- 姓名  VARCHAR   50  必填
-               nvl(i.item_id, '-')                                            "XB",-- 性别  VARCHAR   1 必填  参见 GB/T 2261.1-2003 性别代码表
+               nvl(i.item_id, '-')                                  "XB",-- 性别  VARCHAR   1 必填  参见 GB/T 2261.1-2003 性别代码表
                to_char(d.BIRTHDAY, 'YYYY-MM-DD')                    "CSRQ",-- 出生日期  DATETIME    必填  格式：YYYY-MM-DD
                case
                    when d.PAYKINDCODE = '01' then '07'
@@ -68,7 +68,7 @@
                    when s.ORDE_EXERTYPECD = '1' and s.ITEMTYPE in ('2', '4') and s.APPLYTYPE = '3' then '04'
                    when s.ORDE_EXERTYPECD = '1' and s.ITEMTYPE in ('2', '4') and s.APPLYTYPE = '4' then '05'
                    when s.ORDE_EXERTYPECD = '3' then '07'
-                   else '07' end       "YZXMLXDM",-- 医嘱项目类型代码  VARCHAR 2 必填  "参见CV06.00.229   01：药品类医嘱 02：检查类医嘱 03：检验类医嘱 04：手术类医嘱 05：处置类医嘱 06：材料类医嘱 07：嘱托医嘱"
+                   else '07' end                                    "YZXMLXDM",-- 医嘱项目类型代码  VARCHAR 2 必填  "参见CV06.00.229   01：药品类医嘱 02：检查类医嘱 03：检验类医嘱 04：手术类医嘱 05：处置类医嘱 06：材料类医嘱 07：嘱托医嘱"
                case
                    when s.ORDE_EXERTYPECD = '1' and s.ITEMTYPE = '1' then '药品类医嘱'
                    when s.ORDE_EXERTYPECD = '1' and s.ITEMTYPE = '3' then '材料类医嘱'
@@ -77,7 +77,7 @@
                    when s.ORDE_EXERTYPECD = '1' and s.ITEMTYPE in ('2', '4') and s.APPLYTYPE = '3' then '手术类医嘱'
                    when s.ORDE_EXERTYPECD = '1' and s.ITEMTYPE in ('2', '4') and s.APPLYTYPE = '4' then '处置类医嘱'
                    when s.ORDE_EXERTYPECD = '3' then '嘱托医嘱'
-                   else '药品类医嘱' end     "YZXMLXMC",-- 医嘱项目类型名称  VARCHAR 32  必填
+                   else '药品类医嘱' end                                 "YZXMLXMC",-- 医嘱项目类型名称  VARCHAR 32  必填
                s.APPLYID                                            "DZSQDBH",--  电子申请单编号 VARCHAR 20
                decode(s.ITEMTYPE, '1', '1', '0')                    "YZLX",-- 是否药品  VARCHAR 2 必填  0：否 1：是
                n.GJYPID                                             "YPID",-- 国家药品ID  VARCHAR 64    是否药品为“是”时填写 三级医院必填,二级医院有条件的填
@@ -86,8 +86,14 @@
                    else s.ITEMID
                    end                                              "YZMXBM",-- 院内医嘱项目编码  VARCHAR 32  必填  嘱托类等医嘱没有编码的填写999
                s.ITEMNAME                                           "YZMXMC",-- 院内医嘱项目名称  VARCHAR 1024  必填
-               o.MED_LIST_CODG                                      "ZXDM",-- 中心医嘱项目编码  VARCHAR 32  必填  "药品类填写药品医保编码，如非医保药品，则传999检查类参见《全民健康信息平台检查分类编码标准》检验类参见《全民健康信息平台检验分类编码标准》手术类参见《手术操作分类代码(ICD-9)》处置类医嘱填写《全民健康信息平台医疗服务项目价格表》材料类参见《国家医保医用耗材分类编码》嘱托类填写888"
-               nvl(o.SERVITEM_NAME, '-')                                      "ZXMC",-- 中心医嘱项目名称  VARCHAR 1024  必填
+               case
+                   when s.itemtype = '1' then bb.item_id
+                   when s.itemtype = '3' then cc.item_id
+                   else ss.item_id end                              "ZXDM",-- 中心医嘱项目编码  VARCHAR 32  必填  "药品类填写药品医保编码，如非医保药品，则传999检查类参见《全民健康信息平台检查分类编码标准》检验类参见《全民健康信息平台检验分类编码标准》手术类参见《手术操作分类代码(ICD-9)》处置类医嘱填写《全民健康信息平台医疗服务项目价格表》材料类参见《国家医保医用耗材分类编码》嘱托类填写888"
+               case
+                   when s.itemtype = '1' then bb.item_name
+                   when s.itemtype = '3' then cc.item_name
+                   else ss.item_name end                            "ZXMC",-- 中心医嘱项目名称  VARCHAR 1024  必填
                round(r.UNITPRICE, 3)                                "XMDJ",-- 项目单价  NUMERIC 18,3
                round(r.TOTCOST, 3)                                  "XMJE",-- 项目金额  NUMERIC 18,3
                decode(s.DRUGTYPE, '1', '1', '2', '2', '3', '3')     "YPLB",-- 药品类别  VARCHAR 1 条件必填  1：西药 2：中成药 3：中草药
@@ -137,8 +143,29 @@
                               and a.type_rid = b.type_rid
                               and a.rid = b.item_rid
                               and a.module_rid = '202310101511361148853000000000'
-                              and a.type_rid = '202311141512391328016800000000'
-                              and b.orgcode=#{orgcode}) de on de.his_item_id = s.DEPTCODE
+                              and a.type_rid = '202312071016491431096700000000'
+                              and b.orgcode = #{orgcode}) ss
+                           on ss.his_item_id = s.itemcode
+                 left join (select a.item_id, a.item_name, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202312071017521431097000000000'
+                              and b.orgcode = #{orgcode}) bb
+                           on bb.his_item_id = s.itemcode
+                 left join (select a.item_id, a.item_name, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202312071013101431096400000000'
+                              and b.orgcode = #{orgcode}) cc
+                           on cc.his_item_id = s.itemcode
                  left join (select a.item_id, a.item_name, b.his_item_id
                             from si_yt_report_item a,
                                  si_yt_report_item_compare b
@@ -147,7 +174,16 @@
                               and a.rid = b.item_rid
                               and a.module_rid = '202310101511361148853000000000'
                               and a.type_rid = '202311141512391328016800000000'
-                              and b.orgcode=#{orgcode}) pt on pt.his_item_id = s.DEPTCODE
+                              and b.orgcode = #{orgcode}) de on de.his_item_id = s.DEPTCODE
+                 left join (select a.item_id, a.item_name, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202311141512391328016800000000'
+                              and b.orgcode = #{orgcode}) pt on pt.his_item_id = s.DEPTCODE
                  left join com_userinfo g on g.orgcode = s.orgcode and g.usercode = s.DOCTCODE
                  left join com_userinfo j on j.orgcode = s.orgcode and j.usercode = s.CHECKNURSECD
                  left join com_userinfo k on k.orgcode = s.orgcode and k.usercode = s.CONFIRMCODE
@@ -170,7 +206,7 @@
                               and a.rid = b.item_rid
                               and a.module_rid = '202310101511361148853000000000'
                               and a.type_rid = '202310101607011149584800000000'
-             and b.orgcode=#{orgcode}) t on t.his_item_id = s.FREQCODE
+                              and b.orgcode = #{orgcode}) t on t.his_item_id = s.FREQCODE
                  left join com_dictcodeinfo u
                            on u.typecode = 'MINUNIT'
                                and u.dictcode = s.DOSEUNIT,

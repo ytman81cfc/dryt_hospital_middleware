@@ -11,7 +11,7 @@
                nvl(a.GJYPID, '-')                   "YPID",--	国家药品ID	VARCHAR	64	条件必填	三级医院必填,二级医院有条件的填 填写国家药管平台药品采购唯一性识别码YPID（V8.3），V8.3版本中不包含的药品填“-”。
                ''                                   "YPBWM",--	本位码	VARCHAR	20
                a.SUPPERVISIONCODE                   "YPJGM",--	监管码	VARCHAR	32		如果没有可以填写医保编码
-               replace(e.MED_LIST_CODG, '_SI', '')  "PTZXDM",--	平台药品代码	VARCHAR	64		药品医保编码
+               i.item_id                            "PTZXDM",--	平台药品代码	VARCHAR	64		药品医保编码
                a.REGULARNAME                        "YPMC",--	医院药品名称	VARCHAR	64	必填	通用名
                a.TRADENAME                          "YPSPM",--	医院药品商品名	VARCHAR	64		商品名
                nvl(a.OTC, '0')                      "CFYBZ",--	处方药标志	VARCHAR	1	必填	0：否 1：是
@@ -97,6 +97,16 @@
                to_char(sysdate, 'YYYY-MM-DD')       "TBRQ" --	填报日期	DATETIME		必填	本条数据采集时间，格式YYYY-MM-DD
         from com_hospitalinfo b,
              PHA_DRUGINFO a
+                 left join (select a.item_id, a.item_name, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202312071017521431097000000000'
+                              and b.orgcode = #{orgcode}) i
+                           on i.his_item_id = a.drugcode
                  left join com_dictcodeinfo d on a.MINUNIT = d.dictcode and d.typecode = 'MINUNIT'
                  left join FIN_ITEM_COMPARE e on a.orgcode = e.orgcode and a.DRUGCODE = e.itemcode
                  left join COM_COMPANYINFO f

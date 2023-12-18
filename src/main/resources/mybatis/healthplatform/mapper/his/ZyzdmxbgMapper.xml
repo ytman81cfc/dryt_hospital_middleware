@@ -41,7 +41,8 @@
                               and a.type_rid = b.type_rid
                               and a.rid = b.item_rid
                               and a.module_rid = '202310101511361148853000000000'
-                              and a.type_rid = '202311281105131392640900000000') e on e.his_item_id = a.DISE_CODE,
+                              and a.type_rid = '202311281105131392640900000000'
+                              and b.orgcode = #{orgcode}) e on e.his_item_id = a.DISE_CODE,
              com_patientinfo b,
              opr_register c
                  left join (select a.item_id, b.his_item_id
@@ -101,7 +102,8 @@
                               and a.type_rid = b.type_rid
                               and a.rid = b.item_rid
                               and a.module_rid = '202310101511361148853000000000'
-                              and a.type_rid = '202311281105131392640900000000') e on e.his_item_id = a.DISE_CODE,
+                              and a.type_rid = '202311281105131392640900000000'
+                              and b.orgcode = #{orgcode}) e on e.his_item_id = a.DISE_CODE,
              com_patientinfo b,
              ipr_inpatientinfo c
                  left join (select a.item_id, b.his_item_id

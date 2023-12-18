@@ -389,7 +389,8 @@
                               and a.type_rid = b.type_rid
                               and a.rid = b.item_rid
                               and a.module_rid = '202310101511361148853000000000'
-                              and a.type_rid = '202311281105131392640900000000') n
+                              and a.type_rid = '202311281105131392640900000000'
+                              and b.orgcode = #{orgcode}) n
                            on n.his_item_id = d.OUTPATIENT_DIAGNOSIS_CODE
                  left join (select a.item_id, a.item_name, b.his_item_id
                             from si_yt_report_item a,
@@ -408,7 +409,8 @@
                               and a.type_rid = b.type_rid
                               and a.rid = b.item_rid
                               and a.module_rid = '202310101511361148853000000000'
-                              and a.type_rid = '202311141512391328016800000000') p
+                              and a.type_rid = '202311141512391328016800000000'
+                              and b.orgcode = #{orgcode}) p
                            on p.his_item_id = d.DEPT_DISCHARGE_FROM
                  left join (select a.item_id, a.item_name, b.his_item_id
                             from si_yt_report_item a,
@@ -417,7 +419,8 @@
                               and a.type_rid = b.type_rid
                               and a.rid = b.item_rid
                               and a.module_rid = '202310101511361148853000000000'
-                              and a.type_rid = '202311281105131392640900000000') q
+                              and a.type_rid = '202311281105131392640900000000'
+                              and b.orgcode = #{orgcode}) q
                            on q.his_item_id = d.EXT_INJURY_POISON_CODE
                  left join (select a.*, p.item_id, p.item_name
                             from IPR_DIAGNOSE a
@@ -430,7 +433,8 @@
                                                   and a.module_rid =
                                                       '202310101511361148853000000000'
                                                   and a.type_rid =
-                                                      '202311141512391328016800000000') p
+                                                      '202311141512391328016800000000'
+                                                  and b.orgcode = #{orgcode}) p
                                                on p.his_item_id = a.DISE_CODE
                             where a.DISE_TYPE = '1'
                               and a.MAIN_FLAG = '1'
@@ -447,7 +451,8 @@
                                                   and a.module_rid =
                                                       '202310101511361148853000000000'
                                                   and a.type_rid =
-                                                      '202311141512391328016800000000') p
+                                                      '202311141512391328016800000000'
+                                                  and b.orgcode = #{orgcode}) p
                                                on p.his_item_id = a.DIAGNOSIS_CODE
                             where a.DIAGNOSIS_TYPE = '1'
                               and a.MAIN_FLAG = '1'
@@ -471,7 +476,8 @@
                               and a.type_rid = b.type_rid
                               and a.rid = b.item_rid
                               and a.module_rid = '202310101511361148853000000000'
-                              and a.type_rid = '202311281105131392640900000000') v
+                              and a.type_rid = '202311281105131392640900000000'
+                              and b.orgcode = #{orgcode}) v
                            on v.his_item_id = d.PATHOLOGIC_DIAGNOSIS_CODE
                  left join (select a.item_id, a.item_name, b.his_item_id
                             from si_yt_report_item a,

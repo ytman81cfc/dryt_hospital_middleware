@@ -21,7 +21,8 @@
                               and a.type_rid = b.type_rid
                               and a.rid = b.item_rid
                               and a.module_rid = '202310101511361148853000000000'
-                              and a.type_rid = '202311281105131392640900000000') b on b.his_item_id = a.DIAG_CODE
+                              and a.type_rid = '202311281105131392640900000000'
+                              and b.orgcode = #{orgcode}) b on b.his_item_id = a.DIAG_CODE
         where a.areacode = #{orgcode}
           and a.vali_flag = '1'
     </select>

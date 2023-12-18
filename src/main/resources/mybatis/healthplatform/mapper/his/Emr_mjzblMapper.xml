@@ -11,14 +11,14 @@
                case
                    when extract(year from a.reg_time) - extract(year from a.BRDY) &gt; 1
                        then floor(extract(year from a.reg_time) - extract(year from a.BRDY))
-                   else 0 end                              "NLS",--	年龄(岁)	NUMERIC	3
+                   else 0 end                               "NLS",--	年龄(岁)	NUMERIC	3
                case
                    when extract(year from a.reg_time) - extract(year from a.BRDY) &lt; 1 and
                         months_between(a.reg_time, a.BRDY) &gt; 1 then floor(months_between(a.reg_time, a.BRDY))
-                   else 0 end                              "NLY",--年龄(月)		NUMERIC	3
+                   else 0 end                               "NLY",--年龄(月)		NUMERIC	3
                case
                    when months_between(a.reg_time, a.BRDY) &lt; 1 then floor(a.reg_time - a.BRDY)
-                   else 0 end                              "NLR"
+                   else 0 end                               "NLR"
                 ,--	年龄(日)	NUMERIC	3
                case
                    when a.reg_time - a.BRDY &lt; 1 then floor(a.reg_time - a.BRDY) * 24
@@ -144,7 +144,7 @@
                                 and a.type_rid = b.type_rid
                                 and a.rid = b.item_rid
                                 and a.module_rid = '202310101511361148853000000000'
-                                and a.type_rid = '202311281105131392640900000000') c
+                                and a.type_rid = '202311281105131392640900000000' and b.orgcode=#{orgcode}) c
                             on c.his_item_id = a.dise_code
                             group by a.orgcode, a.regid) b on a.orgcode = b.orgcode and a.regid = b.regid
                  left join (select a.item_id, b.his_item_id

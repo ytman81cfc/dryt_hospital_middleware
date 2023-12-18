@@ -36,7 +36,7 @@
                ''                                             "DZXZJDM",--	地址-乡(镇、街道办事处)代码	VARCHAR	20
                ''                                             "DZCJN",--	地址-村(街、路、弄等)	VARCHAR	70
                ''                                             "DZMPHM",--	地址-门牌号码	VARCHAR	70
-               g.item_id                                             "ZYLBDM",--	职业类别代码	VARCHAR	2		GB/T 2261.4-2003 职业分类与代码
+               g.item_id                                      "ZYLBDM",--	职业类别代码	VARCHAR	2		GB/T 2261.4-2003 职业分类与代码
                d.LINKMANNAME                                  "BSCSZXM",--	病史陈述者姓名	VARCHAR	50
                nvl(h.item_id, '9')                            "CSZYHZDGXDM",--	陈述者与患者的关系代码	VARCHAR	1		1.配偶 2.子 3.女 4.孙子、孙女或外孙子、外孙女 5.父母 6.祖父母或外祖父母 7.兄、弟、姐、妹 9.其他	GB/T 4761-2008
                ''                                             "CSNRKKBZ",--	陈述内容可靠标志	VARCHAR	1		参见 ZD_SFWZBZ 是否未知标志
@@ -96,7 +96,8 @@
                                 and a.type_rid = b.type_rid
                                 and a.rid = b.item_rid
                                 and a.module_rid = '202310101511361148853000000000'
-                                and a.type_rid = '202311281105131392640900000000') c
+                                and a.type_rid = '202311281105131392640900000000'
+                                and b.orgcode=#{orgcode}) c
                             on c.his_item_id = a.dise_code
                             where DISE_CLINICD = '3'
                             group by a.orgcode, a.inid) b on a.orgcode = b.orgcode and a.inid = b.inid
@@ -111,7 +112,7 @@
                                 and a.type_rid = b.type_rid
                                 and a.rid = b.item_rid
                                 and a.module_rid = '202310101511361148853000000000'
-                                and a.type_rid = '202311281105131392640900000000') c
+                                and a.type_rid = '202311281105131392640900000000' and b.orgcode=#{orgcode}) c
                             on c.his_item_id = a.dise_code
                             where DISE_CLINICD = '1'
                             group by a.orgcode, a.inid) q on a.orgcode = q.orgcode and a.inid = q.inid,

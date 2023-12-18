@@ -2,37 +2,37 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hospital.middleware.healthplatform.dao.his.HealthplatfromDAO">
     <select id="queryZysfmxb" resultType="java.util.HashMap">
-        select a.orgcode                                        "YLJGDM",--  医疗机构代码  VARCHAR 22  必填  复合主键：采用22位“卫生机构代码”
-               d.FEEID                                          "SFMXID",--	收费明细ID	VARCHAR	32	必填	复合主键：见说明（1）
-               d.TRANSTYPE                                      "TFBZ",--	退费标志	VARCHAR	1	必填	复合主键：编码。1：收费；2：退费；
-               d.orgname                                        "YLJGMC",--	医疗机构名称	VARCHAR	70	必填	医院执业许可第一名称
-               '0'                                              "FYDM",--	分院代码	VARCHAR	20	必填	记录分院代码（内码）,如无分院，则传0
-               ''                                               "FYMC",--	分院名称	VARCHAR	120	条件必填	分院代码不为0时必填
-               d.inid                                           "SFLSH",--	收费流水号	VARCHAR	64	必填	关联收费记录表
-               d.inid                                           "JZLSH",--	住院就诊流水号	VARCHAR	32	必填	与住院就诊记录表关联的外键
-               '-'                                               "FPH",--	发票号	VARCHAR	32	必填	未结算费用填写默认值“/”,已结算费用填写发票号
-               '8'                                              "KLX",--	卡类型	VARCHAR	16	必填	请按照以下优先级顺序填写：1：患者主索引号、2：身份证号、3：医保卡号，如果都没有则填写住院就诊流水号
-               c.rid                                            "KH",--	卡号	VARCHAR	64	必填
-               f.item_id                                        "ZJLX",--	证件类型	VARCHAR	2		参见CV02.01.101-2022修订版 身份证件类别代码 	优先使用身份证
-               a.certno                                         "ZJHM",--	证件号码	VARCHAR	32
-               a.patientname                                    "XM",--	姓名	VARCHAR	50	必填
+        select a.orgcode                                                  "YLJGDM",--  医疗机构代码  VARCHAR 22  必填  复合主键：采用22位“卫生机构代码”
+               d.FEEID                                                    "SFMXID",--	收费明细ID	VARCHAR	32	必填	复合主键：见说明（1）
+               d.TRANSTYPE                                                "TFBZ",--	退费标志	VARCHAR	1	必填	复合主键：编码。1：收费；2：退费；
+               d.orgname                                                  "YLJGMC",--	医疗机构名称	VARCHAR	70	必填	医院执业许可第一名称
+               '0'                                                        "FYDM",--	分院代码	VARCHAR	20	必填	记录分院代码（内码）,如无分院，则传0
+               ''                                                         "FYMC",--	分院名称	VARCHAR	120	条件必填	分院代码不为0时必填
+               d.inid                                                     "SFLSH",--	收费流水号	VARCHAR	64	必填	关联收费记录表
+               d.inid                                                     "JZLSH",--	住院就诊流水号	VARCHAR	32	必填	与住院就诊记录表关联的外键
+               '-'                                                        "FPH",--	发票号	VARCHAR	32	必填	未结算费用填写默认值“/”,已结算费用填写发票号
+               '8'                                                        "KLX",--	卡类型	VARCHAR	16	必填	请按照以下优先级顺序填写：1：患者主索引号、2：身份证号、3：医保卡号，如果都没有则填写住院就诊流水号
+               c.rid                                                      "KH",--	卡号	VARCHAR	64	必填
+               f.item_id                                                  "ZJLX",--	证件类型	VARCHAR	2		参见CV02.01.101-2022修订版 身份证件类别代码 	优先使用身份证
+               a.certno                                                   "ZJHM",--	证件号码	VARCHAR	32
+               a.patientname                                              "XM",--	姓名	VARCHAR	50	必填
                case
                    when a.PAYKINDCODE = '01' then '07'
                    when a.PAYKINDCODE = '02' and a.PATIRNTSTYPE = 'A' then '01'
                    when a.PAYKINDCODE = '02' and a.PATIRNTSTYPE = 'B' then '02'
-                   end                                          "BXLX",--	医疗费用支付方式	VARCHAR	4	必填	参见CV07.10.003-2022修订版 医疗费用来源类别
-               d.DOCTDEPTCODE                                   "YNXDKSBM",--	院内费用发生科室编码	VARCHAR	50	必填
-               d.DOCTDEPTNAME                                   "YNXDKSMC",--	院内费用发生科室名称	VARCHAR	100	必填
+                   end                                                    "BXLX",--	医疗费用支付方式	VARCHAR	4	必填	参见CV07.10.003-2022修订版 医疗费用来源类别
+               d.DOCTDEPTCODE                                             "YNXDKSBM",--	院内费用发生科室编码	VARCHAR	50	必填
+               d.DOCTDEPTNAME                                             "YNXDKSMC",--	院内费用发生科室名称	VARCHAR	100	必填
                nvl(j.item_id, '-')                                        "XDKSBM",--	中心费用发生科室编码	VARCHAR	50	必填	参见《全民健康信息平台科室分类代码表》
                nvl(j.item_name, '-')                                      "XDKSMC",--	中心费用发生科室名称	VARCHAR	100	必填	参见《全民健康信息平台科室分类代码表》
-               b.EXEDEPTCODE                                    "YNZXKSBM",--	院内医嘱执行科室编码	VARCHAR	50
-               b.EXEDEPTNAME                                    "YNZXKSMC",--	院内医嘱执行科室名称	VARCHAR	100
-               k.item_id                                        "ZXKSBM",--	中心医嘱执行科室编码	VARCHAR	50		参见《全民健康信息平台科室分类代码表》
-               k.item_name                                      "ZXKSMC",--	中心医嘱执行科室名称	VARCHAR	100		参见《全民健康信息平台科室分类代码表》
-               to_char(d.FEEOPTDATE, 'YYYY-MM-DD HH24:MI:SS')   "STFSJ",--	收退费时间	DATETIME		必填
+               b.EXEDEPTCODE                                              "YNZXKSBM",--	院内医嘱执行科室编码	VARCHAR	50
+               b.EXEDEPTNAME                                              "YNZXKSMC",--	院内医嘱执行科室名称	VARCHAR	100
+               k.item_id                                                  "ZXKSBM",--	中心医嘱执行科室编码	VARCHAR	50		参见《全民健康信息平台科室分类代码表》
+               k.item_name                                                "ZXKSMC",--	中心医嘱执行科室名称	VARCHAR	100		参见《全民健康信息平台科室分类代码表》
+               to_char(d.FEEOPTDATE, 'YYYY-MM-DD HH24:MI:SS')             "STFSJ",--	收退费时间	DATETIME		必填
                nvl(m.item_id, '-')                                        "MXFYLB",--	明细费用类别	VARCHAR	2	必填	参见CVA5105明细费用类别
                nvl(decode(d.ITEMTYPE, '1', '0', '2', '1', '3', '1'), '0') "MXXMLB",--	明细项目类别	VARCHAR	1	必填	0：药品 1：项目
-               decode(d.ITEMTYPE, '1', d.GJYPID, '')            "YPID",--	国家药品ID	VARCHAR	64	条件必填	明细项目类别为“药品”时填写  三级医院必填,二级医院有条件的填  填写国家药管平台药品采购唯一性识别码YPID（V8.3） V8.3版本中不包含的药品填“-”。
+               decode(d.ITEMTYPE, '1', d.GJYPID, '')                      "YPID",--	国家药品ID	VARCHAR	64	条件必填	明细项目类别为“药品”时填写  三级医院必填,二级医院有条件的填  填写国家药管平台药品采购唯一性识别码YPID（V8.3） V8.3版本中不包含的药品填“-”。
                case
                    when b.ORDE_EXERTYPECD = '3' then '07'
                    when b.ITEMTYPE = '1' then '01'
@@ -43,7 +43,7 @@
                    when b.ITEMTYPE = '3' then '06'
                    else '-'
                    end
-                                                                "YZXMLXDM",--	医嘱项目类型代码	VARCHAR	2	必填	参见CV06.00.229 01：药品类医嘱  02：检查类医嘱  03：检验类医嘱  04：手术类医嘱  05：处置类医嘱  06：材料类医嘱  07：嘱托医嘱
+                                                                          "YZXMLXDM",--	医嘱项目类型代码	VARCHAR	2	必填	参见CV06.00.229 01：药品类医嘱  02：检查类医嘱  03：检验类医嘱  04：手术类医嘱  05：处置类医嘱  06：材料类医嘱  07：嘱托医嘱
                case
                    when b.ORDE_EXERTYPECD = '3' then '嘱托医嘱'
                    when b.ITEMTYPE = '1' then '药品类医嘱'
@@ -53,20 +53,20 @@
                    when b.ITEMTYPE in ('2', '4') and b.APPLYTYPE = '4' then '处置类医嘱'
                    when b.ITEMTYPE = '3' then '材料类医嘱'
                    else '-'
-                   end                                          "YZXMLXMC",--	医嘱项目类型名称	VARCHAR	32	必填
-               d.ITEMCODE                                       "MXXMBM",--	院内明细项目编码	VARCHAR	32	必填
-               d.ITEMNAME                                       "MXXMMC",--	院内明细项目名称	VARCHAR	128	必填
-               nvl(replace(i.MED_LIST_CODG, '_SI', ''), '999')  "ZXDM",--	中心明细项目代码	VARCHAR	32	必填	耗材、服务项目使用《全民健康信息平台医疗服务项目价格表》编码  药品使用医保码 草药和自制剂使用《全民健康信息平台制剂、中草药医保编码》 其他填写999
-               nvl(i.SERVITEM_NAME, d.itemname)                 "ZXMC",--	中心明细项目名称	VARCHAR	128	必填
+                   end                                                    "YZXMLXMC",--	医嘱项目类型名称	VARCHAR	32	必填
+               d.ITEMCODE                                                 "MXXMBM",--	院内明细项目编码	VARCHAR	32	必填
+               d.ITEMNAME                                                 "MXXMMC",--	院内明细项目名称	VARCHAR	128	必填
+               d.item_id                                                  "ZXDM",--	中心明细项目代码	VARCHAR	32	必填	耗材、服务项目使用《全民健康信息平台医疗服务项目价格表》编码  药品使用医保码 草药和自制剂使用《全民健康信息平台制剂、中草药医保编码》 其他填写999
+               d.item_name                                                "ZXMC",--	中心明细项目名称	VARCHAR	128	必填
                nvl(d.SPECS, '-')                                          "MXXMGG",--	明细项目规格	VARCHAR	32	必填
                nvl(e.dictname, '-')                                       "MXXMDW",--	明细项目单位	VARCHAR	32	必填
-               round(d.UNITPRICE, 3)                            "MXXMDJ",--	明细项目单价	NUMERIC	18,3	必填
-               d.QTY                                            "MXXMSL",--	明细项目数量	NUMERIC	9	必填
-               round(d.TOTCOST, 3)                              "MXXMJE",--	明细项目金额	NUMERIC	18,3	必填	退费标志为2（退费）时，传负数
-               d.OPTER_CODE                                     "SFCZYGH",--	收费操作员工号	VARCHAR	64	必填
-               d.OPTER_NAME                                     "SFCZYXM",--	收费操作员姓名	VARCHAR	50	必填
-               u.certno                                         "SFCZYSFZHM",--	收费操作员身份证号码	VARCHAR	18	必填
-               to_char(sysdate, 'YYYY-MM-DD')                   "TBRQ" --  填报日期  DATETIME   必填 本条数据采集时间，格式YYYY-MM-DD
+               round(d.UNITPRICE, 3)                                      "MXXMDJ",--	明细项目单价	NUMERIC	18,3	必填
+               d.QTY                                                      "MXXMSL",--	明细项目数量	NUMERIC	9	必填
+               round(d.TOTCOST, 3)                                        "MXXMJE",--	明细项目金额	NUMERIC	18,3	必填	退费标志为2（退费）时，传负数
+               d.OPTER_CODE                                               "SFCZYGH",--	收费操作员工号	VARCHAR	64	必填
+               d.OPTER_NAME                                               "SFCZYXM",--	收费操作员姓名	VARCHAR	50	必填
+               u.certno                                                   "SFCZYSFZHM",--	收费操作员身份证号码	VARCHAR	18	必填
+               to_char(sysdate, 'YYYY-MM-DD')                             "TBRQ" --  填报日期  DATETIME   必填 本条数据采集时间，格式YYYY-MM-DD
         from IPR_INPATIENTINFO a
                  left join (select a.item_id, b.his_item_id
                             from si_yt_report_item a,
@@ -86,21 +86,51 @@
                               and a.rid = b.item_rid
                               and a.module_rid = '202310101511361148853000000000'
                               and a.type_rid = '202311141512391328016800000000'
-                              and b.orgcode=#{orgcode}) k on k.his_item_id = b.EXEDEPTCODE,
+                              and b.orgcode = #{orgcode}) k on k.his_item_id = b.EXEDEPTCODE,
              com_patientinfo c,
-             (select a.*, d.invocode, b.GJYPID, h.orgname
+             (select a.*, d.invocode, b.GJYPID, b.item_id, b.item_name, h.orgname
               from IPS_FEEDETAIL a
                        join
                    com_hospitalinfo h on a.orgcode = h.orgcode
                        join
-                   (select orgcode, itemcode, feecode, '' GJYPID
-                    from fin_undruginfo
+                   (select a.orgcode, a.itemcode, a.feecode, '' GJYPID, b.item_id, b.item_name
+                    from fin_undruginfo a
+                             left join (select a.item_id, a.item_name, b.his_item_id
+                                        from si_yt_report_item a,
+                                             si_yt_report_item_compare b
+                                        where a.module_rid = b.module_rid
+                                          and a.type_rid = b.type_rid
+                                          and a.rid = b.item_rid
+                                          and a.module_rid = '202310101511361148853000000000'
+                                          and a.type_rid = '202312071016491431096700000000'
+                                          and b.orgcode = #{orgcode}) b
+                                       on b.his_item_id = a.itemcode
                     union all
-                    select orgcode, drugcode, feecode, GJYPID
-                    from pha_druginfo
+                    select a.orgcode, a.drugcode, a.feecode, a.GJYPID, b.item_id, b.item_name
+                    from pha_druginfo a
+                             left join (select a.item_id, a.item_name, b.his_item_id
+                                        from si_yt_report_item a,
+                                             si_yt_report_item_compare b
+                                        where a.module_rid = b.module_rid
+                                          and a.type_rid = b.type_rid
+                                          and a.rid = b.item_rid
+                                          and a.module_rid = '202310101511361148853000000000'
+                                          and a.type_rid = '202312071017521431097000000000'
+                                          and b.orgcode = #{orgcode}) b
+                                       on b.his_item_id = a.drugcode
                     union all
-                    select orgcode, MEDLISTCODG, feecode, '' GJYPID
-                    from pha_medcon
+                    select a.orgcode, a.MEDLISTCODG, a.feecode, '' GJYPID, b.item_id, b.item_name
+                    from pha_medcon a
+                             left join (select a.item_id, a.item_name, b.his_item_id
+                                        from si_yt_report_item a,
+                                             si_yt_report_item_compare b
+                                        where a.module_rid = b.module_rid
+                                          and a.type_rid = b.type_rid
+                                          and a.rid = b.item_rid
+                                          and a.module_rid = '202310101511361148853000000000'
+                                          and a.type_rid = '202312071013101431096400000000'
+                                          and b.orgcode = #{orgcode}) b
+                                       on b.his_item_id = a.MEDLISTCODG
                    ) b on a.orgcode = b.orgcode and a.itemcode = b.itemcode
                        join com_feetype c on c.orgcode = b.orgcode and c.feecode = b.feecode
                        join com_fee_invo_compare d
@@ -113,7 +143,7 @@
                               and a.rid = b.item_rid
                               and a.module_rid = '202310101511361148853000000000'
                               and a.type_rid = '202312131706470000327700000000'
-                              and b.orgcode=#{orgcode}) m
+                              and b.orgcode = #{orgcode}) m
                            on m.his_item_id = d.invocode
                  left join (select a.item_id, a.item_name, b.his_item_id
                             from si_yt_report_item a,
@@ -123,7 +153,7 @@
                               and a.rid = b.item_rid
                               and a.module_rid = '202310101511361148853000000000'
                               and a.type_rid = '202311141512391328016800000000'
-                              and b.orgcode=#{orgcode}) j on j.his_item_id = d.DOCTDEPTCODE
+                              and b.orgcode = #{orgcode}) j on j.his_item_id = d.DOCTDEPTCODE
                  left join fin_item_compare i on i.orgcode = d.orgcode and i.ITEMCODE = d.ITEMCODE
                  left join com_dictcodeinfo e on e.typecode = 'MINUNIT' and e.dictcode = d.PRICEUNIT
                  left join com_userinfo u on u.orgcode = d.orgcode and u.usercode = d.OPTER_CODE
@@ -158,37 +188,37 @@
             &lt;=
               #{endtime}
         union all
-        select a.orgcode                                        "YLJGDM",--  医疗机构代码  VARCHAR 22  必填  复合主键：采用22位“卫生机构代码”
-               d.FEEID                                          "SFMXID",--	收费明细ID	VARCHAR	32	必填	复合主键：见说明（1）
-               d.TRANSTYPE                                      "TFBZ",--	退费标志	VARCHAR	1	必填	复合主键：编码。1：收费；2：退费；
-               d.orgname                                        "YLJGMC",--	医疗机构名称	VARCHAR	70	必填	医院执业许可第一名称
-               '0'                                              "FYDM",--	分院代码	VARCHAR	20	必填	记录分院代码（内码）,如无分院，则传0
-               ''                                               "FYMC",--	分院名称	VARCHAR	120	条件必填	分院代码不为0时必填
-               d.inid                                           "SFLSH",--	收费流水号	VARCHAR	64	必填	关联收费记录表
-               d.inid                                           "JZLSH",--	住院就诊流水号	VARCHAR	32	必填	与住院就诊记录表关联的外键
+        select a.orgcode                                                  "YLJGDM",--  医疗机构代码  VARCHAR 22  必填  复合主键：采用22位“卫生机构代码”
+               d.FEEID                                                    "SFMXID",--	收费明细ID	VARCHAR	32	必填	复合主键：见说明（1）
+               d.TRANSTYPE                                                "TFBZ",--	退费标志	VARCHAR	1	必填	复合主键：编码。1：收费；2：退费；
+               d.orgname                                                  "YLJGMC",--	医疗机构名称	VARCHAR	70	必填	医院执业许可第一名称
+               '0'                                                        "FYDM",--	分院代码	VARCHAR	20	必填	记录分院代码（内码）,如无分院，则传0
+               ''                                                         "FYMC",--	分院名称	VARCHAR	120	条件必填	分院代码不为0时必填
+               d.inid                                                     "SFLSH",--	收费流水号	VARCHAR	64	必填	关联收费记录表
+               d.inid                                                     "JZLSH",--	住院就诊流水号	VARCHAR	32	必填	与住院就诊记录表关联的外键
                nvl(d.invoiceno, '-')                                      "FPH",--	发票号	VARCHAR	32	必填	未结算费用填写默认值“/”,已结算费用填写发票号
-               '8'                                              "KLX",--	卡类型	VARCHAR	16	必填	请按照以下优先级顺序填写：1：患者主索引号、2：身份证号、3：医保卡号，如果都没有则填写住院就诊流水号
-               c.rid                                            "KH",--	卡号	VARCHAR	64	必填
-               f.item_id                                        "ZJLX",--	证件类型	VARCHAR	2		参见CV02.01.101-2022修订版 身份证件类别代码 	优先使用身份证
-               a.certno                                         "ZJHM",--	证件号码	VARCHAR	32
-               a.patientname                                    "XM",--	姓名	VARCHAR	50	必填
+               '8'                                                        "KLX",--	卡类型	VARCHAR	16	必填	请按照以下优先级顺序填写：1：患者主索引号、2：身份证号、3：医保卡号，如果都没有则填写住院就诊流水号
+               c.rid                                                      "KH",--	卡号	VARCHAR	64	必填
+               f.item_id                                                  "ZJLX",--	证件类型	VARCHAR	2		参见CV02.01.101-2022修订版 身份证件类别代码 	优先使用身份证
+               a.certno                                                   "ZJHM",--	证件号码	VARCHAR	32
+               a.patientname                                              "XM",--	姓名	VARCHAR	50	必填
                case
                    when a.PAYKINDCODE = '01' then '07'
                    when a.PAYKINDCODE = '02' and a.PATIRNTSTYPE = 'A' then '01'
                    when a.PAYKINDCODE = '02' and a.PATIRNTSTYPE = 'B' then '02'
-                   end                                          "BXLX",--	医疗费用支付方式	VARCHAR	4	必填	参见CV07.10.003-2022修订版 医疗费用来源类别
-               d.DOCTDEPTCODE                                   "YNXDKSBM",--	院内费用发生科室编码	VARCHAR	50	必填
-               d.DOCTDEPTNAME                                   "YNXDKSMC",--	院内费用发生科室名称	VARCHAR	100	必填
+                   end                                                    "BXLX",--	医疗费用支付方式	VARCHAR	4	必填	参见CV07.10.003-2022修订版 医疗费用来源类别
+               d.DOCTDEPTCODE                                             "YNXDKSBM",--	院内费用发生科室编码	VARCHAR	50	必填
+               d.DOCTDEPTNAME                                             "YNXDKSMC",--	院内费用发生科室名称	VARCHAR	100	必填
                nvl(j.item_id, '-')                                        "XDKSBM",--	中心费用发生科室编码	VARCHAR	50	必填	参见《全民健康信息平台科室分类代码表》
                nvl(j.item_name, '-')                                      "XDKSMC",--	中心费用发生科室名称	VARCHAR	100	必填	参见《全民健康信息平台科室分类代码表》
-               b.EXEDEPTCODE                                    "YNZXKSBM",--	院内医嘱执行科室编码	VARCHAR	50
-               b.EXEDEPTNAME                                    "YNZXKSMC",--	院内医嘱执行科室名称	VARCHAR	100
-               k.item_id                                        "ZXKSBM",--	中心医嘱执行科室编码	VARCHAR	50		参见《全民健康信息平台科室分类代码表》
-               k.item_name                                      "ZXKSMC",--	中心医嘱执行科室名称	VARCHAR	100		参见《全民健康信息平台科室分类代码表》
-               to_char(d.FEEOPTDATE, 'YYYY-MM-DD HH24:MI:SS')   "STFSJ",--	收退费时间	DATETIME		必填
+               b.EXEDEPTCODE                                              "YNZXKSBM",--	院内医嘱执行科室编码	VARCHAR	50
+               b.EXEDEPTNAME                                              "YNZXKSMC",--	院内医嘱执行科室名称	VARCHAR	100
+               k.item_id                                                  "ZXKSBM",--	中心医嘱执行科室编码	VARCHAR	50		参见《全民健康信息平台科室分类代码表》
+               k.item_name                                                "ZXKSMC",--	中心医嘱执行科室名称	VARCHAR	100		参见《全民健康信息平台科室分类代码表》
+               to_char(d.FEEOPTDATE, 'YYYY-MM-DD HH24:MI:SS')             "STFSJ",--	收退费时间	DATETIME		必填
                nvl(m.item_id, '-')                                        "MXFYLB",--	明细费用类别	VARCHAR	2	必填	参见CVA5105明细费用类别
                nvl(decode(d.ITEMTYPE, '1', '0', '2', '1', '3', '1'), '0') "MXXMLB",--	明细项目类别	VARCHAR	1	必填	0：药品 1：项目
-               decode(d.ITEMTYPE, '1', d.GJYPID, '')            "YPID",--	国家药品ID	VARCHAR	64	条件必填	明细项目类别为“药品”时填写  三级医院必填,二级医院有条件的填  填写国家药管平台药品采购唯一性识别码YPID（V8.3） V8.3版本中不包含的药品填“-”。
+               decode(d.ITEMTYPE, '1', d.GJYPID, '')                      "YPID",--	国家药品ID	VARCHAR	64	条件必填	明细项目类别为“药品”时填写  三级医院必填,二级医院有条件的填  填写国家药管平台药品采购唯一性识别码YPID（V8.3） V8.3版本中不包含的药品填“-”。
                case
                    when b.ORDE_EXERTYPECD = '3' then '07'
                    when b.ITEMTYPE = '1' then '01'
@@ -199,7 +229,7 @@
                    when b.ITEMTYPE = '3' then '06'
                    else '-'
                    end
-                                                                "YZXMLXDM",--	医嘱项目类型代码	VARCHAR	2	必填	参见CV06.00.229 01：药品类医嘱  02：检查类医嘱  03：检验类医嘱  04：手术类医嘱  05：处置类医嘱  06：材料类医嘱  07：嘱托医嘱
+                                                                          "YZXMLXDM",--	医嘱项目类型代码	VARCHAR	2	必填	参见CV06.00.229 01：药品类医嘱  02：检查类医嘱  03：检验类医嘱  04：手术类医嘱  05：处置类医嘱  06：材料类医嘱  07：嘱托医嘱
                case
                    when b.ORDE_EXERTYPECD = '3' then '嘱托医嘱'
                    when b.ITEMTYPE = '1' then '药品类医嘱'
@@ -209,20 +239,20 @@
                    when b.ITEMTYPE in ('2', '4') and b.APPLYTYPE = '4' then '处置类医嘱'
                    when b.ITEMTYPE = '3' then '材料类医嘱'
                    else '-'
-                   end                                          "YZXMLXMC",--	医嘱项目类型名称	VARCHAR	32	必填
-               d.ITEMCODE                                       "MXXMBM",--	院内明细项目编码	VARCHAR	32	必填
-               d.ITEMNAME                                       "MXXMMC",--	院内明细项目名称	VARCHAR	128	必填
-               nvl(replace(i.MED_LIST_CODG, '_SI', ''), '999')  "ZXDM",--	中心明细项目代码	VARCHAR	32	必填	耗材、服务项目使用《全民健康信息平台医疗服务项目价格表》编码  药品使用医保码 草药和自制剂使用《全民健康信息平台制剂、中草药医保编码》 其他填写999
-               nvl(i.SERVITEM_NAME, d.itemname)                 "ZXMC",--	中心明细项目名称	VARCHAR	128	必填
+                   end                                                    "YZXMLXMC",--	医嘱项目类型名称	VARCHAR	32	必填
+               d.ITEMCODE                                                 "MXXMBM",--	院内明细项目编码	VARCHAR	32	必填
+               d.ITEMNAME                                                 "MXXMMC",--	院内明细项目名称	VARCHAR	128	必填
+               d.item_id                                                  "ZXDM",--	中心明细项目代码	VARCHAR	32	必填	耗材、服务项目使用《全民健康信息平台医疗服务项目价格表》编码  药品使用医保码 草药和自制剂使用《全民健康信息平台制剂、中草药医保编码》 其他填写999
+               d.item_name                                                "ZXMC",--	中心明细项目名称	VARCHAR	128	必填
                nvl(d.SPECS, '-')                                          "MXXMGG",--	明细项目规格	VARCHAR	32	必填
                nvl(e.dictname, '-')                                       "MXXMDW",--	明细项目单位	VARCHAR	32	必填
-               round(d.UNITPRICE, 3)                            "MXXMDJ",--	明细项目单价	NUMERIC	18,3	必填
-               d.QTY                                            "MXXMSL",--	明细项目数量	NUMERIC	9	必填
-               round(d.TOTCOST, 3)                              "MXXMJE",--	明细项目金额	NUMERIC	18,3	必填	退费标志为2（退费）时，传负数
-               d.OPTER_CODE                                     "SFCZYGH",--	收费操作员工号	VARCHAR	64	必填
-               d.OPTER_NAME                                     "SFCZYXM",--	收费操作员姓名	VARCHAR	50	必填
-               u.certno                                         "SFCZYSFZHM",--	收费操作员身份证号码	VARCHAR	18	必填
-               to_char(sysdate, 'YYYY-MM-DD')                   "TBRQ" --  填报日期  DATETIME   必填 本条数据采集时间，格式YYYY-MM-DD
+               round(d.UNITPRICE, 3)                                      "MXXMDJ",--	明细项目单价	NUMERIC	18,3	必填
+               d.QTY                                                      "MXXMSL",--	明细项目数量	NUMERIC	9	必填
+               round(d.TOTCOST, 3)                                        "MXXMJE",--	明细项目金额	NUMERIC	18,3	必填	退费标志为2（退费）时，传负数
+               d.OPTER_CODE                                               "SFCZYGH",--	收费操作员工号	VARCHAR	64	必填
+               d.OPTER_NAME                                               "SFCZYXM",--	收费操作员姓名	VARCHAR	50	必填
+               u.certno                                                   "SFCZYSFZHM",--	收费操作员身份证号码	VARCHAR	18	必填
+               to_char(sysdate, 'YYYY-MM-DD')                             "TBRQ" --  填报日期  DATETIME   必填 本条数据采集时间，格式YYYY-MM-DD
         from IPR_INPATIENTINFO a
                  left join (select a.item_id, b.his_item_id
                             from si_yt_report_item a,
@@ -242,21 +272,51 @@
                               and a.rid = b.item_rid
                               and a.module_rid = '202310101511361148853000000000'
                               and a.type_rid = '202311141512391328016800000000'
-                              and b.orgcode=#{orgcode}) k on k.his_item_id = b.EXEDEPTCODE,
+                              and b.orgcode = #{orgcode}) k on k.his_item_id = b.EXEDEPTCODE,
              com_patientinfo c,
-             (select a.*, d.invocode, b.GJYPID, h.orgname
+             (select a.*, d.invocode, b.GJYPID, b.item_id, b.item_name, h.orgname
               from IPS_OUTFEEDETAIL a
                        join
                    com_hospitalinfo h on a.orgcode = h.orgcode
                        join
-                   (select orgcode, itemcode, feecode, '' GJYPID
-                    from fin_undruginfo
+                   (select a.orgcode, a.itemcode, a.feecode, '' GJYPID, b.item_id, b.item_name
+                    from fin_undruginfo a
+                             left join (select a.item_id, a.item_name, b.his_item_id
+                                        from si_yt_report_item a,
+                                             si_yt_report_item_compare b
+                                        where a.module_rid = b.module_rid
+                                          and a.type_rid = b.type_rid
+                                          and a.rid = b.item_rid
+                                          and a.module_rid = '202310101511361148853000000000'
+                                          and a.type_rid = '202312071016491431096700000000'
+                                          and b.orgcode = #{orgcode}) b
+                                       on b.his_item_id = a.itemcode
                     union all
-                    select orgcode, drugcode, feecode, GJYPID
-                    from pha_druginfo
+                    select a.orgcode, a.drugcode, a.feecode, a.GJYPID, b.item_id, b.item_name
+                    from pha_druginfo a
+                             left join (select a.item_id, a.item_name, b.his_item_id
+                                        from si_yt_report_item a,
+                                             si_yt_report_item_compare b
+                                        where a.module_rid = b.module_rid
+                                          and a.type_rid = b.type_rid
+                                          and a.rid = b.item_rid
+                                          and a.module_rid = '202310101511361148853000000000'
+                                          and a.type_rid = '202312071017521431097000000000'
+                                          and b.orgcode = #{orgcode}) b
+                                       on b.his_item_id = a.drugcode
                     union all
-                    select orgcode, MEDLISTCODG, feecode, '' GJYPID
-                    from pha_medcon
+                    select a.orgcode, a.MEDLISTCODG, a.feecode, '' GJYPID, b.item_id, b.item_name
+                    from pha_medcon a
+                             left join (select a.item_id, a.item_name, b.his_item_id
+                                        from si_yt_report_item a,
+                                             si_yt_report_item_compare b
+                                        where a.module_rid = b.module_rid
+                                          and a.type_rid = b.type_rid
+                                          and a.rid = b.item_rid
+                                          and a.module_rid = '202310101511361148853000000000'
+                                          and a.type_rid = '202312071013101431096400000000'
+                                          and b.orgcode = #{orgcode}) b
+                                       on b.his_item_id = a.MEDLISTCODG
                    ) b on a.orgcode = b.orgcode and a.itemcode = b.itemcode
                        join com_feetype c on c.orgcode = b.orgcode and c.feecode = b.feecode
                        join com_fee_invo_compare d
@@ -269,7 +329,7 @@
                               and a.rid = b.item_rid
                               and a.module_rid = '202310101511361148853000000000'
                               and a.type_rid = '202312131706470000327700000000'
-                              and b.orgcode=#{orgcode}) m
+                              and b.orgcode = #{orgcode}) m
                            on m.his_item_id = d.invocode
                  left join (select a.item_id, a.item_name, b.his_item_id
                             from si_yt_report_item a,
@@ -279,7 +339,7 @@
                               and a.rid = b.item_rid
                               and a.module_rid = '202310101511361148853000000000'
                               and a.type_rid = '202311141512391328016800000000'
-                              and b.orgcode=#{orgcode}) j on j.his_item_id = d.DOCTDEPTCODE
+                              and b.orgcode = #{orgcode}) j on j.his_item_id = d.DOCTDEPTCODE
                  left join fin_item_compare i on i.orgcode = d.orgcode and i.ITEMCODE = d.ITEMCODE
                  left join com_dictcodeinfo e on e.typecode = 'MINUNIT' and e.dictcode = d.PRICEUNIT
                  left join com_userinfo u on u.orgcode = d.orgcode and u.usercode = d.OPTER_CODE

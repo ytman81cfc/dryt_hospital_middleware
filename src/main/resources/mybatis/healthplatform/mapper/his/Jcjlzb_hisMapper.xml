@@ -12,8 +12,8 @@
                a.PATIENTBUSIID                "JZLSH",--	就诊流水号	VARCHAR	32	必填	门诊：填写门诊就诊记录表流水号； 住院：填写住院就诊记录表流水号； 体检：填写体检就诊记录表流水号；
                d.itemcode                     "JCSFXMDM",--	院内检查收费项目代码	VARCHAR	64	必填	医院内部的唯一标识该收费项目的编码
                d.itemname                     "JCSFXMMC",--	院内检查收费项目名称	VARCHAR	250	必填	医院内部的唯一标识该收费项目的名称
-               ''                             "JCSFXMPTDM",--	中心检查收费项目代码	VARCHAR	64	必填	参见《全民健康信息平台医疗服务项目价格表》
-               ''                             "JCSFXMPTMC",--	中心检查收费项目名称	VARCHAR	250	必填	参见《全民健康信息平台医疗服务项目价格表》
+               h.item_id                      "JCSFXMPTDM",--	中心检查收费项目代码	VARCHAR	64	必填	参见《全民健康信息平台医疗服务项目价格表》
+               h.item_name                    "JCSFXMPTMC",--	中心检查收费项目名称	VARCHAR	250	必填	参见《全民健康信息平台医疗服务项目价格表》
                c.PARTORSAMPLE                 "YYJCBWBM",--	院内检查部位编码	VARCHAR	32	必填	医院检查部位编码
                f.dictname                     "YYJCBWMC",--	院内检查部位名称	VARCHAR	50	必填	医院检查部位名称
                g.item_id                      "JCBW",--	中心检查部位编码	VARCHAR	32	必填	表明病人的检查部位的编码，参见ZD_ACRJC检查部位代码表若对应到多个部位，则中间用英文分号分隔，对填写的编码必须至少精确到二级目录
@@ -31,7 +31,17 @@
                               and a.type_rid = b.type_rid
                               and a.rid = b.item_rid
                               and a.module_rid = '202310101511361148853000000000'
-                              and a.type_rid = '202312070843031430386800000000') g on g.his_item_id = c.PARTORSAMPLE,
+                              and a.type_rid = '202312070843031430386800000000') g on g.his_item_id = c.PARTORSAMPLE
+                 left join (select a.item_id, a.item_name, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202312071016491431096700000000'
+                              and b.orgcode = #{orgcode}) h
+                           on h.his_item_id = c.itemcode,
              opb_feedetail d,
              opr_register e
         where a.orgcode = e.orgcode
@@ -45,7 +55,7 @@
           and c.itemcode = d.itemcode
           and a.orgcode = #{orgcode}
           and a.APPLYTYPE = '2'
-          and a.APPLYSOURCE='1'
+          and a.APPLYSOURCE = '1'
           and a.RECORDDATE &gt;= to_date(#{begtime}, 'yyyy-mm-dd hh24:mi:ss')
           and a.RECORDDATE &lt;= to_date(#{endtime}, 'yyyy-mm-dd hh24:mi:ss')
         union all
@@ -104,7 +114,7 @@
           and c.itemcode = d.itemcode
           and a.orgcode = #{orgcode}
           and a.APPLYTYPE = '2'
-          and a.APPLYSOURCE='2'
+          and a.APPLYSOURCE = '2'
           and a.RECORDDATE &gt;= to_date(#{begtime}, 'yyyy-mm-dd hh24:mi:ss')
           and a.RECORDDATE &lt;= to_date(#{endtime}, 'yyyy-mm-dd hh24:mi:ss')
     </select>
