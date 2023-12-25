@@ -1,0 +1,884 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hospital.middleware.healthplatform.dao.yb.LzwjDao">
+    <delete id="deleteJB_CLML" parameterType="java.util.HashMap">
+        delete from JB_CLML
+    </delete>
+    <insert id="insertJB_CLML" parameterType="java.util.HashMap">
+        insert into JB_CLML(
+            CLMC, CD, CLDW, GYSMC, PTZXDM, YLJGDM, FYMC, TBRQ, CLDM, ZRWBZ,
+            SCPH, JZJG, ZGXJ, YLJGMC, GZHCBZ, GYSDM, CLFLDM, SCCJMC, FYDM, YZBXBZ,
+            JLZT)
+        values (
+            #{CLMC, jdbcType=VARCHAR}, #{CD, jdbcType=VARCHAR}, #{CLDW, jdbcType=VARCHAR}, #{GYSMC, jdbcType=VARCHAR}, #{PTZXDM, jdbcType=VARCHAR}, #{YLJGDM, jdbcType=VARCHAR}, #{FYMC, jdbcType=VARCHAR}, to_date(#{TBRQ, jdbcType=VARCHAR}, 'YYYY-MM-DD'), #{CLDM, jdbcType=VARCHAR}, #{ZRWBZ, jdbcType=VARCHAR},
+            #{SCPH, jdbcType=VARCHAR}, #{JZJG, jdbcType=VARCHAR}, #{ZGXJ, jdbcType=VARCHAR}, #{YLJGMC, jdbcType=VARCHAR}, #{GZHCBZ, jdbcType=VARCHAR}, #{GYSDM, jdbcType=VARCHAR}, #{CLFLDM, jdbcType=VARCHAR}, #{SCCJMC, jdbcType=VARCHAR}, #{FYDM, jdbcType=VARCHAR}, #{YZBXBZ, jdbcType=VARCHAR},
+            #{JLZT, jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <delete id="deleteJB_XMML" parameterType="HashMap">
+        delete from JB_XMML
+    </delete>
+    <insert id="insertJB_XMML" parameterType="java.util.HashMap">
+        insert into JB_XMML(
+            XMDW, XMMC, PTZXDM, YLJGDM, FYMC, YNZJBZ, XMWSDM, TBRQ, WZYZBZ, GHCBZ,
+            XMFL, XMDJ, ZGXJ, XMDM, YLJGMC, SFXMLB, XMGG, FYDM, ZYBZ, JLZT)
+        values (
+            #{XMDW, jdbcType=VARCHAR}, #{XMMC, jdbcType=VARCHAR}, #{PTZXDM, jdbcType=VARCHAR}, #{YLJGDM, jdbcType=VARCHAR}, #{FYMC, jdbcType=VARCHAR}, #{YNZJBZ, jdbcType=VARCHAR}, #{XMWSDM, jdbcType=VARCHAR}, to_date(#{TBRQ, jdbcType=VARCHAR}, 'YYYY-MM-DD'), #{WZYZBZ, jdbcType=VARCHAR}, #{GHCBZ, jdbcType=VARCHAR},
+            #{XMFL, jdbcType=VARCHAR}, #{XMDJ, jdbcType=VARCHAR}, #{ZGXJ, jdbcType=VARCHAR}, #{XMDM, jdbcType=VARCHAR}, #{YLJGMC, jdbcType=VARCHAR}, #{SFXMLB, jdbcType=VARCHAR}, #{XMGG, jdbcType=VARCHAR}, #{FYDM, jdbcType=VARCHAR}, #{ZYBZ, jdbcType=VARCHAR}, #{JLZT, jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <delete id="deleteJBBQXXB" parameterType="HashMap">
+        delete from JBBQXXB
+    </delete>
+    <insert id="insertJBBQXXB" parameterType="java.util.HashMap">
+        insert into JBBQXXB(
+            BQDM, YLJGDM, BQMC, TBRQ, CWS)
+        values (
+            #{BQDM, jdbcType=VARCHAR}, #{YLJGDM, jdbcType=VARCHAR}, #{BQMC, jdbcType=VARCHAR}, to_date(#{TBRQ, jdbcType=VARCHAR}, 'YYYY-MM-DD'), #{CWS, jdbcType=VARCHAR})
+    </insert>
+
+    <delete id="deleteJBKSXXB" parameterType="HashMap">
+        delete from JBKSXXB
+    </delete>
+    <insert id="insertJBKSXXB" parameterType="java.util.HashMap">
+        insert into JBKSXXB(
+            ZYKSBZ, WSJDM, YLJGDM, FYMC, TBRQ, KSDM, SBJDM, YLJGMC, SM, GHZT,
+            FYDM, KSMC, KSLB, MZLX)
+        values (
+            #{ZYKSBZ, jdbcType=VARCHAR}, #{WSJDM, jdbcType=VARCHAR}, #{YLJGDM, jdbcType=VARCHAR}, #{FYMC, jdbcType=VARCHAR}, to_date(#{TBRQ, jdbcType=VARCHAR}, 'YYYY-MM-DD'), #{KSDM, jdbcType=VARCHAR}, #{SBJDM, jdbcType=VARCHAR}, #{YLJGMC, jdbcType=VARCHAR}, #{SM, jdbcType=VARCHAR}, #{GHZT, jdbcType=VARCHAR},
+            #{FYDM, jdbcType=VARCHAR}, #{KSMC, jdbcType=VARCHAR}, #{KSLB, jdbcType=VARCHAR}, #{MZLX, jdbcType=VARCHAR})
+    </insert>
+
+    <delete id="deleteJBYHRYXXB" parameterType="HashMap">
+        delete from JBYHRYXXB
+    </delete>
+    <insert id="insertJBYHRYXXB" parameterType="java.util.HashMap">
+        insert into JBYHRYXXB(
+            ZCWDDZYYSBZ, JCDWDM, YZBM, FYMC, QKYSZCZSSJ, SSKSMC, DCSJ, GWJB, TBRQ, EMAIL,
+            XPGWSJ, ZYZSH, QKYSBZ, ZGBM, YLJGMC, RYDRQK, SJHM1, XZGLZWMC, YLJGDM, SFBSLBDM,
+            DHHM, ZWDM, CSRQ, SFNRQKYSPX, XZGLZWDM, JCDWMC, SSZXKSDM, ZWMC, SFPY, FYDM,
+            ZY, JTDZ, DRSJ, ZZMM, ZCHENGMC, GZZT, DCDDMC, CJGZRQ, DCDDDM, MZDM,
+            QKYSZCZSH, YSZYLBDM, RYDCQK, WHCD, ZCDM, RYLB, PXLB, GH, XWDM, ZYZGMC,
+            ZCSJ, XB, BZQK, SSKS, GW, SFBSHM, ZCZSH, JCSJ, YSJJ, D2ZYDWLBDM,
+            XM, SYQBZ, GHZT, YSZYFWDM, ZYZSZCSJ, KSLB, DSZYDWLBDM)
+        values (
+            #{ZCWDDZYYSBZ, jdbcType=VARCHAR},
+            #{JCDWDM, jdbcType=VARCHAR},
+            #{YZBM, jdbcType=VARCHAR},
+            #{FYMC, jdbcType=VARCHAR},
+            #{QKYSZCZSSJ, jdbcType=VARCHAR},
+            #{SSKSMC, jdbcType=VARCHAR},
+            #{DCSJ, jdbcType=VARCHAR},
+            #{GWJB, jdbcType=VARCHAR},
+            to_date(#{TBRQ, jdbcType=VARCHAR}, 'YYYY-MM-DD'),
+            #{EMAIL, jdbcType=VARCHAR},
+            #{XPGWSJ, jdbcType=VARCHAR},
+            #{ZYZSH, jdbcType=VARCHAR},
+            #{QKYSBZ, jdbcType=VARCHAR},
+            #{ZGBM, jdbcType=VARCHAR},
+            #{YLJGMC, jdbcType=VARCHAR},
+            #{RYDRQK, jdbcType=VARCHAR},
+            #{SJHM1, jdbcType=VARCHAR},
+            #{XZGLZWMC, jdbcType=VARCHAR},
+            #{YLJGDM, jdbcType=VARCHAR},
+            #{SFBSLBDM, jdbcType=VARCHAR},
+            #{DHHM, jdbcType=VARCHAR},
+            #{ZWDM, jdbcType=VARCHAR},
+            #{CSRQ, jdbcType=VARCHAR},
+            #{SFNRQKYSPX, jdbcType=VARCHAR},
+            #{XZGLZWDM, jdbcType=VARCHAR},
+            #{JCDWMC, jdbcType=VARCHAR},
+            #{SSZXKSDM, jdbcType=VARCHAR},
+            #{ZWMC, jdbcType=VARCHAR},
+            #{SFPY, jdbcType=VARCHAR},
+            #{FYDM, jdbcType=VARCHAR},
+            #{ZY, jdbcType=VARCHAR},
+            #{JTDZ, jdbcType=VARCHAR},
+            #{DRSJ, jdbcType=VARCHAR},
+            #{ZZMM, jdbcType=VARCHAR},
+            #{ZCHENGMC, jdbcType=VARCHAR},
+            #{GZZT, jdbcType=VARCHAR},
+            #{DCDDMC, jdbcType=VARCHAR},
+            #{CJGZRQ, jdbcType=VARCHAR},
+            #{DCDDDM, jdbcType=VARCHAR},
+            #{MZDM, jdbcType=VARCHAR},
+            #{QKYSZCZSH, jdbcType=VARCHAR},
+            #{YSZYLBDM, jdbcType=VARCHAR},
+            #{RYDCQK, jdbcType=VARCHAR},
+            #{WHCD, jdbcType=VARCHAR},
+            #{ZCDM, jdbcType=VARCHAR},
+            #{RYLB, jdbcType=VARCHAR},
+            #{PXLB, jdbcType=VARCHAR},
+            #{GH, jdbcType=VARCHAR},
+            #{XWDM, jdbcType=VARCHAR},
+            #{ZYZGMC, jdbcType=VARCHAR},
+            #{ZCSJ, jdbcType=VARCHAR},
+            #{XB, jdbcType=VARCHAR},
+            #{BZQK, jdbcType=VARCHAR},
+            #{SSKS, jdbcType=VARCHAR},
+            #{GW, jdbcType=VARCHAR},
+            #{SFBSHM, jdbcType=VARCHAR},
+            #{ZCZSH, jdbcType=VARCHAR},
+            #{JCSJ, jdbcType=VARCHAR},
+            #{YSJJ, jdbcType=VARCHAR},
+            #{D2ZYDWLBDM, jdbcType=VARCHAR},
+            #{XM, jdbcType=VARCHAR},
+            #{SYQBZ, jdbcType=VARCHAR},
+            #{GHZT, jdbcType=VARCHAR},
+            #{YSZYFWDM, jdbcType=VARCHAR},
+            #{ZYZSZCSJ, jdbcType=VARCHAR},
+            #{KSLB, jdbcType=VARCHAR},
+            #{DSZYDWLBDM, jdbcType=VARCHAR})
+    </insert>
+
+    <delete id="deleteJB_ZDML" parameterType="HashMap">
+        delete from JB_ZDML
+    </delete>
+    <insert id="insertJB_ZDML" parameterType="java.util.HashMap">
+        insert into JB_ZDML(
+            YNZDMC, PTZXMC, PTZXDM, YLJGMC, YLJGDM, FYMC, ZDLXDM, TBRQ, YNZDDM, FYDM,
+            JLZT)
+        values (
+            #{YNZDMC, jdbcType=VARCHAR}, #{PTZXMC, jdbcType=VARCHAR}, #{PTZXDM, jdbcType=VARCHAR}, #{YLJGMC, jdbcType=VARCHAR}, #{YLJGDM, jdbcType=VARCHAR}, #{FYMC, jdbcType=VARCHAR}, #{ZDLXDM, jdbcType=VARCHAR}, to_date(#{TBRQ, jdbcType=VARCHAR}, 'YYYY-MM-DD'), #{YNZDDM, jdbcType=VARCHAR}, #{FYDM, jdbcType=VARCHAR},
+            #{JLZT, jdbcType=VARCHAR})
+    </insert>
+
+    <delete id="deleteJB_SSML" parameterType="HashMap">
+        delete from JB_SSML
+    </delete>
+    <insert id="insertJB_SSML" parameterType="java.util.HashMap">
+        insert into JB_SSML(
+            PTZXMC, PTZXDM, YLJGMC, YLJGDM, FYMC, YNSSMC, TBRQ, FYDM, JLZT, YNSSDM)
+        values (
+            #{PTZXMC, jdbcType=VARCHAR}, #{PTZXDM, jdbcType=VARCHAR}, #{YLJGMC, jdbcType=VARCHAR}, #{YLJGDM, jdbcType=VARCHAR}, #{FYMC, jdbcType=VARCHAR}, #{YNSSMC, jdbcType=VARCHAR}, to_date(#{TBRQ, jdbcType=VARCHAR}, 'YYYY-MM-DD'), #{FYDM, jdbcType=VARCHAR}, #{JLZT, jdbcType=VARCHAR}, #{YNSSDM, jdbcType=VARCHAR})
+    </insert>
+
+    <delete id="deleteYP_JBXXK" parameterType="HashMap">
+        delete from YP_JBXXK
+    </delete>
+    <insert id="insertYP_JBXXK" parameterType="java.util.HashMap">
+        insert into YP_JBXXK(
+            DXYWBZ, SFYM, ZHXS, YPMC, KSSBZ, JYBZ, PTZXDM, FYMC, YPDM, YNZJBZ,
+            TBRQ, KJYWJB, YPSPM, DW, KZLYWBZ, YPGL, JZCGBZ, YLJGMC, SYBZ, YPID,
+            YPGG, MZYWBZ, YPLB, JYJB, YLJGDM, YPBWM, KJYWBZ, JSYWLBDM, SCCJDM, YPJGM,
+            JXDM, YPDL, YPPJ, SCCJMC, FYDM, JSYWBZ, PZWH, CFYBZ, YZDYWBZ)
+        values (
+            #{DXYWBZ, jdbcType=VARCHAR}, #{SFYM, jdbcType=VARCHAR}, #{ZHXS, jdbcType=VARCHAR}, #{YPMC, jdbcType=VARCHAR}, #{KSSBZ, jdbcType=VARCHAR}, #{JYBZ, jdbcType=VARCHAR}, #{PTZXDM, jdbcType=VARCHAR}, #{FYMC, jdbcType=VARCHAR}, #{YPDM, jdbcType=VARCHAR}, #{YNZJBZ, jdbcType=VARCHAR},
+            to_date(#{TBRQ, jdbcType=VARCHAR}, 'YYYY-MM-DD'), #{KJYWJB, jdbcType=VARCHAR}, #{YPSPM, jdbcType=VARCHAR}, #{DW, jdbcType=VARCHAR}, #{KZLYWBZ, jdbcType=VARCHAR}, #{YPGL, jdbcType=VARCHAR}, #{JZCGBZ, jdbcType=VARCHAR}, #{YLJGMC, jdbcType=VARCHAR}, #{SYBZ, jdbcType=VARCHAR}, #{YPID, jdbcType=VARCHAR},
+            #{YPGG, jdbcType=VARCHAR}, #{MZYWBZ, jdbcType=VARCHAR}, #{YPLB, jdbcType=VARCHAR}, #{JYJB, jdbcType=VARCHAR}, #{YLJGDM, jdbcType=VARCHAR}, #{YPBWM, jdbcType=VARCHAR}, #{KJYWBZ, jdbcType=VARCHAR}, #{JSYWLBDM, jdbcType=VARCHAR}, #{SCCJDM, jdbcType=VARCHAR}, #{YPJGM, jdbcType=VARCHAR},
+            #{JXDM, jdbcType=VARCHAR}, #{YPDL, jdbcType=VARCHAR}, #{YPPJ, jdbcType=VARCHAR}, #{SCCJMC, jdbcType=VARCHAR}, #{FYDM, jdbcType=VARCHAR}, #{JSYWBZ, jdbcType=VARCHAR}, #{PZWH, jdbcType=VARCHAR}, #{CFYBZ, jdbcType=VARCHAR}, #{YZDYWBZ, jdbcType=VARCHAR})
+    </insert>
+
+    <delete id="deleteJBBRJBXXB" parameterType="HashMap">
+        delete from JBBRJBXXB where YWSCSJ >= to_date(#{begTime}, 'YYYY-MM-DD HH24:MI:SS')
+            and YWSCSJ  &lt;= to_date(#{endTime}, 'YYYY-MM-DD HH24:MI:SS')
+    </delete>
+    <delete id="deleteJBBRJBXXBByPk" parameterType="HashMap">
+        delete from JBBRJBXXB where YLJGDM = #{YLJGDM, jdbcType=VARCHAR} and YYDAH = #{YYDAH, jdbcType=VARCHAR} and KLX = #{KLX, jdbcType=VARCHAR}
+    </delete>
+    <insert id="insertJBBRJBXXB" parameterType="java.util.HashMap">
+        insert into JBBRJBXXB(
+        ABOXXDM, RHXXMC, YYDAH, JZDZ, LXRDZ, FYMC, TBRQ, YBKH, LXRDH, WGRFWBM,
+        XLDM, CSD, YWSCSJ, KLX, ZJLX, YLJGMC, LXRYB, KH, ZJHM, HYZK,
+        GZDWMC, GZDWDZ, GJ, ZYLBDM, LXRXM, XZQHDM, GXRXM, YLJGDM, DHHM, GXSJ,
+        XB, MZ, GXRSFZH, LXRGX, CSRQ, RHXXDM, ABOXXMC, GZDWYB, XM, HKDZ,
+        SJHM, HZLX, HKDZYB, FYDM, BXLX) values (
+        #{ABOXXDM, jdbcType=VARCHAR}, #{RHXXMC, jdbcType=VARCHAR}, #{YYDAH, jdbcType=VARCHAR}, #{JZDZ, jdbcType=VARCHAR}, #{LXRDZ, jdbcType=VARCHAR}, #{FYMC, jdbcType=VARCHAR}, to_date(#{TBRQ, jdbcType=VARCHAR}, 'YYYY-MM-DD'), #{YBKH, jdbcType=VARCHAR}, #{LXRDH, jdbcType=VARCHAR}, #{WGRFWBM, jdbcType=VARCHAR},
+        #{XLDM, jdbcType=VARCHAR}, #{CSD, jdbcType=VARCHAR}, to_date(#{YWSCSJ, jdbcType=VARCHAR}, 'YYYY-MM-DD'), #{KLX, jdbcType=VARCHAR}, #{ZJLX, jdbcType=VARCHAR}, #{YLJGMC, jdbcType=VARCHAR}, #{LXRYB, jdbcType=VARCHAR}, #{KH, jdbcType=VARCHAR}, #{ZJHM, jdbcType=VARCHAR}, #{HYZK, jdbcType=VARCHAR},
+        #{GZDWMC, jdbcType=VARCHAR}, #{GZDWDZ, jdbcType=VARCHAR}, #{GJ, jdbcType=VARCHAR}, #{ZYLBDM, jdbcType=VARCHAR}, #{LXRXM, jdbcType=VARCHAR}, #{XZQHDM, jdbcType=VARCHAR}, #{GXRXM, jdbcType=VARCHAR}, #{YLJGDM, jdbcType=VARCHAR}, #{DHHM, jdbcType=VARCHAR}, to_date(#{GXSJ, jdbcType=VARCHAR}, 'YYYY-MM-DD'),
+        #{XB, jdbcType=VARCHAR}, #{MZ, jdbcType=VARCHAR}, #{GXRSFZH, jdbcType=VARCHAR}, #{LXRGX, jdbcType=VARCHAR}, to_date(#{CSRQ, jdbcType=VARCHAR}, 'YYYY-MM-DD'), #{RHXXDM, jdbcType=VARCHAR}, #{ABOXXMC, jdbcType=VARCHAR}, #{GZDWYB, jdbcType=VARCHAR}, #{XM, jdbcType=VARCHAR}, #{HKDZ, jdbcType=VARCHAR},
+        #{SJHM, jdbcType=VARCHAR}, #{HZLX, jdbcType=VARCHAR}, #{HKDZYB, jdbcType=VARCHAR}, #{FYDM, jdbcType=VARCHAR}, #{BXLX, jdbcType=VARCHAR})
+    </insert>
+
+    <delete id="deleteMZGHB" parameterType="HashMap">
+        delete from MZGHB where (GHSJ >= to_date(#{begTime}, 'YYYY-MM-DD HH24:MI:SS') and GHSJ  &lt;= to_date(#{endTime}, 'YYYY-MM-DD HH24:MI:SS'))
+            or (THSJ >= to_date(#{begTime}, 'YYYY-MM-DD HH24:MI:SS') and THSJ  &lt;= to_date(#{endTime}, 'YYYY-MM-DD HH24:MI:SS') and THSJ is not null)
+    </delete>
+    <insert id="insertMZGHB" parameterType="java.util.HashMap">
+        insert into MZGHB(
+            ZJJB, YYDAH, GHCZYSFZHM, YNKSBM, BDSJ, JAOZSJ, FYMC, GHSXH, TBRQ, YSBM,
+            YYLSH, ZJXM, KSBM, HLWGHBZ, ZCFWJBM, ZLF, SFYY, KLX, ZJLX, ZJSFZHM,
+            SFJHSJC, YLJGMC, SFZJH, FRMZ, GHSJ, SFJZGH, GTHBZ, KH, KSMC, YNKSMC,
+            ZJHM, YBZHBZ, SFPDJH, GHCZYXM, YLJGDM, JZZT, XB, THSJ, JZLSH, ZCFWJMC,
+            CSRQ, GHCZYGH, XM, GHLB, GHTJ, FYDM, BXLX, ZFZLF)
+        values (
+            #{ZJJB, jdbcType=VARCHAR}, #{YYDAH, jdbcType=VARCHAR}, #{GHCZYSFZHM, jdbcType=VARCHAR}, #{YNKSBM, jdbcType=VARCHAR}, to_date(#{BDSJ, jdbcType=VARCHAR}, 'YYYY-MM-DD HH24:MI:SS'), to_date(#{JAOZSJ, jdbcType=VARCHAR}, 'YYYY-MM-DD HH24:MI:SS'), #{FYMC, jdbcType=VARCHAR}, #{GHSXH, jdbcType=VARCHAR}, to_date(#{TBRQ, jdbcType=VARCHAR}, 'YYYY-MM-DD'), #{YSBM, jdbcType=VARCHAR},
+            #{YYLSH, jdbcType=VARCHAR}, #{ZJXM, jdbcType=VARCHAR}, #{KSBM, jdbcType=VARCHAR}, #{HLWGHBZ, jdbcType=VARCHAR}, #{ZCFWJBM, jdbcType=VARCHAR}, #{ZLF, jdbcType=VARCHAR}, #{SFYY, jdbcType=VARCHAR}, #{KLX, jdbcType=VARCHAR}, #{ZJLX, jdbcType=VARCHAR}, #{ZJSFZHM, jdbcType=VARCHAR},
+            #{SFJHSJC, jdbcType=VARCHAR}, #{YLJGMC, jdbcType=VARCHAR}, #{SFZJH, jdbcType=VARCHAR}, #{FRMZ, jdbcType=VARCHAR}, to_date(#{GHSJ, jdbcType=VARCHAR}, 'YYYY-MM-DD HH24:MI:SS'), #{SFJZGH, jdbcType=VARCHAR}, #{GTHBZ, jdbcType=VARCHAR}, #{KH, jdbcType=VARCHAR}, #{KSMC, jdbcType=VARCHAR}, #{YNKSMC, jdbcType=VARCHAR},
+            #{ZJHM, jdbcType=VARCHAR}, #{YBZHBZ, jdbcType=VARCHAR}, #{SFPDJH, jdbcType=VARCHAR}, #{GHCZYXM, jdbcType=VARCHAR}, #{YLJGDM, jdbcType=VARCHAR}, #{JZZT, jdbcType=VARCHAR}, #{XB, jdbcType=VARCHAR}, to_date(#{THSJ, jdbcType=VARCHAR}, 'YYYY-MM-DD HH24:MI:SS'), #{JZLSH, jdbcType=VARCHAR}, #{ZCFWJMC, jdbcType=VARCHAR},
+            to_date(#{CSRQ, jdbcType=VARCHAR}, 'YYYY-MM-DD'), #{GHCZYGH, jdbcType=VARCHAR}, #{XM, jdbcType=VARCHAR}, #{GHLB, jdbcType=VARCHAR}, #{GHTJ, jdbcType=VARCHAR}, #{FYDM, jdbcType=VARCHAR}, #{BXLX, jdbcType=VARCHAR}, #{ZFZLF, jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <delete id="deleteMZJZJLB" parameterType="HashMap">
+        delete from MZJZJLB where JZSJ >= to_date(#{begTime}, 'YYYY-MM-DD HH24:MI:SS') and JZSJ  &lt;= to_date(#{endTime}, 'YYYY-MM-DD HH24:MI:SS')
+    </delete>
+    <insert id="insertMZJZJLB" parameterType="java.util.HashMap">
+        insert into MZJZJLB(
+            SQKJT, ZYZDJBBM, TSCZBZ, ZYMZ, YNZYZDJBMC, PZ, TBRQ, FZJXMQTMS, JZKSMC, SFSZJC,
+            YLJGMC, ZYSFSZ, ZJHM, JZKSDM, SZSS, YNZYZDZHBM, FBBK, XLQK, YLJGDM, FJGHZD,
+            SFXZJC, ZD, SZSX, GMS, XYYWZLBZ, BKZD, HXPL, CMY, SZST, SZSXLM,
+            ZDYSDM, XZJCQTMS, ZS, SFPFNMJC, HMXBDM, JZLXDM, BKYT, LGX, CFZBZ, BSCYZZDMZH,
+            ZY, BYUAN, YNJBZDDM, BKBW, FTT, HXY, BM, SJFSJC, YNJBZDMC, TGJCJL,
+            SZQTMS, BKBJ, JTX, RJBFSSJL, SFFBJC, SFJGHDZBL, PXCX, YNJZKSDM, ZYZDJBMC, ZYSFMZ,
+            SFS, XBWX, SZ, CYZZSJ, PXCXBWJTD, JBZDMC, ZYZZDMZH, JZLSH, YNJZKSMC, GZYT,
+            PFNMQTMS, BKYDD, JBZDDM, RJBFSSBZ, ZYBWJTD, STTZ, TW, JZSJ, TZ, CLCS,
+            STTS, FYMC, BLFS, ZYZZSJDW, LY, YNZYZDZHMC, KHM, ZYZDZHBM, XMMCY, LJS,
+            ZJLX, YTBW, CFYWJL, CRBBZ, ML, SFGZJC, KLXDM, SZSSE, JWS, XBS,
+            PZBWJTD, YDXZY, YCCZJL, XBYT, ZYSZMS, HZXXJL, XBMCY, JWXXGZBDFYS, PFYS, SFFZJXMJC,
+            XGFYYQJCS, SZBWJTD, YCJZS, FYDM, NL, ZYTZD, ZDYSXM, CYZZSJDW, HZBZ, YNZYZDJBBM,
+            JZYSSFZHM, SZY, SFXBJC, KJT, NMCJZ, ZYZDZHMC, QFS, WX, CRBJL, JWFRMBS,
+            LYBWJXZ, SXLMYCMS, BKDX2, BKDX1, ZYZZSJ, ZWXGZ, GZ, XL, XM, LYGCBZ,
+            FBYT, SSY, YSZT, ZYBZ, FBQTMS)
+        values (
+            #{SQKJT, jdbcType=VARCHAR}, #{ZYZDJBBM, jdbcType=VARCHAR}, #{TSCZBZ, jdbcType=VARCHAR}, #{ZYMZ, jdbcType=VARCHAR}, #{YNZYZDJBMC, jdbcType=VARCHAR}, #{PZ, jdbcType=VARCHAR}, to_date(#{TBRQ, jdbcType=VARCHAR}, 'YYYY-MM-DD'), #{FZJXMQTMS, jdbcType=VARCHAR}, #{JZKSMC, jdbcType=VARCHAR}, #{SFSZJC, jdbcType=VARCHAR},
+            #{YLJGMC, jdbcType=VARCHAR}, #{ZYSFSZ, jdbcType=VARCHAR}, #{ZJHM, jdbcType=VARCHAR}, #{JZKSDM, jdbcType=VARCHAR}, #{SZSS, jdbcType=VARCHAR}, #{YNZYZDZHBM, jdbcType=VARCHAR}, #{FBBK, jdbcType=VARCHAR}, #{XLQK, jdbcType=VARCHAR}, #{YLJGDM, jdbcType=VARCHAR}, #{FJGHZD, jdbcType=VARCHAR},
+            #{SFXZJC, jdbcType=VARCHAR}, #{ZD, jdbcType=VARCHAR}, #{SZSX, jdbcType=VARCHAR}, #{GMS, jdbcType=VARCHAR}, #{XYYWZLBZ, jdbcType=VARCHAR}, #{BKZD, jdbcType=VARCHAR}, #{HXPL, jdbcType=VARCHAR}, #{CMY, jdbcType=VARCHAR}, #{SZST, jdbcType=VARCHAR}, #{SZSXLM, jdbcType=VARCHAR},
+            #{ZDYSDM, jdbcType=VARCHAR}, #{XZJCQTMS, jdbcType=VARCHAR}, #{ZS, jdbcType=VARCHAR}, #{SFPFNMJC, jdbcType=VARCHAR}, #{HMXBDM, jdbcType=VARCHAR}, #{JZLXDM, jdbcType=VARCHAR}, #{BKYT, jdbcType=VARCHAR}, #{LGX, jdbcType=VARCHAR}, #{CFZBZ, jdbcType=VARCHAR}, #{BSCYZZDMZH, jdbcType=VARCHAR},
+            #{ZY, jdbcType=VARCHAR}, #{BYUAN, jdbcType=VARCHAR}, #{YNJBZDDM, jdbcType=VARCHAR}, #{BKBW, jdbcType=VARCHAR}, #{FTT, jdbcType=VARCHAR}, #{HXY, jdbcType=VARCHAR}, #{BM, jdbcType=VARCHAR}, #{SJFSJC, jdbcType=VARCHAR}, #{YNJBZDMC, jdbcType=VARCHAR}, #{TGJCJL, jdbcType=VARCHAR},
+            #{SZQTMS, jdbcType=VARCHAR}, #{BKBJ, jdbcType=VARCHAR}, #{JTX, jdbcType=VARCHAR}, #{RJBFSSJL, jdbcType=VARCHAR}, #{SFFBJC, jdbcType=VARCHAR}, #{SFJGHDZBL, jdbcType=VARCHAR}, #{PXCX, jdbcType=VARCHAR}, #{YNJZKSDM, jdbcType=VARCHAR}, #{ZYZDJBMC, jdbcType=VARCHAR}, #{ZYSFMZ, jdbcType=VARCHAR},
+            #{SFS, jdbcType=VARCHAR}, #{XBWX, jdbcType=VARCHAR}, #{SZ, jdbcType=VARCHAR}, #{CYZZSJ, jdbcType=VARCHAR}, #{PXCXBWJTD, jdbcType=VARCHAR}, #{JBZDMC, jdbcType=VARCHAR}, #{ZYZZDMZH, jdbcType=VARCHAR}, #{JZLSH, jdbcType=VARCHAR}, #{YNJZKSMC, jdbcType=VARCHAR}, #{GZYT, jdbcType=VARCHAR},
+            #{PFNMQTMS, jdbcType=VARCHAR}, #{BKYDD, jdbcType=VARCHAR}, #{JBZDDM, jdbcType=VARCHAR}, #{RJBFSSBZ, jdbcType=VARCHAR}, #{ZYBWJTD, jdbcType=VARCHAR}, #{STTZ, jdbcType=VARCHAR}, #{TW, jdbcType=VARCHAR}, to_date(#{JZSJ, jdbcType=VARCHAR}, 'YYYY-MM-DD'), #{TZ, jdbcType=VARCHAR}, #{CLCS, jdbcType=VARCHAR},
+            #{STTS, jdbcType=VARCHAR}, #{FYMC, jdbcType=VARCHAR}, #{BLFS, jdbcType=VARCHAR}, #{ZYZZSJDW, jdbcType=VARCHAR}, #{LY, jdbcType=VARCHAR}, #{YNZYZDZHMC, jdbcType=VARCHAR}, #{KHM, jdbcType=VARCHAR}, #{ZYZDZHBM, jdbcType=VARCHAR}, #{XMMCY, jdbcType=VARCHAR}, #{LJS, jdbcType=VARCHAR},
+            #{ZJLX, jdbcType=VARCHAR}, #{YTBW, jdbcType=VARCHAR}, #{CFYWJL, jdbcType=VARCHAR}, #{CRBBZ, jdbcType=VARCHAR}, #{ML, jdbcType=VARCHAR}, #{SFGZJC, jdbcType=VARCHAR}, #{KLXDM, jdbcType=VARCHAR}, #{SZSSE, jdbcType=VARCHAR}, #{JWS, jdbcType=VARCHAR}, #{XBS, jdbcType=VARCHAR},
+            #{PZBWJTD, jdbcType=VARCHAR}, #{YDXZY, jdbcType=VARCHAR}, #{YCCZJL, jdbcType=VARCHAR}, #{XBYT, jdbcType=VARCHAR}, #{ZYSZMS, jdbcType=VARCHAR}, #{HZXXJL, jdbcType=VARCHAR}, #{XBMCY, jdbcType=VARCHAR}, #{JWXXGZBDFYS, jdbcType=VARCHAR}, #{PFYS, jdbcType=VARCHAR}, #{SFFZJXMJC, jdbcType=VARCHAR},
+            #{XGFYYQJCS, jdbcType=VARCHAR}, #{SZBWJTD, jdbcType=VARCHAR}, #{YCJZS, jdbcType=VARCHAR}, #{FYDM, jdbcType=VARCHAR}, #{NL, jdbcType=VARCHAR}, #{ZYTZD, jdbcType=VARCHAR}, #{ZDYSXM, jdbcType=VARCHAR}, #{CYZZSJDW, jdbcType=VARCHAR}, #{HZBZ, jdbcType=VARCHAR}, #{YNZYZDJBBM, jdbcType=VARCHAR},
+            #{JZYSSFZHM, jdbcType=VARCHAR}, #{SZY, jdbcType=VARCHAR}, #{SFXBJC, jdbcType=VARCHAR}, #{KJT, jdbcType=VARCHAR}, #{NMCJZ, jdbcType=VARCHAR}, #{ZYZDZHMC, jdbcType=VARCHAR}, #{QFS, jdbcType=VARCHAR}, #{WX, jdbcType=VARCHAR}, #{CRBJL, jdbcType=VARCHAR}, #{JWFRMBS, jdbcType=VARCHAR},
+            #{LYBWJXZ, jdbcType=VARCHAR}, #{SXLMYCMS, jdbcType=VARCHAR}, #{BKDX2, jdbcType=VARCHAR}, #{BKDX1, jdbcType=VARCHAR}, #{ZYZZSJ, jdbcType=VARCHAR}, #{ZWXGZ, jdbcType=VARCHAR}, #{GZ, jdbcType=VARCHAR}, #{XL, jdbcType=VARCHAR}, #{XM, jdbcType=VARCHAR}, #{LYGCBZ, jdbcType=VARCHAR},
+            #{FBYT, jdbcType=VARCHAR}, #{SSY, jdbcType=VARCHAR}, #{YSZT, jdbcType=VARCHAR}, #{ZYBZ, jdbcType=VARCHAR}, #{FBQTMS, jdbcType=VARCHAR})
+    </insert>
+
+    <delete id="deleteMZYZMXB" parameterType="HashMap">
+        delete from MZYZMXB where KFSJ >= to_date(#{begTime}, 'YYYY-MM-DD HH24:MI:SS') and KFSJ  &lt;= to_date(#{endTime}, 'YYYY-MM-DD HH24:MI:SS')
+    </delete>
+    <insert id="insertMZYZMXB" parameterType="java.util.HashMap">
+        insert into MZYZMXB(
+        YNYWSYTJDM, CFZJE, YWLX, SHYJSGH, YPLYDM, JYMC, YNYWSYPLDM, SJGXSJ, TBRQ, JLDWDM,
+        FYYJSGH, YZBH, JZKSMC, PSPB, XMDJ, KLX, YLJGMC, ZXXMMC, YPGG, JZKSDM,
+        ZJHM, YLJGDM, SHYJSXM, FYKSMC, CFFYRQSJ, YZXMLXDM, FYKSDM, FYYJSXM, FUXMYYDM, JZLXDM,
+        YZXMLXMC, YNYWSYPLMC, CFTS, YNYWSYTJMC, JL, CFH, YNFYKSMC, FYSL, YWJXMC, YZMD,
+        DTSYDWDM, ZXJZKSDM, FYYJSSFZHM, YWSYZSLDWDM, YPID, FYSLDWMC, DTSYDWMC, KH, YYFFMS, CYTS,
+        SYYYBZ, JZLSH, ZXDM, SFBSHM, YWSYZSLDW, YNFYKSDM, CFBZXX, ZXYCFBZ, JLDW, YPDMNBBM,
+        FJMC, BXLX, FYMC, CFBMBZ, ZLXH, YYFFDM, SYPCDM, SYPCMS, YWSYZSL, KFYSXM,
+        ZJLX, ZXJZKSMC, YWSYPLMC, YWSYTJMC, JYFSDM, CSRQ, ZYCFFL, YCYL, YWSYTJDM, YWJXDM,
+        TYBZ, YCYLMS, YPJE, FYDM, YPMC, YWSYPL, KFSJ, XMJE, KFSSGH, YNJYDM,
+        CFFLDM, YPLB, CFXMMXHM, SHYJSSFZHM, GYSJ, XB, YNYWJXMC, JZFFMS, YZLSH, YNYWJXDM,
+        DTSYL, JJFYJE, ZCJZFDM, XM, YNJYMC, FWXMMC, ZYBZ) values (
+        #{YNYWSYTJDM, jdbcType=VARCHAR}, #{CFZJE, jdbcType=VARCHAR}, #{YWLX, jdbcType=VARCHAR}, #{SHYJSGH, jdbcType=VARCHAR}, #{YPLYDM, jdbcType=VARCHAR}, #{JYMC, jdbcType=VARCHAR}, #{YNYWSYPLDM, jdbcType=VARCHAR}, to_date(#{SJGXSJ, jdbcType=VARCHAR}, 'YYYY-MM-DD HH24:MI:SS'), to_date(#{TBRQ, jdbcType=VARCHAR}, 'YYYY-MM-DD'), #{JLDWDM, jdbcType=VARCHAR},
+        #{FYYJSGH, jdbcType=VARCHAR}, #{YZBH, jdbcType=VARCHAR}, #{JZKSMC, jdbcType=VARCHAR}, #{PSPB, jdbcType=VARCHAR}, #{XMDJ, jdbcType=VARCHAR}, #{KLX, jdbcType=VARCHAR}, #{YLJGMC, jdbcType=VARCHAR}, #{ZXXMMC, jdbcType=VARCHAR}, #{YPGG, jdbcType=VARCHAR}, #{JZKSDM, jdbcType=VARCHAR},
+        #{ZJHM, jdbcType=VARCHAR}, #{YLJGDM, jdbcType=VARCHAR}, #{SHYJSXM, jdbcType=VARCHAR}, #{FYKSMC, jdbcType=VARCHAR}, to_date(#{CFFYRQSJ, jdbcType=VARCHAR}, 'YYYY-MM-DD HH24:MI:SS'), #{YZXMLXDM, jdbcType=VARCHAR}, #{FYKSDM, jdbcType=VARCHAR}, #{FYYJSXM, jdbcType=VARCHAR}, #{FUXMYYDM, jdbcType=VARCHAR}, #{JZLXDM, jdbcType=VARCHAR},
+        #{YZXMLXMC, jdbcType=VARCHAR}, #{YNYWSYPLMC, jdbcType=VARCHAR}, #{CFTS, jdbcType=VARCHAR}, #{YNYWSYTJMC, jdbcType=VARCHAR}, #{JL, jdbcType=VARCHAR}, #{CFH, jdbcType=VARCHAR}, #{YNFYKSMC, jdbcType=VARCHAR}, #{FYSL, jdbcType=VARCHAR}, #{YWJXMC, jdbcType=VARCHAR}, #{YZMD, jdbcType=VARCHAR},
+        #{DTSYDWDM, jdbcType=VARCHAR}, #{ZXJZKSDM, jdbcType=VARCHAR}, #{FYYJSSFZHM, jdbcType=VARCHAR}, #{YWSYZSLDWDM, jdbcType=VARCHAR}, #{YPID, jdbcType=VARCHAR}, #{FYSLDWMC, jdbcType=VARCHAR}, #{DTSYDWMC, jdbcType=VARCHAR}, #{KH, jdbcType=VARCHAR}, #{YYFFMS, jdbcType=VARCHAR}, #{CYTS, jdbcType=VARCHAR},
+        #{SYYYBZ, jdbcType=VARCHAR}, #{JZLSH, jdbcType=VARCHAR}, #{ZXDM, jdbcType=VARCHAR}, #{SFBSHM, jdbcType=VARCHAR}, #{YWSYZSLDW, jdbcType=VARCHAR}, #{YNFYKSDM, jdbcType=VARCHAR}, #{CFBZXX, jdbcType=VARCHAR}, #{ZXYCFBZ, jdbcType=VARCHAR}, #{JLDW, jdbcType=VARCHAR}, #{YPDMNBBM, jdbcType=VARCHAR},
+        #{FJMC, jdbcType=VARCHAR}, #{BXLX, jdbcType=VARCHAR}, #{FYMC, jdbcType=VARCHAR}, #{CFBMBZ, jdbcType=VARCHAR}, #{ZLXH, jdbcType=VARCHAR}, #{YYFFDM, jdbcType=VARCHAR}, #{SYPCDM, jdbcType=VARCHAR}, #{SYPCMS, jdbcType=VARCHAR}, #{YWSYZSL, jdbcType=VARCHAR}, #{KFYSXM, jdbcType=VARCHAR},
+        #{ZJLX, jdbcType=VARCHAR}, #{ZXJZKSMC, jdbcType=VARCHAR}, #{YWSYPLMC, jdbcType=VARCHAR}, #{YWSYTJMC, jdbcType=VARCHAR}, #{JYFSDM, jdbcType=VARCHAR}, to_date(#{CSRQ, jdbcType=VARCHAR}, 'YYYY-MM-DD'), #{ZYCFFL, jdbcType=VARCHAR}, #{YCYL, jdbcType=VARCHAR}, #{YWSYTJDM, jdbcType=VARCHAR}, #{YWJXDM, jdbcType=VARCHAR},
+        #{TYBZ, jdbcType=VARCHAR}, #{YCYLMS, jdbcType=VARCHAR}, #{YPJE, jdbcType=VARCHAR}, #{FYDM, jdbcType=VARCHAR}, #{YPMC, jdbcType=VARCHAR}, #{YWSYPL, jdbcType=VARCHAR}, to_date(#{KFSJ, jdbcType=VARCHAR}, 'YYYY-MM-DD HH24:MI:SS'), #{XMJE, jdbcType=VARCHAR}, #{KFSSGH, jdbcType=VARCHAR}, #{YNJYDM, jdbcType=VARCHAR},
+        #{CFFLDM, jdbcType=VARCHAR}, #{YPLB, jdbcType=VARCHAR}, #{CFXMMXHM, jdbcType=VARCHAR}, #{SHYJSSFZHM, jdbcType=VARCHAR}, #{GYSJ, jdbcType=VARCHAR}, #{XB, jdbcType=VARCHAR}, #{YNYWJXMC, jdbcType=VARCHAR}, #{JZFFMS, jdbcType=VARCHAR}, #{YZLSH, jdbcType=VARCHAR}, #{YNYWJXDM, jdbcType=VARCHAR},
+        #{DTSYL, jdbcType=VARCHAR}, #{JJFYJE, jdbcType=VARCHAR}, #{ZCJZFDM, jdbcType=VARCHAR}, #{XM, jdbcType=VARCHAR}, #{YNJYMC, jdbcType=VARCHAR}, #{FWXMMC, jdbcType=VARCHAR}, #{ZYBZ, jdbcType=VARCHAR})
+    </insert>
+
+    <delete id="deleteMZSFJLB" parameterType="HashMap">
+        delete from MZSFJLB where (SFSJ >= to_date(#{begTime}, 'YYYY-MM-DD HH24:MI:SS') and SFSJ  &lt;= to_date(#{endTime}, 'YYYY-MM-DD HH24:MI:SS'))
+            or (TFSJ >= to_date(#{begTime}, 'YYYY-MM-DD HH24:MI:SS') and TFSJ  &lt;= to_date(#{endTime}, 'YYYY-MM-DD HH24:MI:SS'))
+    </delete>
+    <delete id="deleteMZSFJLBByPk" parameterType="HashMap">
+        delete from MZSFJLB where YLJGDM = #{YLJGDM, jdbcType=VARCHAR} and SFLSH = #{SFLSH, jdbcType=VARCHAR} and TFBZ = #{TFBZ, jdbcType=VARCHAR}
+    </delete>
+    <insert id="insertMZSFJLB" parameterType="java.util.HashMap">
+        insert into MZSFJLB(
+            QTF, SFCZYGH, ZHILF, GHF, FYMC, SFCZYSFZHM, TBRQ, SFSJ, WDBZ, ZFJE,
+            JZKSMC, WSCLF, ZJE, HYF, KLX, ZJLX, YLJGMC, YNJZKSDM, YBZFJE, SFLSH,
+            KH, ZJHM, JZKSDM, ZCHYF, YBZHBZ, XYF, SSF, YLJGDM, JCF, TFBZ,
+            JZLSH, YBJE, TFSJ, ZYYPF, YNJZKSMC, YMF, XM, SFCZYXM, ZHENLF, JZLXDM,
+            ZCF, FYDM, BXLX, FLZJJE, FPH)
+        values (
+            #{QTF, jdbcType=VARCHAR}, #{SFCZYGH, jdbcType=VARCHAR}, #{ZHILF, jdbcType=VARCHAR}, #{GHF, jdbcType=VARCHAR}, #{FYMC, jdbcType=VARCHAR}, #{SFCZYSFZHM, jdbcType=VARCHAR}, to_date(#{TBRQ, jdbcType=VARCHAR}, 'YYYY-MM-DD'), to_date(#{SFSJ, jdbcType=VARCHAR}, 'YYYY-MM-DD HH24:MI:SS'), #{WDBZ, jdbcType=VARCHAR}, #{ZFJE, jdbcType=VARCHAR},
+            #{JZKSMC, jdbcType=VARCHAR}, #{WSCLF, jdbcType=VARCHAR}, #{ZJE, jdbcType=VARCHAR}, #{HYF, jdbcType=VARCHAR}, #{KLX, jdbcType=VARCHAR}, #{ZJLX, jdbcType=VARCHAR}, #{YLJGMC, jdbcType=VARCHAR}, #{YNJZKSDM, jdbcType=VARCHAR}, #{YBZFJE, jdbcType=VARCHAR}, #{SFLSH, jdbcType=VARCHAR},
+            #{KH, jdbcType=VARCHAR}, #{ZJHM, jdbcType=VARCHAR}, #{JZKSDM, jdbcType=VARCHAR}, #{ZCHYF, jdbcType=VARCHAR}, #{YBZHBZ, jdbcType=VARCHAR}, #{XYF, jdbcType=VARCHAR}, #{SSF, jdbcType=VARCHAR}, #{YLJGDM, jdbcType=VARCHAR}, #{JCF, jdbcType=VARCHAR}, #{TFBZ, jdbcType=VARCHAR},
+            #{JZLSH, jdbcType=VARCHAR}, #{YBJE, jdbcType=VARCHAR}, to_date(#{TFSJ, jdbcType=VARCHAR}, 'YYYY-MM-DD HH24:MI:SS'), #{ZYYPF, jdbcType=VARCHAR}, #{YNJZKSMC, jdbcType=VARCHAR}, #{YMF, jdbcType=VARCHAR}, #{XM, jdbcType=VARCHAR}, #{SFCZYXM, jdbcType=VARCHAR}, #{ZHENLF, jdbcType=VARCHAR}, #{JZLXDM, jdbcType=VARCHAR},
+            #{ZCF, jdbcType=VARCHAR}, #{FYDM, jdbcType=VARCHAR}, #{BXLX, jdbcType=VARCHAR}, #{FLZJJE, jdbcType=VARCHAR}, #{FPH, jdbcType=VARCHAR})
+    </insert>
+
+    <delete id="deleteMZSFMXB" parameterType="HashMap">
+        delete from MZSFMXB where STFSJ >= to_date(#{begTime}, 'YYYY-MM-DD HH24:MI:SS') and STFSJ  &lt;= to_date(#{endTime}, 'YYYY-MM-DD HH24:MI:SS')
+    </delete>
+    <insert id="insertMZSFMXB" parameterType="java.util.HashMap">
+        insert into MZSFMXB(
+            MXXMDJ, SFCZYGH, FYMC, SFCZYSFZHM, TBRQ, MXXMBM, JZKSMC, MXXMMC, MXXMDW, KLX,
+            ZJLX, YLJGMC, YNJZKSDM, YPID, SFLSH, SFMXLSH, KH, ZJHM, JZKSDM, MXXMSL,
+            STFSJ, MXXMGG, YLJGDM, MXFYLB, TFBZ, JZLSH, ZXDM, YNJZKSMC, YNZXKSMC, MXXMLB,
+            ZXKSMC, XM, SFCZYXM, YNZXKSBM, JZLXDM, FYDM, BXLX, MXXMJE, ZXKSBM, ZXMC,
+            FPH)
+        values (
+            #{MXXMDJ, jdbcType=VARCHAR}, #{SFCZYGH, jdbcType=VARCHAR}, #{FYMC, jdbcType=VARCHAR}, #{SFCZYSFZHM, jdbcType=VARCHAR}, to_date(#{TBRQ, jdbcType=VARCHAR}, 'YYYY-MM-DD'), #{MXXMBM, jdbcType=VARCHAR}, #{JZKSMC, jdbcType=VARCHAR}, #{MXXMMC, jdbcType=VARCHAR}, #{MXXMDW, jdbcType=VARCHAR}, #{KLX, jdbcType=VARCHAR},
+            #{ZJLX, jdbcType=VARCHAR}, #{YLJGMC, jdbcType=VARCHAR}, #{YNJZKSDM, jdbcType=VARCHAR}, #{YPID, jdbcType=VARCHAR}, #{SFLSH, jdbcType=VARCHAR}, #{SFMXLSH, jdbcType=VARCHAR}, #{KH, jdbcType=VARCHAR}, #{ZJHM, jdbcType=VARCHAR}, #{JZKSDM, jdbcType=VARCHAR}, #{MXXMSL, jdbcType=VARCHAR},
+            to_date(#{STFSJ, jdbcType=VARCHAR}, 'YYYY-MM-DD HH24:MI:SS'), #{MXXMGG, jdbcType=VARCHAR}, #{YLJGDM, jdbcType=VARCHAR}, #{MXFYLB, jdbcType=VARCHAR}, #{TFBZ, jdbcType=VARCHAR}, #{JZLSH, jdbcType=VARCHAR}, #{ZXDM, jdbcType=VARCHAR}, #{YNJZKSMC, jdbcType=VARCHAR}, #{YNZXKSMC, jdbcType=VARCHAR}, #{MXXMLB, jdbcType=VARCHAR},
+            #{ZXKSMC, jdbcType=VARCHAR}, #{XM, jdbcType=VARCHAR}, #{SFCZYXM, jdbcType=VARCHAR}, #{YNZXKSBM, jdbcType=VARCHAR}, #{JZLXDM, jdbcType=VARCHAR}, #{FYDM, jdbcType=VARCHAR}, #{BXLX, jdbcType=VARCHAR}, #{MXXMJE, jdbcType=VARCHAR}, #{ZXKSBM, jdbcType=VARCHAR}, #{ZXMC, jdbcType=VARCHAR},
+            #{FPH, jdbcType=VARCHAR})
+    </insert>
+
+    <delete id="deleteMZFYJSXX" parameterType="HashMap">
+        delete from MZFYJSXX where FYJSSJ >= to_date(#{begTime}, 'YYYY-MM-DD HH24:MI:SS') and FYJSSJ  &lt;= to_date(#{endTime}, 'YYYY-MM-DD HH24:MI:SS')
+    </delete>
+    <delete id="deleteMZFYJSXXByPk" parameterType="HashMap">
+        delete from MZFYJSXX where YLJGDM = #{YLJGDM, jdbcType=VARCHAR} and SFLSH = #{SFLSH, jdbcType=VARCHAR}
+    </delete>
+    <insert id="insertMZFYJSXX" parameterType="java.util.HashMap">
+        insert into MZFYJSXX(
+            SFCZYGH, YLJGDM, TBRQ, JZLSH, TFBZ, ZFFSDM, ZFJE, FYJSSJ, XM, KLX,
+            ZJLX, SFCZYXM, SFLSH, KH, ZFCK, ZJHM, FPH)
+        values (
+            #{SFCZYGH, jdbcType=VARCHAR}, #{YLJGDM, jdbcType=VARCHAR}, to_date(#{TBRQ, jdbcType=VARCHAR}, 'YYYY-MM-DD'), #{JZLSH, jdbcType=VARCHAR}, #{TFBZ, jdbcType=VARCHAR}, #{ZFFSDM, jdbcType=VARCHAR}, #{ZFJE, jdbcType=VARCHAR}, to_date(#{FYJSSJ, jdbcType=VARCHAR}, 'YYYY-MM-DD HH24:MI:SS'), #{XM, jdbcType=VARCHAR}, #{KLX, jdbcType=VARCHAR},
+            #{ZJLX, jdbcType=VARCHAR}, #{SFCZYXM, jdbcType=VARCHAR}, #{SFLSH, jdbcType=VARCHAR}, #{KH, jdbcType=VARCHAR}, #{ZFCK, jdbcType=VARCHAR}, #{ZJHM, jdbcType=VARCHAR}, #{FPH, jdbcType=VARCHAR})
+    </insert>
+
+    <delete id="deleteZYJZJLB" parameterType="HashMap">
+        delete from ZYJZJLB where RYSJ >= to_date(#{begTime}, 'YYYY-MM-DD HH24:MI:SS') and RYSJ  &lt;= to_date(#{endTime}, 'YYYY-MM-DD HH24:MI:SS')
+    </delete>
+    <delete id="deleteZYJZJLBByPk" parameterType="HashMap">
+        delete from ZYJZJLB where YLJGDM = #{YLJGDM, jdbcType=VARCHAR} and JZLSH = #{JZLSH, jdbcType=VARCHAR}
+    </delete>
+    <insert id="insertZYJZJLB" parameterType="java.util.HashMap">
+        insert into ZYJZJLB(
+            TW, YNCYKSMC, CLCS, FYMC, TBRQ, TGJCJL, JZKSMC, CYSJ, SZY, YNJZKSBM,
+            KLX, ZJLX, YLJGMC, CISID, KH, JZKSBM, ZJHM, ML, HZXM, JWS,
+            YLJGDM, XBS, BAH, RYLYDM, CYKSMC, ZYZZDMZH, GMS, JZLSH, ZYSZMS, HXPL,
+            YNJZKSMC, YNCYKSBM, XL, CYKSBM, RYSJ, SSY, ZS, YCJZS, FYDM, BXLX)
+        values (
+            #{TW, jdbcType=VARCHAR}, #{YNCYKSMC, jdbcType=VARCHAR}, #{CLCS, jdbcType=VARCHAR}, #{FYMC, jdbcType=VARCHAR}, to_date(#{TBRQ, jdbcType=VARCHAR}, 'YYYY-MM-DD'), #{TGJCJL, jdbcType=VARCHAR}, #{JZKSMC, jdbcType=VARCHAR}, to_date(#{CYSJ, jdbcType=VARCHAR}, 'YYYY-MM-DD HH24:MI:SS'), #{SZY, jdbcType=VARCHAR}, #{YNJZKSBM, jdbcType=VARCHAR},
+            #{KLX, jdbcType=VARCHAR}, #{ZJLX, jdbcType=VARCHAR}, #{YLJGMC, jdbcType=VARCHAR}, #{CISID, jdbcType=VARCHAR}, #{KH, jdbcType=VARCHAR}, #{JZKSBM, jdbcType=VARCHAR}, #{ZJHM, jdbcType=VARCHAR}, #{ML, jdbcType=VARCHAR}, #{HZXM, jdbcType=VARCHAR}, #{JWS, jdbcType=VARCHAR},
+            #{YLJGDM, jdbcType=VARCHAR}, #{XBS, jdbcType=VARCHAR}, #{BAH, jdbcType=VARCHAR}, #{RYLYDM, jdbcType=VARCHAR}, #{CYKSMC, jdbcType=VARCHAR}, #{ZYZZDMZH, jdbcType=VARCHAR}, #{GMS, jdbcType=VARCHAR}, #{JZLSH, jdbcType=VARCHAR}, #{ZYSZMS, jdbcType=VARCHAR}, #{HXPL, jdbcType=VARCHAR},
+            #{YNJZKSMC, jdbcType=VARCHAR}, #{YNCYKSBM, jdbcType=VARCHAR}, #{XL, jdbcType=VARCHAR}, #{CYKSBM, jdbcType=VARCHAR}, to_date(#{RYSJ, jdbcType=VARCHAR}, 'YYYY-MM-DD HH24:MI:SS'), #{SSY, jdbcType=VARCHAR}, #{ZS, jdbcType=VARCHAR}, #{YCJZS, jdbcType=VARCHAR}, #{FYDM, jdbcType=VARCHAR}, #{BXLX, jdbcType=VARCHAR})
+    </insert>
+
+    <delete id="deleteZYYZMXB" parameterType="HashMap">
+        delete from ZYYZMXB where YZXDSJ >= to_date(#{begTime}, 'YYYY-MM-DD HH24:MI:SS') and YZXDSJ  &lt;= to_date(#{endTime}, 'YYYY-MM-DD HH24:MI:SS')
+    </delete>
+    <delete id="deleteZYYZMXBByPk" parameterType="HashMap">
+        delete from ZYYZMXB where YLJGDM = #{YLJGDM, jdbcType=VARCHAR} and YZID = #{YZID, jdbcType=VARCHAR}
+    </delete>
+    <insert id="insertZYYZMXB" parameterType="java.util.HashMap">
+        insert into ZYYZMXB(
+            HDHSXM, TZYZZGH, JYMC, FYMC, DDDDW, YPYFMC, TBRQ, JLDWDM, SHRGH, YNXDKSBM,
+            YNYPYFMC, CXBZ, YZSM, XMDJ, XDKSBM, DW, HDHSGH, KLX, ZJLX, YLJGMC,
+            YZXDSJ, YZZXH, YPSL, YNYPYFDM, YPGG, YYMD, ZJHM, YZMXBM, HDHSSFZHM, XDRXM,
+            YZZH, YNYYPDMC, YLJGDM, ZXRGH, XDRSFZHM, YNYYPDDM, YZXMLXDM, CSRQ, SFPS, ZYCFFL,
+            ZXKSMC, ZXRSFZHM, YYTS, YNZXKSBM, YWJXDM, JYDM, YZXMLXMC, FYDM, YYPD, XDRGH,
+            YYPDMC, JL, YPDW, YZLX, YNXDKSMC, YZZZSJ, DDD, SFKZXSHSFH, SHSJ, YZZXSJ,
+            SHRSFZHM, YPYF, YWJXMC, BQ, TZYZZSFZHM, ZXRXM, YZID, YZMXMC, XMJE, YPID,
+            KH, YNJYDM, SHRXM, YPLB, DZSQDBH, XDKSMC, XB, JZLSH, ZXDM, YNYWJXMC,
+            YNZXKSMC, YNYWJXDM, HDSJ, XM, YNJYMC, TZYZZXM, BXLX, ZXKSBM, YZLB, ZXMC)
+        values (
+            #{HDHSXM, jdbcType=VARCHAR}, #{TZYZZGH, jdbcType=VARCHAR}, #{JYMC, jdbcType=VARCHAR}, #{FYMC, jdbcType=VARCHAR}, #{DDDDW, jdbcType=VARCHAR}, #{YPYFMC, jdbcType=VARCHAR}, to_date(#{TBRQ, jdbcType=VARCHAR}, 'YYYY-MM-DD HH24:MI:SS'), #{JLDWDM, jdbcType=VARCHAR}, #{SHRGH, jdbcType=VARCHAR}, #{YNXDKSBM, jdbcType=VARCHAR},
+            #{YNYPYFMC, jdbcType=VARCHAR}, #{CXBZ, jdbcType=VARCHAR}, #{YZSM, jdbcType=VARCHAR}, #{XMDJ, jdbcType=VARCHAR}, #{XDKSBM, jdbcType=VARCHAR}, #{DW, jdbcType=VARCHAR}, #{HDHSGH, jdbcType=VARCHAR}, #{KLX, jdbcType=VARCHAR}, #{ZJLX, jdbcType=VARCHAR}, #{YLJGMC, jdbcType=VARCHAR},
+            to_date(#{YZXDSJ, jdbcType=VARCHAR}, 'YYYY-MM-DD HH24:MI:SS'), #{YZZXH, jdbcType=VARCHAR}, #{YPSL, jdbcType=VARCHAR}, #{YNYPYFDM, jdbcType=VARCHAR}, #{YPGG, jdbcType=VARCHAR}, #{YYMD, jdbcType=VARCHAR}, #{ZJHM, jdbcType=VARCHAR}, #{YZMXBM, jdbcType=VARCHAR}, #{HDHSSFZHM, jdbcType=VARCHAR}, #{XDRXM, jdbcType=VARCHAR},
+            #{YZZH, jdbcType=VARCHAR}, #{YNYYPDMC, jdbcType=VARCHAR}, #{YLJGDM, jdbcType=VARCHAR}, #{ZXRGH, jdbcType=VARCHAR}, #{XDRSFZHM, jdbcType=VARCHAR}, #{YNYYPDDM, jdbcType=VARCHAR}, #{YZXMLXDM, jdbcType=VARCHAR}, to_date(#{CSRQ, jdbcType=VARCHAR}, 'YYYY-MM-DD'), #{SFPS, jdbcType=VARCHAR}, #{ZYCFFL, jdbcType=VARCHAR},
+            #{ZXKSMC, jdbcType=VARCHAR}, #{ZXRSFZHM, jdbcType=VARCHAR}, #{YYTS, jdbcType=VARCHAR}, #{YNZXKSBM, jdbcType=VARCHAR}, #{YWJXDM, jdbcType=VARCHAR}, #{JYDM, jdbcType=VARCHAR}, #{YZXMLXMC, jdbcType=VARCHAR}, #{FYDM, jdbcType=VARCHAR}, #{YYPD, jdbcType=VARCHAR}, #{XDRGH, jdbcType=VARCHAR},
+            #{YYPDMC, jdbcType=VARCHAR}, #{JL, jdbcType=VARCHAR}, #{YPDW, jdbcType=VARCHAR}, #{YZLX, jdbcType=VARCHAR}, #{YNXDKSMC, jdbcType=VARCHAR}, to_date(#{YZZZSJ, jdbcType=VARCHAR}, 'YYYY-MM-DD HH24:MI:SS'), #{DDD, jdbcType=VARCHAR}, #{SFKZXSHSFH, jdbcType=VARCHAR}, to_date(#{SHSJ, jdbcType=VARCHAR}, 'YYYY-MM-DD HH24:MI:SS'), to_date(#{YZZXSJ, jdbcType=VARCHAR}, 'YYYY-MM-DD HH24:MI:SS'),
+            #{SHRSFZHM, jdbcType=VARCHAR}, #{YPYF, jdbcType=VARCHAR}, #{YWJXMC, jdbcType=VARCHAR}, #{BQ, jdbcType=VARCHAR}, #{TZYZZSFZHM, jdbcType=VARCHAR}, #{ZXRXM, jdbcType=VARCHAR}, #{YZID, jdbcType=VARCHAR}, #{YZMXMC, jdbcType=VARCHAR}, #{XMJE, jdbcType=VARCHAR}, #{YPID, jdbcType=VARCHAR},
+            #{KH, jdbcType=VARCHAR}, #{YNJYDM, jdbcType=VARCHAR}, #{SHRXM, jdbcType=VARCHAR}, #{YPLB, jdbcType=VARCHAR}, #{DZSQDBH, jdbcType=VARCHAR}, #{XDKSMC, jdbcType=VARCHAR}, #{XB, jdbcType=VARCHAR}, #{JZLSH, jdbcType=VARCHAR}, #{ZXDM, jdbcType=VARCHAR}, #{YNYWJXMC, jdbcType=VARCHAR},
+            #{YNZXKSMC, jdbcType=VARCHAR}, #{YNYWJXDM, jdbcType=VARCHAR}, to_date(#{HDSJ, jdbcType=VARCHAR}, 'YYYY-MM-DD HH24:MI:SS'), #{XM, jdbcType=VARCHAR}, #{YNJYMC, jdbcType=VARCHAR}, #{TZYZZXM, jdbcType=VARCHAR}, #{BXLX, jdbcType=VARCHAR}, #{ZXKSBM, jdbcType=VARCHAR}, #{YZLB, jdbcType=VARCHAR}, #{ZXMC, jdbcType=VARCHAR})
+    </insert>
+
+    <delete id="deleteZYSFJLB" parameterType="HashMap">
+        delete from ZYSFJLB where SFSJ >= to_date(#{begTime}, 'YYYY-MM-DD HH24:MI:SS') and SFSJ  &lt;= to_date(#{endTime}, 'YYYY-MM-DD HH24:MI:SS')
+    </delete>
+    <insert id="insertZYSFJLB" parameterType="java.util.HashMap">
+        insert into ZYSFJLB(
+            QTF, SFCZYGH, JSBZ, ZHILF, HLF, YNXDKSMC, FYMC, SFCZYSFZHM, TBRQ, SFSJ,
+            YNXDKSBM, ZFJE, WSCLF, XDKSBM, CWF, ZJE, HYF, KLX, ZJLX, YLJGMC,
+            YBZFJE, SFLSH, KH, ZJHM, ZCHYF, XYF, XDKSMC, SSF, YLJGDM, JCF,
+            JZLSH, YBJE, ZYYPF, YMF, XM, SFCZYXM, SFMXSL, ZHENLF, ZCF, FYDM,
+            BXLX, FLZJJE, FPH)
+        values (
+            #{QTF, jdbcType=VARCHAR}, #{SFCZYGH, jdbcType=VARCHAR}, #{JSBZ, jdbcType=VARCHAR}, #{ZHILF, jdbcType=VARCHAR}, #{HLF, jdbcType=VARCHAR}, #{YNXDKSMC, jdbcType=VARCHAR}, #{FYMC, jdbcType=VARCHAR}, #{SFCZYSFZHM, jdbcType=VARCHAR}, to_date(#{TBRQ, jdbcType=VARCHAR}, 'YYYY-MM-DD'), to_date(#{SFSJ, jdbcType=VARCHAR}, 'YYYY-MM-DD HH24:MI:SS'),
+            #{YNXDKSBM, jdbcType=VARCHAR}, #{ZFJE, jdbcType=VARCHAR}, #{WSCLF, jdbcType=VARCHAR}, #{XDKSBM, jdbcType=VARCHAR}, #{CWF, jdbcType=VARCHAR}, #{ZJE, jdbcType=VARCHAR}, #{HYF, jdbcType=VARCHAR}, #{KLX, jdbcType=VARCHAR}, #{ZJLX, jdbcType=VARCHAR}, #{YLJGMC, jdbcType=VARCHAR},
+            #{YBZFJE, jdbcType=VARCHAR}, #{SFLSH, jdbcType=VARCHAR}, #{KH, jdbcType=VARCHAR}, #{ZJHM, jdbcType=VARCHAR}, #{ZCHYF, jdbcType=VARCHAR}, #{XYF, jdbcType=VARCHAR}, #{XDKSMC, jdbcType=VARCHAR}, #{SSF, jdbcType=VARCHAR}, #{YLJGDM, jdbcType=VARCHAR}, #{JCF, jdbcType=VARCHAR},
+            #{JZLSH, jdbcType=VARCHAR}, #{YBJE, jdbcType=VARCHAR}, #{ZYYPF, jdbcType=VARCHAR}, #{YMF, jdbcType=VARCHAR}, #{XM, jdbcType=VARCHAR}, #{SFCZYXM, jdbcType=VARCHAR}, #{SFMXSL, jdbcType=VARCHAR}, #{ZHENLF, jdbcType=VARCHAR}, #{ZCF, jdbcType=VARCHAR}, #{FYDM, jdbcType=VARCHAR},
+            #{BXLX, jdbcType=VARCHAR}, #{FLZJJE, jdbcType=VARCHAR}, #{FPH, jdbcType=VARCHAR})
+    </insert>
+
+    <delete id="deleteZYSFMXB" parameterType="HashMap">
+        delete from ZYSFMXB where STFSJ >= to_date(#{begTime}, 'YYYY-MM-DD HH24:MI:SS') and STFSJ  &lt;= to_date(#{endTime}, 'YYYY-MM-DD HH24:MI:SS')
+    </delete>
+    <insert id="insertZYSFMXB" parameterType="java.util.HashMap">
+        insert into ZYSFMXB(
+            MXXMDJ, SFCZYGH, YNXDKSMC, FYMC, SFCZYSFZHM, TBRQ, MXXMBM, YNXDKSBM, MXXMMC, XDKSBM,
+            MXXMDW, KLX, ZJLX, YLJGMC, YPID, SFLSH, KH, ZJHM, MXXMSL, STFSJ,
+            XDKSMC, MXXMGG, YLJGDM, MXFYLB, TFBZ, JZLSH, ZXDM, YNZXKSMC, YZXMLXDM, MXXMLB,
+            ZXKSMC, XM, SFCZYXM, YNZXKSBM, SFMXID, YZXMLXMC, FYDM, BXLX, MXXMJE, ZXKSBM,
+            ZXMC, FPH)
+        values (
+            #{MXXMDJ, jdbcType=VARCHAR}, #{SFCZYGH, jdbcType=VARCHAR}, #{YNXDKSMC, jdbcType=VARCHAR}, #{FYMC, jdbcType=VARCHAR}, #{SFCZYSFZHM, jdbcType=VARCHAR}, to_date(#{TBRQ, jdbcType=VARCHAR}, 'YYYY-MM-DD'), #{MXXMBM, jdbcType=VARCHAR}, #{YNXDKSBM, jdbcType=VARCHAR}, #{MXXMMC, jdbcType=VARCHAR}, #{XDKSBM, jdbcType=VARCHAR},
+            #{MXXMDW, jdbcType=VARCHAR}, #{KLX, jdbcType=VARCHAR}, #{ZJLX, jdbcType=VARCHAR}, #{YLJGMC, jdbcType=VARCHAR}, #{YPID, jdbcType=VARCHAR}, #{SFLSH, jdbcType=VARCHAR}, #{KH, jdbcType=VARCHAR}, #{ZJHM, jdbcType=VARCHAR}, #{MXXMSL, jdbcType=VARCHAR}, to_date(#{STFSJ, jdbcType=VARCHAR}, 'YYYY-MM-DD HH24:MI:SS'),
+            #{XDKSMC, jdbcType=VARCHAR}, #{MXXMGG, jdbcType=VARCHAR}, #{YLJGDM, jdbcType=VARCHAR}, #{MXFYLB, jdbcType=VARCHAR}, #{TFBZ, jdbcType=VARCHAR}, #{JZLSH, jdbcType=VARCHAR}, #{ZXDM, jdbcType=VARCHAR}, #{YNZXKSMC, jdbcType=VARCHAR}, #{YZXMLXDM, jdbcType=VARCHAR}, #{MXXMLB, jdbcType=VARCHAR},
+            #{ZXKSMC, jdbcType=VARCHAR}, #{XM, jdbcType=VARCHAR}, #{SFCZYXM, jdbcType=VARCHAR}, #{YNZXKSBM, jdbcType=VARCHAR}, #{SFMXID, jdbcType=VARCHAR}, #{YZXMLXMC, jdbcType=VARCHAR}, #{FYDM, jdbcType=VARCHAR}, #{BXLX, jdbcType=VARCHAR}, #{MXXMJE, jdbcType=VARCHAR}, #{ZXKSBM, jdbcType=VARCHAR},
+            #{ZXMC, jdbcType=VARCHAR}, #{FPH, jdbcType=VARCHAR})
+    </insert>
+
+    <delete id="deleteZYCYXJBG" parameterType="HashMap">
+        delete from ZYCYXJBG where CYSJ >= to_date(#{begTime}, 'YYYY-MM-DD HH24:MI:SS') and CYSJ  &lt;= to_date(#{endTime}, 'YYYY-MM-DD HH24:MI:SS')
+    </delete>
+    <insert id="insertZYCYXJBG" parameterType="java.util.HashMap">
+        insert into ZYCYXJBG(
+            YNKSMC , ZYYSSFZHM, FYMC, KSDM , CYYZ, ZZYSGH, ZZYSSFZHM, TBRQ, CYQK, KLX,
+            ZJLX, YLJGMC, RYZD, SSGC, SWSJ, ZYYSGH, ZJHM, HYZK, ZYDM, SWYY,
+            ZLGC, KSMC , YLJGDM, JCHZ, SSQKYHDJDM, JLBS, YNKSDM , FYDM, NL, CYZD,
+            ZLJG, SFSSWBR, BQ, CYSJ, ZYTS, KH, CH, DJRQ, ZYH, XB,
+            ZYYSXM, JZLSH, QMRQSJ, RYZZTZ, XM, RYSJ, SFBLJP, BQZGDM, BXLX, ZZYSXM)
+        values (
+            #{YNKSMC , jdbcType=VARCHAR}, #{ZYYSSFZHM, jdbcType=VARCHAR}, #{FYMC, jdbcType=VARCHAR}, #{KSDM , jdbcType=VARCHAR}, #{CYYZ, jdbcType=VARCHAR}, #{ZZYSGH, jdbcType=VARCHAR}, #{ZZYSSFZHM, jdbcType=VARCHAR}, to_date(#{TBRQ, jdbcType=VARCHAR}, 'YYYY-MM-DD'), #{CYQK, jdbcType=VARCHAR}, #{KLX, jdbcType=VARCHAR},
+            #{ZJLX, jdbcType=VARCHAR}, #{YLJGMC, jdbcType=VARCHAR}, #{RYZD, jdbcType=VARCHAR}, #{SSGC, jdbcType=VARCHAR}, to_date(#{SWSJ, jdbcType=VARCHAR}, 'YYYY-MM-DD HH24:MI:SS'), #{ZYYSGH, jdbcType=VARCHAR}, #{ZJHM, jdbcType=VARCHAR}, #{HYZK, jdbcType=VARCHAR}, #{ZYDM, jdbcType=VARCHAR}, #{SWYY, jdbcType=VARCHAR},
+            #{ZLGC, jdbcType=VARCHAR}, #{KSMC , jdbcType=VARCHAR}, #{YLJGDM, jdbcType=VARCHAR}, #{JCHZ, jdbcType=VARCHAR}, #{SSQKYHDJDM, jdbcType=VARCHAR}, #{JLBS, jdbcType=VARCHAR}, #{YNKSDM , jdbcType=VARCHAR}, #{FYDM, jdbcType=VARCHAR}, #{NL, jdbcType=VARCHAR}, #{CYZD, jdbcType=VARCHAR},
+            #{ZLJG, jdbcType=VARCHAR}, #{SFSSWBR, jdbcType=VARCHAR}, #{BQ, jdbcType=VARCHAR}, to_date(#{CYSJ, jdbcType=VARCHAR}, 'YYYY-MM-DD HH24:MI:SS'), #{ZYTS, jdbcType=VARCHAR}, #{KH, jdbcType=VARCHAR}, #{CH, jdbcType=VARCHAR}, to_date(#{DJRQ, jdbcType=VARCHAR}, 'YYYY-MM-DD HH24:MI:SS'), #{ZYH, jdbcType=VARCHAR}, #{XB, jdbcType=VARCHAR},
+            #{ZYYSXM, jdbcType=VARCHAR}, #{JZLSH, jdbcType=VARCHAR}, to_date(#{QMRQSJ, jdbcType=VARCHAR}, 'YYYY-MM-DD HH24:MI:SS'), #{RYZZTZ, jdbcType=VARCHAR}, #{XM, jdbcType=VARCHAR}, to_date(#{RYSJ, jdbcType=VARCHAR}, 'YYYY-MM-DD HH24:MI:SS'), #{SFBLJP, jdbcType=VARCHAR}, #{BQZGDM, jdbcType=VARCHAR}, #{BXLX, jdbcType=VARCHAR}, #{ZZYSXM, jdbcType=VARCHAR})
+    </insert>
+
+    <delete id="deleteZYRYDJB" parameterType="HashMap">
+        delete from ZYRYDJB where DJRQ >= to_date(#{begTime}, 'YYYY-MM-DD HH24:MI:SS') and DJRQ  &lt;= to_date(#{endTime}, 'YYYY-MM-DD HH24:MI:SS')
+    </delete>
+    <insert id="insertZYRYDJB" parameterType="java.util.HashMap">
+        insert into ZYRYDJB(
+            RYZDBM, ZYYSSFZHM, BFH, TBRQ, RYKSBM, RYBQBM, NLS, KLX, ZJLX, NLY,
+            KH, RYBQMC, ZYYSGH, ZJHM, YBZHBZ, DJRQ, BCH, YLJGDM, ZYH, XB,
+            RYLYDM, ZYYSXM, JZLSH, ZFBZ, CZYXM, CSRQ, LGBZ, RYKSMC, XM, RYSJ,
+            CZYGH, RYZDMC, BXLX)
+        values (
+            #{RYZDBM, jdbcType=VARCHAR}, #{ZYYSSFZHM, jdbcType=VARCHAR}, #{BFH, jdbcType=VARCHAR}, to_date(#{TBRQ, jdbcType=VARCHAR}, 'YYYY-MM-DD'), #{RYKSBM, jdbcType=VARCHAR}, #{RYBQBM, jdbcType=VARCHAR}, #{NLS, jdbcType=VARCHAR}, #{KLX, jdbcType=VARCHAR}, #{ZJLX, jdbcType=VARCHAR}, #{NLY, jdbcType=VARCHAR},
+            #{KH, jdbcType=VARCHAR}, #{RYBQMC, jdbcType=VARCHAR}, #{ZYYSGH, jdbcType=VARCHAR}, #{ZJHM, jdbcType=VARCHAR}, #{YBZHBZ, jdbcType=VARCHAR}, to_date(#{DJRQ, jdbcType=VARCHAR}, 'YYYY-MM-DD HH24:MI:SS'), #{BCH, jdbcType=VARCHAR}, #{YLJGDM, jdbcType=VARCHAR}, #{ZYH, jdbcType=VARCHAR}, #{XB, jdbcType=VARCHAR},
+            #{RYLYDM, jdbcType=VARCHAR}, #{ZYYSXM, jdbcType=VARCHAR}, #{JZLSH, jdbcType=VARCHAR}, #{ZFBZ, jdbcType=VARCHAR}, #{CZYXM, jdbcType=VARCHAR}, to_date(#{CSRQ, jdbcType=VARCHAR}, 'YYYY-MM-DD'), #{LGBZ, jdbcType=VARCHAR}, #{RYKSMC, jdbcType=VARCHAR}, #{XM, jdbcType=VARCHAR}, to_date(#{RYSJ, jdbcType=VARCHAR}, 'YYYY-MM-DD HH24:MI:SS'),
+            #{CZYGH, jdbcType=VARCHAR}, #{RYZDMC, jdbcType=VARCHAR}, #{BXLX, jdbcType=VARCHAR})
+    </insert>
+
+    <delete id="deleteZYCYDJB" parameterType="HashMap">
+        delete from ZYCYDJB where CYSJ >= to_date(#{begTime}, 'YYYY-MM-DD HH24:MI:SS') and CYSJ  &lt;= to_date(#{endTime}, 'YYYY-MM-DD HH24:MI:SS')
+    </delete>
+    <insert id="insertZYCYDJB" parameterType="java.util.HashMap">
+        insert into ZYCYDJB(
+            CYBQMC, CYBQBM, TBRQ, RYKSBM, WDBZ, CYSJ, RYBQBM, KLX, ZJLX, KH,
+            RYBQMC, ZJHM, YBZHBZ, YLJGDM, ZYH, XB, CYKSMC, JZLSH, ZFBZ, CSRQ,
+            LGBZ, RYKSMC, XM, CYKSBM, RYSJ, TXBZ, BXLX)
+        values (
+            #{CYBQMC, jdbcType=VARCHAR}, #{CYBQBM, jdbcType=VARCHAR}, to_date(#{TBRQ, jdbcType=VARCHAR}, 'YYYY-MM-DD'), #{RYKSBM, jdbcType=VARCHAR}, #{WDBZ, jdbcType=VARCHAR}, to_date(#{CYSJ, jdbcType=VARCHAR}, 'YYYY-MM-DD HH24:MI:SS'), #{RYBQBM, jdbcType=VARCHAR}, #{KLX, jdbcType=VARCHAR}, #{ZJLX, jdbcType=VARCHAR}, #{KH, jdbcType=VARCHAR},
+            #{RYBQMC, jdbcType=VARCHAR}, #{ZJHM, jdbcType=VARCHAR}, #{YBZHBZ, jdbcType=VARCHAR}, #{YLJGDM, jdbcType=VARCHAR}, #{ZYH, jdbcType=VARCHAR}, #{XB, jdbcType=VARCHAR}, #{CYKSMC, jdbcType=VARCHAR}, #{JZLSH, jdbcType=VARCHAR}, #{ZFBZ, jdbcType=VARCHAR}, to_date(#{CSRQ, jdbcType=VARCHAR}, 'YYYY-MM-DD'),
+            #{LGBZ, jdbcType=VARCHAR}, #{RYKSMC, jdbcType=VARCHAR}, #{XM, jdbcType=VARCHAR}, #{CYKSBM, jdbcType=VARCHAR}, to_date(#{RYSJ, jdbcType=VARCHAR}, 'YYYY-MM-DD HH24:MI:SS'), #{TXBZ, jdbcType=VARCHAR}, #{BXLX, jdbcType=VARCHAR})
+    </insert>
+
+    <delete id="deleteZYYJJ" parameterType="HashMap">
+        delete from ZYYJJ where SFSJ >= to_date(#{begTime}, 'YYYY-MM-DD HH24:MI:SS') and SFSJ  &lt;= to_date(#{endTime}, 'YYYY-MM-DD HH24:MI:SS')
+    </delete>
+    <insert id="insertZYYJJ" parameterType="java.util.HashMap">
+        insert into ZYYJJ(
+            SFCZYGH, YLJGDM, YLFKFS, TBRQ, SFSJ, JZLSH, TFBZ, ZFJE, XM, KLX,
+            ZJLX, SFCZYXM, SFLSH, KH, ZJHM)
+        values (
+            #{SFCZYGH, jdbcType=VARCHAR}, #{YLJGDM, jdbcType=VARCHAR}, #{YLFKFS, jdbcType=VARCHAR}, to_date(#{TBRQ, jdbcType=VARCHAR}, 'YYYY-MM-DD'), to_date(#{SFSJ, jdbcType=VARCHAR}, 'YYYY-MM-DD HH24:MI:SS'), #{JZLSH, jdbcType=VARCHAR}, #{TFBZ, jdbcType=VARCHAR}, #{ZFJE, jdbcType=VARCHAR}, #{XM, jdbcType=VARCHAR}, #{KLX, jdbcType=VARCHAR},
+            #{ZJLX, jdbcType=VARCHAR}, #{SFCZYXM, jdbcType=VARCHAR}, #{SFLSH, jdbcType=VARCHAR}, #{KH, jdbcType=VARCHAR}, #{ZJHM, jdbcType=VARCHAR})
+    </insert>
+
+    <delete id="deleteZYFYFSMX" parameterType="HashMap">
+        delete from ZYFYFSMX where STFSJ >= to_date(#{begTime}, 'YYYY-MM-DD HH24:MI:SS') and STFSJ  &lt;= to_date(#{endTime}, 'YYYY-MM-DD HH24:MI:SS')
+    </delete>
+    <insert id="insertZYFYFSMX" parameterType="java.util.HashMap">
+        insert into ZYFYFSMX(
+            MXXMDJ, STFSJ, MXXMGG, YLJGDM, MXFYLB, TBRQ, TFBZ, JZLSH, MXXMBM, ZXDM,
+            MXXMLB, MXXMMC, XM, MXXMDW, KLX, ZJLX, SFMXID, KH, MXXMJE, ZJHM,
+            MXXMSL)
+        values (
+            #{MXXMDJ, jdbcType=VARCHAR}, to_date(#{STFSJ, jdbcType=VARCHAR}, 'YYYY-MM-DD HH24:MI:SS'), #{MXXMGG, jdbcType=VARCHAR}, #{YLJGDM, jdbcType=VARCHAR}, #{MXFYLB, jdbcType=VARCHAR}, to_date(#{TBRQ, jdbcType=VARCHAR}, 'YYYY-MM-DD'), #{TFBZ, jdbcType=VARCHAR}, #{JZLSH, jdbcType=VARCHAR}, #{MXXMBM, jdbcType=VARCHAR}, #{ZXDM, jdbcType=VARCHAR},
+            #{MXXMLB, jdbcType=VARCHAR}, #{MXXMMC, jdbcType=VARCHAR}, #{XM, jdbcType=VARCHAR}, #{MXXMDW, jdbcType=VARCHAR}, #{KLX, jdbcType=VARCHAR}, #{ZJLX, jdbcType=VARCHAR}, #{SFMXID, jdbcType=VARCHAR}, #{KH, jdbcType=VARCHAR}, #{MXXMJE, jdbcType=VARCHAR}, #{ZJHM, jdbcType=VARCHAR},
+            #{MXXMSL, jdbcType=VARCHAR})
+    </insert>
+
+    <!--西医病案首页-->
+    <delete id="deleteBA_SYJBKByPK" parameterType="HashMap">
+        delete from BA_SYJBK where YLJGDM = #{YLJGDM, jdbcType=VARCHAR} and JZLSH = #{JZLSH, jdbcType=VARCHAR}
+    </delete>
+    <insert id="insertBA_SYJBK" parameterType="java.util.HashMap">
+        insert into BA_SYJBK(
+            ZYYSBM, CSDSSMC, LXRDZ, ZYYSSFZHM, YNCYKSMC, KZRBM, HJDZSSMC, ZZYJH, CHENGYF, ZZYSSFZHM,
+            TBRQ, ZRHSSFZHM, QZRQ, HJDZQXMC, ZRYSSFZHM, KLX, YBZLCZF, YLJGMC, GZDWDZCMC, BLZDF,
+            CSDQXMC, SSYYCXCLF, LCLJGLDM, CYZDSL, XZZXMC, XZZDH, KZRZYZSBM, HYZK, SYSZDF, ZKYS,
+            ZYDM, RHJY, CSNY, BRXB, YLJGDM, QTF1, QTF2, CYRQ, ZKHSSFZHM, YNRYZDMC,
+            LXDH, GZDWDZXMC, MZF, LYFS, KZRSFZHM, SFMDTBL, YXXZDF, GZDWDZQXMC, XZZQXMC, ZKYSBM,
+            DWDZ, KFF, SSZLF, ZFJE, JGLB, HJDZDZCMC, SFYNBL, SFZLBDM, NXYZLZPF, BRXM,
+            EJHLTS, ZRYSBM, XZZSSMC, ZRHSZYZSBM, LXGX, YNMJZZDMC, XYF, GZDWDZSMC, ZRHS, KJYWF,
+            BASYLX, QJCS, JZLSH, HKYB, ZZYMD, BDBLZPF, ZZYS, RYBQYZCD, DWDH, ZRYS,
+            HJDZDZXMC, YNRYZDBM, ZLYYCXCLF, SFJXCFBL, RYCYZDFHQK, YNRYKSMC, SXF, FSYBLZDFHQK, YNMZZDBM, SFDBZBL,
+            NL_BABY, GJDM, YBYLFWF, RHXX, ZKHSBM, RYSBQ, JCYYCXCLF, ZZYSBM, XZZ, BAHM,
+            ZRYSZYZSBM, LXRDZSMC, BARQ, XZZYB, ZYZLF, ZFY, YWGM, ZZYSZYZSBM, BAZL, CAOYF,
+            LCZDXMF, ZYYS, SQYSHZDFHQK, XBYZLZPF, YNCYKS, QDBLZPF, MZCYZDFHQK, FYDM, LXRDZXMC, LXRDZQXMC,
+            KZR, XZZCMC, CGCS, JYKH, LXRDZSSMC, XSNL, LCYBLZDFHQK, RYCS, MZDM, ZYTS,
+            LCWLZLF, YNRYKS, ZKHS, XZZSMC, RYTJ, RYRQ, GZDWSSMC, LXRM, JGSSMC, SFWZBL,
+            SFZH, ZKYSSFZHM, SSF, FSSZLXMF, LXRDZCMC, CRBBG, ZYYSZYZSBM, ZRHSBM, JGSMC, HKDZ,
+            CSDDSMC, DWYB, HJDZSMC)
+        values (
+            #{ZYYSBM, jdbcType=VARCHAR}, #{CSDSSMC, jdbcType=VARCHAR}, #{LXRDZ, jdbcType=VARCHAR}, #{ZYYSSFZHM, jdbcType=VARCHAR}, #{YNCYKSMC, jdbcType=VARCHAR}, #{KZRBM, jdbcType=VARCHAR}, #{HJDZSSMC, jdbcType=VARCHAR}, #{ZZYJH, jdbcType=VARCHAR}, #{CHENGYF, jdbcType=VARCHAR}, #{ZZYSSFZHM, jdbcType=VARCHAR},
+            to_date(#{TBRQ, jdbcType=VARCHAR}, 'YYYY-MM-DD HH24:MI:SS'), #{ZRHSSFZHM, jdbcType=VARCHAR}, to_date(#{QZRQ, jdbcType=VARCHAR}, 'YYYY-MM-DD'), #{HJDZQXMC, jdbcType=VARCHAR}, #{ZRYSSFZHM, jdbcType=VARCHAR}, #{KLX, jdbcType=VARCHAR}, #{YBZLCZF, jdbcType=VARCHAR}, #{YLJGMC, jdbcType=VARCHAR}, #{GZDWDZCMC, jdbcType=VARCHAR}, #{BLZDF, jdbcType=VARCHAR},
+            #{CSDQXMC, jdbcType=VARCHAR}, #{SSYYCXCLF, jdbcType=VARCHAR}, #{LCLJGLDM, jdbcType=VARCHAR}, #{CYZDSL, jdbcType=VARCHAR}, #{XZZXMC, jdbcType=VARCHAR}, #{XZZDH, jdbcType=VARCHAR}, #{KZRZYZSBM, jdbcType=VARCHAR}, #{HYZK, jdbcType=VARCHAR}, #{SYSZDF, jdbcType=VARCHAR}, #{ZKYS, jdbcType=VARCHAR},
+            #{ZYDM, jdbcType=VARCHAR}, #{RHJY, jdbcType=VARCHAR}, to_date(#{CSNY, jdbcType=VARCHAR}, 'YYYY-MM-DD'), #{BRXB, jdbcType=VARCHAR}, #{YLJGDM, jdbcType=VARCHAR}, #{QTF1, jdbcType=VARCHAR}, #{QTF2, jdbcType=VARCHAR}, to_date(#{CYRQ, jdbcType=VARCHAR}, 'YYYY-MM-DD'), #{ZKHSSFZHM, jdbcType=VARCHAR}, #{YNRYZDMC, jdbcType=VARCHAR},
+            #{LXDH, jdbcType=VARCHAR}, #{GZDWDZXMC, jdbcType=VARCHAR}, #{MZF, jdbcType=VARCHAR}, #{LYFS, jdbcType=VARCHAR}, #{KZRSFZHM, jdbcType=VARCHAR}, #{SFMDTBL, jdbcType=VARCHAR}, #{YXXZDF, jdbcType=VARCHAR}, #{GZDWDZQXMC, jdbcType=VARCHAR}, #{XZZQXMC, jdbcType=VARCHAR}, #{ZKYSBM, jdbcType=VARCHAR},
+            #{DWDZ, jdbcType=VARCHAR}, #{KFF, jdbcType=VARCHAR}, #{SSZLF, jdbcType=VARCHAR}, #{ZFJE, jdbcType=VARCHAR}, #{JGLB, jdbcType=VARCHAR}, #{HJDZDZCMC, jdbcType=VARCHAR}, #{SFYNBL, jdbcType=VARCHAR}, #{SFZLBDM, jdbcType=VARCHAR}, #{NXYZLZPF, jdbcType=VARCHAR}, #{BRXM, jdbcType=VARCHAR},
+            #{EJHLTS, jdbcType=VARCHAR}, #{ZRYSBM, jdbcType=VARCHAR}, #{XZZSSMC, jdbcType=VARCHAR}, #{ZRHSZYZSBM, jdbcType=VARCHAR}, #{LXGX, jdbcType=VARCHAR}, #{YNMJZZDMC, jdbcType=VARCHAR}, #{XYF, jdbcType=VARCHAR}, #{GZDWDZSMC, jdbcType=VARCHAR}, #{ZRHS, jdbcType=VARCHAR}, #{KJYWF, jdbcType=VARCHAR},
+            #{BASYLX, jdbcType=VARCHAR}, #{QJCS, jdbcType=VARCHAR}, #{JZLSH, jdbcType=VARCHAR}, #{HKYB, jdbcType=VARCHAR}, #{ZZYMD, jdbcType=VARCHAR}, #{BDBLZPF, jdbcType=VARCHAR}, #{ZZYS, jdbcType=VARCHAR}, #{RYBQYZCD, jdbcType=VARCHAR}, #{DWDH, jdbcType=VARCHAR}, #{ZRYS, jdbcType=VARCHAR},
+            #{HJDZDZXMC, jdbcType=VARCHAR}, #{YNRYZDBM, jdbcType=VARCHAR}, #{ZLYYCXCLF, jdbcType=VARCHAR}, #{SFJXCFBL, jdbcType=VARCHAR}, #{RYCYZDFHQK, jdbcType=VARCHAR}, #{YNRYKSMC, jdbcType=VARCHAR}, #{SXF, jdbcType=VARCHAR}, #{FSYBLZDFHQK, jdbcType=VARCHAR}, #{YNMZZDBM, jdbcType=VARCHAR}, #{SFDBZBL, jdbcType=VARCHAR},
+            #{NL_BABY, jdbcType=VARCHAR}, #{GJDM, jdbcType=VARCHAR}, #{YBYLFWF, jdbcType=VARCHAR}, #{RHXX, jdbcType=VARCHAR}, #{ZKHSBM, jdbcType=VARCHAR}, #{RYSBQ, jdbcType=VARCHAR}, #{JCYYCXCLF, jdbcType=VARCHAR}, #{ZZYSBM, jdbcType=VARCHAR}, #{XZZ, jdbcType=VARCHAR}, #{BAHM, jdbcType=VARCHAR},
+            #{ZRYSZYZSBM, jdbcType=VARCHAR}, #{LXRDZSMC, jdbcType=VARCHAR}, to_date(#{BARQ, jdbcType=VARCHAR}, 'YYYY-MM-DD'), #{XZZYB, jdbcType=VARCHAR}, #{ZYZLF, jdbcType=VARCHAR}, #{ZFY, jdbcType=VARCHAR}, #{YWGM, jdbcType=VARCHAR}, #{ZZYSZYZSBM, jdbcType=VARCHAR}, #{BAZL, jdbcType=VARCHAR}, #{CAOYF, jdbcType=VARCHAR},
+            #{LCZDXMF, jdbcType=VARCHAR}, #{ZYYS, jdbcType=VARCHAR}, #{SQYSHZDFHQK, jdbcType=VARCHAR}, #{XBYZLZPF, jdbcType=VARCHAR}, #{YNCYKS, jdbcType=VARCHAR}, #{QDBLZPF, jdbcType=VARCHAR}, #{MZCYZDFHQK, jdbcType=VARCHAR}, #{FYDM, jdbcType=VARCHAR}, #{LXRDZXMC, jdbcType=VARCHAR}, #{LXRDZQXMC, jdbcType=VARCHAR},
+            #{KZR, jdbcType=VARCHAR}, #{XZZCMC, jdbcType=VARCHAR}, #{CGCS, jdbcType=VARCHAR}, #{JYKH, jdbcType=VARCHAR}, #{LXRDZSSMC, jdbcType=VARCHAR}, #{XSNL, jdbcType=VARCHAR}, #{LCYBLZDFHQK, jdbcType=VARCHAR}, #{RYCS, jdbcType=VARCHAR}, #{MZDM, jdbcType=VARCHAR}, #{ZYTS, jdbcType=VARCHAR},
+            #{LCWLZLF, jdbcType=VARCHAR}, #{YNRYKS, jdbcType=VARCHAR}, #{ZKHS, jdbcType=VARCHAR}, #{XZZSMC, jdbcType=VARCHAR}, #{RYTJ, jdbcType=VARCHAR}, to_date(#{RYRQ, jdbcType=VARCHAR}, 'YYYY-MM-DD'), #{GZDWSSMC, jdbcType=VARCHAR}, #{LXRM, jdbcType=VARCHAR}, #{JGSSMC, jdbcType=VARCHAR}, #{SFWZBL, jdbcType=VARCHAR},
+            #{SFZH, jdbcType=VARCHAR}, #{ZKYSSFZHM, jdbcType=VARCHAR}, #{SSF, jdbcType=VARCHAR}, #{FSSZLXMF, jdbcType=VARCHAR}, #{LXRDZCMC, jdbcType=VARCHAR}, #{CRBBG, jdbcType=VARCHAR}, #{ZYYSZYZSBM, jdbcType=VARCHAR}, #{ZRHSBM, jdbcType=VARCHAR}, #{JGSMC, jdbcType=VARCHAR}, #{HKDZ, jdbcType=VARCHAR},
+            #{CSDDSMC, jdbcType=VARCHAR}, #{DWYB, jdbcType=VARCHAR}, #{HJDZSMC, jdbcType=VARCHAR})
+    </insert>
+
+    <!--西医病案首页手术-->
+    <delete id="deleteBA_SYSSK" parameterType="HashMap">
+        delete from BA_SYSSK where SSRQ >= to_date(#{begTime}, 'YYYY-MM-DD HH24:MI:SS') and SSRQ  &lt;= to_date(#{endTime}, 'YYYY-MM-DD HH24:MI:SS')
+    </delete>
+    <insert id="insertBA_SYSSK" parameterType="java.util.HashMap">
+        insert into BA_SYSSK(
+            YNMZDM, SFSDYQTSSJCZ, FYMC, SSYZSFZHM, TBRQ, MZYSSFZH, SSDM, SSMC, SSYZBM, MZYSBM,
+            MZDM, MZFJ, YNMZMC, YLJGMC, SSYSBM, YNSSMC, SSQKLBDM, SSYS, SSYSSFZHM, MZYS,
+            SSQKLBMC, SSYZ, MZMC, YLJGDM, SSYSZYZSBH, YHLB, JZLSH, YNSSDM, SSLB, SSEZSFZHM,
+            SFSZYSSJCZ, SSEZ, SSEZBM, SSXH, SSRQ, FYDM, SSJB, SSCXSJ)
+        values (
+            #{YNMZDM, jdbcType=VARCHAR}, #{SFSDYQTSSJCZ, jdbcType=VARCHAR}, #{FYMC, jdbcType=VARCHAR}, #{SSYZSFZHM, jdbcType=VARCHAR}, to_date(#{TBRQ, jdbcType=VARCHAR}, 'YYYY-MM-DD'), #{MZYSSFZH, jdbcType=VARCHAR}, #{SSDM, jdbcType=VARCHAR}, #{SSMC, jdbcType=VARCHAR}, #{SSYZBM, jdbcType=VARCHAR}, #{MZYSBM, jdbcType=VARCHAR},
+            #{MZDM, jdbcType=VARCHAR}, #{MZFJ, jdbcType=VARCHAR}, #{YNMZMC, jdbcType=VARCHAR}, #{YLJGMC, jdbcType=VARCHAR}, #{SSYSBM, jdbcType=VARCHAR}, #{YNSSMC, jdbcType=VARCHAR}, #{SSQKLBDM, jdbcType=VARCHAR}, #{SSYS, jdbcType=VARCHAR}, #{SSYSSFZHM, jdbcType=VARCHAR}, #{MZYS, jdbcType=VARCHAR},
+            #{SSQKLBMC, jdbcType=VARCHAR}, #{SSYZ, jdbcType=VARCHAR}, #{MZMC, jdbcType=VARCHAR}, #{YLJGDM, jdbcType=VARCHAR}, #{SSYSZYZSBH, jdbcType=VARCHAR}, #{YHLB, jdbcType=VARCHAR}, #{JZLSH, jdbcType=VARCHAR}, #{YNSSDM, jdbcType=VARCHAR}, #{SSLB, jdbcType=VARCHAR}, #{SSEZSFZHM, jdbcType=VARCHAR},
+            #{SFSZYSSJCZ, jdbcType=VARCHAR}, #{SSEZ, jdbcType=VARCHAR}, #{SSEZBM, jdbcType=VARCHAR}, #{SSXH, jdbcType=VARCHAR}, to_date(#{SSRQ, jdbcType=VARCHAR}, 'YYYY-MM-DD HH24:MI:SS'), #{FYDM, jdbcType=VARCHAR}, #{SSJB, jdbcType=VARCHAR}, #{SSCXSJ, jdbcType=VARCHAR})
+    </insert>
+
+    <!--西医病案首页出院诊断-->
+    <delete id="deleteBA_SYZDKByPk" parameterType="HashMap">
+        delete from BA_SYZDK where YLJGDM = #{YLJGDM, jdbcType=VARCHAR} and ZDXH = #{ZDXH, jdbcType=VARCHAR} and JZLSH = #{JZLSH, jdbcType=VARCHAR}
+    </delete>
+    <insert id="insertBA_SYZDK" parameterType="java.util.HashMap">
+        insert into BA_SYZDK(
+            YNZDMC, YLJGDM, FYMC, ZDMC, TBRQ, JZLSH, ZGQK, RYBQ, ZDXH, YLJGMC,
+            SFZYZD, ZDDM, SFQTDYZD, YNZDDM, FYDM, ZXYZDBS)
+        values (
+            #{YNZDMC, jdbcType=VARCHAR}, #{YLJGDM, jdbcType=VARCHAR}, #{FYMC, jdbcType=VARCHAR}, #{ZDMC, jdbcType=VARCHAR}, to_date(#{TBRQ, jdbcType=VARCHAR}, 'YYYY-MM-DD'), #{JZLSH, jdbcType=VARCHAR}, #{ZGQK, jdbcType=VARCHAR}, #{RYBQ, jdbcType=VARCHAR}, #{ZDXH, jdbcType=VARCHAR}, #{YLJGMC, jdbcType=VARCHAR},
+            #{SFZYZD, jdbcType=VARCHAR}, #{ZDDM, jdbcType=VARCHAR}, #{SFQTDYZD, jdbcType=VARCHAR}, #{YNZDDM, jdbcType=VARCHAR}, #{FYDM, jdbcType=VARCHAR}, #{ZXYZDBS, jdbcType=VARCHAR})
+    </insert>
+
+    <!--诊断明细报告-->
+    <delete id="deleteZYZDMXBG" parameterType="HashMap">
+        delete from ZYZDMXBG where ZDSJ >= to_date(#{begTime}, 'YYYY-MM-DD HH24:MI:SS') and ZDSJ  &lt;= to_date(#{endTime}, 'YYYY-MM-DD HH24:MI:SS')
+    </delete>
+    <insert id="insertZYZDMXBG" parameterType="java.util.HashMap">
+        insert into ZYZDMXBG(
+            ZYZDBZ, MZZYBZ, YLJGDM, ZDSJ, BMLX, ZDLB, TBRQ, ZYZBZZBZ, YZDBZ, JZLSH,
+            ZDSM, RYBQDM, KLX, ZJLX, CYQKBM, ZYZDLSH, ZDBM, KH, ZDLXQF, ZJHM)
+        values (
+            #{ZYZDBZ, jdbcType=VARCHAR}, #{MZZYBZ, jdbcType=VARCHAR}, #{YLJGDM, jdbcType=VARCHAR}, to_date(#{ZDSJ, jdbcType=VARCHAR}, 'YYYY-MM-DD HH24:MI:SS'), #{BMLX, jdbcType=VARCHAR}, #{ZDLB, jdbcType=VARCHAR}, to_date(#{TBRQ, jdbcType=VARCHAR}, 'YYYY-MM-DD'), #{ZYZBZZBZ, jdbcType=VARCHAR}, #{YZDBZ, jdbcType=VARCHAR}, #{JZLSH, jdbcType=VARCHAR},
+            #{ZDSM, jdbcType=VARCHAR}, #{RYBQDM, jdbcType=VARCHAR}, #{KLX, jdbcType=VARCHAR}, #{ZJLX, jdbcType=VARCHAR}, #{CYQKBM, jdbcType=VARCHAR}, #{ZYZDLSH, jdbcType=VARCHAR}, #{ZDBM, jdbcType=VARCHAR}, #{KH, jdbcType=VARCHAR}, #{ZDLXQF, jdbcType=VARCHAR}, #{ZJHM, jdbcType=VARCHAR})
+    </insert>
+
+    <!--检验记录表-->
+    <delete id="deleteJYJLBByPk" parameterType="HashMap">
+        delete from JYJLB where YLJGDM = #{YLJGDM, jdbcType=VARCHAR} and JYJLLSH = #{JYJLLSH, jdbcType=VARCHAR} and BGRQ = to_date(#{BGRQ, jdbcType=VARCHAR}, 'YYYY-MM-DD HH24:MI:SS')
+    </delete>
+    <insert id="insertJYJLB" parameterType="java.util.HashMap">
+        insert into JYJLB(
+            YNBGKSMC, JYMXSL, BGDLBBM, BBMC, TBRQ, YYJYTCBM, BGDLBMC, SQYLJGMC, YNSQKSBM, JYBGBH,
+            JYJLLSH, SHYSGH, YYJYTCMC, SQSJ, KLX, ZJLX, BBDM, YLJGMC, JSBBSJ, YNBGKSBM,
+            YNSQKSMC, SQYSGH, JLLB, BGYSSFZHM, BGRQ, KH, ZJHM, CJSJ, JYBGMC, CH,
+            JYBBH, BGYSXM, SHYSXM, YLJGDM, XB, SQYSXM, JYRQ, JZLSH, SHRQ, BGYSGH,
+            XM, SHYSSFZHM, BQMC, SQYSSFZHM, SQYLJGDM, FYDM, NL)
+        values (
+            #{YNBGKSMC, jdbcType=VARCHAR}, #{JYMXSL, jdbcType=VARCHAR}, #{BGDLBBM, jdbcType=VARCHAR}, #{BBMC, jdbcType=VARCHAR}, to_date(#{TBRQ, jdbcType=VARCHAR}, 'YYYY-MM-DD'), #{YYJYTCBM, jdbcType=VARCHAR}, #{BGDLBMC, jdbcType=VARCHAR}, #{SQYLJGMC, jdbcType=VARCHAR}, #{YNSQKSBM, jdbcType=VARCHAR}, #{JYBGBH, jdbcType=VARCHAR},
+            #{JYJLLSH, jdbcType=VARCHAR}, #{SHYSGH, jdbcType=VARCHAR}, #{YYJYTCMC, jdbcType=VARCHAR}, to_date(#{SQSJ, jdbcType=VARCHAR}, 'YYYY-MM-DD HH24:MI:SS'), #{KLX, jdbcType=VARCHAR}, #{ZJLX, jdbcType=VARCHAR}, #{BBDM, jdbcType=VARCHAR}, #{YLJGMC, jdbcType=VARCHAR}, to_date(#{JSBBSJ, jdbcType=VARCHAR}, 'YYYY-MM-DD HH24:MI:SS'), #{YNBGKSBM, jdbcType=VARCHAR},
+            #{YNSQKSMC, jdbcType=VARCHAR}, #{SQYSGH, jdbcType=VARCHAR}, #{JLLB, jdbcType=VARCHAR}, #{BGYSSFZHM, jdbcType=VARCHAR}, to_date(#{BGRQ, jdbcType=VARCHAR}, 'YYYY-MM-DD HH24:MI:SS'), #{KH, jdbcType=VARCHAR}, #{ZJHM, jdbcType=VARCHAR}, to_date(#{CJSJ, jdbcType=VARCHAR}, 'YYYY-MM-DD HH24:MI:SS'), #{JYBGMC, jdbcType=VARCHAR}, #{CH, jdbcType=VARCHAR},
+            #{JYBBH, jdbcType=VARCHAR}, #{BGYSXM, jdbcType=VARCHAR}, #{SHYSXM, jdbcType=VARCHAR}, #{YLJGDM, jdbcType=VARCHAR}, #{XB, jdbcType=VARCHAR}, #{SQYSXM, jdbcType=VARCHAR}, to_date(#{JYRQ, jdbcType=VARCHAR}, 'YYYY-MM-DD HH24:MI:SS'), #{JZLSH, jdbcType=VARCHAR}, to_date(#{SHRQ, jdbcType=VARCHAR}, 'YYYY-MM-DD HH24:MI:SS'), #{BGYSGH, jdbcType=VARCHAR},
+            #{XM, jdbcType=VARCHAR}, #{SHYSSFZHM, jdbcType=VARCHAR}, #{BQMC, jdbcType=VARCHAR}, #{SQYSSFZHM, jdbcType=VARCHAR}, #{SQYLJGDM, jdbcType=VARCHAR}, #{FYDM, jdbcType=VARCHAR}, #{NL, jdbcType=VARCHAR})
+    </insert>
+
+    <!--检验明细表-->
+    <delete id="deleteJYMXBByPk" parameterType="HashMap">
+        delete from JYMXB where YLJGDM = #{YLJGDM, jdbcType=VARCHAR} and JYMXLSH = #{JYMXLSH, jdbcType=VARCHAR}
+    </delete>
+    <insert id="insertJYMXB" parameterType="java.util.HashMap">
+        insert into JYMXB(
+            YNJCKSMC, SFSWJZ, DYXH, YLJGDM, JCRGH, YNJCKSBM, TBRQ, JCRSFZHM, JYJLDW, JYLSH,
+            JYJG, JYXMMC, CKZFW, JYMXLSH, YLJGMC, JYJGLX, JYXMDM, BGRQ, JCRXM, FYDM,
+            JYLBDM, JGTS)
+        values (
+            #{YNJCKSMC, jdbcType=VARCHAR}, #{SFSWJZ, jdbcType=VARCHAR}, #{DYXH, jdbcType=VARCHAR}, #{YLJGDM, jdbcType=VARCHAR}, #{JCRGH, jdbcType=VARCHAR}, #{YNJCKSBM, jdbcType=VARCHAR}, to_date(#{TBRQ, jdbcType=VARCHAR}, 'YYYY-MM-DD'), #{JCRSFZHM, jdbcType=VARCHAR}, #{JYJLDW, jdbcType=VARCHAR}, #{JYLSH, jdbcType=VARCHAR},
+            #{JYJG, jdbcType=VARCHAR}, #{JYXMMC, jdbcType=VARCHAR}, #{CKZFW, jdbcType=VARCHAR}, #{JYMXLSH, jdbcType=VARCHAR}, #{YLJGMC, jdbcType=VARCHAR}, #{JYJGLX, jdbcType=VARCHAR}, #{JYXMDM, jdbcType=VARCHAR}, to_date(#{BGRQ, jdbcType=VARCHAR}, 'YYYY-MM-DD'), #{JCRXM, jdbcType=VARCHAR}, #{FYDM, jdbcType=VARCHAR},
+            #{JYLBDM, jdbcType=VARCHAR}, #{JGTS, jdbcType=VARCHAR})
+    </insert>
+
+    <!--检验收费项目明细表-->
+    <delete id="deleteJYSFXMBByPk" parameterType="HashMap">
+        delete from JYSFXMB where YLJGDM = #{YLJGDM, jdbcType=VARCHAR} and JYJLLSH = #{JYJLLSH, jdbcType=VARCHAR} and BGRQ = to_date(#{BGRQ, jdbcType=VARCHAR}, 'YYYY-MM-DD HH24:MI:SS') and JYSFXMMXLSH = #{JYSFXMMXLSH, jdbcType=VARCHAR}
+    </delete>
+    <insert id="insertJYSFXMB" parameterType="java.util.HashMap">
+        insert into JYSFXMB(
+            JYJLLSH, SFXMDM, YLJGMC, YLJGDM, JYSFXMMXLSH, TBRQ, BGRQ, SFXMMC, FYDM)
+        values (
+            #{JYJLLSH, jdbcType=VARCHAR}, #{SFXMDM, jdbcType=VARCHAR}, #{YLJGMC, jdbcType=VARCHAR}, #{YLJGDM, jdbcType=VARCHAR},
+            #{JYSFXMMXLSH, jdbcType=VARCHAR}, to_date(#{TBRQ, jdbcType=VARCHAR}, 'YYYY-MM-DD'), to_date(#{BGRQ, jdbcType=VARCHAR}, 'YYYY-MM-DD HH24:MI:SS'), #{SFXMMC, jdbcType=VARCHAR}, #{FYDM, jdbcType=VARCHAR})
+    </insert>
+
+    <!--检查记录表-->
+    <delete id="deleteJCJLBByPk" parameterType="HashMap">
+        delete from JCJLB where YLJGDM = #{YLJGDM, jdbcType=VARCHAR} and JCLSH = #{JCLSH, jdbcType=VARCHAR}
+    </delete>
+    <insert id="insertJCJLB" parameterType="java.util.HashMap">
+        insert into JCJLB(
+            YNBGKSMC, YNJCKSMC, BGYLJGDM, TBRQ, SQYLJGMC, JCRQSJ, JCYSGH, KLX, ZJLX, YLJGMC,
+            YNSQKSMC, SQYSGH, JLLB, BGYSSFZHM, JCXMMC, YXBZ, ZJHM, SFSWJZ, JCJGDM, YLJGDM,
+            SQYSXM, BGYLJGMC, TWBGTXSL, SQRQ, FYDM, JCLXMC, KZBGSL, SQDH, YNJCKSBM, YNSQKSBM,
+            YXFWQDZ, BGKSBM, JCLXDM, YNBGKSBM, BGRQ, KH, YXURL, JCUID, BGYSXM, BGDBH,
+            JCXMDM, JCYSXM, BGKSMC, XB, JZLSH, JCYSSFZHM, BGYSGH, XM, JCLSH, SQYSSFZHM,
+            SQYLJGDM)
+        values (
+            #{YNBGKSMC, jdbcType=VARCHAR}, #{YNJCKSMC, jdbcType=VARCHAR}, #{BGYLJGDM, jdbcType=VARCHAR}, to_date(#{TBRQ, jdbcType=VARCHAR}, 'YYYY-MM-DD'), #{SQYLJGMC, jdbcType=VARCHAR}, to_date(#{JCRQSJ, jdbcType=VARCHAR}, 'YYYY-MM-DD HH24:MI:SS'), #{JCYSGH, jdbcType=VARCHAR}, #{KLX, jdbcType=VARCHAR}, #{ZJLX, jdbcType=VARCHAR}, #{YLJGMC, jdbcType=VARCHAR},
+            #{YNSQKSMC, jdbcType=VARCHAR}, #{SQYSGH, jdbcType=VARCHAR}, #{JLLB, jdbcType=VARCHAR}, #{BGYSSFZHM, jdbcType=VARCHAR}, #{JCXMMC, jdbcType=VARCHAR}, #{YXBZ, jdbcType=VARCHAR}, #{ZJHM, jdbcType=VARCHAR}, #{SFSWJZ, jdbcType=VARCHAR}, #{JCJGDM, jdbcType=VARCHAR}, #{YLJGDM, jdbcType=VARCHAR},
+            #{SQYSXM, jdbcType=VARCHAR}, #{BGYLJGMC, jdbcType=VARCHAR}, #{TWBGTXSL, jdbcType=VARCHAR}, to_date(#{SQRQ, jdbcType=VARCHAR}, 'YYYY-MM-DD HH24:MI:SS'), #{FYDM, jdbcType=VARCHAR}, #{JCLXMC, jdbcType=VARCHAR}, #{KZBGSL, jdbcType=VARCHAR}, #{SQDH, jdbcType=VARCHAR}, #{YNJCKSBM, jdbcType=VARCHAR}, #{YNSQKSBM, jdbcType=VARCHAR},
+            #{YXFWQDZ, jdbcType=VARCHAR}, #{BGKSBM, jdbcType=VARCHAR}, #{JCLXDM, jdbcType=VARCHAR}, #{YNBGKSBM, jdbcType=VARCHAR}, to_date(#{BGRQ, jdbcType=VARCHAR}, 'YYYY-MM-DD HH24:MI:SS'), #{KH, jdbcType=VARCHAR}, #{YXURL, jdbcType=VARCHAR}, #{JCUID, jdbcType=VARCHAR}, #{BGYSXM, jdbcType=VARCHAR}, #{BGDBH, jdbcType=VARCHAR},
+            #{JCXMDM, jdbcType=VARCHAR}, #{JCYSXM, jdbcType=VARCHAR}, #{BGKSMC, jdbcType=VARCHAR}, #{XB, jdbcType=VARCHAR}, #{JZLSH, jdbcType=VARCHAR}, #{JCYSSFZHM, jdbcType=VARCHAR}, #{BGYSGH, jdbcType=VARCHAR}, #{XM, jdbcType=VARCHAR}, #{JCLSH, jdbcType=VARCHAR}, #{SQYSSFZHM, jdbcType=VARCHAR},
+            #{SQYLJGDM, jdbcType=VARCHAR})
+    </insert>
+
+    <!-- 检查收费项目明细表 -->
+    <delete id="deleteJCJLZBByPK" parameterType="HashMap">
+        delete from JCJLZB where YLJGDM = #{YLJGDM, jdbcType=VARCHAR} and JCLSH = #{JCLSH, jdbcType=VARCHAR} and JCJLZLSH = #{JCJLZLSH, jdbcType=VARCHAR}
+    </delete>
+    <insert id="insertJCJLZB" parameterType="java.util.HashMap">
+        insert into JCJLZB(
+            YLJGDM, JCSFXMMC, TBRQ, JCBW, JZLSH, YYJCBWMC, YYJCBWBM, JCBWMC, JCSFXMDM, YLJGMC,
+            JCLSH, JCJLZLSH, FYDM)
+        values (
+            #{YLJGDM, jdbcType=VARCHAR}, #{JCSFXMMC, jdbcType=VARCHAR}, to_date(#{TBRQ, jdbcType=VARCHAR}, 'YYYY-MM-DD'), #{JCBW, jdbcType=VARCHAR}, #{JZLSH, jdbcType=VARCHAR}, #{YYJCBWMC, jdbcType=VARCHAR}, #{YYJCBWBM, jdbcType=VARCHAR}, #{JCBWMC, jdbcType=VARCHAR}, #{JCSFXMDM, jdbcType=VARCHAR}, #{YLJGMC, jdbcType=VARCHAR},
+            #{JCLSH, jdbcType=VARCHAR}, #{JCJLZLSH, jdbcType=VARCHAR}, #{FYDM, jdbcType=VARCHAR})
+    </insert>
+
+
+    <!--门(急)诊病历-->
+    <delete id="deleteEMR_MJZBL" parameterType="HashMap">
+        delete from EMR_MJZBL where JLRQ >= to_date(#{begTime}, 'YYYY-MM-DD HH24:MI:SS') and JLRQ  &lt;= to_date(#{endTime}, 'YYYY-MM-DD HH24:MI:SS')
+    </delete>
+    <insert id="insertEMR_MJZBL" parameterType="java.util.HashMap">
+        insert into EMR_MJZBL(
+            WZTSY, QZAZ, WZHR, XYZDYNMS, TBRQ, WZWPFDM, KLX, MZBLH, JBS, NLXS,
+            WZEMDM, ZJHM, YZ, WZWLMDM, JLRQ, WZWXT, WZXB, YLJGDM, QZQT, GMS,
+            YSSFZJHM, ZS, WZTSDM, WZWTLWGJQ, WZWPF, WZFNDM, WZWMSDM, WZWXRXFDM, ZZZF, JZRQSJ,
+            FZJCXM, GMSBZ, ZYBMDM, WZXQW, TTPF, ZYZHDM, YSGH, NLS, SG, WZXQWDM,
+            NLR, WZSM, WZSMDM, WZQT2, WZTSYDM, WZQT3, NLY, WZWSDM, WZWPXWYFMWDM, ZXYBLBZ,
+            KH, WZQT1, HYS, YJS, WZDBDM, WZWPXWYFMW, JZLSH, JKJY, BZYJ, ZYBMMC,
+            TZ, GXPG, WZDB, WZTS, XYZDDM, WZWMS, SXS, KSBM, WZYSYKWDM, ZJLX,
+            WZCHDM, WZXXWFDM, WZWXTDM, YSQM, WZCH, WZWLM, WZXXWF, HZXM, WZWTLWGJQDM, JWS,
+            ZYZHMC, XBS, WZSDM, CSRQ, CZBZDM, WYS, ZZZFMC, QZMZ, YCJZS, WZFN,
+            WZXBDM, GRS, TGJC, QZMZDM, ZYSX, WZT, YFJZS, WZS, WZWS, XBDM,
+            KSMC, CSS, WZEM, MZFYLBMC, DZSQDBH, LXBXS, YZXMNR, ZLYJ, CZJH, WZTDM,
+            SSS, MJZLB, HZQXDM, WZYSYKW, WZWXRXF, XYZDMC, WZHRDM)
+        values (
+            #{WZTSY, jdbcType=VARCHAR}, #{QZAZ, jdbcType=VARCHAR}, #{WZHR, jdbcType=VARCHAR}, #{XYZDYNMS, jdbcType=VARCHAR}, to_date(#{TBRQ, jdbcType=VARCHAR}, 'YYYY-MM-DD'), #{WZWPFDM, jdbcType=VARCHAR}, #{KLX, jdbcType=VARCHAR}, #{MZBLH, jdbcType=VARCHAR}, #{JBS, jdbcType=VARCHAR}, #{NLXS, jdbcType=VARCHAR},
+            #{WZEMDM, jdbcType=VARCHAR}, #{ZJHM, jdbcType=VARCHAR}, #{YZ, jdbcType=VARCHAR}, #{WZWLMDM, jdbcType=VARCHAR}, to_date(#{JLRQ, jdbcType=VARCHAR}, 'YYYY-MM-DD HH24:MI:SS'), #{WZWXT, jdbcType=VARCHAR}, #{WZXB, jdbcType=VARCHAR}, #{YLJGDM, jdbcType=VARCHAR}, #{QZQT, jdbcType=VARCHAR}, #{GMS, jdbcType=VARCHAR},
+            #{YSSFZJHM, jdbcType=VARCHAR}, #{ZS, jdbcType=VARCHAR}, #{WZTSDM, jdbcType=VARCHAR}, #{WZWTLWGJQ, jdbcType=VARCHAR}, #{WZWPF, jdbcType=VARCHAR}, #{WZFNDM, jdbcType=VARCHAR}, #{WZWMSDM, jdbcType=VARCHAR}, #{WZWXRXFDM, jdbcType=VARCHAR}, #{ZZZF, jdbcType=VARCHAR}, to_date(#{JZRQSJ, jdbcType=VARCHAR}, 'YYYY-MM-DD HH24:MI:SS'),
+            #{FZJCXM, jdbcType=VARCHAR}, #{GMSBZ, jdbcType=VARCHAR}, #{ZYBMDM, jdbcType=VARCHAR}, #{WZXQW, jdbcType=VARCHAR}, #{TTPF, jdbcType=VARCHAR}, #{ZYZHDM, jdbcType=VARCHAR}, #{YSGH, jdbcType=VARCHAR}, #{NLS, jdbcType=VARCHAR}, #{SG, jdbcType=VARCHAR}, #{WZXQWDM, jdbcType=VARCHAR},
+            #{NLR, jdbcType=VARCHAR}, #{WZSM, jdbcType=VARCHAR}, #{WZSMDM, jdbcType=VARCHAR}, #{WZQT2, jdbcType=VARCHAR}, #{WZTSYDM, jdbcType=VARCHAR}, #{WZQT3, jdbcType=VARCHAR}, #{NLY, jdbcType=VARCHAR}, #{WZWSDM, jdbcType=VARCHAR}, #{WZWPXWYFMWDM, jdbcType=VARCHAR}, #{ZXYBLBZ, jdbcType=VARCHAR},
+            #{KH, jdbcType=VARCHAR}, #{WZQT1, jdbcType=VARCHAR}, #{HYS, jdbcType=VARCHAR}, #{YJS, jdbcType=VARCHAR}, #{WZDBDM, jdbcType=VARCHAR}, #{WZWPXWYFMW, jdbcType=VARCHAR}, #{JZLSH, jdbcType=VARCHAR}, #{JKJY, jdbcType=VARCHAR}, #{BZYJ, jdbcType=VARCHAR}, #{ZYBMMC, jdbcType=VARCHAR},
+            #{TZ, jdbcType=VARCHAR}, #{GXPG, jdbcType=VARCHAR}, #{WZDB, jdbcType=VARCHAR}, #{WZTS, jdbcType=VARCHAR}, #{XYZDDM, jdbcType=VARCHAR}, #{WZWMS, jdbcType=VARCHAR}, #{SXS, jdbcType=VARCHAR}, #{KSBM, jdbcType=VARCHAR}, #{WZYSYKWDM, jdbcType=VARCHAR}, #{ZJLX, jdbcType=VARCHAR},
+            #{WZCHDM, jdbcType=VARCHAR}, #{WZXXWFDM, jdbcType=VARCHAR}, #{WZWXTDM, jdbcType=VARCHAR}, #{YSQM, jdbcType=VARCHAR}, #{WZCH, jdbcType=VARCHAR}, #{WZWLM, jdbcType=VARCHAR}, #{WZXXWF, jdbcType=VARCHAR}, #{HZXM, jdbcType=VARCHAR}, #{WZWTLWGJQDM, jdbcType=VARCHAR}, #{JWS, jdbcType=VARCHAR},
+            #{ZYZHMC, jdbcType=VARCHAR}, #{XBS, jdbcType=VARCHAR}, #{WZSDM, jdbcType=VARCHAR}, to_date(#{CSRQ, jdbcType=VARCHAR}, 'YYYY-MM-DD'), #{CZBZDM, jdbcType=VARCHAR}, #{WYS, jdbcType=VARCHAR}, #{ZZZFMC, jdbcType=VARCHAR}, #{QZMZ, jdbcType=VARCHAR}, #{YCJZS, jdbcType=VARCHAR}, #{WZFN, jdbcType=VARCHAR},
+            #{WZXBDM, jdbcType=VARCHAR}, #{GRS, jdbcType=VARCHAR}, #{TGJC, jdbcType=VARCHAR}, #{QZMZDM, jdbcType=VARCHAR}, #{ZYSX, jdbcType=VARCHAR}, #{WZT, jdbcType=VARCHAR}, #{YFJZS, jdbcType=VARCHAR}, #{WZS, jdbcType=VARCHAR}, #{WZWS, jdbcType=VARCHAR}, #{XBDM, jdbcType=VARCHAR},
+            #{KSMC, jdbcType=VARCHAR}, #{CSS, jdbcType=VARCHAR}, #{WZEM, jdbcType=VARCHAR}, #{MZFYLBMC, jdbcType=VARCHAR}, #{DZSQDBH, jdbcType=VARCHAR}, #{LXBXS, jdbcType=VARCHAR}, #{YZXMNR, jdbcType=VARCHAR}, #{ZLYJ, jdbcType=VARCHAR}, #{CZJH, jdbcType=VARCHAR}, #{WZTDM, jdbcType=VARCHAR},
+            #{SSS, jdbcType=VARCHAR}, #{MJZLB, jdbcType=VARCHAR}, #{HZQXDM, jdbcType=VARCHAR}, #{WZYSYKW, jdbcType=VARCHAR}, #{WZWXRXF, jdbcType=VARCHAR}, #{XYZDMC, jdbcType=VARCHAR}, #{WZHRDM, jdbcType=VARCHAR})
+    </insert>
+
+    <!--入院记录-->
+    <delete id="deleteEMR_RYJLByPk" parameterType="HashMap">
+        delete from EMR_RYJL where YLJGDM = #{YLJGDM, jdbcType=VARCHAR} and ZYJZLSH = #{ZYJZLSH, jdbcType=VARCHAR}
+    </delete>
+    <insert id="insertEMR_RYJL" parameterType="java.util.HashMap">
+        insert into EMR_RYJL(
+            JZS, ZZYSGH, TBRQ, CBZYBMDM, KLX, JBS, CBZYBMMC, ZJHM, CRBS, ZKQK,
+            BCH, QDXYZDDM, YLJGDM, PFHNMJCJG, RYZDSW, CSZYHZDGXDM, GMS, HXPL, DZXQ, TBJQQGJCJG,
+            SJXTJCJG, QDXYZDMC, ZS, BQMC, DZSDZ, ZZYSQM, YBZKJCJG, NLS, SG, CBXYZDDM,
+            CISID, NLY, DZMPHM, QDZDRQ, KH, JZYSQM, HYS, YJS, CBXYZDMC, JBJCJG,
+            YBJKZKBZ, RYRQSJ, ZCGMJCJGMS, BCZDMC, XZZYZHMC, BSCSZXM, ZYJZLSH, TW, XZZYZHDM, BFH,
+            DZXZJDM, TZ, BCZDDM, SXS, KSBM, XZZYBMMC, DZSZZ, ZJLX, DZCJN, CRBBZ,
+            WSZQJCJG, ZYYSGH, ML, ZYLBDM, XZZDRQ, SZJCJG, XZXYZDDM, XZZYBMDM, HZXM, XZQHDM,
+            QDZYBMDM, XBS, MZ, JZYSGH, ZRYSQM, DZSZZDM, QDZYBMMC, CSNRKKBZ, QSQBLBJJCJG, QDZYZHDM,
+            BQBM, FBJCJG, GRS, CBZYZHMC, XBJCJG, YFJZS, XZXYZDMC, ZYYSQM, SZY, BCZDRQ,
+            XBDM, DZXZJ, JZJCJG, KSMC, QDZYZHMC, HYZKDM, CBZDRQ, BAH, DZSDZDM, SSS,
+            ZRYSGH, SSY, CBZYZHDM, DZXQDM)
+        values (
+            #{JZS, jdbcType=VARCHAR}, #{ZZYSGH, jdbcType=VARCHAR}, to_date(#{TBRQ, jdbcType=VARCHAR}, 'YYYY-MM-DD'), #{CBZYBMDM, jdbcType=VARCHAR}, #{KLX, jdbcType=VARCHAR}, #{JBS, jdbcType=VARCHAR}, #{CBZYBMMC, jdbcType=VARCHAR}, #{ZJHM, jdbcType=VARCHAR}, #{CRBS, jdbcType=VARCHAR}, #{ZKQK, jdbcType=VARCHAR},
+            #{BCH, jdbcType=VARCHAR}, #{QDXYZDDM, jdbcType=VARCHAR}, #{YLJGDM, jdbcType=VARCHAR}, #{PFHNMJCJG, jdbcType=VARCHAR}, #{RYZDSW, jdbcType=VARCHAR}, #{CSZYHZDGXDM, jdbcType=VARCHAR}, #{GMS, jdbcType=VARCHAR}, #{HXPL, jdbcType=VARCHAR}, #{DZXQ, jdbcType=VARCHAR}, #{TBJQQGJCJG, jdbcType=VARCHAR},
+            #{SJXTJCJG, jdbcType=VARCHAR}, #{QDXYZDMC, jdbcType=VARCHAR}, #{ZS, jdbcType=VARCHAR}, #{BQMC, jdbcType=VARCHAR}, #{DZSDZ, jdbcType=VARCHAR}, #{ZZYSQM, jdbcType=VARCHAR}, #{YBZKJCJG, jdbcType=VARCHAR}, #{NLS, jdbcType=VARCHAR}, #{SG, jdbcType=VARCHAR}, #{CBXYZDDM, jdbcType=VARCHAR},
+            #{CISID, jdbcType=VARCHAR}, #{NLY, jdbcType=VARCHAR}, #{DZMPHM, jdbcType=VARCHAR}, to_date(#{QDZDRQ, jdbcType=VARCHAR}, 'YYYY-MM-DD HH24:MI:SS'), #{KH, jdbcType=VARCHAR}, #{JZYSQM, jdbcType=VARCHAR}, #{HYS, jdbcType=VARCHAR}, #{YJS, jdbcType=VARCHAR}, #{CBXYZDMC, jdbcType=VARCHAR}, #{JBJCJG, jdbcType=VARCHAR},
+            #{YBJKZKBZ, jdbcType=VARCHAR}, to_date(#{RYRQSJ, jdbcType=VARCHAR}, 'YYYY-MM-DD HH24:MI:SS'), #{ZCGMJCJGMS, jdbcType=VARCHAR}, #{BCZDMC, jdbcType=VARCHAR}, #{XZZYZHMC, jdbcType=VARCHAR}, #{BSCSZXM, jdbcType=VARCHAR}, #{ZYJZLSH, jdbcType=VARCHAR}, #{TW, jdbcType=VARCHAR}, #{XZZYZHDM, jdbcType=VARCHAR}, #{BFH, jdbcType=VARCHAR},
+            #{DZXZJDM, jdbcType=VARCHAR}, #{TZ, jdbcType=VARCHAR}, #{BCZDDM, jdbcType=VARCHAR}, #{SXS, jdbcType=VARCHAR}, #{KSBM, jdbcType=VARCHAR}, #{XZZYBMMC, jdbcType=VARCHAR}, #{DZSZZ, jdbcType=VARCHAR}, #{ZJLX, jdbcType=VARCHAR}, #{DZCJN, jdbcType=VARCHAR}, #{CRBBZ, jdbcType=VARCHAR},
+            #{WSZQJCJG, jdbcType=VARCHAR}, #{ZYYSGH, jdbcType=VARCHAR}, #{ML, jdbcType=VARCHAR}, #{ZYLBDM, jdbcType=VARCHAR}, to_date(#{XZZDRQ, jdbcType=VARCHAR}, 'YYYY-MM-DD HH24:MI:SS'), #{SZJCJG, jdbcType=VARCHAR}, #{XZXYZDDM, jdbcType=VARCHAR}, #{XZZYBMDM, jdbcType=VARCHAR}, #{HZXM, jdbcType=VARCHAR}, #{XZQHDM, jdbcType=VARCHAR},
+            #{QDZYBMDM, jdbcType=VARCHAR}, #{XBS, jdbcType=VARCHAR}, #{MZ, jdbcType=VARCHAR}, #{JZYSGH, jdbcType=VARCHAR}, #{ZRYSQM, jdbcType=VARCHAR}, #{DZSZZDM, jdbcType=VARCHAR}, #{QDZYBMMC, jdbcType=VARCHAR}, #{CSNRKKBZ, jdbcType=VARCHAR}, #{QSQBLBJJCJG, jdbcType=VARCHAR}, #{QDZYZHDM, jdbcType=VARCHAR},
+            #{BQBM, jdbcType=VARCHAR}, #{FBJCJG, jdbcType=VARCHAR}, #{GRS, jdbcType=VARCHAR}, #{CBZYZHMC, jdbcType=VARCHAR}, #{XBJCJG, jdbcType=VARCHAR}, #{YFJZS, jdbcType=VARCHAR}, #{XZXYZDMC, jdbcType=VARCHAR}, #{ZYYSQM, jdbcType=VARCHAR}, #{SZY, jdbcType=VARCHAR}, to_date(#{BCZDRQ, jdbcType=VARCHAR}, 'YYYY-MM-DD HH24:MI:SS'),
+            #{XBDM, jdbcType=VARCHAR}, #{DZXZJ, jdbcType=VARCHAR}, #{JZJCJG, jdbcType=VARCHAR}, #{KSMC, jdbcType=VARCHAR}, #{QDZYZHMC, jdbcType=VARCHAR}, #{HYZKDM, jdbcType=VARCHAR}, to_date(#{CBZDRQ, jdbcType=VARCHAR}, 'YYYY-MM-DD HH24:MI:SS'), #{BAH, jdbcType=VARCHAR}, #{DZSDZDM, jdbcType=VARCHAR}, #{SSS, jdbcType=VARCHAR},
+            #{ZRYSGH, jdbcType=VARCHAR}, #{SSY, jdbcType=VARCHAR}, #{CBZYZHDM, jdbcType=VARCHAR}, #{DZXQDM, jdbcType=VARCHAR})
+    </insert>
+
+    <!--24h内入出院记录-->
+    <delete id="deleteEMR_CRYJLByPk" parameterType="HashMap">
+        delete from EMR_CRYJL where YLJGDM = #{YLJGDM, jdbcType=VARCHAR} and ZYJZLSH = #{ZYJZLSH, jdbcType=VARCHAR}
+    </delete>
+    <insert id="insertEMR_CRYJL" parameterType="java.util.HashMap">
+        insert into EMR_CRYJL(
+            CYYZKLRQSJ, DZXZJDM, RYQK, CYYZ, ZZYSGH, TBRQ, CZYBMDM, CYQK, DZSZZ, KLX,
+            DZCJN, CZYZHDM, NLXS, ZYYSGH, ZYLBDM, CYYZKLRQM, HZXM, XZQHDM, YLJGDM, XBS,
+            GXSJ, CSZYHZDGXDM, RZYZHDM, MZ, CYRQSJ, DZXQ, JZYSGH, ZRYSQM, DZSZZDM, RZYZHMC,
+            SZGCJG, CSNRKKBZ, CXYZDMC, CZYBMMC, ZS, DZSDZ, ZZYSQM, ZZZF, CXYZDDM, ZZMS,
+            ZLGCMS, ZYYSQM, NLS, NLR, XBDM, NLY, DZXZJ, DZMPHM, KH, JZYSQM,
+            CZYZHMC, HYZKDM, RYRQSJ, RXYZDMC, RZYBMMC, DZSDZDM, ZRYSGH, BSCSZXM, ZZMC, RZYBMDM,
+            ZYJZLSH, DZXQDM, RXYZDDM)
+        values (
+            to_date(#{CYYZKLRQSJ, jdbcType=VARCHAR}, 'YYYY-MM-DD HH24:MI:SS'), #{DZXZJDM, jdbcType=VARCHAR}, #{RYQK, jdbcType=VARCHAR}, #{CYYZ, jdbcType=VARCHAR}, #{ZZYSGH, jdbcType=VARCHAR}, to_date(#{TBRQ, jdbcType=VARCHAR}, 'YYYY-MM-DD'), #{CZYBMDM, jdbcType=VARCHAR}, #{CYQK, jdbcType=VARCHAR}, #{DZSZZ, jdbcType=VARCHAR}, #{KLX, jdbcType=VARCHAR},
+            #{DZCJN, jdbcType=VARCHAR}, #{CZYZHDM, jdbcType=VARCHAR}, #{NLXS, jdbcType=VARCHAR}, #{ZYYSGH, jdbcType=VARCHAR}, #{ZYLBDM, jdbcType=VARCHAR}, #{CYYZKLRQM, jdbcType=VARCHAR}, #{HZXM, jdbcType=VARCHAR}, #{XZQHDM, jdbcType=VARCHAR}, #{YLJGDM, jdbcType=VARCHAR}, #{XBS, jdbcType=VARCHAR},
+            to_date(#{GXSJ, jdbcType=VARCHAR}, 'YYYY-MM-DD HH24:MI:SS'), #{CSZYHZDGXDM, jdbcType=VARCHAR}, #{RZYZHDM, jdbcType=VARCHAR}, #{MZ, jdbcType=VARCHAR}, to_date(#{CYRQSJ, jdbcType=VARCHAR}, 'YYYY-MM-DD HH24:MI:SS'), #{DZXQ, jdbcType=VARCHAR}, #{JZYSGH, jdbcType=VARCHAR}, #{ZRYSQM, jdbcType=VARCHAR}, #{DZSZZDM, jdbcType=VARCHAR}, #{RZYZHMC, jdbcType=VARCHAR},
+            #{SZGCJG, jdbcType=VARCHAR}, #{CSNRKKBZ, jdbcType=VARCHAR}, #{CXYZDMC, jdbcType=VARCHAR}, #{CZYBMMC, jdbcType=VARCHAR}, #{ZS, jdbcType=VARCHAR}, #{DZSDZ, jdbcType=VARCHAR}, #{ZZYSQM, jdbcType=VARCHAR}, #{ZZZF, jdbcType=VARCHAR}, #{CXYZDDM, jdbcType=VARCHAR}, #{ZZMS, jdbcType=VARCHAR},
+            #{ZLGCMS, jdbcType=VARCHAR}, #{ZYYSQM, jdbcType=VARCHAR}, #{NLS, jdbcType=VARCHAR}, #{NLR, jdbcType=VARCHAR}, #{XBDM, jdbcType=VARCHAR}, #{NLY, jdbcType=VARCHAR}, #{DZXZJ, jdbcType=VARCHAR}, #{DZMPHM, jdbcType=VARCHAR}, #{KH, jdbcType=VARCHAR}, #{JZYSQM, jdbcType=VARCHAR},
+            #{CZYZHMC, jdbcType=VARCHAR}, #{HYZKDM, jdbcType=VARCHAR}, to_date(#{RYRQSJ, jdbcType=VARCHAR}, 'YYYY-MM-DD HH24:MI:SS'), #{RXYZDMC, jdbcType=VARCHAR}, #{RZYBMMC, jdbcType=VARCHAR}, #{DZSDZDM, jdbcType=VARCHAR}, #{ZRYSGH, jdbcType=VARCHAR}, #{BSCSZXM, jdbcType=VARCHAR}, #{ZZMC, jdbcType=VARCHAR}, #{RZYBMDM, jdbcType=VARCHAR},
+            #{ZYJZLSH, jdbcType=VARCHAR}, #{DZXQDM, jdbcType=VARCHAR}, #{RXYZDDM, jdbcType=VARCHAR})
+    </insert>
+
+    <!--24h内入院死亡记录-->
+    <delete id="deleteEMR_ZYSWJLByPk" parameterType="HashMap">
+        delete from EMR_ZYSWJL where YLJGDM = #{YLJGDM, jdbcType=VARCHAR} and ZYSWJLLSH = #{ZYSWJLLSH, jdbcType=VARCHAR}
+    </delete>
+    <insert id="insertEMR_ZYSWJL" parameterType="java.util.HashMap">
+        insert into EMR_ZYSWJL(
+            DZXZJDM, RYQK, ZZYSGH, TBRQ, SXYZDMC, DZSZZ, SXYZDDM, DZCJN, NLXS, ZYYSGH,
+            ZYLBDM, SWYY, HZXM, XZQHDM, YLJGDM, SWRQSJ, GXSJ, CSZYHZDGXDM, RZYZHDM, MZ,
+            DZXQ, JZYSGH, ZRYSQM, DZSZZDM, ZYSWJLLSH, RZYZHMC, CSNRKKBZ, DZSDZ, SZYZHDM, ZZYSQM,
+            SZYBMMC, ZLGCMS, ZYYSQM, NLS, NLR, SZYBMDM, XBDM, NLY, DZXZJ, DZMPHM,
+            SZYZHMC, JZYSQM, HYZKDM, RYRQSJ, RXYZDMC, RZYBMMC, DZSDZDM, ZRYSGH, BSCSZXM, RZYBMDM,
+            ZYJZLSH, DZXQDM, RXYZDDM)
+        values (
+            #{DZXZJDM, jdbcType=VARCHAR}, #{RYQK, jdbcType=VARCHAR}, #{ZZYSGH, jdbcType=VARCHAR}, to_date(#{TBRQ, jdbcType=VARCHAR}, 'YYYY-MM-DD'), #{SXYZDMC, jdbcType=VARCHAR}, #{DZSZZ, jdbcType=VARCHAR}, #{SXYZDDM, jdbcType=VARCHAR}, #{DZCJN, jdbcType=VARCHAR}, #{NLXS, jdbcType=VARCHAR}, #{ZYYSGH, jdbcType=VARCHAR},
+            #{ZYLBDM, jdbcType=VARCHAR}, #{SWYY, jdbcType=VARCHAR}, #{HZXM, jdbcType=VARCHAR}, #{XZQHDM, jdbcType=VARCHAR}, #{YLJGDM, jdbcType=VARCHAR}, to_date(#{SWRQSJ, jdbcType=VARCHAR}, 'YYYY-MM-DD HH24:MI:SS'), to_date(#{GXSJ, jdbcType=VARCHAR}, 'YYYY-MM-DD HH24:MI:SS'), #{CSZYHZDGXDM, jdbcType=VARCHAR}, #{RZYZHDM, jdbcType=VARCHAR}, #{MZ, jdbcType=VARCHAR},
+            #{DZXQ, jdbcType=VARCHAR}, #{JZYSGH, jdbcType=VARCHAR}, #{ZRYSQM, jdbcType=VARCHAR}, #{DZSZZDM, jdbcType=VARCHAR}, #{ZYSWJLLSH, jdbcType=VARCHAR}, #{RZYZHMC, jdbcType=VARCHAR}, #{CSNRKKBZ, jdbcType=VARCHAR}, #{DZSDZ, jdbcType=VARCHAR}, #{SZYZHDM, jdbcType=VARCHAR}, #{ZZYSQM, jdbcType=VARCHAR},
+            #{SZYBMMC, jdbcType=VARCHAR}, #{ZLGCMS, jdbcType=VARCHAR}, #{ZYYSQM, jdbcType=VARCHAR}, #{NLS, jdbcType=VARCHAR}, #{NLR, jdbcType=VARCHAR}, #{SZYBMDM, jdbcType=VARCHAR}, #{XBDM, jdbcType=VARCHAR}, #{NLY, jdbcType=VARCHAR}, #{DZXZJ, jdbcType=VARCHAR}, #{DZMPHM, jdbcType=VARCHAR},
+            #{SZYZHMC, jdbcType=VARCHAR}, #{JZYSQM, jdbcType=VARCHAR}, #{HYZKDM, jdbcType=VARCHAR}, to_date(#{RYRQSJ, jdbcType=VARCHAR}, 'YYYY-MM-DD HH24:MI:SS'), #{RXYZDMC, jdbcType=VARCHAR}, #{RZYBMMC, jdbcType=VARCHAR}, #{DZSDZDM, jdbcType=VARCHAR}, #{ZRYSGH, jdbcType=VARCHAR}, #{BSCSZXM, jdbcType=VARCHAR}, #{RZYBMDM, jdbcType=VARCHAR},
+            #{ZYJZLSH, jdbcType=VARCHAR}, #{DZXQDM, jdbcType=VARCHAR}, #{RXYZDDM, jdbcType=VARCHAR})
+    </insert>
+
+    <!--门（急）诊统计表（日报）-->
+    <delete id="deleteTJ_MJZ_RBByPK" parameterType="HashMap">
+        delete from TJ_MJZ_RB where YLJGDM = #{YLJGDM, jdbcType=VARCHAR} and YWRQ = #{YWRQ, jdbcType=VARCHAR}
+    </delete>
+    <insert id="insertTJ_MJZ_RB" parameterType="java.util.HashMap">
+        insert into TJ_MJZ_RB(
+            MZ_GTZJRC, THRC, YPFY, MZ_EKRC, JZ_YJZRC, FYMC, JZ_JSZYZLRC, JCYWFY, TBRQ, JZ_ZFFY,
+            JZ_YBRC, JZ_JBYWFY, XDLBGDS, MZ_GHRC, TJ_YBRC, ZZHSRC, YLJGMC, MZ_ZFRC, MZ_YLFWFY, MZ_YJZRC,
+            JZ_EKRC, MZ_SYZSYWRC, MZ_JSZYZLRC, JZ_GHRC, MZ_ZFY, TJ_ZFFY, BLJYBGDS, NJLBGDS, MZ_SYKJYWRC, MZ_ZRYSRC,
+            MZ_PDJHRC, HCLBGDS, YLJGDM, JYBGDS, JZ_ZCF, ZFY, MZ_ZCF, JZ_YBFY, HCFY, TJ_ZFRC,
+            MZ_JCYWFY, SYZSYWRC, JZ_SYKJYWRC, YBFY, JZ_THRC, MZ_JBYWFY, JBYWFY, ZCF, JZ_YPFY, FYDM,
+            MZ_CDKRC, CSLBGDS, MZ_THRC, MZ_YPFY, JSZYZLRC, MZ_YYZLRC, SYKJYWRC, MZ_HCFY, QTJYBGDS, YJZRC,
+            YBRC, JZ_SYZSYWRC, TJ_GHRC, ZFFY, MZ_YBFY, JZ_YLFWFY, FSLBGDS, YLFWFY, JCBGDS, JZ_ZFY,
+            MZ_ZJMZRC, MZ_FZRYSRC, JZ_HCFY, QTLBGDS, JZ_ZFRC, MZ_ZFFY, CTLBGDS, CDKRC, YYZLRC, FRMZRC,
+            TJ_ZFY, HYXJYBGDS, GHRC, TJ_YBFY, YWRQ, ZFRC, MZ_YBRC, MZ_FRMZRC, EKRC, JZ_CDKRC,
+            TJ_THRC, JZ_JCYWFY, LCJYBGDS)
+        values (
+            #{MZ_GTZJRC, jdbcType=VARCHAR}, #{THRC, jdbcType=VARCHAR}, #{YPFY, jdbcType=VARCHAR}, #{MZ_EKRC, jdbcType=VARCHAR}, #{JZ_YJZRC, jdbcType=VARCHAR}, #{FYMC, jdbcType=VARCHAR}, #{JZ_JSZYZLRC, jdbcType=VARCHAR}, #{JCYWFY, jdbcType=VARCHAR}, to_date(#{TBRQ, jdbcType=VARCHAR}, 'YYYY-MM-DD'), #{JZ_ZFFY, jdbcType=VARCHAR},
+            #{JZ_YBRC, jdbcType=VARCHAR}, #{JZ_JBYWFY, jdbcType=VARCHAR}, #{XDLBGDS, jdbcType=VARCHAR}, #{MZ_GHRC, jdbcType=VARCHAR}, #{TJ_YBRC, jdbcType=VARCHAR}, #{ZZHSRC, jdbcType=VARCHAR}, #{YLJGMC, jdbcType=VARCHAR}, #{MZ_ZFRC, jdbcType=VARCHAR}, #{MZ_YLFWFY, jdbcType=VARCHAR}, #{MZ_YJZRC, jdbcType=VARCHAR},
+            #{JZ_EKRC, jdbcType=VARCHAR}, #{MZ_SYZSYWRC, jdbcType=VARCHAR}, #{MZ_JSZYZLRC, jdbcType=VARCHAR}, #{JZ_GHRC, jdbcType=VARCHAR}, #{MZ_ZFY, jdbcType=VARCHAR}, #{TJ_ZFFY, jdbcType=VARCHAR}, #{BLJYBGDS, jdbcType=VARCHAR}, #{NJLBGDS, jdbcType=VARCHAR}, #{MZ_SYKJYWRC, jdbcType=VARCHAR}, #{MZ_ZRYSRC, jdbcType=VARCHAR},
+            #{MZ_PDJHRC, jdbcType=VARCHAR}, #{HCLBGDS, jdbcType=VARCHAR}, #{YLJGDM, jdbcType=VARCHAR}, #{JYBGDS, jdbcType=VARCHAR}, #{JZ_ZCF, jdbcType=VARCHAR}, #{ZFY, jdbcType=VARCHAR}, #{MZ_ZCF, jdbcType=VARCHAR}, #{JZ_YBFY, jdbcType=VARCHAR}, #{HCFY, jdbcType=VARCHAR}, #{TJ_ZFRC, jdbcType=VARCHAR},
+            #{MZ_JCYWFY, jdbcType=VARCHAR}, #{SYZSYWRC, jdbcType=VARCHAR}, #{JZ_SYKJYWRC, jdbcType=VARCHAR}, #{YBFY, jdbcType=VARCHAR}, #{JZ_THRC, jdbcType=VARCHAR}, #{MZ_JBYWFY, jdbcType=VARCHAR}, #{JBYWFY, jdbcType=VARCHAR}, #{ZCF, jdbcType=VARCHAR}, #{JZ_YPFY, jdbcType=VARCHAR}, #{FYDM, jdbcType=VARCHAR},
+            #{MZ_CDKRC, jdbcType=VARCHAR}, #{CSLBGDS, jdbcType=VARCHAR}, #{MZ_THRC, jdbcType=VARCHAR}, #{MZ_YPFY, jdbcType=VARCHAR}, #{JSZYZLRC, jdbcType=VARCHAR}, #{MZ_YYZLRC, jdbcType=VARCHAR}, #{SYKJYWRC, jdbcType=VARCHAR}, #{MZ_HCFY, jdbcType=VARCHAR}, #{QTJYBGDS, jdbcType=VARCHAR}, #{YJZRC, jdbcType=VARCHAR},
+            #{YBRC, jdbcType=VARCHAR}, #{JZ_SYZSYWRC, jdbcType=VARCHAR}, #{TJ_GHRC, jdbcType=VARCHAR}, #{ZFFY, jdbcType=VARCHAR}, #{MZ_YBFY, jdbcType=VARCHAR}, #{JZ_YLFWFY, jdbcType=VARCHAR}, #{FSLBGDS, jdbcType=VARCHAR}, #{YLFWFY, jdbcType=VARCHAR}, #{JCBGDS, jdbcType=VARCHAR}, #{JZ_ZFY, jdbcType=VARCHAR},
+            #{MZ_ZJMZRC, jdbcType=VARCHAR}, #{MZ_FZRYSRC, jdbcType=VARCHAR}, #{JZ_HCFY, jdbcType=VARCHAR}, #{QTLBGDS, jdbcType=VARCHAR}, #{JZ_ZFRC, jdbcType=VARCHAR}, #{MZ_ZFFY, jdbcType=VARCHAR}, #{CTLBGDS, jdbcType=VARCHAR}, #{CDKRC, jdbcType=VARCHAR}, #{YYZLRC, jdbcType=VARCHAR}, #{FRMZRC, jdbcType=VARCHAR},
+            #{TJ_ZFY, jdbcType=VARCHAR}, #{HYXJYBGDS, jdbcType=VARCHAR}, #{GHRC, jdbcType=VARCHAR}, #{TJ_YBFY, jdbcType=VARCHAR}, #{YWRQ, jdbcType=VARCHAR}, #{ZFRC, jdbcType=VARCHAR}, #{MZ_YBRC, jdbcType=VARCHAR}, #{MZ_FRMZRC, jdbcType=VARCHAR}, #{EKRC, jdbcType=VARCHAR}, #{JZ_CDKRC, jdbcType=VARCHAR},
+            #{TJ_THRC, jdbcType=VARCHAR}, #{JZ_JCYWFY, jdbcType=VARCHAR}, #{LCJYBGDS, jdbcType=VARCHAR})
+    </insert>
+
+    <!-- 住院统计表（日报）-->
+    <delete id="deleteTJ_ZY_RBByPK" parameterType="HashMap">
+        delete from TJ_ZY_RB where YLJGDM = #{YLJGDM, jdbcType=VARCHAR} and YWRQ = #{YWRQ, jdbcType=VARCHAR}
+    </delete>
+    <insert id="insertTJ_ZY_RB" parameterType="java.util.HashMap">
+        insert into TJ_ZY_RB(
+            CSLBGDS, YPFY, YJHLRS, BZRS, FYMC, ZZJKSRS, BWRS, JCYWFY, TBRQ, XDLBGDS,
+            QTJYBGDS, HDCWZS, YLJGMC, FSLBGDS, YLFWFY, JCBGDS, EJHLRS, SJKFCWZS, BLJYBGDS, NJLBGDS,
+            QTLBGDS, HCLBGDS, YLJGDM, CYRS, JYBGDS, CTLBGDS, ZYRS, ZFY, RYRS, HCFY,
+            TJHLRS, HYXJYBGDS, YWRQ, CYHZJCFY, CYHZPJZYL, JBYWFY, LCJYBGDS, FYDM, ZYSSTS)
+        values (
+            #{CSLBGDS, jdbcType=VARCHAR}, #{YPFY, jdbcType=VARCHAR}, #{YJHLRS, jdbcType=VARCHAR}, #{BZRS, jdbcType=VARCHAR}, #{FYMC, jdbcType=VARCHAR}, #{ZZJKSRS, jdbcType=VARCHAR}, #{BWRS, jdbcType=VARCHAR}, #{JCYWFY, jdbcType=VARCHAR}, to_date(#{TBRQ, jdbcType=VARCHAR}, 'YYYY-MM-DD'), #{XDLBGDS, jdbcType=VARCHAR},
+            #{QTJYBGDS, jdbcType=VARCHAR}, #{HDCWZS, jdbcType=VARCHAR}, #{YLJGMC, jdbcType=VARCHAR}, #{FSLBGDS, jdbcType=VARCHAR}, #{YLFWFY, jdbcType=VARCHAR}, #{JCBGDS, jdbcType=VARCHAR}, #{EJHLRS, jdbcType=VARCHAR}, #{SJKFCWZS, jdbcType=VARCHAR}, #{BLJYBGDS, jdbcType=VARCHAR}, #{NJLBGDS, jdbcType=VARCHAR},
+            #{QTLBGDS, jdbcType=VARCHAR}, #{HCLBGDS, jdbcType=VARCHAR}, #{YLJGDM, jdbcType=VARCHAR}, #{CYRS, jdbcType=VARCHAR}, #{JYBGDS, jdbcType=VARCHAR}, #{CTLBGDS, jdbcType=VARCHAR}, #{ZYRS, jdbcType=VARCHAR}, #{ZFY, jdbcType=VARCHAR}, #{RYRS, jdbcType=VARCHAR}, #{HCFY, jdbcType=VARCHAR},
+            #{TJHLRS, jdbcType=VARCHAR}, #{HYXJYBGDS, jdbcType=VARCHAR}, #{YWRQ, jdbcType=VARCHAR}, #{CYHZJCFY, jdbcType=VARCHAR}, #{CYHZPJZYL, jdbcType=VARCHAR}, #{JBYWFY, jdbcType=VARCHAR}, #{LCJYBGDS, jdbcType=VARCHAR}, #{FYDM, jdbcType=VARCHAR}, #{ZYSSTS, jdbcType=VARCHAR})
+    </insert>
+
+    <!--住院工作量及病床分科统计表（日报）-->
+    <delete id="deleteTJ_ZYGZL_KS_RBByPK" parameterType="HashMap">
+        delete from TJ_ZYGZL_KS_RB where YLJGDM = #{YLJGDM, jdbcType=VARCHAR} and KSBM = #{KSBM, jdbcType=VARCHAR} and YWRQ = #{YWRQ, jdbcType=VARCHAR}
+    </delete>
+    <insert id="insertTJ_ZYGZL_KS_RB" parameterType="java.util.HashMap">
+        insert into TJ_ZYGZL_KS_RB(
+            CYRS_YZLYRS, YJBARS, CYRS_ZCAORS, CYRS_FYWZYZLRS, ZWTAKRS, TBRQ, WZRS, CYBRGRRS, KSBM, TKZRRS,
+            HDCWZS, CYRS_YZZYRS, CYRS_SWRS, BJBARS, PKRS, SJKFCWZS, CYRS_FYZLYRS, KSMC, CYRS_ZYZLRS, CYRS_QTRS,
+            BZKSMC, BRJCS, BRKCS, CYRS_ZYFYWRS, CYRS_ZCHYRS, ZYWZBR_QJCGRC, YLJGDM, CYRS, ZYRS, RYRS,
+            CYYS_WYRS, CYRS_YZZSQRS, ZWTKRS, YWRQ, CYRS_HZRS, ZYWZBR_QJRC, TAKZRRS, CYBRSSGRRS, JJBARS, CYHZZYCRS,
+            BZKSBM, ZRLYRS, CYRS_ZYRS)
+        values (
+            #{CYRS_YZLYRS, jdbcType=VARCHAR}, #{YJBARS, jdbcType=VARCHAR}, #{CYRS_ZCAORS, jdbcType=VARCHAR}, #{CYRS_FYWZYZLRS, jdbcType=VARCHAR}, #{ZWTAKRS, jdbcType=VARCHAR}, to_date(#{TBRQ, jdbcType=VARCHAR}, 'YYYY-MM-DD'), #{WZRS, jdbcType=VARCHAR}, #{CYBRGRRS, jdbcType=VARCHAR}, #{KSBM, jdbcType=VARCHAR}, #{TKZRRS, jdbcType=VARCHAR},
+            #{HDCWZS, jdbcType=VARCHAR}, #{CYRS_YZZYRS, jdbcType=VARCHAR}, #{CYRS_SWRS, jdbcType=VARCHAR}, #{BJBARS, jdbcType=VARCHAR}, #{PKRS, jdbcType=VARCHAR}, #{SJKFCWZS, jdbcType=VARCHAR}, #{CYRS_FYZLYRS, jdbcType=VARCHAR}, #{KSMC, jdbcType=VARCHAR}, #{CYRS_ZYZLRS, jdbcType=VARCHAR}, #{CYRS_QTRS, jdbcType=VARCHAR},
+            #{BZKSMC, jdbcType=VARCHAR}, #{BRJCS, jdbcType=VARCHAR}, #{BRKCS, jdbcType=VARCHAR}, #{CYRS_ZYFYWRS, jdbcType=VARCHAR}, #{CYRS_ZCHYRS, jdbcType=VARCHAR}, #{ZYWZBR_QJCGRC, jdbcType=VARCHAR}, #{YLJGDM, jdbcType=VARCHAR}, #{CYRS, jdbcType=VARCHAR}, #{ZYRS, jdbcType=VARCHAR}, #{RYRS, jdbcType=VARCHAR},
+            #{CYYS_WYRS, jdbcType=VARCHAR}, #{CYRS_YZZSQRS, jdbcType=VARCHAR}, #{ZWTKRS, jdbcType=VARCHAR}, #{YWRQ, jdbcType=VARCHAR}, #{CYRS_HZRS, jdbcType=VARCHAR}, #{ZYWZBR_QJRC, jdbcType=VARCHAR}, #{TAKZRRS, jdbcType=VARCHAR}, #{CYBRSSGRRS, jdbcType=VARCHAR}, #{JJBARS, jdbcType=VARCHAR}, #{CYHZZYCRS, jdbcType=VARCHAR},
+            #{BZKSBM, jdbcType=VARCHAR}, #{ZRLYRS, jdbcType=VARCHAR}, #{CYRS_ZYRS, jdbcType=VARCHAR})
+    </insert>
+
+    <!--床位占用情况表-->
+    <delete id="deleteTJ_SSYW_CWZYQKByPK" parameterType="HashMap">
+        delete from TJ_SSYW_CWZYQK
+            where YLJGDM = #{YLJGDM, jdbcType=VARCHAR}
+                and CJRQ = #{CJRQ, jdbcType=VARCHAR}
+                and CJSJ = to_date(#{CJSJ, jdbcType=VARCHAR}, 'YYYY-MM-DD HH24:MI:SS')
+                and BQBM = #{BQBM, jdbcType=VARCHAR}
+    </delete>
+    <insert id="insertTJ_SSYW_CWZYQK" parameterType="java.util.HashMap">
+        insert into TJ_SSYW_CWZYQK(
+            BQBM, BRRLYBRS, TBRQ, BRSWBRS, BRXZRBRS, HDCWZS, LGCWS, ZZJHCWS, SJKFCWZS, SSBRS,
+            BRCYBRS, CJSJ, HDUKFCWS, HDUZYCWS, BRJCS, BRKCS, YLJGDM, BRXRYBRS, GYYCWSZC, LGBRS,
+            BRXZCBRS, GYYZYCWSZC, CJRQ, BQMC, ZZJHBRS)
+        values (
+            #{BQBM, jdbcType=VARCHAR}, #{BRRLYBRS, jdbcType=VARCHAR}, to_date(#{TBRQ, jdbcType=VARCHAR}, 'YYYY-MM-DD'), #{BRSWBRS, jdbcType=VARCHAR}, #{BRXZRBRS, jdbcType=VARCHAR}, #{HDCWZS, jdbcType=VARCHAR}, #{LGCWS, jdbcType=VARCHAR}, #{ZZJHCWS, jdbcType=VARCHAR}, #{SJKFCWZS, jdbcType=VARCHAR}, #{SSBRS, jdbcType=VARCHAR},
+            #{BRCYBRS, jdbcType=VARCHAR}, to_date(#{CJSJ, jdbcType=VARCHAR}, 'YYYY-MM-DD HH24:MI:SS'), #{HDUKFCWS, jdbcType=VARCHAR}, #{HDUZYCWS, jdbcType=VARCHAR}, #{BRJCS, jdbcType=VARCHAR}, #{BRKCS, jdbcType=VARCHAR}, #{YLJGDM, jdbcType=VARCHAR}, #{BRXRYBRS, jdbcType=VARCHAR}, #{GYYCWSZC, jdbcType=VARCHAR}, #{LGBRS, jdbcType=VARCHAR},
+            #{BRXZCBRS, jdbcType=VARCHAR}, #{GYYZYCWSZC, jdbcType=VARCHAR}, #{CJRQ, jdbcType=VARCHAR}, #{BQMC, jdbcType=VARCHAR}, #{ZZJHBRS, jdbcType=VARCHAR})
+    </insert>
+
+    <!-- 首次病程记录 -->
+    <delete id="deleteEMR_SCBCJLByPK" parameterType="HashMap">
+        delete from EMR_SCBCJL where YLJGDM = #{YLJGDM, jdbcType=VARCHAR} and ZYJZLSH = #{ZYJZLSH, jdbcType=VARCHAR}
+    </delete>
+    <insert id="insertEMR_SCBCJL" parameterType="java.util.HashMap">
+        insert into EMR_SCBCJL(
+            ZYYSSFZHM, YNKSBM, HZXM, BCH, YLJGDM, TBRQ, YNCBXYZDDM, ZYYSQM, YNCBXYZDMC, NLS,
+            NLR, KLX, YLJGMC, ZS, BQMC, XBDM, NLY, FYDM, KH, YNKSMC,
+            NLXS, ZYYSGH, ZYJZLSH)
+        values (
+            #{ZYYSSFZHM, jdbcType=VARCHAR}, #{YNKSBM, jdbcType=VARCHAR}, #{HZXM, jdbcType=VARCHAR}, #{BCH, jdbcType=VARCHAR}, #{YLJGDM, jdbcType=VARCHAR}, to_date(#{TBRQ, jdbcType=VARCHAR}, 'YYYY-MM-DD'), #{YNCBXYZDDM, jdbcType=VARCHAR}, #{ZYYSQM, jdbcType=VARCHAR}, #{YNCBXYZDMC, jdbcType=VARCHAR}, #{NLS, jdbcType=VARCHAR},
+            #{NLR, jdbcType=VARCHAR}, #{KLX, jdbcType=VARCHAR}, #{YLJGMC, jdbcType=VARCHAR}, #{ZS, jdbcType=VARCHAR}, #{BQMC, jdbcType=VARCHAR}, #{XBDM, jdbcType=VARCHAR}, #{NLY, jdbcType=VARCHAR}, #{FYDM, jdbcType=VARCHAR}, #{KH, jdbcType=VARCHAR}, #{YNKSMC, jdbcType=VARCHAR},
+            #{ NLXS, jdbcType=VARCHAR}, #{ZYYSGH, jdbcType=VARCHAR}, #{ZYJZLSH, jdbcType=VARCHAR})
+    </insert>
+
+    <!--日常病程记录-->
+    <delete id="deleteEMR_RCBCJLByPK" parameterType="HashMap">
+        delete from EMR_RCBCJL where YLJGDM = #{YLJGDM, jdbcType=VARCHAR} and RCBCJLLSH = #{RCBCJLLSH, jdbcType=VARCHAR}
+    </delete>
+    <insert id="insertEMR_RCBCJL" parameterType="java.util.HashMap">
+        insert into EMR_RCBCJL(
+            JLRQSJ, YNKSBM, TBRQ, YSSFZHM, YSGH, NLS, NLR, KLX, YLJGMC, XBDM,
+            NLY, KH, NLXS, YNKSMC, YSQM, HZXM, BCH, YLJGDM, ZYBC, RCBCJLLSH,
+            QMRQSJ, CSRQ, BQMC, FYDM, ZYJZLSH)
+        values (
+            to_date(#{JLRQSJ, jdbcType=VARCHAR}, 'YYYY-MM-DD HH24:MI:SS'), #{YNKSBM, jdbcType=VARCHAR}, to_date(#{TBRQ, jdbcType=VARCHAR}, 'YYYY-MM-DD'), #{YSSFZHM, jdbcType=VARCHAR}, #{YSGH, jdbcType=VARCHAR}, #{NLS, jdbcType=VARCHAR}, #{NLR, jdbcType=VARCHAR}, #{KLX, jdbcType=VARCHAR}, #{YLJGMC, jdbcType=VARCHAR}, #{XBDM, jdbcType=VARCHAR},
+            #{NLY, jdbcType=VARCHAR}, #{KH, jdbcType=VARCHAR}, #{NLXS, jdbcType=VARCHAR}, #{YNKSMC, jdbcType=VARCHAR}, #{YSQM, jdbcType=VARCHAR}, #{HZXM, jdbcType=VARCHAR}, #{BCH, jdbcType=VARCHAR}, #{YLJGDM, jdbcType=VARCHAR}, #{ZYBC, jdbcType=VARCHAR}, #{RCBCJLLSH, jdbcType=VARCHAR},
+            to_date(#{QMRQSJ, jdbcType=VARCHAR}, 'YYYY-MM-DD HH24:MI:SS'), to_date(#{CSRQ, jdbcType=VARCHAR}, 'YYYY-MM-DD'), #{BQMC, jdbcType=VARCHAR}, #{FYDM, jdbcType=VARCHAR}, #{ZYJZLSH, jdbcType=VARCHAR})
+    </insert>
+
+
+
+</mapper>

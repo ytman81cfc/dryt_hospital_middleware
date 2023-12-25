@@ -20,4 +20,8 @@ public class HpWebServerImpl implements HpWebServer {
         return hps.queryData(startdt, enddt, dataType);
     }
 
+    public void insertLog(String begtime, String endtime, String dataType, String begTimeStamp, String endTimeStamp, String message){
+        hps.insertLog(begtime, endtime, dataType, begTimeStamp, endTimeStamp, message);
+    }
+
 }

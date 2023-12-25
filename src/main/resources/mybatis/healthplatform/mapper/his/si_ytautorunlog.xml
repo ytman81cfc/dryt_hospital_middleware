@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hospital.middleware.healthplatform.dao.his.HealthplatfromDAO">
+    <insert id="insertSI_YTAUTORUNLOG" parameterType="java.util.HashMap">
+        insert into SI_YTAUTORUNLOG(
+            uuid, service_code, service_name, params, begtime, endtime, run_result, comments, auto_type, orgcode
+        )
+        values (
+            sys_guid(), #{service_code, jdbcType=VARCHAR}, #{service_name, jdbcType=VARCHAR},
+            #{params, jdbcType=VARCHAR}, to_date(#{begTime, jdbcType=VARCHAR}, 'YYYY-MM-DD HH24:MI:SS'), to_date(#{endTime, jdbcType=VARCHAR}, 'YYYY-MM-DD HH24:MI:SS'),
+            #{run_result, jdbcType=VARCHAR}, #{comments, jdbcType=VARCHAR}, #{auto_type, jdbcType=VARCHAR},
+            #{orgCode, jdbcType=VARCHAR})
+    </insert>
+
+</mapper>

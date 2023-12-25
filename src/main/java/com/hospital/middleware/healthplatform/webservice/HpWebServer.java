@@ -7,4 +7,6 @@ import javax.jws.WebService;
 public interface HpWebServer {
     @WebMethod
     public String queryData(String startdt, String enddt, String dataType);
+    @WebMethod
+    public void insertLog(String begtime, String endtime, String dataType, String begTimeStamp, String endTimeStamp, String message);
 }

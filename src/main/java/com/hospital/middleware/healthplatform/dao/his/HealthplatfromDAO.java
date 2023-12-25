@@ -7,6 +7,7 @@ import java.util.Map;
 
 @Mapper
 public interface HealthplatfromDAO {
+    public void insertSI_YTAUTORUNLOG(Map<String, String> param);
     //JBYHRYXXB 医护人员信息表
     List<Map> queryJbyhryxxb(String orgcode);
     //JBKSXXB 科室信息
@@ -126,4 +127,6 @@ public interface HealthplatfromDAO {
     List<Map> queryEmr_scbcjl(String orgcode);
     //EMR_RCBCJL 日常病程记录
     List<Map> queryEmr_rcbcjl (String orgcode,String begtime,String endtime);
+
+
 }
