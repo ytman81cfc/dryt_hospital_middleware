@@ -2,62 +2,62 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hospital.middleware.healthplatform.dao.his.HealthplatfromDAO">
     <select id="queryMzghb" resultType="java.util.HashMap">
-        select a.orgcode                                       "YLJGDM",-- 医疗机构代码  VARCHAR 22  必填  复合主键：采用22位“卫生机构代码”
-               a.regid                                         "JZLSH",-- 就诊流水号 VARCHAR 32  必填  复合主键：医院内部HIS系统唯一编号
-               '1'                                             "GTHBZ",-- 退号标志  VARCHAR 1 必填  复合主键：1：挂号 2：退号
-               b.orgname                                       "YLJGMC",-- 医疗机构名称  VARCHAR 70  必填  医院执业许可第一名称
-               '0'                                             "FYDM",-- 分院代码  VARCHAR 20  必填  记录分院代码（内码）,如无分院，则传0
-               ''                                              "FYMC",-- 分院名称  VARCHAR 120 条件必填  分院代码不为0时必填
-               a.PRE_RID                                       "YYLSH",-- 预约流水号 VARCHAR 64    关联门诊预约表(MZYYB)
-               ''                                              "GHSXH",-- 挂号顺序号 VARCHAR 6   从1号开始所挂科室或专家的顺序号
-               p.rid                                           "YYDAH",-- 医院内部档案号 VARCHAR 64  必填  填写患者主索引号，如没有则填写就诊流水号
-               '8'                                             "KLX",-- 卡类型 VARCHAR 16  必填  请按照以下优先级顺序填写：1：患者主索引号、2：身份证号、3：医保卡号，如果都没有则填写门诊就诊流水号
-               p.rid                                           "KH",-- 卡号  VARCHAR 64  必填
-               e.item_id                                       "ZJLX",-- 证件类型  VARCHAR 2   参见CV02.01.101-2022修订版 身份证件类别代码  优先使用身份证
-               a.CERTNO                                        "ZJHM",-- 证件号码  VARCHAR 32
-               a.PATIENTNAME                                   "XM",-- 姓名  VARCHAR 50  必填
-               f.item_id                                       "XB",-- 性别  VARCHAR 1 必填  参见 GB/T 2261.1-2003 性别代码表
-               to_char(a.BRDY, 'YYYY-MM-DD')                   "CSRQ",-- 出生日期  DATETIME    必填  YYYY-MM-DD
+        select a.orgcode                                        "YLJGDM",-- 医疗机构代码  VARCHAR 22  必填  复合主键：采用22位“卫生机构代码”
+               a.regid                                          "JZLSH",-- 就诊流水号 VARCHAR 32  必填  复合主键：医院内部HIS系统唯一编号
+               '1'                                              "GTHBZ",-- 退号标志  VARCHAR 1 必填  复合主键：1：挂号 2：退号
+               b.orgname                                        "YLJGMC",-- 医疗机构名称  VARCHAR 70  必填  医院执业许可第一名称
+               '0'                                              "FYDM",-- 分院代码  VARCHAR 20  必填  记录分院代码（内码）,如无分院，则传0
+               ''                                               "FYMC",-- 分院名称  VARCHAR 120 条件必填  分院代码不为0时必填
+               a.PRE_RID                                        "YYLSH",-- 预约流水号 VARCHAR 64    关联门诊预约表(MZYYB)
+               ''                                               "GHSXH",-- 挂号顺序号 VARCHAR 6   从1号开始所挂科室或专家的顺序号
+               p.rid                                            "YYDAH",-- 医院内部档案号 VARCHAR 64  必填  填写患者主索引号，如没有则填写就诊流水号
+               '8'                                              "KLX",-- 卡类型 VARCHAR 16  必填  请按照以下优先级顺序填写：1：患者主索引号、2：身份证号、3：医保卡号，如果都没有则填写门诊就诊流水号
+               p.rid                                            "KH",-- 卡号  VARCHAR 64  必填
+               e.item_id                                        "ZJLX",-- 证件类型  VARCHAR 2   参见CV02.01.101-2022修订版 身份证件类别代码  优先使用身份证
+               a.CERTNO                                         "ZJHM",-- 证件号码  VARCHAR 32
+               substr(a.PATIENTNAME, 1, 50)                     "XM",-- 姓名  VARCHAR 50  必填
+               nvl(f.item_id, '1')                              "XB",-- 性别  VARCHAR 1 必填  参见 GB/T 2261.1-2003 性别代码表
+               nvl(to_char(a.BRDY, 'YYYY-MM-DD'), '1999-01-01') "CSRQ",-- 出生日期  DATETIME    必填  YYYY-MM-DD
                case
                    when a.ISEMERGENCY = '1' then '2'
-                   else '1' end                                "GHLB",-- 挂号类别  VARCHAR 3 必填  1：门诊 2：急诊 3：体检 9：其他
-               decode(a.REG_RESOURCE, '0', '1', '1', '3', '1') "GHTJ",-- 挂号途径  VARCHAR 1 必填  1：窗口 2：自助机 3：线上 9：其他
-               to_char(a.REG_TIME, 'yyyy-mm-dd hh24:mi:ss')    "GHSJ",-- 挂号时间  DATETIME    必填  yyyy-mm-dd hh24:mi:ss
-               ''                                              "THSJ",-- 退号时间  DATETIME      yyyy-mm-dd hh24:mi:ss
+                   else '1' end                                 "GHLB",-- 挂号类别  VARCHAR 3 必填  1：门诊 2：急诊 3：体检 9：其他
+               decode(a.REG_RESOURCE, '0', '1', '1', '3', '1')  "GHTJ",-- 挂号途径  VARCHAR 1 必填  1：窗口 2：自助机 3：线上 9：其他
+               to_char(a.REG_TIME, 'yyyy-mm-dd hh24:mi:ss')     "GHSJ",-- 挂号时间  DATETIME    必填  yyyy-mm-dd hh24:mi:ss
+               ''                                               "THSJ",-- 退号时间  DATETIME      yyyy-mm-dd hh24:mi:ss
                case
                    when a.PAYKINDCODE = '01' then '07'
                    when a.PAYKINDCODE = '02' and a.INSUTYPE = 'A' then '01'
                    when a.PAYKINDCODE = '02' and a.INSUTYPE = 'B' then '02'
-                   else '99' end                               "BXLX",-- 医疗费用支付方式  VARCHAR 4 必填  参见CV07.10.003-2022修订版 医疗费用来源类别
-               a.SI_PSN_NO                                     "YBZHBZ",-- 医保账户号码  VARCHAR 64  条件必填  填写医保卡号或社保卡号，医保患者必填
-               a.DEPTCODE                                      "YNKSBM",-- 院内科室编码  VARCHAR 64  必填
-               a.DEPTNAME                                      "YNKSMC",-- 院内科室名称  VARCHAR 200 必填
-               h.item_id                                       "KSBM",-- 中心科室编码  VARCHAR 64  必填  参见《全民健康信息平台科室分类代码表》
-               h.item_name                                     "KSMC",-- 中心科室名称  VARCHAR 200 必填  参见《全民健康信息平台科室分类代码表》
-               decode(a.YNSEE, '0', '1', '2', '2')             "JZZT",-- 就诊状态  VARCHAR 1 必填  1：未就诊 2：已就诊
-               ''                                              "ZCFWJBM",-- 诊察费物价编码 VARCHAR 20  条件必填  有物价码时必填
-               ''                                              "ZCFWJMC",-- 诊察费物价名称 VARCHAR 50  条件必填  有物价码时必填
-               nvl(round(d.totcost, 3), 0)                     "ZLF",-- 诊察费 NUMERIC 10,3  必填
-               nvl(round(d.PAYCOST, 3), 0)                     "ZFZLF",-- 个人支付诊察费用  NUMERIC 10,3  必填  退号的费用以负数表示，通过退号标志进行区分。 若挂号时暂未收费则填入0
-               ''                                              "SFZJH",-- 是否专家号 VARCHAR 1   0：否 1：是
-               ''                                              "YSBM",-- 专家工号  VARCHAR 64
-               ''                                              "ZJXM",-- 专家姓名  VARCHAR 50
-               ''                                              "ZJJB",-- 专家级别  VARCHAR 1   1：国特 2：主任 3：副主任 9：其他专家
-               ''                                              "ZJSFZHM",-- 专家身份证号码 VARCHAR 18
-               nvl(a.ISEMERGENCY, '0')                         "SFJZGH",-- 是否急诊挂号  VARCHAR 1 必填  0：否 1：是
-               nvl(a.REG_RESOURCE, '0')                        "HLWGHBZ",-- 互联网挂号标志 VARCHAR 1 必填  0：否 1：是
-               '0'                                             "SFPDJH",-- 是否排队叫号  VARCHAR 1 必填  0：否 1：是
-               to_char(a.REG_TIME, 'yyyy-mm-dd hh24:mi:ss')    "BDSJ",-- 首次报道时间  DATETIME    条件必填  yyyy-mm-dd hh24:mi:ss  患者到分诊台或通过信息系统（自助机、APP等）报到时的时间
-               to_char(a.SEE_TIME, 'yyyy-mm-dd hh24:mi:ss')    "JAOZSJ",-- 首次叫号时间  DATETIME    条件必填  yyyy-mm-dd hh24:mi:ss  患者进入诊室后医生点击叫诊系统的时间
-               '0'                                             "SFJHSJC",-- 是否仅核酸检测 VARCHAR 1 必填  0：否 1：是
-               '0'                                             "FRMZ",-- 发热门诊标志  VARCHAR 1 必填  0：否 1：是
+                   else '99' end                                "BXLX",-- 医疗费用支付方式  VARCHAR 4 必填  参见CV07.10.003-2022修订版 医疗费用来源类别
+               a.SI_PSN_NO                                      "YBZHBZ",-- 医保账户号码  VARCHAR 64  条件必填  填写医保卡号或社保卡号，医保患者必填
+               a.DEPTCODE                                       "YNKSBM",-- 院内科室编码  VARCHAR 64  必填
+               nvl(a.DEPTNAME, '-')                             "YNKSMC",-- 院内科室名称  VARCHAR 200 必填
+               nvl(h.item_id, '-')                              "KSBM",-- 中心科室编码  VARCHAR 64  必填  参见《全民健康信息平台科室分类代码表》
+               nvl(h.item_name, '-')                            "KSMC",-- 中心科室名称  VARCHAR 200 必填  参见《全民健康信息平台科室分类代码表》
+               decode(a.YNSEE, '0', '1', '2', '2')              "JZZT",-- 就诊状态  VARCHAR 1 必填  1：未就诊 2：已就诊
+               ''                                               "ZCFWJBM",-- 诊察费物价编码 VARCHAR 20  条件必填  有物价码时必填
+               ''                                               "ZCFWJMC",-- 诊察费物价名称 VARCHAR 50  条件必填  有物价码时必填
+               nvl(round(d.totcost, 3), 0)                      "ZLF",-- 诊察费 NUMERIC 10,3  必填
+               nvl(round(d.PAYCOST, 3), 0)                      "ZFZLF",-- 个人支付诊察费用  NUMERIC 10,3  必填  退号的费用以负数表示，通过退号标志进行区分。 若挂号时暂未收费则填入0
+               ''                                               "SFZJH",-- 是否专家号 VARCHAR 1   0：否 1：是
+               ''                                               "YSBM",-- 专家工号  VARCHAR 64
+               ''                                               "ZJXM",-- 专家姓名  VARCHAR 50
+               ''                                               "ZJJB",-- 专家级别  VARCHAR 1   1：国特 2：主任 3：副主任 9：其他专家
+               ''                                               "ZJSFZHM",-- 专家身份证号码 VARCHAR 18
+               nvl(a.ISEMERGENCY, '0')                          "SFJZGH",-- 是否急诊挂号  VARCHAR 1 必填  0：否 1：是
+               nvl(a.REG_RESOURCE, '0')                         "HLWGHBZ",-- 互联网挂号标志 VARCHAR 1 必填  0：否 1：是
+               '0'                                              "SFPDJH",-- 是否排队叫号  VARCHAR 1 必填  0：否 1：是
+               to_char(a.REG_TIME, 'yyyy-mm-dd hh24:mi:ss')     "BDSJ",-- 首次报道时间  DATETIME    条件必填  yyyy-mm-dd hh24:mi:ss  患者到分诊台或通过信息系统（自助机、APP等）报到时的时间
+               to_char(a.SEE_TIME, 'yyyy-mm-dd hh24:mi:ss')     "JAOZSJ",-- 首次叫号时间  DATETIME    条件必填  yyyy-mm-dd hh24:mi:ss  患者进入诊室后医生点击叫诊系统的时间
+               '0'                                              "SFJHSJC",-- 是否仅核酸检测 VARCHAR 1 必填  0：否 1：是
+               '0'                                              "FRMZ",-- 发热门诊标志  VARCHAR 1 必填  0：否 1：是
                case
                    when a.PRE_RID is null then '0'
-                   else '1' end                                "SFYY",-- 预约挂号标识  VARCHAR 1 必填  0：否 1：是
-               c.usercode                                      "GHCZYGH",-- 挂号操作员工号 VARCHAR 64  必填
-               a.CRTER_NAME                                    "GHCZYXM",-- 挂号操作员姓名 VARCHAR 50  必填
-               ''                                              "GHCZYSFZHM",-- 挂号操作员身份证号码  VARCHAR 18
-               to_char(sysdate, 'YYYY-MM-DD')                  "TBRQ" -- 填报日期  DATETIME    必填  本条数据采集时间，格式YYYY-MM-DD
+                   else '1' end                                 "SFYY",-- 预约挂号标识  VARCHAR 1 必填  0：否 1：是
+               c.usercode                                       "GHCZYGH",-- 挂号操作员工号 VARCHAR 64  必填
+               a.CRTER_NAME                                     "GHCZYXM",-- 挂号操作员姓名 VARCHAR 50  必填
+               ''                                               "GHCZYSFZHM",-- 挂号操作员身份证号码  VARCHAR 18
+               to_char(sysdate, 'YYYY-MM-DD')                   "TBRQ" -- 填报日期  DATETIME    必填  本条数据采集时间，格式YYYY-MM-DD
         from com_hospitalinfo b,
              com_userinfo c,
              com_patientinfo p,
@@ -116,7 +116,7 @@
                               and a.rid = b.item_rid
                               and a.module_rid = '202310101511361148853000000000'
                               and a.type_rid = '202311141512391328016800000000'
-             and b.orgcode=#{orgcode}) h on h.his_item_id = a.DEPTCODE
+                              and b.orgcode = #{orgcode}) h on h.his_item_id = a.DEPTCODE
         where a.orgcode = b.orgcode
           and a.orgcode = c.orgcode
           and a.CRTER = c.userid
@@ -131,62 +131,62 @@
           and to_char(a.reg_time, 'yyyy-mm-dd hh24:mi:ss') &lt;= #{endtime}
     </select>
     <select id="queryMzthb" resultType="java.util.HashMap">
-        select a.orgcode                                       "YLJGDM",-- 医疗机构代码  VARCHAR 22  必填  复合主键：采用22位“卫生机构代码”
-               a.regid                                         "JZLSH",-- 就诊流水号 VARCHAR 32  必填  复合主键：医院内部HIS系统唯一编号
-               '2'                                             "GTHBZ",-- 退号标志  VARCHAR 1 必填  复合主键：1：挂号 2：退号
-               b.orgname                                       "YLJGMC",-- 医疗机构名称  VARCHAR 70  必填  医院执业许可第一名称
-               '0'                                             "FYDM",-- 分院代码  VARCHAR 20  必填  记录分院代码（内码）,如无分院，则传0
-               ''                                              "FYMC",-- 分院名称  VARCHAR 120 条件必填  分院代码不为0时必填
-               a.PRE_RID                                       "YYLSH",-- 预约流水号 VARCHAR 64    关联门诊预约表(MZYYB)
-               ''                                              "GHSXH",-- 挂号顺序号 VARCHAR 6   从1号开始所挂科室或专家的顺序号
-               p.rid                                           "YYDAH",-- 医院内部档案号 VARCHAR 64  必填  填写患者主索引号，如没有则填写就诊流水号
-               '8'                                             "KLX",-- 卡类型 VARCHAR 16  必填  请按照以下优先级顺序填写：1：患者主索引号、2：身份证号、3：医保卡号，如果都没有则填写门诊就诊流水号
-               p.rid                                           "KH",-- 卡号  VARCHAR 64  必填
-               e.item_id                                       "ZJLX",-- 证件类型  VARCHAR 2   参见CV02.01.101-2022修订版 身份证件类别代码  优先使用身份证
-               a.CERTNO                                        "ZJHM",-- 证件号码  VARCHAR 32
-               a.PATIENTNAME                                   "XM",-- 姓名  VARCHAR 50  必填
-               f.item_id                                       "XB",-- 性别  VARCHAR 1 必填  参见 GB/T 2261.1-2003 性别代码表
-               to_char(a.BRDY, 'YYYY-MM-DD')                   "CSRQ",-- 出生日期  DATETIME    必填  YYYY-MM-DD
+        select a.orgcode                                        "YLJGDM",-- 医疗机构代码  VARCHAR 22  必填  复合主键：采用22位“卫生机构代码”
+               a.regid                                          "JZLSH",-- 就诊流水号 VARCHAR 32  必填  复合主键：医院内部HIS系统唯一编号
+               '2'                                              "GTHBZ",-- 退号标志  VARCHAR 1 必填  复合主键：1：挂号 2：退号
+               b.orgname                                        "YLJGMC",-- 医疗机构名称  VARCHAR 70  必填  医院执业许可第一名称
+               '0'                                              "FYDM",-- 分院代码  VARCHAR 20  必填  记录分院代码（内码）,如无分院，则传0
+               ''                                               "FYMC",-- 分院名称  VARCHAR 120 条件必填  分院代码不为0时必填
+               a.PRE_RID                                        "YYLSH",-- 预约流水号 VARCHAR 64    关联门诊预约表(MZYYB)
+               ''                                               "GHSXH",-- 挂号顺序号 VARCHAR 6   从1号开始所挂科室或专家的顺序号
+               p.rid                                            "YYDAH",-- 医院内部档案号 VARCHAR 64  必填  填写患者主索引号，如没有则填写就诊流水号
+               '8'                                              "KLX",-- 卡类型 VARCHAR 16  必填  请按照以下优先级顺序填写：1：患者主索引号、2：身份证号、3：医保卡号，如果都没有则填写门诊就诊流水号
+               p.rid                                            "KH",-- 卡号  VARCHAR 64  必填
+               e.item_id                                        "ZJLX",-- 证件类型  VARCHAR 2   参见CV02.01.101-2022修订版 身份证件类别代码  优先使用身份证
+               a.CERTNO                                         "ZJHM",-- 证件号码  VARCHAR 32
+               substr(a.PATIENTNAME, 1, 50)                     "XM",-- 姓名  VARCHAR 50  必填
+               nvl(f.item_id, '1')                              "XB",-- 性别  VARCHAR 1 必填  参见 GB/T 2261.1-2003 性别代码表
+               nvl(to_char(a.BRDY, 'YYYY-MM-DD'), '1999-01-01') "CSRQ",-- 出生日期  DATETIME    必填  YYYY-MM-DD
                case
                    when a.ISEMERGENCY = '1' then '2'
-                   else '1' end                                "GHLB",-- 挂号类别  VARCHAR 3 必填  1：门诊 2：急诊 3：体检 9：其他
-               decode(a.REG_RESOURCE, '0', '1', '1', '3', '1') "GHTJ",-- 挂号途径  VARCHAR 1 必填  1：窗口 2：自助机 3：线上 9：其他
-               to_char(a.REG_TIME, 'yyyy-mm-dd hh24:mi:ss')    "GHSJ",-- 挂号时间  DATETIME    必填  yyyy-mm-dd hh24:mi:ss
-               to_char(a.CANCELDATE, 'yyyy-mm-dd hh24:mi:ss')  "THSJ",-- 退号时间  DATETIME      yyyy-mm-dd hh24:mi:ss
+                   else '1' end                                 "GHLB",-- 挂号类别  VARCHAR 3 必填  1：门诊 2：急诊 3：体检 9：其他
+               decode(a.REG_RESOURCE, '0', '1', '1', '3', '1')  "GHTJ",-- 挂号途径  VARCHAR 1 必填  1：窗口 2：自助机 3：线上 9：其他
+               to_char(a.REG_TIME, 'yyyy-mm-dd hh24:mi:ss')     "GHSJ",-- 挂号时间  DATETIME    必填  yyyy-mm-dd hh24:mi:ss
+               to_char(a.CANCELDATE, 'yyyy-mm-dd hh24:mi:ss')   "THSJ",-- 退号时间  DATETIME      yyyy-mm-dd hh24:mi:ss
                case
                    when a.PAYKINDCODE = '01' then '07'
                    when a.PAYKINDCODE = '02' and a.INSUTYPE = 'A' then '01'
                    when a.PAYKINDCODE = '02' and a.INSUTYPE = 'B' then '02'
-                   else '99' end                               "BXLX",-- 医疗费用支付方式  VARCHAR 4 必填  参见CV07.10.003-2022修订版 医疗费用来源类别
-               a.SI_PSN_NO                                     "YBZHBZ",-- 医保账户号码  VARCHAR 64  条件必填  填写医保卡号或社保卡号，医保患者必填
-               a.DEPTCODE                                      "YNKSBM",-- 院内科室编码  VARCHAR 64  必填
-               a.DEPTNAME                                      "YNKSMC",-- 院内科室名称  VARCHAR 200 必填
-               h.item_id                                       "KSBM",-- 中心科室编码  VARCHAR 64  必填  参见《全民健康信息平台科室分类代码表》
-               h.item_name                                     "KSMC",-- 中心科室名称  VARCHAR 200 必填  参见《全民健康信息平台科室分类代码表》
-               decode(a.YNSEE, '0', '1', '2')                  "JZZT",-- 就诊状态  VARCHAR 1 必填  1：未就诊 2：已就诊
-               ''                                              "ZCFWJBM",-- 诊察费物价编码 VARCHAR 20  条件必填  有物价码时必填
-               ''                                              "ZCFWJMC",-- 诊察费物价名称 VARCHAR 50  条件必填  有物价码时必填
-               nvl(-round(d.totcost, 3), 0)                    "ZLF",-- 诊察费 NUMERIC 10,3  必填
-               nvl(-round(d.PAYCOST, 3), 0)                    "ZFZLF",-- 个人支付诊察费用  NUMERIC 10,3  必填  退号的费用以负数表示，通过退号标志进行区分。 若挂号时暂未收费则填入0
-               ''                                              "SFZJH",-- 是否专家号 VARCHAR 1   0：否 1：是
-               ''                                              "YSBM",-- 专家工号  VARCHAR 64
-               ''                                              "ZJXM",-- 专家姓名  VARCHAR 50
-               ''                                              "ZJJB",-- 专家级别  VARCHAR 1   1：国特 2：主任 3：副主任 9：其他专家
-               ''                                              "ZJSFZHM",-- 专家身份证号码 VARCHAR 18
-               nvl(a.ISEMERGENCY, '0')                         "SFJZGH",-- 是否急诊挂号  VARCHAR 1 必填  0：否 1：是
-               nvl(a.REG_RESOURCE, '0')                        "HLWGHBZ",-- 互联网挂号标志 VARCHAR 1 必填  0：否 1：是
-               '0'                                             "SFPDJH",-- 是否排队叫号  VARCHAR 1 必填  0：否 1：是
-               to_char(a.REG_TIME, 'yyyy-mm-dd hh24:mi:ss')    "BDSJ",-- 首次报道时间  DATETIME    条件必填  yyyy-mm-dd hh24:mi:ss  患者到分诊台或通过信息系统（自助机、APP等）报到时的时间
-               to_char(a.SEE_TIME, 'yyyy-mm-dd hh24:mi:ss')    "JAOZSJ",-- 首次叫号时间  DATETIME    条件必填  yyyy-mm-dd hh24:mi:ss  患者进入诊室后医生点击叫诊系统的时间
-               '0'                                             "SFJHSJC",-- 是否仅核酸检测 VARCHAR 1 必填  0：否 1：是
-               '0'                                             "FRMZ",-- 发热门诊标志  VARCHAR 1 必填  0：否 1：是
+                   else '99' end                                "BXLX",-- 医疗费用支付方式  VARCHAR 4 必填  参见CV07.10.003-2022修订版 医疗费用来源类别
+               a.SI_PSN_NO                                      "YBZHBZ",-- 医保账户号码  VARCHAR 64  条件必填  填写医保卡号或社保卡号，医保患者必填
+               a.DEPTCODE                                       "YNKSBM",-- 院内科室编码  VARCHAR 64  必填
+               nvl(a.DEPTNAME, '-')                             "YNKSMC",-- 院内科室名称  VARCHAR 200 必填
+               nvl(h.item_id, '-')                              "KSBM",-- 中心科室编码  VARCHAR 64  必填  参见《全民健康信息平台科室分类代码表》
+               nvl(h.item_name, '-')                            "KSMC",-- 中心科室名称  VARCHAR 200 必填  参见《全民健康信息平台科室分类代码表》
+               decode(a.YNSEE, '0', '1', '2')                   "JZZT",-- 就诊状态  VARCHAR 1 必填  1：未就诊 2：已就诊
+               ''                                               "ZCFWJBM",-- 诊察费物价编码 VARCHAR 20  条件必填  有物价码时必填
+               ''                                               "ZCFWJMC",-- 诊察费物价名称 VARCHAR 50  条件必填  有物价码时必填
+               nvl(-round(d.totcost, 3), 0)                     "ZLF",-- 诊察费 NUMERIC 10,3  必填
+               nvl(-round(d.PAYCOST, 3), 0)                     "ZFZLF",-- 个人支付诊察费用  NUMERIC 10,3  必填  退号的费用以负数表示，通过退号标志进行区分。 若挂号时暂未收费则填入0
+               ''                                               "SFZJH",-- 是否专家号 VARCHAR 1   0：否 1：是
+               ''                                               "YSBM",-- 专家工号  VARCHAR 64
+               ''                                               "ZJXM",-- 专家姓名  VARCHAR 50
+               ''                                               "ZJJB",-- 专家级别  VARCHAR 1   1：国特 2：主任 3：副主任 9：其他专家
+               ''                                               "ZJSFZHM",-- 专家身份证号码 VARCHAR 18
+               nvl(a.ISEMERGENCY, '0')                          "SFJZGH",-- 是否急诊挂号  VARCHAR 1 必填  0：否 1：是
+               nvl(a.REG_RESOURCE, '0')                         "HLWGHBZ",-- 互联网挂号标志 VARCHAR 1 必填  0：否 1：是
+               '0'                                              "SFPDJH",-- 是否排队叫号  VARCHAR 1 必填  0：否 1：是
+               to_char(a.REG_TIME, 'yyyy-mm-dd hh24:mi:ss')     "BDSJ",-- 首次报道时间  DATETIME    条件必填  yyyy-mm-dd hh24:mi:ss  患者到分诊台或通过信息系统（自助机、APP等）报到时的时间
+               to_char(a.SEE_TIME, 'yyyy-mm-dd hh24:mi:ss')     "JAOZSJ",-- 首次叫号时间  DATETIME    条件必填  yyyy-mm-dd hh24:mi:ss  患者进入诊室后医生点击叫诊系统的时间
+               '0'                                              "SFJHSJC",-- 是否仅核酸检测 VARCHAR 1 必填  0：否 1：是
+               '0'                                              "FRMZ",-- 发热门诊标志  VARCHAR 1 必填  0：否 1：是
                case
                    when a.PRE_RID is null then '0'
-                   else '1' end                                "SFYY",-- 预约挂号标识  VARCHAR 1 必填  0：否 1：是
-               c.usercode                                      "GHCZYGH",-- 挂号操作员工号 VARCHAR 64  必填
-               a.CRTER_NAME                                    "GHCZYXM",-- 挂号操作员姓名 VARCHAR 50  必填
-               ''                                              "GHCZYSFZHM",-- 挂号操作员身份证号码  VARCHAR 18
-               to_char(sysdate, 'YYYY-MM-DD')                  "TBRQ" -- 填报日期  DATETIME    必填  本条数据采集时间，格式YYYY-MM-DD
+                   else '1' end                                 "SFYY",-- 预约挂号标识  VARCHAR 1 必填  0：否 1：是
+               c.usercode                                       "GHCZYGH",-- 挂号操作员工号 VARCHAR 64  必填
+               a.CRTER_NAME                                     "GHCZYXM",-- 挂号操作员姓名 VARCHAR 50  必填
+               ''                                               "GHCZYSFZHM",-- 挂号操作员身份证号码  VARCHAR 18
+               to_char(sysdate, 'YYYY-MM-DD')                   "TBRQ" -- 填报日期  DATETIME    必填  本条数据采集时间，格式YYYY-MM-DD
         from com_hospitalinfo b,
              com_userinfo c,
              com_patientinfo p,
@@ -245,7 +245,7 @@
                               and a.rid = b.item_rid
                               and a.module_rid = '202310101511361148853000000000'
                               and a.type_rid = '202311141512391328016800000000'
-             and b.orgcode=#{orgcode}) h on h.his_item_id = a.DEPTCODE
+                              and b.orgcode = #{orgcode}) h on h.his_item_id = a.DEPTCODE
         where a.orgcode = b.orgcode
           and a.orgcode = c.orgcode
           and a.CRTER = c.userid

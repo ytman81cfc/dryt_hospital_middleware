@@ -102,16 +102,8 @@
                ''                                         "XZZYZHDM",--	修正诊断--中医症候代码	VARCHAR	64		GB/T 15657-2021中医病证分类代码
                ''                                         "XZZYZHMC",--	修正诊断--中医症候名称	VARCHAR	512
                ''                                         "XZZDRQ",--	修正诊断日期	DATETIME
-               case
-                   when o.DISE_TYPE = '1' and o.MAIN_FLAG = '1' then i.item_id
-                   else ''
-                   end                                    "QDXYZDDM"
-                ,--	确定诊断-西医诊断代码	VARCHAR	64
-               case
-                   when o.DISE_TYPE = '1' and o.MAIN_FLAG = '1' then i.item_name
-                   else ''
-                   end                                    "QDXYZDMC"
-                ,--	确定诊断-西医诊断名称	VARCHAR	512
+               o.DISE_CODE                                "QDXYZDDM",--	确定诊断-西医诊断代码	VARCHAR	64
+               o.DISE_NAME                                "QDXYZDMC",--	确定诊断-西医诊断名称	VARCHAR	512
                ''                                         "QDZYBMDM",--	确定诊断-中医病名代码	VARCHAR	64
                ''                                         "QDZYBMMC",--	确定诊断-中医病名名称	VARCHAR	512
                ''                                         "QDZYZHDM",--	确定诊断-中医证候代码	VARCHAR	64
@@ -170,15 +162,6 @@
                               and a.module_rid = '202310101511361148853000000000'
                               and a.type_rid = '202311161530191338672700000000') h on h.his_item_id = d.RELACODE,
              ipr_diagnose o
-                 left join (select a.item_id, a.item_name, b.his_item_id
-                            from si_yt_report_item a,
-                                 si_yt_report_item_compare b
-                            where a.module_rid = b.module_rid
-                              and a.type_rid = b.type_rid
-                              and a.rid = b.item_rid
-                              and a.module_rid = '202310101511361148853000000000'
-                              and a.type_rid = '202311281105131392640900000000'
-                              and b.orgcode = #{orgcode}) i on i.his_item_id = o.DISE_CODE
         where a.orgcode = b.orgcode
           and a.inid = b.inid
           and a.instate &lt;&gt; '0'

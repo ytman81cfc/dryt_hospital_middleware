@@ -9,20 +9,11 @@
                ''                             "FYMC",--	分院名称	VARCHAR	120	条件必填	分院代码不为0时必填
                '1'                            "ZDLXDM",--	诊断类型代码	VARCHAR	1	必填	1：西医 2：中医
                a.DIAG_NAME                    "YNZDMC",--	院内诊断名称	VARCHAR	128	必填	院内诊断名称
-               b.item_id                      "PTZXDM",--	平台中心诊断代码	VARCHAR	64		西医参见 《疾病分类与代码(ICD-10)》	中医参见 GB/T 15657-2021 中医病名/证候/治法
-               b.item_name                    "PTZXMC",--	平台中心诊断名称	VARCHAR	128		西医参见 《疾病分类与代码(ICD-10)》	中医参见 GB/T 15657-2021 中医病名/证候/治法
+               a.DIAG_CODE                    "PTZXDM",--	平台中心诊断代码	VARCHAR	64		西医参见 《疾病分类与代码(ICD-10)》	中医参见 GB/T 15657-2021 中医病名/证候/治法
+               a.DIAG_NAME                    "PTZXMC",--	平台中心诊断名称	VARCHAR	128		西医参见 《疾病分类与代码(ICD-10)》	中医参见 GB/T 15657-2021 中医病名/证候/治法
                '0'                            "JLZT",--	记录状态	VARCHAR	1	必填	0：正常 1：停用
                to_char(sysdate, 'YYYY-MM-DD') "TBRQ"   --	填报日期	DATETIME		必填	本条数据采集时间，格式YYYY-MM-DD
         from SI_DIAGLIST a
-                 left join (select a.item_id, a.item_name, b.his_item_id
-                            from si_yt_report_item a,
-                                 si_yt_report_item_compare b
-                            where a.module_rid = b.module_rid
-                              and a.type_rid = b.type_rid
-                              and a.rid = b.item_rid
-                              and a.module_rid = '202310101511361148853000000000'
-                              and a.type_rid = '202311281105131392640900000000'
-                              and b.orgcode = #{orgcode}) b on b.his_item_id = a.DIAG_CODE
         where a.areacode = #{orgcode}
           and a.vali_flag = '1'
     </select>

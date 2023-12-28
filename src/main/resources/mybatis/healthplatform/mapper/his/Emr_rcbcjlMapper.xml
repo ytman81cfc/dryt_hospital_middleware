@@ -13,15 +13,15 @@
                c.rid                                          "KH",--	卡号	VARCHAR	64	必填
                a.outdeptcode                                  "YNKSBM",--	院内科室编码	VARCHAR	50	必填
                a.outdeptname                                  "YNKSMC",--	院内科室名称	VARCHAR	100	必填
-               g.item_id                                      "KSMC",--	科室名称	VARCHAR	100	必填
-               g.item_name                                    "KSBM",--	科室编码	VARCHAR	50	必填	编码。见科室字典表
+               nvl(g.item_name, '未对照')                        "KSMC",--	科室名称	VARCHAR	100	必填
+               nvl(g.item_id, '未对照')                          "KSBM",--	科室编码	VARCHAR	50	必填	编码。见科室字典表
                d.NURSECELLNAME                                "BQMC",--	病区名称	VARCHAR	50	必填
                ''                                             "BFH",--	病房号	VARCHAR	10
                d.bedno                                        "BCH",--	病床号	VARCHAR	10
                to_char(e.CREATETIME, 'YYYY-MM-DD HH24:mi:SS') "JLRQSJ",--	记录日期时间	DATETIME		必填	格式：YYYY-MM-DD HH:MM:SS
                a.patientname                                  "HZXM",--	患者姓名	VARCHAR	50	必填
                h.item_id                                      "XBDM",--	性别代码	VARCHAR	1	必填	编码。按国标GB/T 2261.1-2003执行
-               a.BIRTHDAY                                     "CSRQ",--	出生日期	DATETIME		必填	格式：YYYY-MM-DD
+               to_char(a.BIRTHDAY, 'YYYY-MM-DD')              "CSRQ",--	出生日期	DATETIME		必填	格式：YYYY-MM-DD
                case
                    when extract(year from a.indate) - extract(year from a.BIRTHDAY) &gt; 1
                        then floor(extract(year from a.indate) - extract(year from a.BIRTHDAY))

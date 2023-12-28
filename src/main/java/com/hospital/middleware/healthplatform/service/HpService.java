@@ -684,28 +684,8 @@ public class HpService {
         return out;
     }
     public List<Map> queryScbc(String orgcode ,String begtime, String endtime) {
-        List<Map> list1=hpfDAO.queryZs(orgcode,begtime,endtime);
+        List<Map> list2=hpfDAO.query(orgcode,begtime,endtime);
         hpfDAO.delete();
-        for (int i = 0; i < list1.size(); i++) {
-            Clob clob = null;
-            String text = "";
-            String result = "";
-            try {
-                if (list1.get(i).containsKey("TEXT2")) {
-                    clob = (Clob) list1.get(i).get("TEXT2");
-                    text = clob.getSubString(1, (int) clob.length());
-                    String info2 = this.decodeBase64AndGZip(text);
-                    result=info2.replaceAll("<.*?>", "");
-                    String zs=result.substring(result.indexOf("诉：")+2,result.indexOf("现病史：")).replace("&nbsp;", "");;
-                    list1.get(i).remove("TEXT2");
-                    list1.get(i).put("ZS", zs);
-                    hpfDAO.add(list1.get(i).get("INID").toString(),list1.get(i).get("ORGCODE").toString(),list1.get(i).get("ZS").toString());
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        /*List<Map> list2 = hpfDAO.query(orgcode);
         for (int i = 0; i < list2.size(); i++) {
             Clob clob = null;
             String text = "";
@@ -716,9 +696,18 @@ public class HpService {
                     text = clob.getSubString(1, (int) clob.length());
                     String info = this.decodeBase64AndGZip(text);
                     result=info.replaceAll("<.*?>", "");
-                    String bltd=result.substring(result.indexOf("病例特点：")+5,result.indexOf("初步诊断"));
+                    String bltd=result.substring(result.indexOf("病例特点：")+5,result.indexOf("诊断"));
+                    if(bltd.length()>1300){
+                        bltd=bltd.substring(0,1300);
+                    }
                     String zdyj=result.substring(result.indexOf("鉴别诊断：")+5,result.indexOf("诊疗计划")).replace("&nbsp;", "");
+                    if(zdyj.length()>1300) {
+                        zdyj = zdyj.substring(0, 1300);
+                    }
                     String zljh=result.substring(result.indexOf("诊疗计划：")+5).replace("&nbsp;", "");
+                    if(zljh.length()>600) {
+                        zljh = zljh.substring(0, 600);
+                    }
                     list2.get(i).remove("TEXT2");
                     list2.get(i).put("BLTD", bltd);
                     list2.get(i).put("ZDYJ", zdyj);
@@ -730,19 +719,41 @@ public class HpService {
                     map.put("BLTD",list2.get(i).get("BLTD").toString());
                     map.put("ZDYJ",list2.get(i).get("ZDYJ").toString());
                     map.put("ZLJH",list2.get(i).get("ZLJH").toString());
-                    hpfDAO.update(map);
+                    hpfDAO.add(map);
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-        }*/
+        }
+        List<Map> list1 = hpfDAO.queryZs(orgcode);
+        for (int i = 0; i < list1.size(); i++) {
+            Clob clob = null;
+            String text = "";
+            String result = "";
+            try {
+                if (list1.get(i).containsKey("TEXT2")) {
+                    clob = (Clob) list1.get(i).get("TEXT2");
+                    text = clob.getSubString(1, (int) clob.length());
+                    String info2 = this.decodeBase64AndGZip(text);
+                    result=info2.replaceAll("<.*?>", "");
+                    String zs=result.substring(result.indexOf("诉：")+2,result.indexOf("现病史：")).replace("&nbsp;", "");;
+                    if(zs.length()>330) {
+                        zs = zs.substring(0, 330);
+                    }
+                    list1.get(i).remove("TEXT2");
+                    list1.get(i).put("ZS", zs);
+                    hpfDAO.update(list1.get(i).get("INID").toString(),list1.get(i).get("ORGCODE").toString(),list1.get(i).get("ZS").toString());
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
         List<Map> list=hpfDAO.queryEmr_scbcjl(orgcode);
         return list;
     }
     public List<Map> queryRcbc(String orgcode ,String begtime, String endtime) {
         List<Map> list1=hpfDAO.queryEmr_rcbcjl(orgcode,begtime,endtime);
-        // hpfDAO.delete();
-        for (int i = 0; i < list1.size(); i++) {
+         for (int i = 0; i < list1.size(); i++) {
             Clob clob = null;
             String text = "";
             String result = "";
@@ -752,7 +763,11 @@ public class HpService {
                     text = clob.getSubString(1, (int) clob.length());
                     String info2 = this.decodeBase64AndGZip(text);
                     result=info2.replaceAll("<.*?>", "");
-                    list1.get(i).put("ZYBC",result.replace("&nbsp;",""));
+                    String zybc=result.replace("&nbsp;","");
+                    if(zybc.length()>600){
+                        zybc=zybc.substring(0,600);
+                    }
+                    list1.get(i).put("ZYBC",zybc);
                 }
             } catch (SQLException e) {
                 e.printStackTrace();

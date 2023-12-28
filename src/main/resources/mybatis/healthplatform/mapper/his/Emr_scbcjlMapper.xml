@@ -12,8 +12,7 @@
           and a.REGISTERNO = b.inid
           and b.instate &lt;&gt; '0'
           and a.orgcode = #{orgcode}
-          and a.CREATETIME &gt;= to_date(#{begtime}, 'YYYY-MM-DD HH24:mi:SS')
-          and a.CREATETIME &lt;= to_date(#{endtime}, 'YYYY-MM-DD HH24:mi:SS')
+          and b.inid in (select inid from PRO_SCBCJL where orgcode = #{orgcode})
           and a.typecode = 'STD54'
           and a.isvalid = '1'
     </select>
@@ -29,29 +28,28 @@
         where a.orgcode = b.orgcode
           and a.REGISTERNO = b.inid
           and b.instate &lt;&gt; '0'
-          and a.orgcode = #{orgcode}
-          and b.inid in (select inid from PRO_SCBCJL where orgcode = #{orgcode})
           and a.typecode = 'TR00029'
           and a.isvalid = '1'
+          and a.orgcode = #{orgcode}
+          and a.CREATETIME &gt;= to_date(#{begtime}, 'YYYY-MM-DD HH24:mi:SS')
+          and a.CREATETIME &lt;= to_date(#{endtime}, 'YYYY-MM-DD HH24:mi:SS')
     </select>
     <delete id="delete">
         delete
         from PRO_SCBCJL
     </delete>
 
-    <insert id="add">
-        insert into PRO_SCBCJL(inid, orgcode, zs)
-        values (#{inid}, #{orgcode}, #{zs})
+    <insert id="add" parameterType="java.util.HashMap">
+        insert into PRO_SCBCJL(inid, orgcode, JLRQSJ, BLTD, ZDYJ, ZLJH)
+        values (#{INID,jdbcType=VARCHAR}, #{ORGCODE,jdbcType=VARCHAR}, #{JLRQSJ,jdbcType=VARCHAR},
+                #{BLTD,jdbcType=VARCHAR}, #{ZDYJ,jdbcType=VARCHAR}, #{ZLJH,jdbcType=VARCHAR})
     </insert>
 
     <update id="update">
         update PRO_SCBCJL
-        set JLRQSJ=#{map.JLRQSJ},
-            BLTD=#{map.BLTD},
-            ZDYJ=#{map.ZDYJ},
-            ZLJH=#{map.ZLJH}
-        where orgcode = #{map.ORGCODE}
-          and inid = #{map.INID}
+        set zs=#{zs,jdbcType=VARCHAR}
+        where orgcode = #{orgcode}
+          and inid = #{inid}
     </update>
 
 
@@ -65,8 +63,8 @@
                c.rid                          "KH",--	卡号	VARCHAR	64	必填
                a.OUTDEPTCODE                  "YNKSBM",--	院内科室编码	VARCHAR	50	必填
                a.OUTDEPTNAME                  "YNKSMC",--	院内科室名称	VARCHAR	100	必填
-               g.item_id                      "KSMC",--	科室名称	VARCHAR	100	必填
-               g.item_name                    "KSBM",--	科室编码	VARCHAR	50	必填	编码。见科室字典表
+               g.item_name                    "KSMC",--	科室名称	VARCHAR	100	必填
+               g.item_id                      "KSBM",--	科室编码	VARCHAR	50	必填	编码。见科室字典表
                d.NURSECELLNAME                "BQMC",--	病区名称	VARCHAR	50	必填
                ''                             "BFH",--	病房号	VARCHAR	10
                d.bedno                        "BCH",--	病床号	VARCHAR	10
@@ -87,16 +85,16 @@
                case
                    when months_between(a.indate, a.BIRTHDAY) &lt; 1 then floor(a.indate - a.BIRTHDAY)
                    else 0 end                 " NLXS",--	年龄(小时)	NUMERIC	3
-               f.zs                           "ZS",--	主诉	VARCHAR	1024	必填
-               f.bltd                         "BLTD",--	病例特点	VARCHAR	4000
-               f.zdyj                         "ZDYJ",--	诊断依据	VARCHAR	4000
-               f.zljh                         "ZLJH",--	诊疗计划	VARCHAR	2000
+               nvl(f.zs, '-')                 "ZS",--	主诉	VARCHAR	1024	必填
+               nvl(f.bltd, '-')               "BLTD",--	病例特点	VARCHAR	4000
+               nvl(f.zdyj, '-')               "ZDYJ",--	诊断依据	VARCHAR	4000
+               nvl(f.zljh, '-')               "ZLJH",--	诊疗计划	VARCHAR	2000
                ''                             "ZYSZGCJG",--	中医“四诊”观察结果	VARCHAR	1024
                ''                             "ZZZF",--	治则治法	VARCHAR	100		字典：GB/T 16751_3_1997治法代码
                j.code                         "YNCBXYZDDM",--	初步诊断-院内西医诊断编码	VARCHAR	128	必填	多个用英文分号“;”分割
                j.name                         "YNCBXYZDMC",--	初步诊断-院内西医诊断名称	VARCHAR	512	必填	多个用正斜杠“/”分割
-               j.item_id                      "CBXYZDDM",--	初步诊断-西医诊断编码	VARCHAR	128	必填	参见《疾病分类与代码(ICD-10)》，多个用英文分号“;”分割
-               j.item_name                    "CBXYZDMC",--	初步诊断-西医诊断名称	VARCHAR	512	必填	参见《疾病分类与代码(ICD-10)》，多个用正斜杠“/”分割
+               nvl(j.code, '-')               "CBXYZDDM",--	初步诊断-西医诊断编码	VARCHAR	128	必填	参见《疾病分类与代码(ICD-10)》，多个用英文分号“;”分割
+               nvl(j.name, '-')               "CBXYZDMC",--	初步诊断-西医诊断名称	VARCHAR	512	必填	参见《疾病分类与代码(ICD-10)》，多个用正斜杠“/”分割
                ''                             "YNCBZYBMDM",--	初步诊断-院内中医病名代码	VARCHAR	128		多个用英文分号“;”分割
                ''                             "YNCBZYBMMC",--	初步诊断-院内中医病名名称	VARCHAR	512		多个用正斜杠“/”分割
                ''                             "CBZYBMDM",--	初步诊断-中医病名代码	VARCHAR	128		参见GB/T 15657-2021，多个用英文分号“;”分割
@@ -146,22 +144,8 @@
                  left join (select listagg(a.DISE_CODE, ';') within group(order by a.DISE_CODE) code,
              listagg(a.DISE_NAME,';') within
                             group (order by a.DISE_NAME) name,
-                                listagg(b.item_id, ';') within
-                            group (order by b.item_id) item_id,
-                                listagg(b.item_name, ';') within
-                            group (order by b.item_name) item_name, a.inid, a.orgcode
+                                a.inid, a.orgcode
                             FROM ipr_diagnose a
-                                left join (select a.item_id, a.item_name, b.his_item_id
-                                from si_yt_report_item a,
-                                si_yt_report_item_compare b
-                                where a.module_rid = b.module_rid
-                                and a.type_rid = b.type_rid
-                                and a.rid = b.item_rid
-                                and a.module_rid = '202310101511361148853000000000'
-                                and a.type_rid = '202311281105131392640900000000'
-                                and b.orgcode=#{orgcode}
-                                ) b
-                            on b.his_item_id=a.DISE_CODE
                             where DISE_TYPE='1' and DISE_CLINICD='3'
                             group by inid, orgcode) j
                            on j.orgcode = a.orgcode and j.inid = a.inid,
@@ -169,7 +153,6 @@
              com_patientinfo c,
              inr_receiveinfo d
                  left join com_userinfo i on i.orgcode = d.orgcode and i.usercode = d.CHADR_NO,
-             EMR_DOCUMENT e,
              PRO_SCBCJL f
         where a.orgcode = b.orgcode
           and a.orgcode = c.orgcode
@@ -178,9 +161,6 @@
           and a.instate &lt;&gt; '0'
           and a.orgcode = d.orgcode
           and a.inid = d.inid
-          and a.orgcode = e.orgcode
-          and a.inid = e.REGISTERNO
-          and e.DTYPE = '1'
           and a.orgcode = f.orgcode
           and a.inid = f.inid
 

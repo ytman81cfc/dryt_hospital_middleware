@@ -3,23 +3,22 @@
 <mapper namespace="com.hospital.middleware.healthplatform.dao.his.HealthplatfromDAO">
 
     <select id="queryJcjlzb_his" resultType="java.util.HashMap">
-        select a.orgcode                      "YLJGDM",--	医疗机构代码	VARCHAR	22	必填	复合主键：采用22位“卫生机构代码”
-               a.applyid                      "JCLSH",--	检查报告流水号	VARCHAR	36	必填	复合主键：检查报告单唯一标识，关联《检查记录表》
-               d.feeid                        "JCJLZLSH",--	检查记录子表流水号	VARCHAR	36	必填	复合主键：本次检查医嘱对应的检查收费项目唯一编码
-               b.orgname                      "YLJGMC",--	医疗机构名称	VARCHAR	70	必填	医院执业许可第一名称
-               '0'                            "FYDM",--	分院代码	VARCHAR	20	必填	记录分院代码（内码）,如无分院，则传0
-               ''                             "FYMC",--	分院名称	VARCHAR	120	条件必填	分院代码不为0时必填
-               a.PATIENTBUSIID                "JZLSH",--	就诊流水号	VARCHAR	32	必填	门诊：填写门诊就诊记录表流水号； 住院：填写住院就诊记录表流水号； 体检：填写体检就诊记录表流水号；
-               d.itemcode                     "JCSFXMDM",--	院内检查收费项目代码	VARCHAR	64	必填	医院内部的唯一标识该收费项目的编码
-               d.itemname                     "JCSFXMMC",--	院内检查收费项目名称	VARCHAR	250	必填	医院内部的唯一标识该收费项目的名称
-               h.item_id                      "JCSFXMPTDM",--	中心检查收费项目代码	VARCHAR	64	必填	参见《全民健康信息平台医疗服务项目价格表》
-               h.item_name                    "JCSFXMPTMC",--	中心检查收费项目名称	VARCHAR	250	必填	参见《全民健康信息平台医疗服务项目价格表》
-               c.PARTORSAMPLE                 "YYJCBWBM",--	院内检查部位编码	VARCHAR	32	必填	医院检查部位编码
-               f.dictname                     "YYJCBWMC",--	院内检查部位名称	VARCHAR	50	必填	医院检查部位名称
-               g.item_id                      "JCBW",--	中心检查部位编码	VARCHAR	32	必填	表明病人的检查部位的编码，参见ZD_ACRJC检查部位代码表若对应到多个部位，则中间用英文分号分隔，对填写的编码必须至少精确到二级目录
-               g.item_name                    "JCBWMC",--	中心检查部位名称	VARCHAR	50	必填
-               to_char(sysdate, 'YYYY-MM-DD') "TBRQ"--	填报日期	DATETIME		必填	本条数据采集时间，格式YYYY-MM-DD
-
+        select a.orgcode                                     "YLJGDM",--	医疗机构代码	VARCHAR	22	必填	复合主键：采用22位“卫生机构代码”
+               a.applyid                                     "JCLSH",--	检查报告流水号	VARCHAR	36	必填	复合主键：检查报告单唯一标识，关联《检查记录表》
+               d.feeid                                       "JCJLZLSH",--	检查记录子表流水号	VARCHAR	36	必填	复合主键：本次检查医嘱对应的检查收费项目唯一编码
+               b.orgname                                     "YLJGMC",--	医疗机构名称	VARCHAR	70	必填	医院执业许可第一名称
+               '0'                                           "FYDM",--	分院代码	VARCHAR	20	必填	记录分院代码（内码）,如无分院，则传0
+               ''                                            "FYMC",--	分院名称	VARCHAR	120	条件必填	分院代码不为0时必填
+               a.PATIENTBUSIID                               "JZLSH",--	就诊流水号	VARCHAR	32	必填	门诊：填写门诊就诊记录表流水号； 住院：填写住院就诊记录表流水号； 体检：填写体检就诊记录表流水号；
+               d.itemcode                                    "JCSFXMDM",--	院内检查收费项目代码	VARCHAR	64	必填	医院内部的唯一标识该收费项目的编码
+               d.itemname                                    "JCSFXMMC",--	院内检查收费项目名称	VARCHAR	250	必填	医院内部的唯一标识该收费项目的名称
+               nvl(replace(h.med_list_codg, '_SI', ''), '-') "JCSFXMPTDM",--	中心检查收费项目代码	VARCHAR	64	必填	参见《全民健康信息平台医疗服务项目价格表》
+               h.servitem_name                               "JCSFXMPTMC",--	中心检查收费项目名称	VARCHAR	250	必填	参见《全民健康信息平台医疗服务项目价格表》
+               nvl(c.PARTORSAMPLE, '-')                      "YYJCBWBM",--	院内检查部位编码	VARCHAR	32	必填	医院检查部位编码
+               nvl(f.dictname, '-')                          "YYJCBWMC",--	院内检查部位名称	VARCHAR	50	必填	医院检查部位名称
+               nvl(g.item_id, '未对照')                         "JCBW",--	中心检查部位编码	VARCHAR	32	必填	表明病人的检查部位的编码，参见ZD_ACRJC检查部位代码表若对应到多个部位，则中间用英文分号分隔，对填写的编码必须至少精确到二级目录
+               nvl(g.item_name, '未对照')                       "JCBWMC",--	中心检查部位名称	VARCHAR	50	必填
+               to_char(sysdate, 'YYYY-MM-DD')                "TBRQ"--	填报日期	DATETIME		必填	本条数据采集时间，格式YYYY-MM-DD
         from met_checkapply_info a,
              com_hospitalinfo b,
              fin_undruginfo c
@@ -31,18 +30,10 @@
                               and a.type_rid = b.type_rid
                               and a.rid = b.item_rid
                               and a.module_rid = '202310101511361148853000000000'
-                              and a.type_rid = '202312070843031430386800000000') g on g.his_item_id = c.PARTORSAMPLE
-                 left join (select a.item_id, a.item_name, b.his_item_id
-                            from si_yt_report_item a,
-                                 si_yt_report_item_compare b
-                            where a.module_rid = b.module_rid
-                              and a.type_rid = b.type_rid
-                              and a.rid = b.item_rid
-                              and a.module_rid = '202310101511361148853000000000'
-                              and a.type_rid = '202312071016491431096700000000'
-                              and b.orgcode = #{orgcode}) h
-                           on h.his_item_id = c.itemcode,
-             opb_feedetail d,
+                              and a.type_rid = '202312070843031430386800000000'
+                              and b.orgcode = #{orgcode}) g on g.his_item_id = c.PARTORSAMPLE,
+             opb_feedetail d
+                 left join fin_item_compare h on h.orgcode = d.orgcode and h.ITEMCODE = d.ITEMCODE,
              opr_register e
         where a.orgcode = e.orgcode
           and a.PATIENTBUSIID = e.regid
@@ -59,22 +50,22 @@
           and a.RECORDDATE &gt;= to_date(#{begtime}, 'yyyy-mm-dd hh24:mi:ss')
           and a.RECORDDATE &lt;= to_date(#{endtime}, 'yyyy-mm-dd hh24:mi:ss')
         union all
-        select a.orgcode                      "YLJGDM",--	医疗机构代码	VARCHAR	22	必填	复合主键：采用22位“卫生机构代码”
-               a.applyid                      "JCLSH",--	检查报告流水号	VARCHAR	36	必填	复合主键：检查报告单唯一标识，关联《检查记录表》
-               d.feeid                        "JCJLZLSH",--	检查记录子表流水号	VARCHAR	36	必填	复合主键：本次检查医嘱对应的检查收费项目唯一编码
-               b.orgname                      "YLJGMC",--	医疗机构名称	VARCHAR	70	必填	医院执业许可第一名称
-               '0'                            "FYDM",--	分院代码	VARCHAR	20	必填	记录分院代码（内码）,如无分院，则传0
-               ''                             "FYMC",--	分院名称	VARCHAR	120	条件必填	分院代码不为0时必填
-               a.PATIENTBUSIID                "JZLSH",--	就诊流水号	VARCHAR	32	必填	门诊：填写门诊就诊记录表流水号； 住院：填写住院就诊记录表流水号； 体检：填写体检就诊记录表流水号；
-               d.itemcode                     "JCSFXMDM",--	院内检查收费项目代码	VARCHAR	64	必填	医院内部的唯一标识该收费项目的编码
-               d.itemname                     "JCSFXMMC",--	院内检查收费项目名称	VARCHAR	250	必填	医院内部的唯一标识该收费项目的名称
-               ''                             "JCSFXMPTDM",--	中心检查收费项目代码	VARCHAR	64	必填	参见《全民健康信息平台医疗服务项目价格表》
-               ''                             "JCSFXMPTMC",--	中心检查收费项目名称	VARCHAR	250	必填	参见《全民健康信息平台医疗服务项目价格表》
-               c.PARTORSAMPLE                 "YYJCBWBM",--	院内检查部位编码	VARCHAR	32	必填	医院检查部位编码
-               f.dictname                     "YYJCBWMC",--	院内检查部位名称	VARCHAR	50	必填	医院检查部位名称
-               g.item_id                      "JCBW",--	中心检查部位编码	VARCHAR	32	必填	表明病人的检查部位的编码，参见ZD_ACRJC检查部位代码表若对应到多个部位，则中间用英文分号分隔，对填写的编码必须至少精确到二级目录
-               g.item_name                    "JCBWMC",--	中心检查部位名称	VARCHAR	50	必填
-               to_char(sysdate, 'YYYY-MM-DD') "TBRQ"--	填报日期	DATETIME		必填	本条数据采集时间，格式YYYY-MM-DD
+        select a.orgcode                                     "YLJGDM",--	医疗机构代码	VARCHAR	22	必填	复合主键：采用22位“卫生机构代码”
+               a.applyid                                     "JCLSH",--	检查报告流水号	VARCHAR	36	必填	复合主键：检查报告单唯一标识，关联《检查记录表》
+               d.feeid                                       "JCJLZLSH",--	检查记录子表流水号	VARCHAR	36	必填	复合主键：本次检查医嘱对应的检查收费项目唯一编码
+               b.orgname                                     "YLJGMC",--	医疗机构名称	VARCHAR	70	必填	医院执业许可第一名称
+               '0'                                           "FYDM",--	分院代码	VARCHAR	20	必填	记录分院代码（内码）,如无分院，则传0
+               ''                                            "FYMC",--	分院名称	VARCHAR	120	条件必填	分院代码不为0时必填
+               a.PATIENTBUSIID                               "JZLSH",--	就诊流水号	VARCHAR	32	必填	门诊：填写门诊就诊记录表流水号； 住院：填写住院就诊记录表流水号； 体检：填写体检就诊记录表流水号；
+               d.itemcode                                    "JCSFXMDM",--	院内检查收费项目代码	VARCHAR	64	必填	医院内部的唯一标识该收费项目的编码
+               d.itemname                                    "JCSFXMMC",--	院内检查收费项目名称	VARCHAR	250	必填	医院内部的唯一标识该收费项目的名称
+               nvl(replace(h.med_list_codg, '_SI', ''), '-') "JCSFXMPTDM",--	中心检查收费项目代码	VARCHAR	64	必填	参见《全民健康信息平台医疗服务项目价格表》
+               h.servitem_name                               "JCSFXMPTMC",--	中心检查收费项目名称	VARCHAR	250	必填	参见《全民健康信息平台医疗服务项目价格表》
+               nvl(c.PARTORSAMPLE, '-')                      "YYJCBWBM",--	院内检查部位编码	VARCHAR	32	必填	医院检查部位编码
+               nvl(f.dictname, '-')                          "YYJCBWMC",--	院内检查部位名称	VARCHAR	50	必填	医院检查部位名称
+               nvl(g.item_id, '未对照')                         "JCBW",--	中心检查部位编码	VARCHAR	32	必填	表明病人的检查部位的编码，参见ZD_ACRJC检查部位代码表若对应到多个部位，则中间用英文分号分隔，对填写的编码必须至少精确到二级目录
+               nvl(g.item_name, '未对照')                       "JCBWMC",--	中心检查部位名称	VARCHAR	50	必填
+               to_char(sysdate, 'YYYY-MM-DD')                "TBRQ"--	填报日期	DATETIME		必填	本条数据采集时间，格式YYYY-MM-DD
         from met_checkapply_info a,
              com_hospitalinfo b,
              fin_undruginfo c
@@ -86,7 +77,8 @@
                               and a.type_rid = b.type_rid
                               and a.rid = b.item_rid
                               and a.module_rid = '202310101511361148853000000000'
-                              and a.type_rid = '202312070843031430386800000000') g on g.his_item_id = c.PARTORSAMPLE,
+                              and a.type_rid = '202312070843031430386800000000'
+                              and b.orgcode = #{orgcode}) g on g.his_item_id = c.PARTORSAMPLE,
              (select orgcode,
                      inid,
                      applyid,
@@ -101,7 +93,8 @@
                      itemcode,
                      itemname,
                      feeid
-              from ips_outfeedetail) d,
+              from ips_outfeedetail) d
+                 left join fin_item_compare h on h.orgcode = d.orgcode and h.ITEMCODE = d.ITEMCODE,
              ipr_inpatientinfo e
         where a.orgcode = e.orgcode
           and a.PATIENTBUSIID = e.inid

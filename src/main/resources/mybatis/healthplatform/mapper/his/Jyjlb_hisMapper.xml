@@ -58,7 +58,7 @@
     </insert>
 
 
-    <select id="queryJyjlb_his"  resultType="java.util.HashMap">
+    <select id="queryJyjlb_his" resultType="java.util.HashMap">
         select a.orgcode                      "YLJGDM",--	医疗机构代码	VARCHAR	22	必填	复合主键：采用22位“卫生机构代码”
                a.applyid                      "JYJLLSH",--	检验流水号	VARCHAR	64	必填	复合主键：检验报告单唯一标识
                e.bgrq                         "BGRQ",--	报告日期	DATETIME		必填	复合主键：报告日期，无报告日期则使用审核日期
@@ -69,11 +69,11 @@
                a.PATIENTBUSIID                "JZLSH",--	就诊流水号	VARCHAR	32	必填	门诊：填写门诊就诊记录表流水号	 住院：填写住院就诊记录表流水号	 体检：填写体检就诊记录表流水号
                '8'                            "KLX",--	卡类型	VARCHAR	16	必填	请按照以下优先级顺序填写：1：患者主索引号、2：身份证号、3：医保卡号，如果都没有则填写门诊/住院/体检就诊流水号
                c.rid                          "KH",--	卡号	VARCHAR	64	必填
-               f.item_id                      "ZJLX",--	证件类型	VARCHAR	2		参见CV02.01.101-2022修订版 身份证件类别代码  优先填写身份证号
+               nvl(f.item_id, '01')           "ZJLX",--	证件类型	VARCHAR	2		参见CV02.01.101-2022修订版 身份证件类别代码  优先填写身份证号
                d.certno                       "ZJHM",--	证件号码	VARCHAR	32
                d.patientname                  "XM",--	姓名	VARCHAR	50	必填
                d.sexcode                      "XB",--	性别	VARCHAR	1	必填	参见 GB/T 2261.1-2003 性别代码表
-               e.nl                           "NL",--	年龄	NUMERIC	3	必填
+               regexp_substr(e.nl, '[0-9]+')  "NL",--	年龄	NUMERIC	3	必填
                e.bqmc                         "BQMC",--	申请病区名称	VARCHAR	64	条件必填
                e.ch                           "CH",--	患者床号	VARCHAR	20	条件必填	住院患者必填
                e.yyjytcbm                     "YYJYTCBM",--	医院检验套餐编码	VARCHAR	36	必填	医院内部使用检验套餐编码
@@ -86,22 +86,22 @@
                b.orgname                      "SQYLJGMC",--	申请医疗机构名称	VARCHAR	100	必填
                a.LISTDPCD                     "YNSQKSBM",--	院内申请科室编码	VARCHAR	50	必填
                a.LISTDPNM                     "YNSQKSMC",--	院内申请科室名称	VARCHAR	100	必填
-               g.item_id                      "SQKSBM",--	中心申请科室编码	VARCHAR	50	必填	参见《全民健康信息平台科室分类代码表》
-               g.item_name                    "SQKSMC",--	中心申请科室名称	VARCHAR	100	必填	参见《全民健康信息平台科室分类代码表》
-               e.sqysgh                       "SQYSGH",--	申请医生工号	VARCHAR	64	必填
-               e.sqysxm                       "SQYSXM",--	申请医生姓名	VARCHAR	50	必填
-               e.sqyssfzhm                    "SQYSSFZHM",--	申请医生身份证号码	VARCHAR	18	必填
+               nvl(g.item_id, '未对照')          "SQKSBM",--	中心申请科室编码	VARCHAR	50	必填	参见《全民健康信息平台科室分类代码表》
+               nvl(g.item_name, '未对照')        "SQKSMC",--	中心申请科室名称	VARCHAR	100	必填	参见《全民健康信息平台科室分类代码表》
+               a.DOCTCODE                     "SQYSGH",--	申请医生工号	VARCHAR	64	必填
+               a.DOCTNAME                     "SQYSXM",--	申请医生姓名	VARCHAR	50	必填
+               j.certno                       "SQYSSFZHM",--	申请医生身份证号码	VARCHAR	18	必填
                e.sqsj                         "SQSJ",--	申请时间	DATETIME		必填	YYYY-MM-DD HH24:MI:SS　
-               e.cjsj                         "CJSJ",--	采样时间	DATETIME		必填	YYYY-MM-DD HH24:MI:SS
-               e.jsbbsj                       "JSBBSJ",--	接收标本时间	DATETIME		必填	YYYY-MM-DD HH24:MI:SS
+               nvl(e.cjsj, e.jyrq)            "CJSJ",--	采样时间	DATETIME		必填	YYYY-MM-DD HH24:MI:SS
+               nvl(e.jsbbsj, e.jyrq)          "JSBBSJ",--	接收标本时间	DATETIME		必填	YYYY-MM-DD HH24:MI:SS
                e.jyrq                         "JYRQ",--	检验时间	DATETIME		必填	YYYY-MM-DD HH24:MI:SS
                e.shrq                         "SHRQ",--	出报告审核时间	DATETIME			YYYY-MM-DD HH24:MI:SS 无审核时间可用报告时间
                ''                             "BGYLJGDM",--	检验医疗机构代码	VARCHAR	22	条件必填	外送项目必填
                ''                             "BGYLJGMC",--	检验医疗机构名称	VARCHAR	100	条件必填	外送项目必填
                a.EXEDPCD                      "YNBGKSBM",--	院内检验科室编码	VARCHAR	50	必填
                a.EXEDPNM                      "YNBGKSMC",--	院内检验科室名称	VARCHAR	100	必填
-               h.item_id                      "BGKSBM",--	中心检验科室编码	VARCHAR	50	必填	参见《全民健康信息平台科室分类代码表》
-               h.item_name                    "BGKSMC",--	中心检验科室名称	VARCHAR	100	必填	参见《全民健康信息平台科室分类代码表》
+               nvl(h.item_id, '未对照')          "BGKSBM",--	中心检验科室编码	VARCHAR	50	必填	参见《全民健康信息平台科室分类代码表》
+               nvl(h.item_name, '未对照')        "BGKSMC",--	中心检验科室名称	VARCHAR	100	必填	参见《全民健康信息平台科室分类代码表》
                e.bgysgh                       "BGYSGH",--	检验医师工号	VARCHAR	64	必填
                e.bgysxm                       "BGYSXM",--	检验医师姓名	VARCHAR	50	必填
                e.bgyssfzhm                    "BGYSSFZHM",--	检验医师身份证号	VARCHAR	18	必填
@@ -133,7 +133,8 @@
                               and a.rid = b.item_rid
                               and a.module_rid = '202310101511361148853000000000'
                               and a.type_rid = '202311141512391328016800000000'
-                              and b.orgcode = #{orgcode}) h on h.his_item_id = a.LISTDPCD,
+                              and b.orgcode = #{orgcode}) h on h.his_item_id = a.LISTDPCD
+                 left join com_userinfo j on j.orgcode = a.orgcode and j.usercode = a.DOCTCODE,
              com_hospitalinfo b,
              com_patientinfo c,
              ipr_inpatientinfo d
@@ -150,7 +151,7 @@
         where a.orgcode = b.orgcode
           and a.orgcode = d.orgcode
           and a.PATIENTBUSIID = d.inid
-          and d.instate &lt;&gt;  '0'
+          and d.instate &lt;&gt; '0'
           and d.orgcode = c.orgcode
           and d.inhosno = c.inhosno
           and d.patientid = c.patientid
@@ -170,11 +171,11 @@
                a.PATIENTBUSIID                "JZLSH",--	就诊流水号	VARCHAR	32	必填	门诊：填写门诊就诊记录表流水号	 住院：填写住院就诊记录表流水号	 体检：填写体检就诊记录表流水号
                '8'                            "KLX",--	卡类型	VARCHAR	16	必填	请按照以下优先级顺序填写：1：患者主索引号、2：身份证号、3：医保卡号，如果都没有则填写门诊/住院/体检就诊流水号
                c.rid                          "KH",--	卡号	VARCHAR	64	必填
-               f.item_id                      "ZJLX",--	证件类型	VARCHAR	2		参见CV02.01.101-2022修订版 身份证件类别代码  优先填写身份证号
+               nvl(f.item_id, '01')           "ZJLX",--	证件类型	VARCHAR	2		参见CV02.01.101-2022修订版 身份证件类别代码  优先填写身份证号
                d.certno                       "ZJHM",--	证件号码	VARCHAR	32
                d.patientname                  "XM",--	姓名	VARCHAR	50	必填
                d.sexcode                      "XB",--	性别	VARCHAR	1	必填	参见 GB/T 2261.1-2003 性别代码表
-               e.nl                           "NL",--	年龄	NUMERIC	3	必填
+               regexp_substr(e.nl, '[0-9]+')  "NL",--	年龄	NUMERIC	3	必填
                e.bqmc                         "BQMC",--	申请病区名称	VARCHAR	64	条件必填
                e.ch                           "CH",--	患者床号	VARCHAR	20	条件必填	住院患者必填
                e.yyjytcbm                     "YYJYTCBM",--	医院检验套餐编码	VARCHAR	36	必填	医院内部使用检验套餐编码
@@ -187,11 +188,11 @@
                b.orgname                      "SQYLJGMC",--	申请医疗机构名称	VARCHAR	100	必填
                a.LISTDPCD                     "YNSQKSBM",--	院内申请科室编码	VARCHAR	50	必填
                a.LISTDPNM                     "YNSQKSMC",--	院内申请科室名称	VARCHAR	100	必填
-               g.item_id                      "SQKSBM",--	中心申请科室编码	VARCHAR	50	必填	参见《全民健康信息平台科室分类代码表》
-               g.item_name                    "SQKSMC",--	中心申请科室名称	VARCHAR	100	必填	参见《全民健康信息平台科室分类代码表》
-               e.sqysgh                       "SQYSGH",--	申请医生工号	VARCHAR	64	必填
-               e.sqysxm                       "SQYSXM",--	申请医生姓名	VARCHAR	50	必填
-               e.sqyssfzhm                    "SQYSSFZHM",--	申请医生身份证号码	VARCHAR	18	必填
+               nvl(g.item_id, '未对照')          "SQKSBM",--	中心申请科室编码	VARCHAR	50	必填	参见《全民健康信息平台科室分类代码表》
+               nvl(g.item_name, '未对照')        "SQKSMC",--	中心申请科室名称	VARCHAR	100	必填	参见《全民健康信息平台科室分类代码表》
+               a.DOCTCODE                     "SQYSGH",--	申请医生工号	VARCHAR	64	必填
+               a.DOCTNAME                     "SQYSXM",--	申请医生姓名	VARCHAR	50	必填
+               j.certno                       "SQYSSFZHM",--	申请医生身份证号码	VARCHAR	18	必填
                e.sqsj                         "SQSJ",--	申请时间	DATETIME		必填	YYYY-MM-DD HH24:MI:SS　
                e.cjsj                         "CJSJ",--	采样时间	DATETIME		必填	YYYY-MM-DD HH24:MI:SS
                e.jsbbsj                       "JSBBSJ",--	接收标本时间	DATETIME		必填	YYYY-MM-DD HH24:MI:SS
@@ -201,8 +202,8 @@
                ''                             "BGYLJGMC",--	检验医疗机构名称	VARCHAR	100	条件必填	外送项目必填
                a.EXEDPCD                      "YNBGKSBM",--	院内检验科室编码	VARCHAR	50	必填
                a.EXEDPNM                      "YNBGKSMC",--	院内检验科室名称	VARCHAR	100	必填
-               h.item_id                      "BGKSBM",--	中心检验科室编码	VARCHAR	50	必填	参见《全民健康信息平台科室分类代码表》
-               h.item_name                    "BGKSMC",--	中心检验科室名称	VARCHAR	100	必填	参见《全民健康信息平台科室分类代码表》
+               nvl(h.item_id, '未对照')          "BGKSBM",--	中心检验科室编码	VARCHAR	50	必填	参见《全民健康信息平台科室分类代码表》
+               nvl(h.item_name, '未对照')        "BGKSMC",--	中心检验科室名称	VARCHAR	100	必填	参见《全民健康信息平台科室分类代码表》
                e.bgysgh                       "BGYSGH",--	检验医师工号	VARCHAR	64	必填
                e.bgysxm                       "BGYSXM",--	检验医师姓名	VARCHAR	50	必填
                e.bgyssfzhm                    "BGYSSFZHM",--	检验医师身份证号	VARCHAR	18	必填
@@ -234,7 +235,8 @@
                               and a.rid = b.item_rid
                               and a.module_rid = '202310101511361148853000000000'
                               and a.type_rid = '202311141512391328016800000000'
-                              and b.orgcode = #{orgcode}) h on h.his_item_id = a.LISTDPCD,
+                              and b.orgcode = #{orgcode}) h on h.his_item_id = a.LISTDPCD
+                 left join com_userinfo j on j.orgcode = a.orgcode and j.usercode = a.DOCTCODE,
              com_hospitalinfo b,
              com_patientinfo c,
              opr_register d

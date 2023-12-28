@@ -119,11 +119,11 @@ public interface HealthplatfromDAO {
     List<Map> queryTj_ssyw_cwzyqk(String orgcode,String begtime,String endtime);
 
     //EMR_SCBCJL 首次病程记录
-    List<Map> query (String orgcode);
-    List<Map> queryZs (String orgcode,String begtime,String endtime);
+    List<Map> query (String orgcode,String begtime,String endtime);
+    List<Map> queryZs (String orgcode);
     void delete();
-    void add(String inid,String orgcode,String zs);
-    void update(Map<String,String> map);
+    void add(Map<String,String> map);
+    void update(String inid,String orgcode,String zs);
     List<Map> queryEmr_scbcjl(String orgcode);
     //EMR_RCBCJL 日常病程记录
     List<Map> queryEmr_rcbcjl (String orgcode,String begtime,String endtime);

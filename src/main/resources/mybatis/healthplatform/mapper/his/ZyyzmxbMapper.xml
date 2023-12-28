@@ -86,14 +86,8 @@
                    else s.ITEMID
                    end                                              "YZMXBM",-- 院内医嘱项目编码  VARCHAR 32  必填  嘱托类等医嘱没有编码的填写999
                s.ITEMNAME                                           "YZMXMC",-- 院内医嘱项目名称  VARCHAR 1024  必填
-               case
-                   when s.itemtype = '1' then bb.item_id
-                   when s.itemtype = '3' then cc.item_id
-                   else ss.item_id end                              "ZXDM",-- 中心医嘱项目编码  VARCHAR 32  必填  "药品类填写药品医保编码，如非医保药品，则传999检查类参见《全民健康信息平台检查分类编码标准》检验类参见《全民健康信息平台检验分类编码标准》手术类参见《手术操作分类代码(ICD-9)》处置类医嘱填写《全民健康信息平台医疗服务项目价格表》材料类参见《国家医保医用耗材分类编码》嘱托类填写888"
-               case
-                   when s.itemtype = '1' then bb.item_name
-                   when s.itemtype = '3' then cc.item_name
-                   else ss.item_name end                            "ZXMC",-- 中心医嘱项目名称  VARCHAR 1024  必填
+               nvl(replace(o.med_list_codg, '_SI', ''), '-')        "ZXDM",-- 中心医嘱项目编码  VARCHAR 32  必填  "药品类填写药品医保编码，如非医保药品，则传999检查类参见《全民健康信息平台检查分类编码标准》检验类参见《全民健康信息平台检验分类编码标准》手术类参见《手术操作分类代码(ICD-9)》处置类医嘱填写《全民健康信息平台医疗服务项目价格表》材料类参见《国家医保医用耗材分类编码》嘱托类填写888"
+               o.servitem_name                                      "ZXMC",-- 中心医嘱项目名称  VARCHAR 1024  必填
                round(r.UNITPRICE, 3)                                "XMDJ",-- 项目单价  NUMERIC 18,3
                round(r.TOTCOST, 3)                                  "XMJE",-- 项目金额  NUMERIC 18,3
                decode(s.DRUGTYPE, '1', '1', '2', '2', '3', '3')     "YPLB",-- 药品类别  VARCHAR 1 条件必填  1：西药 2：中成药 3：中草药
@@ -143,36 +137,6 @@
                               and a.type_rid = b.type_rid
                               and a.rid = b.item_rid
                               and a.module_rid = '202310101511361148853000000000'
-                              and a.type_rid = '202312071016491431096700000000'
-                              and b.orgcode = #{orgcode}) ss
-                           on ss.his_item_id = s.itemcode
-                 left join (select a.item_id, a.item_name, b.his_item_id
-                            from si_yt_report_item a,
-                                 si_yt_report_item_compare b
-                            where a.module_rid = b.module_rid
-                              and a.type_rid = b.type_rid
-                              and a.rid = b.item_rid
-                              and a.module_rid = '202310101511361148853000000000'
-                              and a.type_rid = '202312071017521431097000000000'
-                              and b.orgcode = #{orgcode}) bb
-                           on bb.his_item_id = s.itemcode
-                 left join (select a.item_id, a.item_name, b.his_item_id
-                            from si_yt_report_item a,
-                                 si_yt_report_item_compare b
-                            where a.module_rid = b.module_rid
-                              and a.type_rid = b.type_rid
-                              and a.rid = b.item_rid
-                              and a.module_rid = '202310101511361148853000000000'
-                              and a.type_rid = '202312071013101431096400000000'
-                              and b.orgcode = #{orgcode}) cc
-                           on cc.his_item_id = s.itemcode
-                 left join (select a.item_id, a.item_name, b.his_item_id
-                            from si_yt_report_item a,
-                                 si_yt_report_item_compare b
-                            where a.module_rid = b.module_rid
-                              and a.type_rid = b.type_rid
-                              and a.rid = b.item_rid
-                              and a.module_rid = '202310101511361148853000000000'
                               and a.type_rid = '202311141512391328016800000000'
                               and b.orgcode = #{orgcode}) de on de.his_item_id = s.DEPTCODE
                  left join (select a.item_id, a.item_name, b.his_item_id
@@ -197,7 +161,8 @@
                               and a.type_rid = b.type_rid
                               and a.rid = b.item_rid
                               and a.module_rid = '202310101511361148853000000000'
-                              and a.type_rid = '202310101607531149585000000000') q on q.his_item_id = s.USAGECODE
+                              and a.type_rid = '202310101607531149585000000000'
+                              and b.orgcode = #{orgcode}) q on q.his_item_id = s.USAGECODE
                  left join (select a.item_id, a.item_name, b.his_item_id
                             from si_yt_report_item a,
                                  si_yt_report_item_compare b
@@ -282,7 +247,8 @@
                               and a.type_rid = b.type_rid
                               and a.rid = b.item_rid
                               and a.module_rid = '202310101511361148853000000000'
-                              and a.type_rid = '202310101606231149584700000000') p on p.his_item_id = r.DOSEMODELCODE
+                              and a.type_rid = '202310101606231149584700000000'
+                              and b.orgcode = #{orgcode}) p on p.his_item_id = r.DOSEMODELCODE
         where a.orgcode = s.orgcode
           and a.inid = s.inid
           and a.BILLID = s.BILLID

@@ -13,21 +13,12 @@
                '0'                            "SFQTDYZD",--	是否其他第一诊断	VARCHAR	1	必填	0：否 1：是
                a.DIAGNOSIS_CODE               "YNZDDM",--	院内西医出院诊断代码	VARCHAR	256	必填
                a.DIAGNOSIS_NAME               "YNZDMC",--	院内西医出院诊断名称	VARCHAR	512	必填
-               d.item_id                      "ZDDM",--	中心西医出院诊断代码	VARCHAR	256	必填	参见《疾病分类与代码(ICD-10)》
-               d.item_name                    "ZDMC",--	中心西医出院诊断名称	VARCHAR	512	必填	参见《疾病分类与代码(ICD-10)》
-               e.item_id                      "RYBQ",--	入院病情	VARCHAR	4	必填	参见 CV05.10.019入院病情  1：有 2：临床未确定 3：情况不明 4：无
-               f.item_id                      "ZGQK",--	治疗转归	VARCHAR	4	必填	参见 CV05.10.010病情转归  1：治愈 2：好转 3：稳定 4：恶化 5：死亡 9：其他
+               a.DIAGNOSIS_CODE               "ZDDM",--	中心西医出院诊断代码	VARCHAR	256	必填	参见《疾病分类与代码(ICD-10)》
+               a.DIAGNOSIS_NAME               "ZDMC",--	中心西医出院诊断名称	VARCHAR	512	必填	参见《疾病分类与代码(ICD-10)》
+               nvl(e.item_id, '1')            "RYBQ",--	入院病情	VARCHAR	4	必填	参见 CV05.10.019入院病情  1：有 2：临床未确定 3：情况不明 4：无
+               nvl(f.item_id, '9')            "ZGQK",--	治疗转归	VARCHAR	4	必填	参见 CV05.10.010病情转归  1：治愈 2：好转 3：稳定 4：恶化 5：死亡 9：其他
                to_char(sysdate, 'YYYY-MM-DD') "TBRQ" --  填报日期  DATETIME   必填 本条数据采集时间，格式YYYY-MM-DD
         from emr_diagnose a
-                 left join (select a.item_id, a.item_name, b.his_item_id
-                            from si_yt_report_item a,
-                                 si_yt_report_item_compare b
-                            where a.module_rid = b.module_rid
-                              and a.type_rid = b.type_rid
-                              and a.rid = b.item_rid
-                              and a.module_rid = '202310101511361148853000000000'
-                              and a.type_rid = '202311281105131392640900000000'
-                              and b.orgcode = #{orgcode}) d on d.his_item_id = a.DIAGNOSIS_CODE
                  left join (select a.item_id, a.item_name, b.his_item_id
                             from si_yt_report_item a,
                                  si_yt_report_item_compare b

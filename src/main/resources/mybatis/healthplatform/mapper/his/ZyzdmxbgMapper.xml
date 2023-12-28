@@ -16,33 +16,21 @@
                    when a.dise_type = '2' then '1'
                    end                                       "ZDLB",--	诊断类别代码 	VARCHAR 	2	必填 	西医参见CV5502.20   中医参见CV5502.21   病案填写（1：出院诊断 2：门诊诊断 9：.病理诊断）
                to_char(a.CRTE_TIME, 'YYYY-MM-DD HH24:MI:SS') "ZDSJ",--	诊断时间 	DATETIME
-               'ICD10'                                       "BMLX",--	诊断编码类型 	VARCHAR 	2	必填 	01：ICD10 02：国标-21
+               '02'                                          "BMLX",--	诊断编码类型 	VARCHAR 	2	必填 	01：ICD10 02：国标-21
                case
                    when a.dise_type = '2' and a.MAIN_FLAG = '1' then '1'
                    else ''
                    end                                       "ZYZBZZBZ",--	中医主病主证标志	VARCHAR 	1	 	中医诊断必填，1：主病 2：主证
-               case
-                   when a.dise_type = '1' then e.item_id
-                   when a.dise_type = '2' then ''
-                   end                                       "ZDBM",--	诊断编码 	VARCHAR 	64	必填 	西医：参见《疾病分类与代码(ICD-10)》 中医：参见 GB/T 15657-2021
-               a.DISE_REMARK                                 "ZDSM",--	诊断说明 	VARCHAR 	512	必填 	文字描述
+               a.DISE_CODE                                   "ZDBM",--	诊断编码 	VARCHAR 	64	必填 	西医：参见《疾病分类与代码(ICD-10)》 中医：参见 GB/T 15657-2021
+               nvl(a.DISE_REMARK, '-')                       "ZDSM",--	诊断说明 	VARCHAR 	512	必填 	文字描述
                case
                    when a.MAIN_FLAG = '1' then '1'
                    else '2' end                              "ZYZDBZ",--	主要诊断标志 	VARCHAR 	1	必填 	1：第一诊断 2：第二诊断 3：第三诊断
-               a.SUS_FLAG                                    "YZDBZ",--	疑似诊断标志 	VARCHAR 	1	必填 	参见 CV05.01.002 诊断状态代码表
+               nvl(a.SUS_FLAG, '1')                          "YZDBZ",--	疑似诊断标志 	VARCHAR 	1	必填 	参见 CV05.01.002 诊断状态代码表
                ''                                            "CYQKBM",--	出院情况编码 	VARCHAR 	1		1：治愈 2：好转 3：未愈 4：死亡 5：其它 出院诊断时必填
                ''                                            "RYBQDM",--	入院病情代码	VARCHAR 	1		1：有明确诊断 2：临床未确定 3：情况不明 4：无法确定 出院诊断时必填
                to_char(sysdate, 'YYYY-MM-DD')                "TBRQ" --  填报日期  DATETIME   必填 本条数据采集时间，格式YYYY-MM-DD
-        from opm_diagnose a
-                 left join (select a.item_id, b.his_item_id
-                            from si_yt_report_item a,
-                                 si_yt_report_item_compare b
-                            where a.module_rid = b.module_rid
-                              and a.type_rid = b.type_rid
-                              and a.rid = b.item_rid
-                              and a.module_rid = '202310101511361148853000000000'
-                              and a.type_rid = '202311281105131392640900000000'
-                              and b.orgcode = #{orgcode}) e on e.his_item_id = a.DISE_CODE,
+        from opm_diagnose a,
              com_patientinfo b,
              opr_register c
                  left join (select a.item_id, b.his_item_id
@@ -77,33 +65,21 @@
                    when a.dise_type = '2' then '1'
                    end                                       "ZDLB",--	诊断类别代码 	VARCHAR 	2	必填 	西医参见CV5502.20   中医参见CV5502.21   病案填写（1：出院诊断 2：门诊诊断 9：.病理诊断）
                to_char(a.CRTE_TIME, 'YYYY-MM-DD HH24:MI:SS') "ZDSJ",--	诊断时间 	DATETIME
-               'ICD10'                                       "BMLX",--	诊断编码类型 	VARCHAR 	2	必填 	01：ICD10 02：国标-21
+               '02'                                          "BMLX",--	诊断编码类型 	VARCHAR 	2	必填 	01：ICD10 02：国标-21
                case
                    when a.dise_type = '2' and a.MAIN_FLAG = '1' then '1'
                    else ''
                    end                                       "ZYZBZZBZ",--	中医主病主证标志	VARCHAR 	1	 	中医诊断必填，1：主病 2：主证
-               case
-                   when a.dise_type = '1' then e.item_id
-                   when a.dise_type = '2' then ''
-                   end                                       "ZDBM",--	诊断编码 	VARCHAR 	64	必填 	西医：参见《疾病分类与代码(ICD-10)》 中医：参见 GB/T 15657-2021
-               a.DISE_REMARK                                 "ZDSM",--	诊断说明 	VARCHAR 	512	必填 	文字描述
+               a.DISE_CODE                                   "ZDBM",--	诊断编码 	VARCHAR 	64	必填 	西医：参见《疾病分类与代码(ICD-10)》 中医：参见 GB/T 15657-2021
+               nvl(a.DISE_REMARK, '-')                       "ZDSM",--	诊断说明 	VARCHAR 	512	必填 	文字描述
                case
                    when a.MAIN_FLAG = '1' then '1'
                    else '2' end                              "ZYZDBZ",--	主要诊断标志 	VARCHAR 	1	必填 	1：第一诊断 2：第二诊断 3：第三诊断
-               a.SUS_FLAG                                    "YZDBZ",--	疑似诊断标志 	VARCHAR 	1	必填 	参见 CV05.01.002 诊断状态代码表
+               nvl(a.SUS_FLAG, '1')                          "YZDBZ",--	疑似诊断标志 	VARCHAR 	1	必填 	参见 CV05.01.002 诊断状态代码表
                ''                                            "CYQKBM",--	出院情况编码 	VARCHAR 	1		1：治愈 2：好转 3：未愈 4：死亡 5：其它 出院诊断时必填
                a.ADM_COND                                    "RYBQDM",--	入院病情代码	VARCHAR 	1		1：有明确诊断 2：临床未确定 3：情况不明 4：无法确定 出院诊断时必填
                to_char(sysdate, 'YYYY-MM-DD')                "TBRQ" --  填报日期  DATETIME   必填 本条数据采集时间，格式YYYY-MM-DD
-        from ipr_diagnose a
-                 left join (select a.item_id, b.his_item_id
-                            from si_yt_report_item a,
-                                 si_yt_report_item_compare b
-                            where a.module_rid = b.module_rid
-                              and a.type_rid = b.type_rid
-                              and a.rid = b.item_rid
-                              and a.module_rid = '202310101511361148853000000000'
-                              and a.type_rid = '202311281105131392640900000000'
-                              and b.orgcode = #{orgcode}) e on e.his_item_id = a.DISE_CODE,
+        from ipr_diagnose a,
              com_patientinfo b,
              ipr_inpatientinfo c
                  left join (select a.item_id, b.his_item_id

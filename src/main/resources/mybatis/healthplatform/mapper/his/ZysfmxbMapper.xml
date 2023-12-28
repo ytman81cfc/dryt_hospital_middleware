@@ -56,8 +56,8 @@
                    end                                                    "YZXMLXMC",--	医嘱项目类型名称	VARCHAR	32	必填
                d.ITEMCODE                                                 "MXXMBM",--	院内明细项目编码	VARCHAR	32	必填
                d.ITEMNAME                                                 "MXXMMC",--	院内明细项目名称	VARCHAR	128	必填
-               d.item_id                                                  "ZXDM",--	中心明细项目代码	VARCHAR	32	必填	耗材、服务项目使用《全民健康信息平台医疗服务项目价格表》编码  药品使用医保码 草药和自制剂使用《全民健康信息平台制剂、中草药医保编码》 其他填写999
-               d.item_name                                                "ZXMC",--	中心明细项目名称	VARCHAR	128	必填
+               nvl(replace(i.med_list_codg, '_SI', ''), '-')              "ZXDM",--	中心明细项目代码	VARCHAR	32	必填	耗材、服务项目使用《全民健康信息平台医疗服务项目价格表》编码  药品使用医保码 草药和自制剂使用《全民健康信息平台制剂、中草药医保编码》 其他填写999
+               i.servitem_name                                            "ZXMC",--	中心明细项目名称	VARCHAR	128	必填
                nvl(d.SPECS, '-')                                          "MXXMGG",--	明细项目规格	VARCHAR	32	必填
                nvl(e.dictname, '-')                                       "MXXMDW",--	明细项目单位	VARCHAR	32	必填
                round(d.UNITPRICE, 3)                                      "MXXMDJ",--	明细项目单价	NUMERIC	18,3	必填
@@ -88,49 +88,19 @@
                               and a.type_rid = '202311141512391328016800000000'
                               and b.orgcode = #{orgcode}) k on k.his_item_id = b.EXEDEPTCODE,
              com_patientinfo c,
-             (select a.*, d.invocode, b.GJYPID, b.item_id, b.item_name, h.orgname
+             (select a.*, d.invocode, b.GJYPID, h.orgname
               from IPS_FEEDETAIL a
                        join
                    com_hospitalinfo h on a.orgcode = h.orgcode
                        join
-                   (select a.orgcode, a.itemcode, a.feecode, '' GJYPID, b.item_id, b.item_name
+                   (select a.orgcode, a.itemcode, a.feecode, '' GJYPID
                     from fin_undruginfo a
-                             left join (select a.item_id, a.item_name, b.his_item_id
-                                        from si_yt_report_item a,
-                                             si_yt_report_item_compare b
-                                        where a.module_rid = b.module_rid
-                                          and a.type_rid = b.type_rid
-                                          and a.rid = b.item_rid
-                                          and a.module_rid = '202310101511361148853000000000'
-                                          and a.type_rid = '202312071016491431096700000000'
-                                          and b.orgcode = #{orgcode}) b
-                                       on b.his_item_id = a.itemcode
                     union all
-                    select a.orgcode, a.drugcode, a.feecode, a.GJYPID, b.item_id, b.item_name
+                    select a.orgcode, a.drugcode, a.feecode, a.GJYPID
                     from pha_druginfo a
-                             left join (select a.item_id, a.item_name, b.his_item_id
-                                        from si_yt_report_item a,
-                                             si_yt_report_item_compare b
-                                        where a.module_rid = b.module_rid
-                                          and a.type_rid = b.type_rid
-                                          and a.rid = b.item_rid
-                                          and a.module_rid = '202310101511361148853000000000'
-                                          and a.type_rid = '202312071017521431097000000000'
-                                          and b.orgcode = #{orgcode}) b
-                                       on b.his_item_id = a.drugcode
                     union all
-                    select a.orgcode, a.MEDLISTCODG, a.feecode, '' GJYPID, b.item_id, b.item_name
+                    select a.orgcode, a.MEDLISTCODG, a.feecode, '' GJYPID
                     from pha_medcon a
-                             left join (select a.item_id, a.item_name, b.his_item_id
-                                        from si_yt_report_item a,
-                                             si_yt_report_item_compare b
-                                        where a.module_rid = b.module_rid
-                                          and a.type_rid = b.type_rid
-                                          and a.rid = b.item_rid
-                                          and a.module_rid = '202310101511361148853000000000'
-                                          and a.type_rid = '202312071013101431096400000000'
-                                          and b.orgcode = #{orgcode}) b
-                                       on b.his_item_id = a.MEDLISTCODG
                    ) b on a.orgcode = b.orgcode and a.itemcode = b.itemcode
                        join com_feetype c on c.orgcode = b.orgcode and c.feecode = b.feecode
                        join com_fee_invo_compare d
@@ -242,8 +212,8 @@
                    end                                                    "YZXMLXMC",--	医嘱项目类型名称	VARCHAR	32	必填
                d.ITEMCODE                                                 "MXXMBM",--	院内明细项目编码	VARCHAR	32	必填
                d.ITEMNAME                                                 "MXXMMC",--	院内明细项目名称	VARCHAR	128	必填
-               d.item_id                                                  "ZXDM",--	中心明细项目代码	VARCHAR	32	必填	耗材、服务项目使用《全民健康信息平台医疗服务项目价格表》编码  药品使用医保码 草药和自制剂使用《全民健康信息平台制剂、中草药医保编码》 其他填写999
-               d.item_name                                                "ZXMC",--	中心明细项目名称	VARCHAR	128	必填
+               nvl(replace(i.med_list_codg, '_SI', ''), '-')              "ZXDM",--	中心明细项目代码	VARCHAR	32	必填	耗材、服务项目使用《全民健康信息平台医疗服务项目价格表》编码  药品使用医保码 草药和自制剂使用《全民健康信息平台制剂、中草药医保编码》 其他填写999
+               i.servitem_name                                            "ZXMC",--	中心明细项目名称	VARCHAR	128	必填
                nvl(d.SPECS, '-')                                          "MXXMGG",--	明细项目规格	VARCHAR	32	必填
                nvl(e.dictname, '-')                                       "MXXMDW",--	明细项目单位	VARCHAR	32	必填
                round(d.UNITPRICE, 3)                                      "MXXMDJ",--	明细项目单价	NUMERIC	18,3	必填
@@ -274,49 +244,19 @@
                               and a.type_rid = '202311141512391328016800000000'
                               and b.orgcode = #{orgcode}) k on k.his_item_id = b.EXEDEPTCODE,
              com_patientinfo c,
-             (select a.*, d.invocode, b.GJYPID, b.item_id, b.item_name, h.orgname
+             (select a.*, d.invocode, b.GJYPID,   h.orgname
               from IPS_OUTFEEDETAIL a
                        join
                    com_hospitalinfo h on a.orgcode = h.orgcode
                        join
-                   (select a.orgcode, a.itemcode, a.feecode, '' GJYPID, b.item_id, b.item_name
+                   (select a.orgcode, a.itemcode, a.feecode, '' GJYPID
                     from fin_undruginfo a
-                             left join (select a.item_id, a.item_name, b.his_item_id
-                                        from si_yt_report_item a,
-                                             si_yt_report_item_compare b
-                                        where a.module_rid = b.module_rid
-                                          and a.type_rid = b.type_rid
-                                          and a.rid = b.item_rid
-                                          and a.module_rid = '202310101511361148853000000000'
-                                          and a.type_rid = '202312071016491431096700000000'
-                                          and b.orgcode = #{orgcode}) b
-                                       on b.his_item_id = a.itemcode
                     union all
-                    select a.orgcode, a.drugcode, a.feecode, a.GJYPID, b.item_id, b.item_name
+                    select a.orgcode, a.drugcode, a.feecode, a.GJYPID
                     from pha_druginfo a
-                             left join (select a.item_id, a.item_name, b.his_item_id
-                                        from si_yt_report_item a,
-                                             si_yt_report_item_compare b
-                                        where a.module_rid = b.module_rid
-                                          and a.type_rid = b.type_rid
-                                          and a.rid = b.item_rid
-                                          and a.module_rid = '202310101511361148853000000000'
-                                          and a.type_rid = '202312071017521431097000000000'
-                                          and b.orgcode = #{orgcode}) b
-                                       on b.his_item_id = a.drugcode
                     union all
-                    select a.orgcode, a.MEDLISTCODG, a.feecode, '' GJYPID, b.item_id, b.item_name
+                    select a.orgcode, a.MEDLISTCODG, a.feecode, '' GJYPID
                     from pha_medcon a
-                             left join (select a.item_id, a.item_name, b.his_item_id
-                                        from si_yt_report_item a,
-                                             si_yt_report_item_compare b
-                                        where a.module_rid = b.module_rid
-                                          and a.type_rid = b.type_rid
-                                          and a.rid = b.item_rid
-                                          and a.module_rid = '202310101511361148853000000000'
-                                          and a.type_rid = '202312071013101431096400000000'
-                                          and b.orgcode = #{orgcode}) b
-                                       on b.his_item_id = a.MEDLISTCODG
                    ) b on a.orgcode = b.orgcode and a.itemcode = b.itemcode
                        join com_feetype c on c.orgcode = b.orgcode and c.feecode = b.feecode
                        join com_fee_invo_compare d

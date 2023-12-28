@@ -2,27 +2,27 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hospital.middleware.healthplatform.dao.his.HealthplatfromDAO">
     <select id="queryZyfyfsmx" resultType="java.util.HashMap">
-        select a.orgcode                                        "YLJGDM",--  医疗机构代码  VARCHAR 22  必填  复合主键：采用22位“卫生机构代码”
-               a.feeid                                          "SFMXID",--	收费明细ID	VARCHAR	32	必填	复合主键：收费明细ID是医院内部唯一标示此条明细记录的一个序号，必须保证在本医院内不重复
-               a.TRANSTYPE                                      "TFBZ",--	退费标志	VARCHAR	1	必填	复合主键：编码。1：收费；2：退费；
-               a.inid                                           "JZLSH",--	就诊流水号	VARCHAR	32	必填	关联《就诊记录表》
-               c.rid                                            "KH",--	卡号	VARCHAR	64	必填
-               '8'                                              "KLX",--	卡类型	VARCHAR	16	必填	参见CVA5104就诊卡类型
-               f.item_id                                        "ZJLX",--	证件类型	VARCHAR	2		参见CV02.01.101身份证件类别代码
-               b.certno                                         "ZJHM",--	证件号码	VARCHAR	32
-               b.patientname                                    "XM",--	姓名	VARCHAR	50	必填
-               to_char(a.FEEOPTDATE, 'YYYY-MM-DD HH24:MI:SS')   "STFSJ",--	收退费时间	DATETIME		必填
-               j.item_id                                        "MXFYLB",--	明细费用类别	VARCHAR	2	必填	编码：参见CVA5105明细费用类别
-               decode(a.ITEMTYPE, '1', '0', '2', '1', '3', '1') "MXXMLB",--	明细项目类别	VARCHAR	1	必填	0：药品 1：项目
-               a.ITEMCODE                                       "MXXMBM",--	明细项目编码	VARCHAR	32	必填
-               a.ITEMNAME                                       "MXXMMC",--	明细项目名称	VARCHAR	128	必填
-               nvl(replace(i.MED_LIST_CODG, '_SI', ''), '999')  "ZXDM",--	明细项目中心代码	VARCHAR	32	必填	药品或者项目的平台中心代码，如没有特殊说明采用医保代码
-               a.SPECS                                          "MXXMGG",--	明细项目规格	VARCHAR	32	必填
-               e.dictname                                       "MXXMDW",--	明细项目单位	VARCHAR	32	必填
-               round(a.UNITPRICE, 3)                            "MXXMDJ",--	明细项目单价	NUMERIC	18,3	必填
-               a.QTY                                            "MXXMSL",--	明细项目数量	NUMERIC	9	必填
-               round(a.TOTCOST, 3)                              "MXXMJE",--	明细项目金额	NUMERIC	18,3	必填
-               to_char(sysdate, 'YYYY-MM-DD')                   "TBRQ"   --  填报日期  DATETIME   必填 本条数据采集时间，格式YYYY-MM-DD
+        select a.orgcode                                      "YLJGDM",--  医疗机构代码  VARCHAR 22  必填  复合主键：采用22位“卫生机构代码”
+               a.feeid                                        "SFMXID",--	收费明细ID	VARCHAR	32	必填	复合主键：收费明细ID是医院内部唯一标示此条明细记录的一个序号，必须保证在本医院内不重复
+               a.TRANSTYPE                                    "TFBZ",--	退费标志	VARCHAR	1	必填	复合主键：编码。1：收费；2：退费；
+               a.inid                                         "JZLSH",--	就诊流水号	VARCHAR	32	必填	关联《就诊记录表》
+               c.rid                                          "KH",--	卡号	VARCHAR	64	必填
+               '8'                                            "KLX",--	卡类型	VARCHAR	16	必填	参见CVA5104就诊卡类型
+               f.item_id                                      "ZJLX",--	证件类型	VARCHAR	2		参见CV02.01.101身份证件类别代码
+               b.certno                                       "ZJHM",--	证件号码	VARCHAR	32
+               b.patientname                                  "XM",--	姓名	VARCHAR	50	必填
+               to_char(a.FEEOPTDATE, 'YYYY-MM-DD HH24:MI:SS') "STFSJ",--	收退费时间	DATETIME		必填
+               j.item_id                                      "MXFYLB",--	明细费用类别	VARCHAR	2	必填	编码：参见CVA5105明细费用类别
+               decode(a.ITEMTYPE, '1', '0', '1')              "MXXMLB",--	明细项目类别	VARCHAR	1	必填	0：药品 1：项目
+               a.ITEMCODE                                     "MXXMBM",--	明细项目编码	VARCHAR	32	必填
+               a.ITEMNAME                                     "MXXMMC",--	明细项目名称	VARCHAR	128	必填
+               nvl(replace(i.med_list_codg, '_SI', ''), '-')  "ZXDM",--	明细项目中心代码	VARCHAR	32	必填	药品或者项目的平台中心代码，如没有特殊说明采用医保代码
+               nvl(a.SPECS, '-')                              "MXXMGG",--	明细项目规格	VARCHAR	32	必填
+               nvl(e.dictname, '-')                           "MXXMDW",--	明细项目单位	VARCHAR	32	必填
+               round(a.UNITPRICE, 3)                          "MXXMDJ",--	明细项目单价	NUMERIC	18,3	必填
+               a.QTY                                          "MXXMSL",--	明细项目数量	NUMERIC	9	必填
+               round(a.TOTCOST, 3)                            "MXXMJE",--	明细项目金额	NUMERIC	18,3	必填
+               to_char(sysdate, 'YYYY-MM-DD')                 "TBRQ"   --  填报日期  DATETIME   必填 本条数据采集时间，格式YYYY-MM-DD
         from IPR_INPATIENTINFO b
                  left join (select a.item_id, b.his_item_id
                             from si_yt_report_item a,
@@ -33,21 +33,35 @@
                               and a.module_rid = '202310101511361148853000000000'
                               and a.type_rid = '202310101602441149584100000000') f
                            on f.his_item_id = b.PSNCERTTYPE,
-             (select a.*, d.invocode
+             (select a.orgcode,
+                     a.feeid,
+                     a.PRICEUNIT,
+                     a.TRANSTYPE,
+                     a.inid,
+                     a.FEEOPTDATE,
+                     a.ITEMTYPE,
+                     a.ITEMCODE,
+                     a.ITEMNAME,
+                     a.SPECS,
+                     a.UNITPRICE,
+                     sum(a.qty)   qty,
+                     sum(totcost) totcost,
+                     b.item_id,
+                     b.item_name,
+                     d.invocode
               from IPS_FEEDETAIL a
                        join
-                   (select orgcode, itemcode, feecode
-                    from fin_undruginfo
+                   (select a.orgcode, a.itemcode, a.feecode
+                    from fin_undruginfo a
                     union all
-                    select orgcode, drugcode, feecode
-                    from pha_druginfo
-                    union all
-                    select orgcode, MEDLISTCODG, feecode
-                    from pha_medcon
+                    select a.orgcode, a.drugcode as itemcode, a.feecode
+                    from pha_druginfo a
                    ) b on a.orgcode = b.orgcode and a.itemcode = b.itemcode
                        join com_feetype c on c.orgcode = b.orgcode and c.feecode = b.feecode
                        join com_fee_invo_compare d
-                            on d.orgcode = c.orgcode and d.feecode = c.feecode and d.statcode = 'ZY01') a
+                            on d.orgcode = c.orgcode and d.feecode = c.feecode and d.statcode = 'ZY01'
+              group by a.orgcode, a.feeid, a.PRICEUNIT, a.TRANSTYPE, a.inid, a.FEEOPTDATE, a.ITEMTYPE, a.ITEMCODE,
+                       a.ITEMNAME, a.SPECS, a.UNITPRICE, b.item_id, b.item_name, d.invocode) a
                  left join (select a.item_id, b.his_item_id
                             from si_yt_report_item a,
                                  si_yt_report_item_compare b
@@ -68,26 +82,24 @@
           and a.inid = b.inid
           and b.instate &lt;&gt; '0'
           and b.out_date is null
-          and a.orgcode =
-              #{orgcode}
+          and a.ITEMTYPE &lt;&gt; '3'
+          and a.orgcode = #{orgcode}
           and to_char
                   (
                       a
                           .
-                          FEEOPTDATE,
-                      'yyyy-mm-dd hh24:mi:ss'
+                          FEEOPTDATE
+                  , 'yyyy-mm-dd hh24:mi:ss'
                   )
-            &gt;=
-              #{begtime}
+            &gt;= #{begtime}
           and to_char
                   (
                       a
                           .
-                          FEEOPTDATE,
-                      'yyyy-mm-dd hh24:mi:ss'
+                          FEEOPTDATE
+                  , 'yyyy-mm-dd hh24:mi:ss'
                   )
-            &lt;=
-              #{endtime}
+            &lt;= #{endtime}
 
     </select>
 

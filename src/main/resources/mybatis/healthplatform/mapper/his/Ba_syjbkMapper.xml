@@ -144,16 +144,16 @@
                       '9')                                                        "CYZGDM",      -- 出院转归（对应西医主要诊断）  VARCHAR 4 必填  参见CV05.10.010病情转归 1：治愈 2：好转 3：稳定 4：恶化 5：死亡 9：其他
                d.OUTPATIENT_DIAGNOSIS_CODE                                        "YNMZZDBM",    -- 院内门急诊西医诊断编码 VARCHAR 256 必填
                d.OUTPATIENT_DIAGNOSIS                                             "YNMJZZDMC",   --  院内门急诊西医诊断名称 VARCHAR 512 必填
-               n.item_id                                                          "MZZDBM",      -- 中心门急诊西医诊断编码 VARCHAR 256 必填  参见《疾病分类与代码(ICD-10)》
-               n.item_name                                                        "MJZZDMC",     --  中心门急诊西医诊断名称 VARCHAR 512 必填  参见《疾病分类与代码(ICD-10)》
+               d.OUTPATIENT_DIAGNOSIS_CODE                                        "MZZDBM",      -- 中心门急诊西医诊断编码 VARCHAR 256 必填  参见《疾病分类与代码(ICD-10)》
+               d.OUTPATIENT_DIAGNOSIS_name                                        "MJZZDMC",     --  中心门急诊西医诊断名称 VARCHAR 512 必填  参见《疾病分类与代码(ICD-10)》
                d.EXT_INJURY_POISON_CODE                                           "YNSSZD",      -- 院内损伤中毒外部原因编码  VARCHAR 64    多选项，使用“/”（左斜杠）进行分隔
                d.EXT_INJURY_POISON                                                "YNSSZDMC",    -- 院内损伤中毒外部原因  VARCHAR 256   多选项，使用“;”（英文分号）进行分隔
-               q.item_id                                                          "SSZD",        -- 中心损伤中毒外部原因编码  VARCHAR 64    多选项，使用“/”（左斜杠）进行分隔 参见《疾病分类与代码(ICD-10)》
-               q.item_name                                                        "SSWYMC",      -- 中心损伤中毒外部原因  VARCHAR 256   多选项，使用“;”（英文分号）进行分隔 参见《疾病分类与代码(ICD-10)》
-               d.PATHOLOGIC_DIAGNOSIS                                             "YNBLZD",      -- 院内病理诊断  VARCHAR 256   多选项，使用“/”（左斜杠）进行分隔
+               d.EXT_INJURY_POISON_CODE                                           "SSZD",        -- 中心损伤中毒外部原因编码  VARCHAR 64    多选项，使用“/”（左斜杠）进行分隔 参见《疾病分类与代码(ICD-10)》
+               d.EXT_INJURY_POISON                                                "SSWYMC",      -- 中心损伤中毒外部原因  VARCHAR 256   多选项，使用“;”（英文分号）进行分隔 参见《疾病分类与代码(ICD-10)》
+               d.PATHOLOGIC_DIAGNOSIS_CODE                                        "YNBLZD",      -- 院内病理诊断  VARCHAR 256   多选项，使用“/”（左斜杠）进行分隔
                d.PATHOLOGIC_DIAGNOSIS                                             "YNBLZDMC",    -- 院内病理诊断名称  VARCHAR 512   多选项，使用“;”（英文分号）进行分隔
-               v.item_id                                                          "BLZD",        -- 中心病理诊断  VARCHAR 256   多选项，使用“/”（左斜杠）进行分隔 参见《疾病分类与代码(ICD-10)》
-               v.item_name                                                        "BLZDMC",      -- 中心病理诊断名称  VARCHAR 512   多选项，使用“;”（英文分号）进行分隔 参见《疾病分类与代码(ICD-10)》
+               d.PATHOLOGIC_DIAGNOSIS_CODE                                        "BLZD",        -- 中心病理诊断  VARCHAR 256   多选项，使用“/”（左斜杠）进行分隔 参见《疾病分类与代码(ICD-10)》
+               d.PATHOLOGIC_DIAGNOSIS                                             "BLZDMC",      -- 中心病理诊断名称  VARCHAR 512   多选项，使用“;”（英文分号）进行分隔 参见《疾病分类与代码(ICD-10)》
                d.PATHOLOGICAL_NUMBER                                              "BLBH",        -- 病理号 VARCHAR 100 条件必填  多选项，使用“/”（左斜杠）进行分隔，有病理诊断时必填
                d.IS_ALLERGY                                                       "YWGM",        -- 有无药物过敏  VARCHAR 4 必填  1：无 2：有
                d.ALERGY_DRUGS                                                     "GMYW",        -- 过敏药物名称  VARCHAR 64  条件必填  填写平台药物代码，多项时用英文分号“;”分割 “有无药物过敏”为“有”时必填
@@ -382,16 +382,7 @@
                               and a.module_rid = '202310101511361148853000000000'
                               and a.type_rid = '202310101743311149749700000000') m
                            on m.his_item_id = d.ADM_COND_CODE
-                 left join (select a.item_id, a.item_name, b.his_item_id
-                            from si_yt_report_item a,
-                                 si_yt_report_item_compare b
-                            where a.module_rid = b.module_rid
-                              and a.type_rid = b.type_rid
-                              and a.rid = b.item_rid
-                              and a.module_rid = '202310101511361148853000000000'
-                              and a.type_rid = '202311281105131392640900000000'
-                              and b.orgcode = #{orgcode}) n
-                           on n.his_item_id = d.OUTPATIENT_DIAGNOSIS_CODE
+
                  left join (select a.item_id, a.item_name, b.his_item_id
                             from si_yt_report_item a,
                                  si_yt_report_item_compare b
@@ -412,16 +403,7 @@
                               and a.type_rid = '202311141512391328016800000000'
                               and b.orgcode = #{orgcode}) p
                            on p.his_item_id = d.DEPT_DISCHARGE_FROM
-                 left join (select a.item_id, a.item_name, b.his_item_id
-                            from si_yt_report_item a,
-                                 si_yt_report_item_compare b
-                            where a.module_rid = b.module_rid
-                              and a.type_rid = b.type_rid
-                              and a.rid = b.item_rid
-                              and a.module_rid = '202310101511361148853000000000'
-                              and a.type_rid = '202311281105131392640900000000'
-                              and b.orgcode = #{orgcode}) q
-                           on q.his_item_id = d.EXT_INJURY_POISON_CODE
+
                  left join (select a.*, p.item_id, p.item_name
                             from IPR_DIAGNOSE a
                                      left join (select a.item_id, a.item_name, b.his_item_id
@@ -469,16 +451,6 @@
                             group by orgcode, visit_id) u
                            on u.orgcode = d.orgcode
                                and u.visit_id = d.visit_id
-                 left join (select a.item_id, a.item_name, b.his_item_id
-                            from si_yt_report_item a,
-                                 si_yt_report_item_compare b
-                            where a.module_rid = b.module_rid
-                              and a.type_rid = b.type_rid
-                              and a.rid = b.item_rid
-                              and a.module_rid = '202310101511361148853000000000'
-                              and a.type_rid = '202311281105131392640900000000'
-                              and b.orgcode = #{orgcode}) v
-                           on v.his_item_id = d.PATHOLOGIC_DIAGNOSIS_CODE
                  left join (select a.item_id, a.item_name, b.his_item_id
                             from si_yt_report_item a,
                                  si_yt_report_item_compare b

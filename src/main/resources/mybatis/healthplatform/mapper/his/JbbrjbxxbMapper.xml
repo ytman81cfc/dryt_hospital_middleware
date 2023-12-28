@@ -24,7 +24,7 @@
                f.item_id                                                     "HYZK",--	婚姻状况	VARCHAR	3		参见GB/T 2261.2-2003-2022修订版 婚姻状况代码
                to_char(a.BRDY, 'YYYY-MM-DD')                                 "CSRQ",--	出生日期	DATETIME			YYYY-MM-DD
                a.RESIHOME                                                    "CSD",--	出生地	VARCHAR	32		参见 GB/T 2260-2007
-               a.NATY                                                        "MZ",--	民族	VARCHAR	2		参见 GB/T 3304-1991-2022修订版 民族代码表
+               nvl(h.item_id, '01')                                          "MZ",--	民族	VARCHAR	2		参见 GB/T 3304-1991-2022修订版 民族代码表
                i.item_id                                                     "GJ",--	国籍	VARCHAR	3		参见 GB/T 2659-2000
                a.TEL                                                         "DHHM",--	电话号码	VARCHAR	24
                ''                                                            "SJHM",--	手机号码	VARCHAR	20
@@ -36,8 +36,8 @@
                a.WORKNAME                                                    "GZDWMC",--	工作单位名称	VARCHAR	128
                a.WORKHOME                                                    "GZDWDZ",--	工作单位地址	VARCHAR	128
                ''                                                            "ZYLBDM",--	职业类别代码	VARCHAR	3		参见 GB/T 2261.4-2003 职业分类与代码
-               a.HOME                                                        "JZDZ",--	居住地址	VARCHAR	128	必填	患者本人常住地址的描述
-               a.SI_INSUPLCADMDVS                                            "XZQHDM",--	常住地址-行政区划代码	VARCHAR	6	必填	患者本人常住地址中的县（区）的 6 位行政区划代码
+               nvl(a.HOME,'-')                                                        "JZDZ",--	居住地址	VARCHAR	128	必填	患者本人常住地址的描述
+               nvl(substr(a.SI_INSUPLCADMDVS,3),'-')                                            "XZQHDM",--	常住地址-行政区划代码	VARCHAR	6	必填	患者本人常住地址中的县（区）的 6 位行政区划代码
                a.RESIHOME                                                    "HKDZ",--	户口地址	VARCHAR	128
                a.RESIHOME_ZIP                                                "HKDZYB",--	户口地址邮编	VARCHAR	6
                substr(a.LINKMANNAME, 0, 20)                                  "LXRXM",--	联系人姓名	VARCHAR	50
@@ -104,6 +104,14 @@
                               and a.rid = b.item_rid
                               and a.module_rid = '202310101511361148853000000000'
                               and a.type_rid = '202311161530191338672700000000') g on g.his_item_id = a.RELACODE
+                 left join (select a.item_id, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202312040850191416618200000000') h on h.his_item_id = a.NATY
         where a.orgcode = c.orgcode
           and a.PATIENTID = b.PATIENTID
           and a.orgcode = #{orgcode}

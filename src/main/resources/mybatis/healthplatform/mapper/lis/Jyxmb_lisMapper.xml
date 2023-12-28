@@ -45,6 +45,5 @@
           AND a.org_code = #{orgcode}
           AND a.result_date &gt;= str_to_date(#{begtime}, '%Y-%m-%d %T')
           AND a.result_date &lt;= str_to_date(#{endtime}, '%Y-%m-%d %T')
-
     </select>
 </mapper>
