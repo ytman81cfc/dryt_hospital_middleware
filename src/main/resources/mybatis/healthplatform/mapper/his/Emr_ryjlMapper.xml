@@ -17,7 +17,7 @@
                a.certno                                   "ZJHM",--	证件号码	VARCHAR	32
                e.item_id                                  "ZJLX",--	证件类型	VARCHAR	2		参见CV02.01.101身份证件类别代码
                a.patientname                              "HZXM",--	患者姓名	VARCHAR	50	必填
-               a.SEXCODE                                  "XBDM",--	性别代码	VARCHAR	1	必填	编码。按国标GB/T 2261.1-2003执行
+               nvl(s.item_id, '1')                        "XBDM",--	性别代码	VARCHAR	1	必填	编码。按国标GB/T 2261.1-2003执行
                case
                    when extract(year from a.indate) - extract(year from a.BIRTHDAY) &gt; 1
                        then floor(extract(year from a.indate) - extract(year from a.BIRTHDAY))
@@ -126,6 +126,14 @@
                b.CHIFDR_NO                                "ZRYSGH",--	主任医师工号	VARCHAR	64
                to_char(sysdate, 'YYYY-MM-DD')             "TBRQ" --  填报日期  DATETIME   必填 本条数据采集时间，格式YYYY-MM-DD
         from ipr_inpatientinfo a
+                 left join (select a.item_id, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202310101602441149584100000000') s on s.his_item_id = a.SEXCODE
                  left join (select a.item_id, b.his_item_id
                             from si_yt_report_item a,
                                  si_yt_report_item_compare b

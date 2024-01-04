@@ -13,7 +13,7 @@
                d.itemcode                                    "JCSFXMDM",--	院内检查收费项目代码	VARCHAR	64	必填	医院内部的唯一标识该收费项目的编码
                d.itemname                                    "JCSFXMMC",--	院内检查收费项目名称	VARCHAR	250	必填	医院内部的唯一标识该收费项目的名称
                nvl(replace(h.med_list_codg, '_SI', ''), '-') "JCSFXMPTDM",--	中心检查收费项目代码	VARCHAR	64	必填	参见《全民健康信息平台医疗服务项目价格表》
-               h.servitem_name                               "JCSFXMPTMC",--	中心检查收费项目名称	VARCHAR	250	必填	参见《全民健康信息平台医疗服务项目价格表》
+               nvl(h.servitem_name, '-')                     "JCSFXMPTMC",--	中心检查收费项目名称	VARCHAR	250	必填	参见《全民健康信息平台医疗服务项目价格表》
                nvl(c.PARTORSAMPLE, '-')                      "YYJCBWBM",--	院内检查部位编码	VARCHAR	32	必填	医院检查部位编码
                nvl(f.dictname, '-')                          "YYJCBWMC",--	院内检查部位名称	VARCHAR	50	必填	医院检查部位名称
                nvl(g.item_id, '未对照')                         "JCBW",--	中心检查部位编码	VARCHAR	32	必填	表明病人的检查部位的编码，参见ZD_ACRJC检查部位代码表若对应到多个部位，则中间用英文分号分隔，对填写的编码必须至少精确到二级目录
@@ -60,7 +60,7 @@
                d.itemcode                                    "JCSFXMDM",--	院内检查收费项目代码	VARCHAR	64	必填	医院内部的唯一标识该收费项目的编码
                d.itemname                                    "JCSFXMMC",--	院内检查收费项目名称	VARCHAR	250	必填	医院内部的唯一标识该收费项目的名称
                nvl(replace(h.med_list_codg, '_SI', ''), '-') "JCSFXMPTDM",--	中心检查收费项目代码	VARCHAR	64	必填	参见《全民健康信息平台医疗服务项目价格表》
-               h.servitem_name                               "JCSFXMPTMC",--	中心检查收费项目名称	VARCHAR	250	必填	参见《全民健康信息平台医疗服务项目价格表》
+               nvl(h.servitem_name, '-')                     "JCSFXMPTMC",--	中心检查收费项目名称	VARCHAR	250	必填	参见《全民健康信息平台医疗服务项目价格表》
                nvl(c.PARTORSAMPLE, '-')                      "YYJCBWBM",--	院内检查部位编码	VARCHAR	32	必填	医院检查部位编码
                nvl(f.dictname, '-')                          "YYJCBWMC",--	院内检查部位名称	VARCHAR	50	必填	医院检查部位名称
                nvl(g.item_id, '未对照')                         "JCBW",--	中心检查部位编码	VARCHAR	32	必填	表明病人的检查部位的编码，参见ZD_ACRJC检查部位代码表若对应到多个部位，则中间用英文分号分隔，对填写的编码必须至少精确到二级目录

@@ -7,16 +7,16 @@
                '8'                                           "KLX",--	卡类型	VARCHAR	16	必填	参见CVA5104就诊卡类型
                c.rid                                         "KH",--	卡号	VARCHAR	64	必填
                a.certno                                      "ZJHM",--	证件号码	VARCHAR	32
-               nvl(f.item_id, '-')                                     "ZJLX",--	证件类型	VARCHAR	2		参见CV02.01.101身份证件类别代码
+               nvl(f.item_id, '-')                           "ZJLX",--	证件类型	VARCHAR	2		参见CV02.01.101身份证件类别代码
                a.patientname                                 "XM",--	姓名	VARCHAR 	50	必填
-               a.sexcode                                     "XB",--	性别	VARCHAR 	1	必填 	编码。按国标GB/T 2261.1-2003执行
+               nvl(s.sexcode, '1')                           "XB",--	性别	VARCHAR 	1	必填 	编码。按国标GB/T 2261.1-2003执行
                to_char(a.birthday, 'YYYY-MM-DD')             "CSRQ",--	出生日期	DATETIME 		必填 	格式：YYYY-MM-DD
                case
                    when (a.out_date - a.BIRTHDAY) &gt;= 1 then trunc(MONTHS_BETWEEN(a.out_date, a.BIRTHDAY) / 12)
                    else 0 end                                "NLS",--	年龄(岁)	NUMERIC	3	必填
                case
                    when (a.out_date - a.BIRTHDAY) &lt; 1 then trunc(MONTHS_BETWEEN(a.out_date, a.BIRTHDAY))
-                   else '-' end                             "NLY",--	年龄(月)	NUMERIC	3
+                   else '-' end                              "NLY",--	年龄(月)	NUMERIC	3
                g.item_id                                     "RYLYDM",--	入院来源代码	VARCHAR	1	必填	1、急诊，2、门诊，3、转入，9、其他
                a.indeptcode                                  "RYKSBM",--	入院科室编码	VARCHAR	50	必填	填医院系统内部定义的科室编码
                a.indeptname                                  "RYKSMC",--	入院科室名称	VARCHAR	100	必填	填医院系统内部定义的科室名称
@@ -40,6 +40,14 @@
                to_char(a.CRTE_TIME, 'YYYY-MM-DD HH24:MI:SS') "DJRQ",--	登记日期	DATETIME		必填	系统登记日期
                to_char(sysdate, 'YYYY-MM-DD')                "TBRQ" --  填报日期  DATETIME   必填 本条数据采集时间，格式YYYY-MM-DD
         from IPR_INPATIENTINFO a
+                 left join (select a.item_id, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202310101602441149584100000000') s on s.his_item_id = a.SEXCODE
                  left join com_userinfo u1 on u1.orgcode = a.orgcode and u1.userid = a.CRTER
                  left join (select a.item_id, b.his_item_id
                             from si_yt_report_item a,

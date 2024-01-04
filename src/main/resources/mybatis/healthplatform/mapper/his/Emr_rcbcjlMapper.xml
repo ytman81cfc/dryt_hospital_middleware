@@ -20,7 +20,7 @@
                d.bedno                                        "BCH",--	病床号	VARCHAR	10
                to_char(e.CREATETIME, 'YYYY-MM-DD HH24:mi:SS') "JLRQSJ",--	记录日期时间	DATETIME		必填	格式：YYYY-MM-DD HH:MM:SS
                a.patientname                                  "HZXM",--	患者姓名	VARCHAR	50	必填
-               h.item_id                                      "XBDM",--	性别代码	VARCHAR	1	必填	编码。按国标GB/T 2261.1-2003执行
+               nvl(h.item_id, '1')                            "XBDM",--	性别代码	VARCHAR	1	必填	编码。按国标GB/T 2261.1-2003执行
                to_char(a.BIRTHDAY, 'YYYY-MM-DD')              "CSRQ",--	出生日期	DATETIME		必填	格式：YYYY-MM-DD
                case
                    when extract(year from a.indate) - extract(year from a.BIRTHDAY) &gt; 1

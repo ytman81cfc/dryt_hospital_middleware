@@ -72,7 +72,7 @@
                nvl(f.item_id, '01')           "ZJLX",--	证件类型	VARCHAR	2		参见CV02.01.101-2022修订版 身份证件类别代码  优先填写身份证号
                d.certno                       "ZJHM",--	证件号码	VARCHAR	32
                d.patientname                  "XM",--	姓名	VARCHAR	50	必填
-               d.sexcode                      "XB",--	性别	VARCHAR	1	必填	参见 GB/T 2261.1-2003 性别代码表
+               nvl(s.item_id, '1')            "XB",--	性别	VARCHAR	1	必填	参见 GB/T 2261.1-2003 性别代码表
                regexp_substr(e.nl, '[0-9]+')  "NL",--	年龄	NUMERIC	3	必填
                e.bqmc                         "BQMC",--	申请病区名称	VARCHAR	64	条件必填
                e.ch                           "CH",--	患者床号	VARCHAR	20	条件必填	住院患者必填
@@ -145,6 +145,14 @@
                               and a.type_rid = b.type_rid
                               and a.rid = b.item_rid
                               and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202310101602441149584100000000') s on s.his_item_id = d.SEXCODE
+                 left join (select a.item_id, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
                               and a.type_rid = '202310101521161149402900000000') f on f.his_item_id = d.PSNCERTTYPE
                 ,
              PRO_JYJLB e
@@ -174,7 +182,7 @@
                nvl(f.item_id, '01')           "ZJLX",--	证件类型	VARCHAR	2		参见CV02.01.101-2022修订版 身份证件类别代码  优先填写身份证号
                d.certno                       "ZJHM",--	证件号码	VARCHAR	32
                d.patientname                  "XM",--	姓名	VARCHAR	50	必填
-               d.sexcode                      "XB",--	性别	VARCHAR	1	必填	参见 GB/T 2261.1-2003 性别代码表
+               nvl(s.item_id, '1')            "XB",--	性别	VARCHAR	1	必填	参见 GB/T 2261.1-2003 性别代码表
                regexp_substr(e.nl, '[0-9]+')  "NL",--	年龄	NUMERIC	3	必填
                e.bqmc                         "BQMC",--	申请病区名称	VARCHAR	64	条件必填
                e.ch                           "CH",--	患者床号	VARCHAR	20	条件必填	住院患者必填
@@ -240,6 +248,15 @@
              com_hospitalinfo b,
              com_patientinfo c,
              opr_register d
+                 left join (select a.item_id, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202310101602441149584100000000') s on s.his_item_id = d.SEXCODE
+
                  left join (select a.item_id, b.his_item_id
                             from si_yt_report_item a,
                                  si_yt_report_item_compare b

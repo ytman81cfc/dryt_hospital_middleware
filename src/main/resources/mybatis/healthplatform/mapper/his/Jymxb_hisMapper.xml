@@ -71,13 +71,13 @@
                            else '3'
                            end
                    end                        "JYJGLX",-- 检验结果类型  VARCHAR 1 必填  检验结果的类型 1：数值型 2：阴阳型 3：文本型
-               c.result                       "JYJG",-- 检验结果  VARCHAR 1000  必填  检验结果类型为1时，填写具体的数值  检验结果类型为2时，填写阴性或者阳性   检验结果类型为3时，填写具体的检验结果文本描述
+               nvl(c.result, '-')             "JYJG",-- 检验结果  VARCHAR 1000  必填  检验结果类型为1时，填写具体的数值  检验结果类型为2时，填写阴性或者阳性   检验结果类型为3时，填写具体的检验结果文本描述
                c.unit                         "JYJLDW",-- 检验计量单位  VARCHAR 20
                case
                    when c.flag = '↓' then '4'
                    when c.flag = '↑' then '3'
                    when c.flag is null or c.flag = '' then '1'
-                   end                        "JGTS",-- 检验结果提示  VARCHAR 2 必填  1：正常 2：其他异常 3：异常偏高 4：异常偏低 9：不详
+                   else '9' end               "JGTS",-- 检验结果提示  VARCHAR 2 必填  1：正常 2：其他异常 3：异常偏高 4：异常偏低 9：不详
                c.NORMALRANGE                  "CKZFW",--  参考值范围 VARCHAR 512 条件必填
                case
                    when c.type = '0' then round(to_number(c.NORMALUP), 3)
@@ -156,13 +156,13 @@
                            else '3'
                            end
                    end                        "JYJGLX",-- 检验结果类型  VARCHAR 1 必填  检验结果的类型 1：数值型 2：阴阳型 3：文本型
-               c.result                       "JYJG",-- 检验结果  VARCHAR 1000  必填  检验结果类型为1时，填写具体的数值  检验结果类型为2时，填写阴性或者阳性   检验结果类型为3时，填写具体的检验结果文本描述
+               nvl(c.result, '-')             "JYJG",-- 检验结果  VARCHAR 1000  必填  检验结果类型为1时，填写具体的数值  检验结果类型为2时，填写阴性或者阳性   检验结果类型为3时，填写具体的检验结果文本描述
                c.unit                         "JYJLDW",-- 检验计量单位  VARCHAR 20
                case
                    when c.flag = '↓' then '4'
                    when c.flag = '↑' then '3'
                    when c.flag is null or c.flag = '' then '1'
-                   end                        "JGTS",-- 检验结果提示  VARCHAR 2 必填  1：正常 2：其他异常 3：异常偏高 4：异常偏低 9：不详
+                   else '9' end               "JGTS",-- 检验结果提示  VARCHAR 2 必填  1：正常 2：其他异常 3：异常偏高 4：异常偏低 9：不详
                c.NORMALRANGE                  "CKZFW",--  参考值范围 VARCHAR 512 条件必填
                case
                    when c.type = '0' then round(to_number(c.NORMALUP), 3)

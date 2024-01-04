@@ -6,7 +6,7 @@
                a.inid                                       "ZYSWJLLSH",--	住院死亡记录流水号	VARCHAR	64	必填	复合主键
                a.inid                                       "ZYJZLSH",--	住院就诊流水号	VARCHAR	32	必填	复合主键
                a.patientname                                "HZXM",--	患者姓名	VARCHAR	50	必填
-               a.sexcode                                    "XBDM",--	性别代码	VARCHAR	1	必填	编码。按国标GB/T 2261.1-2003执行
+               nvl(s.item_id, '1')                          "XBDM",--	性别代码	VARCHAR	1	必填	编码。按国标GB/T 2261.1-2003执行
                case
                    when extract(year from a.indate) - extract(year from a.BIRTHDAY) &gt; 1
                        then floor(extract(year from a.indate) - extract(year from a.BIRTHDAY))
@@ -75,6 +75,14 @@
                               and a.rid = b.item_rid
                               and a.module_rid = '202310101511361148853000000000'
                               and a.type_rid = '202310101521161149402900000000') e on e.his_item_id = a.PSNCERTTYPE
+                 left join (select a.item_id, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202310101602441149584100000000') s on s.his_item_id = a.SEXCODE
                  left join (select listagg(a.dise_code, ';') within group (order by a.dise_code)code,
                      listagg(a.dise_name,';') within
                             group (order by a.dise_name) name, a.orgcode, a.inid
