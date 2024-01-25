@@ -47,8 +47,8 @@
             to_char(a.crte_time, 'YYYY-MM-DD HH24:MI:SS') "ZDSJ",			--	诊断时间 		DATETIME
             '02'                                          "BMLX",			--	诊断编码类型 		VARCHAR 2	必填 	01：ICD10	02：国标-21
             '1'					                          "ZYZBZZBZ",		--	中医主病主证标志	VARCHAR 1	 	    中医诊断必填，1：主病 2：主证
-            a.tcm_dise_code                               "ZDBM",			--	诊断编码 		VARCHAR 64	必填 	西医：参见《疾病分类与代码(ICD-10)》 中医：参见 GB/T 15657-2021
-            nvl(a.tcm_dise_name, '-')                     "ZDSM",			--	诊断说明 		VARCHAR 512	必填 	文字描述
+            a.dise_code                                   "ZDBM",			--	诊断编码 		VARCHAR 64	必填 	西医：参见《疾病分类与代码(ICD-10)》 中医：参见 GB/T 15657-2021
+            nvl(a.dise_name, '-')                         "ZDSM",			--	诊断说明 		VARCHAR 512	必填 	文字描述
             '1'                              	          "ZYZDBZ",			--	主要诊断标志 		VARCHAR 1	必填 	1：第一诊断 2：第二诊断 3：第三诊断
             '0'                          		          "YZDBZ",			--	疑似诊断标志 		VARCHAR 1	必填 	参见 CV05.01.002 诊断状态代码表
             null                                          "CYQKBM",			--	出院情况编码 		VARCHAR 1		    1：治愈 2：好转 3：未愈 4：死亡 5：其它 出院诊断时必填
