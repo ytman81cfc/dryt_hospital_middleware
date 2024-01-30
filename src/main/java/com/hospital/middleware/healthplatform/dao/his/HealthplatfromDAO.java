@@ -129,4 +129,17 @@ public interface HealthplatfromDAO {
     List<Map> queryEmr_rcbcjl (String orgcode,String begtime,String endtime);
 
 
+    //查询莱州卫健科室对应关系
+    List<Map> queryDicDeptCompare(String orgcode);
+    //查询员工身份证号
+    List<Map> queryDicDoctorCertNo(String orgcode);
+    //查询药品 院内药物剂型代码 院内药物剂型名称 中心药物剂型代码 中心药物剂型名称
+    List<Map> queryDicDrugJxInfor(String orgcode);
+    //查询药品 中心用药频度代码 中心用药频度名称
+    List<Map> queryDicDrugPdInfor(String orgcode);
+    //查询药品 中心药品用法代码 中心药品用法名称
+    List<Map> queryDicDrugYfInfor(String orgcode);
+
+
+
 }

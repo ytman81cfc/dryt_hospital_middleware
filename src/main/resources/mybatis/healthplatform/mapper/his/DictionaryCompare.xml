@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hospital.middleware.healthplatform.dao.his.HealthplatfromDAO">
+    <!--查询莱州卫健科室对应关系 -->
+    <select id="queryDicDeptCompare" resultType="java.util.HashMap">
+        select  a.item_id as "item_id",
+                a.item_name as "item_name",
+                b.his_item_id as "his_item_id",
+                b.his_item_name as "his_item_name"
+        from si_yt_report_item a,
+             si_yt_report_item_compare b
+        where a.module_rid = b.module_rid
+                and a.type_rid = b.type_rid
+                and a.rid = b.item_rid
+                and a.module_rid = '202310101511361148853000000000'
+                and a.type_rid = '202311141512391328016800000000'
+    </select>
+    <!--查询员工身份证号-->
+    <select id="queryDicDoctorCertNo" resultType="java.util.HashMap">
+        select usercode as "usercode",
+               username as "username",
+               certno as "certno"
+        from com_userinfo where orgcode = #{orgcode}
+    </select>
+    <!--查询药品 院内药物剂型代码 院内药物剂型名称 中心药物剂型代码 中心药物剂型名称-->
+    <select id="queryDicDrugJxInfor" resultType="java.util.HashMap">
+        select
+            pd.drugcode as "drugcode",
+            pd.dosemodelcode as "ynywjxdm",
+            cd.dictname as "ynywjxmc",
+            a.item_id as "ywjxdm",
+            a.item_name as "ywjxmc"
+        from
+            com_dictcodeinfo cd,
+            pha_druginfo pd,
+            (
+                select a.item_id, a.item_name, b.his_item_id, b.his_item_name
+                    from si_yt_report_item a,
+                         si_yt_report_item_compare b
+                    where a.module_rid = b.module_rid
+                            and a.type_rid = b.type_rid
+                            and a.rid = b.item_rid
+                            and a.module_rid = '202310101511361148853000000000'
+                            and a.type_rid = '202310101606231149584700000000'
+        ) a
+        where cd.typecode = 'DRUG_DOSFORM'
+            and pd.dosemodelcode = cd.dictcode
+            and pd.dosemodelcode = a.his_item_id
+            and pd.orgcode = #{orgcode}
+    </select>
+
+    <!--查询药品 中心用药频度代码 中心用药频度名称-->
+    <select id="queryDicDrugPdInfor" resultType="java.util.HashMap">
+        select
+            a.item_id as "item_id",
+            a.item_name as "item_name",
+            b.his_item_id as "his_item_id",
+            b.his_item_name as "his_item_name"
+        from si_yt_report_item a,
+            si_yt_report_item_compare b
+        where a.module_rid = b.module_rid
+            and a.type_rid = b.type_rid
+            and a.rid = b.item_rid
+            and a.module_rid = '202310101511361148853000000000'
+            and a.type_rid = '202310101607011149584800000000'
+    </select>
+
+    <!--查询药品 中心药品用法代码 中心药品用法名称-->
+    <select id="queryDicDrugYfInfor" resultType="java.util.HashMap">
+        select
+            a.item_id as "item_id",
+            a.item_name as "item_name",
+            b.his_item_id as "his_item_id",
+            b.his_item_name as "his_item_name"
+        from    si_yt_report_item a,
+                si_yt_report_item_compare b
+        where a.module_rid = b.module_rid
+            and a.type_rid = b.type_rid
+            and a.rid = b.item_rid
+            and a.module_rid = '202310101511361148853000000000'
+            and (a.type_rid = '202310121119021160879600000000' or a.type_rid = '202310101607531149585000000000')
+    </select>
+
+</mapper>

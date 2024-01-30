@@ -545,17 +545,18 @@
     </insert>
 
     <delete id="deleteZYYZMXB" parameterType="HashMap">
-        delete
-        from ZYYZMXB
-        where YZXDSJ >= to_date(#{begTime}, 'YYYY-MM-DD HH24:MI:SS')
-          and YZXDSJ &lt;= to_date(#{endTime}, 'YYYY-MM-DD HH24:MI:SS')
+        delete from ZYYZMXB
+            where YZXDSJ >= to_date(#{begTime}, 'YYYY-MM-DD HH24:MI:SS')
+                    and YZXDSJ &lt;= to_date(#{endTime}, 'YYYY-MM-DD HH24:MI:SS')
     </delete>
+
     <delete id="deleteZYYZMXBByPk" parameterType="HashMap">
         delete
         from ZYYZMXB
         where YLJGDM = #{YLJGDM, jdbcType=VARCHAR}
           and YZID = #{YZID, jdbcType=VARCHAR}
     </delete>
+
     <insert id="insertZYYZMXB" parameterType="java.util.HashMap">
         insert into ZYYZMXB(HDHSXM, TZYZZGH, JYMC, FYMC, DDDDW, YPYFMC, TBRQ, JLDWDM, SHRGH, YNXDKSBM,
                             YNYPYFMC, CXBZ, YZSM, XMDJ, XDKSBM, DW, HDHSGH, KLX, ZJLX, YLJGMC,

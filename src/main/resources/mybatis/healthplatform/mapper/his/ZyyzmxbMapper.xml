@@ -98,18 +98,18 @@
                 decode(b.drugtype, '1', '1', '2', '2', '3', '3')							"YPLB",		-- 药品类别			    VARCHAR 1	条件必填	1：西药 2：中成药 3：中草药
                 decode(b.itemtype, '1', '9', null)									        "ZYCFFL",	-- 中药处方分类			VARCHAR 1	条件必填	1：散装饮片 2：小包装饮片 3：颗粒剂 4：协定 5：膏方 6：中药制剂 9：其他
                 decode(b.itemtype, '1', b.specs, null)									    "YPGG",		-- 药品规格			    VARCHAR 32	条件必填	若为药品，则必填写，若为非药品，则必须为空。
-                decode(b.itemtype, '1', b.itemid, null)									    "YNYWJXDM",	-- 院内药物剂型代码		VARCHAR 10	条件必填
-                decode(b.itemtype, '1', b.itemname, null)								    "YNYWJXMC",	-- 院内药物剂型名称		VARCHAR 128	条件必填
-                '需要查询后转换'											                    "YWJXDM",	-- 中心药物剂型代码		VARCHAR 3	条件必填	参见 CV08.50.002 药物剂型代码表
-                '需要查询后转换'											                    "YWJXMC",	-- 中心药物剂型名称		VARCHAR 128	条件必填
+                decode(b.itemtype, '1', '需要查询后转换', null)						        "YNYWJXDM",	-- 院内药物剂型代码		VARCHAR 10	条件必填
+                decode(b.itemtype, '1', '需要查询后转换', null)								"YNYWJXMC",	-- 院内药物剂型名称		VARCHAR 128	条件必填
+                decode(b.itemtype, '1', '需要查询后转换', null)								"YWJXDM",	-- 中心药物剂型代码		VARCHAR 3	条件必填	参见 CV08.50.002 药物剂型代码表
+                decode(b.itemtype, '1', '需要查询后转换', null)								"YWJXMC",	-- 中心药物剂型名称		VARCHAR 128	条件必填
                 decode(b.itemtype, '1', b.usagecode, null)								    "YNYPYFDM",	-- 院内药品用法代码		VARCHAR 32	条件必填
                 decode(b.itemtype, '1', b.usagename, null)								    "YNYPYFMC",	-- 院内药品用法名称		VARCHAR 128	条件必填
-                '需要查询后转换'											                    "YPYF",		-- 中心药品用法代码		VARCHAR 32	条件必填	参见CV06.00.102 用药途径代码
-                '需要查询后转换'											                    "YPYFMC",	-- 中心药品用法名称		VARCHAR 128	条件必填
+                decode(b.itemtype, '1', '需要查询后转换', null)							    "YPYF",		-- 中心药品用法代码		VARCHAR 32	条件必填	参见CV06.00.102 用药途径代码
+                decode(b.itemtype, '1', '需要查询后转换', null)								"YPYFMC",	-- 中心药品用法名称		VARCHAR 128	条件必填
                 decode(b.itemtype, '1', b.freqcode, null)								    "YNYYPDDM",	-- 院内用药频度代码		VARCHAR 32	条件必填
                 decode(b.itemtype, '1', b.freqname, null)								    "YNYYPDMC",	-- 院内用药频度名称		VARCHAR 128	条件必填
-                '需要查询后转换'											                    "YYPD",		-- 中心用药频度代码		VARCHAR 32	条件必填	参见CVA5301_01 药物使用频率代码表
-                '需要查询后转换'											                    "YYPDMC",	-- 中心用药频度名称		VARCHAR 128	条件必填	平台用药频度名称
+                decode(b.itemtype, '1', '需要查询后转换', null)								"YYPD",		-- 中心用药频度代码		VARCHAR 32	条件必填	参见CVA5301_01 药物使用频率代码表
+                decode(b.itemtype, '1', '需要查询后转换', null)								"YYPDMC",	-- 中心用药频度名称		VARCHAR 128	条件必填	平台用药频度名称
                 decode(b.itemtype, '1', round(b.doseonce, 3), null)							"JL",		-- 药物使用次剂量		    NUMERIC 10,3	条件必填
                 decode(b.itemtype, '1', b.doseunit, null)								    "JLDWDM",	-- 药物使用次剂量单位代码	VARCHAR 64	    条件必填	参见 CVA08.03.014 药物使用剂量单位
                 decode(b.itemtype, '1', b.priceunit, null)								    "DW",		-- 药物使用次剂量单位名称	VARCHAR 16	    条件必填
@@ -166,6 +166,4 @@
                 and to_char(e.out_date, 'yyyy-mm-dd hh24:mi:ss') &lt;= #{endtime}
                 and a.orgcode = #{orgcode}
     </select>
-
-
 </mapper>

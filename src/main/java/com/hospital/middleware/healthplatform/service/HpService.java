@@ -298,8 +298,136 @@ public class HpService {
             //住院医嘱明细表
             if ("ZYYZMXB".equals(dataType.toUpperCase())) {
                 List<Map> queryResult = hpfDAO.queryZyyzmxb(orgCode, begtime, endtime);
+
+
+                //查询莱州卫健科室对应关系
+                List<Map> DicDeptCompareList = hpfDAO.queryDicDeptCompare(orgCode);
+                HashMap<String, Map> DicDeptCompareHM = new  HashMap<String, Map>();
+                for(int a = 0; a < DicDeptCompareList.size(); a++){
+                    DicDeptCompareHM.put(DicDeptCompareList.get(a).get("his_item_id").toString(), DicDeptCompareList.get(a));
+                }
+
+                //查询员工身份证号
+                List<Map> DicDoctorCertNoList = hpfDAO.queryDicDoctorCertNo(orgCode);
+                HashMap<String, Map> DicDoctorCertNoHM = new  HashMap<String, Map>();
+                for(int a = 0; a < DicDoctorCertNoList.size(); a++){
+                    DicDoctorCertNoHM.put(DicDoctorCertNoList.get(a).get("usercode").toString(), DicDoctorCertNoList.get(a));
+                }
+
+                //查询药品 院内药物剂型代码 院内药物剂型名称 中心药物剂型代码 中心药物剂型名称
+                List<Map> DicDrugJxInforList = hpfDAO.queryDicDrugJxInfor(orgCode);
+                HashMap<String, Map> DicDrugJxInforHM = new  HashMap<String, Map>();
+                for(int a = 0; a < DicDrugJxInforList.size(); a++){
+                    DicDrugJxInforHM.put(DicDrugJxInforList.get(a).get("drugcode").toString(), DicDrugJxInforList.get(a));
+                }
+
+                //查询药品 中心用药频度代码 中心用药频度名称
+                List<Map> DicDrugPdInforList = hpfDAO.queryDicDrugPdInfor(orgCode);
+                HashMap<String, Map> DicDrugPdInforHM = new  HashMap<String, Map>();
+                for(int a = 0; a < DicDrugPdInforList.size(); a++){
+                    DicDrugPdInforHM.put(DicDrugPdInforList.get(a).get("his_item_id").toString(), DicDrugPdInforList.get(a));
+                }
+
+                //查询药品 中心药品用法代码 中心药品用法名称
+                List<Map> DicDrugYfInforList = hpfDAO.queryDicDrugYfInfor(orgCode);
+                HashMap<String, Map> DicDrugYfInforHM = new  HashMap<String, Map>();
+                for(int a = 0; a < DicDrugYfInforList.size(); a++){
+                    DicDrugYfInforHM.put(DicDrugYfInforList.get(a).get("his_item_id").toString(), DicDrugYfInforList.get(a));
+                }
+
+
                 for (int i = 0; i < queryResult.size(); i++) {
-                    queryResult.get(i).put("YLJGDM", "12370683MB2637101K");
+                    Map row = queryResult.get(i);
+                    row.put("YLJGDM", "12370683MB2637101K");
+
+                    //处理莱州卫健科室对应关系
+                    Object YNXDKSBM = row.get("YNXDKSBM");
+                    if(YNXDKSBM != null){
+                        if(DicDeptCompareHM.containsKey(YNXDKSBM.toString())){
+                            Map ddc = DicDeptCompareHM.get(YNXDKSBM.toString());
+                            String item_id = ddc.get("item_id").toString();
+                            String item_name = ddc.get("item_name").toString();
+                            row.put("XDKSBM", item_id);
+                            row.put("XDKSMC", item_name);
+                        }else{
+                            row.put("XDKSBM", "-");
+                            row.put("XDKSMC", "-");
+                        }
+                    }
+
+                    //处理员工身份证号
+                    Object XDRGH = row.get("XDRGH");
+                    if(XDRGH != null){
+                        if(DicDoctorCertNoHM.containsKey(XDRGH.toString())){
+                            Map ddc = DicDoctorCertNoHM.get(XDRGH.toString());
+                            String certno = ddc.get("certno").toString();
+                            row.put("XDRSFZHM", certno);
+                        }else{
+                            row.put("XDRSFZHM", "-");
+                        }
+                    }
+                    Object ZXRGH = row.get("ZXRGH");
+                    if(ZXRGH != null){
+                        if(DicDoctorCertNoHM.containsKey(ZXRGH.toString())){
+                            Map ddc = DicDoctorCertNoHM.get(ZXRGH.toString());
+                            String certno = ddc.get("certno").toString();
+                            row.put("ZXRSFZHM", certno);
+                        }else{
+                            row.put("ZXRSFZHM", "-");
+                        }
+                    }
+                    String YZLX = row.get("YZLX").toString();
+                    if(YZLX.equals("1")){
+                        //处理院内药物剂型代码 院内药物剂型名称 中心药物剂型代码 中心药物剂型名称
+                        Object YZMXBM = row.get("YZMXBM");
+                        if(YZMXBM != null){
+                            if(DicDrugJxInforHM.containsKey(YZMXBM.toString())){
+                                Map ddji = DicDrugJxInforHM.get(YZMXBM.toString());
+                                String ynywjxdm = ddji.get("ynywjxdm").toString();
+                                String ynywjxmc = ddji.get("ynywjxmc").toString();
+                                String ywjxdm = ddji.get("ywjxdm").toString();
+                                String ywjxmc = ddji.get("ywjxmc").toString();
+                                row.put("YNYWJXDM", ynywjxdm);
+                                row.put("YNYWJXMC", ynywjxmc);
+                                row.put("YWJXDM", ywjxdm);
+                                row.put("YWJXMC", ywjxmc);
+                            }else{
+                                row.put("YNYWJXDM", "-");
+                                row.put("YNYWJXMC", "-");
+                                row.put("YWJXDM", "-");
+                                row.put("YWJXMC", "-");
+                            }
+                        }
+                        //处理中心用药频度代码 中心用药频度名称
+                        Object YNYYPDDM = row.get("YNYYPDDM");
+                        if(YNYYPDDM != null){
+                            if(DicDrugPdInforHM.containsKey(YNYYPDDM.toString())){
+                                Map ddpi = DicDrugPdInforHM.get(YNYYPDDM.toString());
+                                String item_id = ddpi.get("item_id").toString();
+                                String item_name = ddpi.get("item_name").toString();
+                                row.put("YYPD", item_id);
+                                row.put("YYPDMC", item_name);
+                            }else{
+                                row.put("YYPD", "-");
+                                row.put("YYPDMC", "-");
+                            }
+                        }
+
+                        //处理中心药品用法代码 中心药品用法名称
+                        Object YNYPYFDM = row.get("YNYPYFDM");
+                        if(YNYPYFDM != null){
+                            if(DicDrugYfInforHM.containsKey(YNYPYFDM.toString())){
+                                Map ddpi = DicDrugYfInforHM.get(YNYPYFDM.toString());
+                                String item_id = ddpi.get("item_id").toString();
+                                String item_name = ddpi.get("item_name").toString();
+                                row.put("YPYF", item_id);
+                                row.put("YPYFMC", item_name);
+                            }else{
+                                row.put("YPYF", "-");
+                                row.put("YPYFMC", "-");
+                            }
+                        }
+                    }
                 }
                 result = gson.toJson(queryResult);
                 if (isTest) {
@@ -745,9 +873,7 @@ public class HpService {
         param.put("service_code", "莱州卫健");
         param.put("service_name", "莱州卫健");
         param.put("params", hmJson);
-        System.out.println("111111111111111111111");
         hpfDAO.insertSI_YTAUTORUNLOG(param);
-        System.out.println("222222222222222222222");
     }
 
     public void genSqlString(String tableName, Map columnSet) {
