@@ -4,7 +4,7 @@
     <select id="queryZyrydjb" resultType="java.util.HashMap">
         select a.orgcode                                     "YLJGDM",--  医疗机构代码  VARCHAR 22  必填  复合主键：采用22位“卫生机构代码”
                a.inid                                        "JZLSH",--	住院就诊流水号 	VARCHAR 	32	必填 	复合主键：His系统内部业务主键；入院登记时产生的代表该次住院的信息系统唯一识别编号
-               '8'                                           "KLX",--	卡类型	VARCHAR	16	必填	参见CVA5104就诊卡类型
+               '1'                                           "KLX",--	卡类型	VARCHAR	16	必填	参见CVA5104就诊卡类型
                c.rid                                         "KH",--	卡号	VARCHAR	64	必填
                a.certno                                      "ZJHM",--	证件号码	VARCHAR	32
                nvl(f.item_id, '-')                           "ZJLX",--	证件类型	VARCHAR	2		参见CV02.01.101身份证件类别代码

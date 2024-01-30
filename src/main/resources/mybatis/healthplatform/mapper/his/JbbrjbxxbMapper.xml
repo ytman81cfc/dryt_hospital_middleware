@@ -4,7 +4,7 @@
     <select id="queryJbbrjbxxb" resultType="java.util.HashMap">
         select a.orgcode                                                     "YLJGDM",--	医疗机构代码	VARCHAR	22	必填	复合主键：采用22位“卫生机构代码”
                a.RID                                                         "YYDAH",--	医院内部档案号	VARCHAR	64	必填	复合主键：指医院内部患者唯一的索引号
-               '8'                                                           "KLX",--	卡类型	VARCHAR	16	必填	复合主键：请按照以下优先级顺序填写：1：患者主索引号、2：身份证号、3：医保卡号，如果都没有则填写门诊就诊流水号
+               '1'                                                           "KLX",--	卡类型	VARCHAR	16	必填	复合主键：请按照以下优先级顺序填写：1：患者主索引号、2：身份证号、3：医保卡号，如果都没有则填写门诊就诊流水号
                a.RID                                                         "KH",--	卡号	VARCHAR	64	必填	复合主键：卡类型对应的号码
                c.orgname                                                     "YLJGMC",--	医疗机构名称	VARCHAR	70	必填	医院执业许可第一名称
                '0'                                                           "FYDM",--	分院代码	VARCHAR	20	必填	记录分院代码（内码）,如无分院，则传0
@@ -115,8 +115,8 @@
         where a.orgcode = c.orgcode
           and a.PATIENTID = b.PATIENTID
           and a.orgcode = #{orgcode}
-          and a.CRTE_TIME &gt;= to_date(#{begtime}, 'YYYY-MM-DD HH24:MI:SS')
-          and a.CRTE_TIME &lt;= to_date(#{endtime}, 'YYYY-MM-DD HH24:MI:SS')
+          and a.updt_time &gt;= to_date(#{begtime}, 'YYYY-MM-DD HH24:MI:SS')
+          and a.updt_time &lt;= to_date(#{endtime}, 'YYYY-MM-DD HH24:MI:SS')
     </select>
 
 </mapper>

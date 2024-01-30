@@ -26,10 +26,10 @@
                substr(a.APPROVEINFO, 0, 30)                  "PZWH",--	批准文号                    	VARCHAR	64
                nvl(a.CENPURCH, '0')                          "JZCGBZ",--	集中采购标志	VARCHAR	1	必填	0：否 1：是
                case
-                   when a.drugtype = '1' then nvl(a.ESSDRUG, '0')
+                   when a.drugtype = '1' then decode(a.ESSDRUG, '0', '0', '1', '1', '0')
                    else '' end                               "JYBZ",--	基本药物标志	VARCHAR	1	条件必填	(西药必填)0：否 1：是
                case
-                   when a.drugtype = '1' then '3'
+                   when a.drugtype = '1' and a.ESSDRUG = '1' then '01'
                    else '' end                               "JYJB",--	基本药物级别	VARCHAR	12	条件必填	(西药必填)参见 CVA08.03.003 基本药物级别多选，代码以“;”(英文分号)分隔
                case
                    when a.drugtype = '1' then
@@ -41,11 +41,8 @@
                    when a.drugtype = '1' then m.item_id
                    else '' end                               "KJYWJB",--	抗菌药物级别	VARCHAR	1	条件必填	(西药必填)参见 CVA08.03.004 抗菌药物级别
                case
-                   when a.drugtype = '1' then
-                       case
-                           when a.phykind = 'A' then '1'
-                           else '0' end
-                   else '' end                               "KSSBZ",--	抗生素标志	VARCHAR	1	条件必填	(西药必填) 0：否 1：是
+                   when a.drugtype = '1' and a.phykind = 'A' then '1'
+                   else '0' end                              "KSSBZ",--	抗生素标志	VARCHAR	1	条件必填	(西药必填) 0：否 1：是
                case
                    when a.drugtype = '1' then
                        case

@@ -11,7 +11,7 @@
                d.inid                                                     "SFLSH",--	收费流水号	VARCHAR	64	必填	关联收费记录表
                d.inid                                                     "JZLSH",--	住院就诊流水号	VARCHAR	32	必填	与住院就诊记录表关联的外键
                '-'                                                        "FPH",--	发票号	VARCHAR	32	必填	未结算费用填写默认值“/”,已结算费用填写发票号
-               '8'                                                        "KLX",--	卡类型	VARCHAR	16	必填	请按照以下优先级顺序填写：1：患者主索引号、2：身份证号、3：医保卡号，如果都没有则填写住院就诊流水号
+               '1'                                                        "KLX",--	卡类型	VARCHAR	16	必填	请按照以下优先级顺序填写：1：患者主索引号、2：身份证号、3：医保卡号，如果都没有则填写住院就诊流水号
                c.rid                                                      "KH",--	卡号	VARCHAR	64	必填
                f.item_id                                                  "ZJLX",--	证件类型	VARCHAR	2		参见CV02.01.101-2022修订版 身份证件类别代码 	优先使用身份证
                a.certno                                                   "ZJHM",--	证件号码	VARCHAR	32
@@ -57,7 +57,7 @@
                d.ITEMCODE                                                 "MXXMBM",--	院内明细项目编码	VARCHAR	32	必填
                d.ITEMNAME                                                 "MXXMMC",--	院内明细项目名称	VARCHAR	128	必填
                nvl(replace(i.med_list_codg, '_SI', ''), '-')              "ZXDM",--	中心明细项目代码	VARCHAR	32	必填	耗材、服务项目使用《全民健康信息平台医疗服务项目价格表》编码  药品使用医保码 草药和自制剂使用《全民健康信息平台制剂、中草药医保编码》 其他填写999
-               i.servitem_name                                            "ZXMC",--	中心明细项目名称	VARCHAR	128	必填
+               nvl(i.servitem_name, d.itemname)                           "ZXMC",--	中心明细项目名称	VARCHAR	128	必填
                nvl(d.SPECS, '-')                                          "MXXMGG",--	明细项目规格	VARCHAR	32	必填
                nvl(e.dictname, '-')                                       "MXXMDW",--	明细项目单位	VARCHAR	32	必填
                round(d.UNITPRICE, 3)                                      "MXXMDJ",--	明细项目单价	NUMERIC	18,3	必填
@@ -167,7 +167,7 @@
                d.inid                                                     "SFLSH",--	收费流水号	VARCHAR	64	必填	关联收费记录表
                d.inid                                                     "JZLSH",--	住院就诊流水号	VARCHAR	32	必填	与住院就诊记录表关联的外键
                nvl(d.invoiceno, '-')                                      "FPH",--	发票号	VARCHAR	32	必填	未结算费用填写默认值“/”,已结算费用填写发票号
-               '8'                                                        "KLX",--	卡类型	VARCHAR	16	必填	请按照以下优先级顺序填写：1：患者主索引号、2：身份证号、3：医保卡号，如果都没有则填写住院就诊流水号
+               '1'                                                        "KLX",--	卡类型	VARCHAR	16	必填	请按照以下优先级顺序填写：1：患者主索引号、2：身份证号、3：医保卡号，如果都没有则填写住院就诊流水号
                c.rid                                                      "KH",--	卡号	VARCHAR	64	必填
                f.item_id                                                  "ZJLX",--	证件类型	VARCHAR	2		参见CV02.01.101-2022修订版 身份证件类别代码 	优先使用身份证
                a.certno                                                   "ZJHM",--	证件号码	VARCHAR	32
@@ -213,7 +213,7 @@
                d.ITEMCODE                                                 "MXXMBM",--	院内明细项目编码	VARCHAR	32	必填
                d.ITEMNAME                                                 "MXXMMC",--	院内明细项目名称	VARCHAR	128	必填
                nvl(replace(i.med_list_codg, '_SI', ''), '-')              "ZXDM",--	中心明细项目代码	VARCHAR	32	必填	耗材、服务项目使用《全民健康信息平台医疗服务项目价格表》编码  药品使用医保码 草药和自制剂使用《全民健康信息平台制剂、中草药医保编码》 其他填写999
-               i.servitem_name                                            "ZXMC",--	中心明细项目名称	VARCHAR	128	必填
+               nvl(i.servitem_name, d.itemname)                           "ZXMC",--	中心明细项目名称	VARCHAR	128	必填
                nvl(d.SPECS, '-')                                          "MXXMGG",--	明细项目规格	VARCHAR	32	必填
                nvl(e.dictname, '-')                                       "MXXMDW",--	明细项目单位	VARCHAR	32	必填
                round(d.UNITPRICE, 3)                                      "MXXMDJ",--	明细项目单价	NUMERIC	18,3	必填
@@ -244,7 +244,7 @@
                               and a.type_rid = '202311141512391328016800000000'
                               and b.orgcode = #{orgcode}) k on k.his_item_id = b.EXEDEPTCODE,
              com_patientinfo c,
-             (select a.*, d.invocode, b.GJYPID,   h.orgname
+             (select a.*, d.invocode, b.GJYPID, h.orgname
               from IPS_OUTFEEDETAIL a
                        join
                    com_hospitalinfo h on a.orgcode = h.orgcode

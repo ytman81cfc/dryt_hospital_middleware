@@ -1,11 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hospital.middleware.healthplatform.dao.his.HealthplatfromDAO">
+
+    <select id="querycr" resultType="java.util.HashMap">
+        select b.inid,
+               d.content as text2,
+               b.orgcode
+        from ipr_inpatientinfo b,
+             EMR_DOCUMENT a
+                 left join EMR_RESOURCES d on a.RID_BODY = d.rid
+        where a.orgcode = b.orgcode
+          and a.REGISTERNO = b.inid
+          and b.instate &lt;&gt; '0'
+          and a.orgcode = #{orgcode}
+          and a.typecode = 'STD54'
+          and a.TEMPLATECODE = 'T0000000209'
+          and a.ISFINISHED = '1'
+          and a.isvalid = '1'
+          and a.UPDATETIME &gt;= to_date(#{begtime}, 'YYYY-MM-DD HH24:mi:SS')
+          and a.UPDATETIME &lt;= to_date(#{endtime}, 'YYYY-MM-DD HH24:mi:SS')
+    </select>
+
     <select id="queryEmr_cryjl" resultType="java.util.HashMap">
         select a.orgcode                                      "YLJGDM",--	医疗机构代码 	VARCHAR	22	必填	复合主键：采用22位“卫生机构代码”
                a.inid                                         "ZYJZLSH",--	住院就诊流水号	VARCHAR	32	必填	复合主键
                d.rid                                          "KH",--	卡号	VARCHAR	64	必填
-               '8'                                            "KLX",--	卡类型	VARCHAR	16	必填	参照CVA5104就诊卡类型
+               '1'                                            "KLX",--	卡类型	VARCHAR	16	必填	参照CVA5104就诊卡类型
                a.patientname                                  "HZXM",--	患者姓名	VARCHAR	50	必填
                nvl(s.item_id, '1')                            "XBDM",--	性别代码	VARCHAR	1	必填	编码。按国标GB/T 2261.1-2003执行
                case
@@ -17,15 +37,15 @@
                         months_between(a.indate, a.BIRTHDAY) &gt; 1 then floor(months_between(a.indate, a.BIRTHDAY))
                    else 0 end                                 "NLY",--	年龄(月)	NUMERIC	3
                case
-                   when months_between(a.indate, a.BIRTHDAY) &lt; 1 then floor(a.indate - a.BIRTHDAY)
+                   when months_between(a.indate, a.BIRTHDAY) &lt; 1 then f                       loor(a.indate - a.BIRTHDAY)
                    else 0 end                                 "NLR",--	年龄(日)	NUMERIC	3
                case
                    when a.indate - a.BIRTHDAY &lt; 1 then floor(a.indate - a.BIRTHDAY) * 24
                    else 0
                    end                                        "NLXS",--	年龄(小时)	NUMERIC	3
-               d.NATY                                         "MZ",--	民族	VARCHAR	2		参见GB/T 3304-1991
+               nvl(i.item_id, '01')                           "MZ",--	民族	VARCHAR	2		参见GB/T 3304-1991
                nvl(f.item_id, '90')                           "HYZKDM",--	婚姻状况代码	VARCHAR	2	必填	参见GB/T 2261.2-2003 个人基本信息分类与代码第2 部分：婚姻状况代码
-               nvl(d.SI_INSUPLCADMDVS, '-')                   "XZQHDM",--	行政区划代码	VARCHAR	12	必填	参照GB/T 2260-2007 中华人民共和国行政区划代码
+               '370683'                                       "XZQHDM",--	行政区划代码	VARCHAR	12	必填	参照GB/T 2260-2007 中华人民共和国行政区划代码
                ''                                             "DZSZZ",--	地址-省(自治区、直辖市)	VARCHAR	70
                ''                                             "DZSZZDM",--	地址-省(自治区、直辖市)代码	VARCHAR	20
                ''                                             "DZSDZ",--	地址-市(地区、州)	VARCHAR	70
@@ -54,7 +74,7 @@
                b.name                                         "RXYZDMC",--	入院诊断-西医诊断名称	VARCHAR	512	必填
                ''                                             "RZYBMDM",--	入院诊断-中医病名代码	VARCHAR	64		GB/T 15657-2021中医病证分类代码，多个用英文分号“;”分割
                ''                                             "RZYBMMC",--	入院诊断-中医病名名称	VARCHAR	512
-               ''                                             "RZYZHDM",--	入院诊断-中医症候代码	VARCHAR	64		GB/T 15657-2021中医病证分类代码，多个用英文分号“;”分割
+               ''                                             "RZYZHDM", --	入院诊断-中医症候代码	VARCHAR	64		GB/T 15657-2021中医病证分类代码，多个用英文分号“;”分割
                ''                                             "RZYZHMC",--	入院诊断-中医症候名称	VARCHAR	512
                q.code                                         "CXYZDDM",--	出院诊断-西医诊断编码	VARCHAR	64	必填	ICD-10多个用英文分号“;”分割
                q.name                                         "CXYZDMC",--	出院诊断-西医诊断名称	VARCHAR	512	必填
@@ -129,10 +149,25 @@
                               and a.type_rid = b.type_rid
                               and a.rid = b.item_rid
                               and a.module_rid = '202310101511361148853000000000'
-                              and a.type_rid = '202311161530191338672700000000') h on h.his_item_id = d.RELACODE,
+                              and a.type_rid = '202311161530191338672700000000') h on h.his_item_id = d.RELACODE
+                 left join (select a.item_id, b.his_item_id
+                            from si_yt_report_item a,
+                                 si_yt_report_item_compare b
+                            where a.module_rid = b.module_rid
+                              and a.type_rid = b.type_rid
+                              and a.rid = b.item_rid
+                              and a.module_rid = '202310101511361148853000000000'
+                              and a.type_rid = '202312040850191416618200000000') i on i.his_item_id = d.NATY,
              ipm_order_info o,
-             INR_RECEIVEINFO r
-        where a.instate &lt;&gt; '0'
+             INR_RECEIVEINFO r,
+             EMR_DOCUMENT m
+        where a.orgcode = m.orgcode
+          and m.REGISTERNO = b.inid
+          and m.typecode = 'STD54'
+          and m.TEMPLATECODE = 'T0000000209'
+          and m.ISFINISHED = '1'
+          and m.isvalid = '1'
+          and a.instate &lt;&gt; '0'
           and a.orgcode = d.orgcode
           and a.patientid = d.patientid
           and a.inhosno = d.inhosno

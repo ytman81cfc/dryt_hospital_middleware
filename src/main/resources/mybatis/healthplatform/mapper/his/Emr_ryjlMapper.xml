@@ -13,7 +13,7 @@
                c.ROOMNO                                   "BFH",--	病房号	VARCHAR	10
                b.bedno                                    "BCH",--	病床号	VARCHAR	10
                d.rid                                      "KH",--	卡号	VARCHAR	64	必填
-               '8'                                        "KLX",--	卡类型	VARCHAR	16	必填	参见CVA5104就诊卡类型
+               '1'                                        "KLX",--	卡类型	VARCHAR	16	必填	参见CVA5104就诊卡类型
                a.certno                                   "ZJHM",--	证件号码	VARCHAR	32
                e.item_id                                  "ZJLX",--	证件类型	VARCHAR	2		参见CV02.01.101身份证件类别代码
                a.patientname                              "HZXM",--	患者姓名	VARCHAR	50	必填

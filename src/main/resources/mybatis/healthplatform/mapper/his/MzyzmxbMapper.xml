@@ -15,9 +15,9 @@
                nvl(y.item_id, '-')                            "ZXJZKSDM",    -- 中心就诊科室代码  VARCHAR 50  必填  参见 《全民健康信息平台科室分类代码表》
                nvl(y.item_name, '-')                          "ZXJZKSMC",    -- 中心就诊科室名称  VARCHAR 100 必填  参见 《全民健康信息平台科室分类代码表》
                c.PATIENTNAME                                  "XM",          --  姓名  VARCHAR 50  必填
-               nvl(e.item_id,'1')                                      "XB",          --  性别  VARCHAR 1 必填  参见 GB/T 2261.1-2003 性别代码表
+               nvl(e.item_id, '1')                            "XB",          --  性别  VARCHAR 1 必填  参见 GB/T 2261.1-2003 性别代码表
                to_char(c.BRDY, 'YYYY-MM-DD')                  "CSRQ",        --  出生日期  DATETIME    必填  YYYY-MM-DD
-               '8'                                            "KLX",         -- 卡类型 VARCHAR 16  必填  请按照以下优先级顺序填写：1：患者主索引号、2：身份证号、3：医保卡号，如果都没有则填写门诊就诊流水号
+               '1'                                            "KLX",         -- 卡类型 VARCHAR 16  必填  请按照以下优先级顺序填写：1：患者主索引号、2：身份证号、3：医保卡号，如果都没有则填写门诊就诊流水号
                d.rid                                          "KH",          --  卡号  VARCHAR 64  必填
                f.item_id                                      "ZJLX",        --  证件类型  VARCHAR 2   参见CV02.01.101-2022修订版 身份证件类别代码 优先使用身份证
                c.CERTNO                                       "ZJHM",        --  证件号码  VARCHAR 32
@@ -88,7 +88,7 @@
                    when a.BUSITYPE = '1' then
                        z.item_id
                    else
-                       ''
+                       '01'
                    end                                        "CFFLDM",      -- 药品处方分类代码  VARCHAR 2 条件必填  (西药/中药填写) 参照 ZD_CFFLDM处方分类代码
                case
                    when a.BUSITYPE = '1' then
@@ -124,13 +124,13 @@
                    when a.BUSITYPE = '1' then
                        o.ITEMCODE
                    else
-                       ''
+                       '-'
                    end                                        "YPDMNBBM",    -- 药物代码  VARCHAR 32  条件必填  (西药/中药填写)医院内部编码
                case
                    when a.BUSITYPE = '1' then
                        o.ITEMNAME
                    else
-                       ''
+                       '-'
                    end                                        "YPMC",        -- 药物名称  VARCHAR 200 条件必填  (西药/中药填写)
                case
                    when a.BUSITYPE = '1' then
@@ -356,18 +356,8 @@
                ''                                             "JYMC",        -- 中心中药煎煮法名称 VARCHAR 128   (中草药填写)
                ''                                             "JZFFMS",      -- 中药煎煮法描述 VARCHAR 200 条件必填  (中草药填写) 一帖药的煎煮方法。如“水煎“
                null                                           "CYTS",        -- 草药帖数  NUMERIC 3 条件必填  (中草药填写)
-               case
-                   when a.BUSITYPE not in ('1', '2') then
-                       o.ITEMCODE
-                   else
-                       ''
-                   end                                        "FUXMYYDM",    -- 项目代码  VARCHAR 32    医院内部编码，非药品医嘱必填
-               case
-                   when a.BUSITYPE not in ('1', '2') then
-                       o.ITEMNAME
-                   else
-                       ''
-                   end                                        "FWXMMC",      -- 项目名称  VARCHAR 200   医院内部编码，非药品医嘱必填
+               o.ITEMCODE                                     "FUXMYYDM",    -- 项目代码  VARCHAR 32    医院内部编码，非药品医嘱必填
+               o.ITEMNAME                                     "FWXMMC",      -- 项目名称  VARCHAR 200   医院内部编码，非药品医嘱必填
                case
                    when a.BUSITYPE not in ('1', '2') then
                        round(o.UNITPRICE, 3)
@@ -567,9 +557,9 @@
                nvl(y.item_id, '-')                            "ZXJZKSDM",    -- 中心就诊科室代码  VARCHAR 50  必填  参见 《全民健康信息平台科室分类代码表》
                nvl(y.item_name, '-')                          "ZXJZKSMC",    -- 中心就诊科室名称  VARCHAR 100 必填  参见 《全民健康信息平台科室分类代码表》
                c.PATIENTNAME                                  "XM",          --  姓名  VARCHAR 50  必填
-               nvl(e.item_id,'1')                                      "XB",          --  性别  VARCHAR 1 必填  参见 GB/T 2261.1-2003 性别代码表
+               nvl(e.item_id, '1')                            "XB",          --  性别  VARCHAR 1 必填  参见 GB/T 2261.1-2003 性别代码表
                to_char(c.BRDY, 'YYYY-MM-DD')                  "CSRQ",        --  出生日期  DATETIME    必填  YYYY-MM-DD
-               '8'                                            "KLX",         -- 卡类型 VARCHAR 16  必填  请按照以下优先级顺序填写：1：患者主索引号、2：身份证号、3：医保卡号，如果都没有则填写门诊就诊流水号
+               '1'                                            "KLX",         -- 卡类型 VARCHAR 16  必填  请按照以下优先级顺序填写：1：患者主索引号、2：身份证号、3：医保卡号，如果都没有则填写门诊就诊流水号
                d.rid                                          "KH",          --  卡号  VARCHAR 64  必填
                f.item_id                                      "ZJLX",        --  证件类型  VARCHAR 2   参见CV02.01.101-2022修订版 身份证件类别代码 优先使用身份证
                c.CERTNO                                       "ZJHM",        --  证件号码  VARCHAR 32
@@ -633,7 +623,7 @@
                    when a.BUSITYPE = '2' then
                        z.item_id
                    else
-                       ''
+                       '01'
                    end                                        "CFFLDM",      -- 药品处方分类代码  VARCHAR 2 条件必填  (西药/中药填写) 参照 ZD_CFFLDM处方分类代码
                case
                    when a.BUSITYPE = '2' then
@@ -664,13 +654,13 @@
                    when a.BUSITYPE = '2' then
                        o.ITEMCODE
                    else
-                       ''
+                       '-'
                    end                                        "YPDMNBBM",    -- 药物代码  VARCHAR 32  条件必填  (西药/中药填写)医院内部编码
                case
                    when a.BUSITYPE = '2' then
                        o.ITEMNAME
                    else
-                       ''
+                       '-'
                    end                                        "YPMC",        -- 药物名称  VARCHAR 200 条件必填  (西药/中药填写)
                case
                    when a.BUSITYPE = '2' then
@@ -897,8 +887,8 @@
                    else
                        null
                    end                                        "CYTS",        -- 草药帖数  NUMERIC 3 条件必填  (中草药填写)
-               ''                                             "FUXMYYDM",    -- 项目代码  VARCHAR 32    医院内部编码，非药品医嘱必填
-               ''                                             "FWXMMC",      -- 项目名称  VARCHAR 200   医院内部编码，非药品医嘱必填
+               o.itemcode                                     "FUXMYYDM",    -- 项目代码  VARCHAR 32    医院内部编码，非药品医嘱必填
+               o.itemname                                     "FWXMMC",      -- 项目名称  VARCHAR 200   医院内部编码，非药品医嘱必填
                null                                           "XMDJ",        -- 项目单价  NUMERIC 18,3
                null                                           "XMJE",        -- 项目金额  NUMERIC 18,3
                nvl(replace(yy.med_list_codg, '_SI', ''), '-') "ZXDM",        --  中心药品/项目代码 VARCHAR 32  必填  "药品类填写药品医保编码，如非医保药品，则传999检查类参见《全民健康信息平台检查分类编码标准》检验类参见《全民健康信息平台检验分类编码标准》手术类参见《手术操作分类代码(ICD-9)》处置类医嘱填写《全民健康信息平台医疗服务项目价格表》材料类参见《国家医保医用耗材分类编码》嘱托类填写888"
@@ -1073,9 +1063,9 @@
                nvl(y.item_id, '-')                            "ZXJZKSDM",    -- 中心就诊科室代码  VARCHAR 50  必填  参见 《全民健康信息平台科室分类代码表》
                nvl(y.item_name, '-')                          "ZXJZKSMC",    -- 中心就诊科室名称  VARCHAR 100 必填  参见 《全民健康信息平台科室分类代码表》
                c.PATIENTNAME                                  "XM",          --  姓名  VARCHAR 50  必填
-               nvl(e.item_id,'1')                                     "XB",          --  性别  VARCHAR 1 必填  参见 GB/T 2261.1-2003 性别代码表
+               nvl(e.item_id, '1')                            "XB",          --  性别  VARCHAR 1 必填  参见 GB/T 2261.1-2003 性别代码表
                to_char(c.BRDY, 'YYYY-MM-DD')                  "CSRQ",        --  出生日期  DATETIME    必填  YYYY-MM-DD
-               '8'                                            "KLX",         -- 卡类型 VARCHAR 16  必填  请按照以下优先级顺序填写：1：患者主索引号、2：身份证号、3：医保卡号，如果都没有则填写门诊就诊流水号
+               '1'                                            "KLX",         -- 卡类型 VARCHAR 16  必填  请按照以下优先级顺序填写：1：患者主索引号、2：身份证号、3：医保卡号，如果都没有则填写门诊就诊流水号
                d.rid                                          "KH",          --  卡号  VARCHAR 64  必填
                f.item_id                                      "ZJLX",        --  证件类型  VARCHAR 2   参见CV02.01.101-2022修订版 身份证件类别代码 优先使用身份证
                c.CERTNO                                       "ZJHM",        --  证件号码  VARCHAR 32
@@ -1296,9 +1286,9 @@
                nvl(y.item_id, '-')                            "ZXJZKSDM",    -- 中心就诊科室代码  VARCHAR 50  必填  参见 《全民健康信息平台科室分类代码表》
                nvl(y.item_name, '-')                          "ZXJZKSMC",    -- 中心就诊科室名称  VARCHAR 100 必填  参见 《全民健康信息平台科室分类代码表》
                c.PATIENTNAME                                  "XM",          --  姓名  VARCHAR 50  必填
-               nvl(e.item_id,'1')                                     "XB",          --  性别  VARCHAR 1 必填  参见 GB/T 2261.1-2003 性别代码表
+               nvl(e.item_id, '1')                            "XB",          --  性别  VARCHAR 1 必填  参见 GB/T 2261.1-2003 性别代码表
                to_char(c.BRDY, 'YYYY-MM-DD')                  "CSRQ",        --  出生日期  DATETIME    必填  YYYY-MM-DD
-               '8'                                            "KLX",         -- 卡类型 VARCHAR 16  必填  请按照以下优先级顺序填写：1：患者主索引号、2：身份证号、3：医保卡号，如果都没有则填写门诊就诊流水号
+               '1'                                            "KLX",         -- 卡类型 VARCHAR 16  必填  请按照以下优先级顺序填写：1：患者主索引号、2：身份证号、3：医保卡号，如果都没有则填写门诊就诊流水号
                d.rid                                          "KH",          --  卡号  VARCHAR 64  必填
                f.item_id                                      "ZJLX",        --  证件类型  VARCHAR 2   参见CV02.01.101-2022修订版 身份证件类别代码 优先使用身份证
                c.CERTNO                                       "ZJHM",        --  证件号码  VARCHAR 32

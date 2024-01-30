@@ -11,7 +11,7 @@
                a.PRE_RID                                        "YYLSH",-- 预约流水号 VARCHAR 64    关联门诊预约表(MZYYB)
                ''                                               "GHSXH",-- 挂号顺序号 VARCHAR 6   从1号开始所挂科室或专家的顺序号
                p.rid                                            "YYDAH",-- 医院内部档案号 VARCHAR 64  必填  填写患者主索引号，如没有则填写就诊流水号
-               '8'                                              "KLX",-- 卡类型 VARCHAR 16  必填  请按照以下优先级顺序填写：1：患者主索引号、2：身份证号、3：医保卡号，如果都没有则填写门诊就诊流水号
+               '1'                                              "KLX",-- 卡类型 VARCHAR 16  必填  请按照以下优先级顺序填写：1：患者主索引号、2：身份证号、3：医保卡号，如果都没有则填写门诊就诊流水号
                p.rid                                            "KH",-- 卡号  VARCHAR 64  必填
                e.item_id                                        "ZJLX",-- 证件类型  VARCHAR 2   参见CV02.01.101-2022修订版 身份证件类别代码  优先使用身份证
                a.CERTNO                                         "ZJHM",-- 证件号码  VARCHAR 32
@@ -39,13 +39,13 @@
                ''                                               "ZCFWJMC",-- 诊察费物价名称 VARCHAR 50  条件必填  有物价码时必填
                nvl(round(d.totcost, 3), 0)                      "ZLF",-- 诊察费 NUMERIC 10,3  必填
                nvl(round(d.PAYCOST, 3), 0)                      "ZFZLF",-- 个人支付诊察费用  NUMERIC 10,3  必填  退号的费用以负数表示，通过退号标志进行区分。 若挂号时暂未收费则填入0
-               ''                                               "SFZJH",-- 是否专家号 VARCHAR 1   0：否 1：是
+               '0'                                              "SFZJH",-- 是否专家号 VARCHAR 1   0：否 1：是
                ''                                               "YSBM",-- 专家工号  VARCHAR 64
                ''                                               "ZJXM",-- 专家姓名  VARCHAR 50
                ''                                               "ZJJB",-- 专家级别  VARCHAR 1   1：国特 2：主任 3：副主任 9：其他专家
                ''                                               "ZJSFZHM",-- 专家身份证号码 VARCHAR 18
                nvl(a.ISEMERGENCY, '0')                          "SFJZGH",-- 是否急诊挂号  VARCHAR 1 必填  0：否 1：是
-               nvl(a.REG_RESOURCE, '0')                         "HLWGHBZ",-- 互联网挂号标志 VARCHAR 1 必填  0：否 1：是
+               '0'                                              "HLWGHBZ",-- 互联网挂号标志 VARCHAR 1 必填  0：否 1：是
                '0'                                              "SFPDJH",-- 是否排队叫号  VARCHAR 1 必填  0：否 1：是
                to_char(a.REG_TIME, 'yyyy-mm-dd hh24:mi:ss')     "BDSJ",-- 首次报道时间  DATETIME    条件必填  yyyy-mm-dd hh24:mi:ss  患者到分诊台或通过信息系统（自助机、APP等）报到时的时间
                to_char(a.SEE_TIME, 'yyyy-mm-dd hh24:mi:ss')     "JAOZSJ",-- 首次叫号时间  DATETIME    条件必填  yyyy-mm-dd hh24:mi:ss  患者进入诊室后医生点击叫诊系统的时间
@@ -140,7 +140,7 @@
                a.PRE_RID                                        "YYLSH",-- 预约流水号 VARCHAR 64    关联门诊预约表(MZYYB)
                ''                                               "GHSXH",-- 挂号顺序号 VARCHAR 6   从1号开始所挂科室或专家的顺序号
                p.rid                                            "YYDAH",-- 医院内部档案号 VARCHAR 64  必填  填写患者主索引号，如没有则填写就诊流水号
-               '8'                                              "KLX",-- 卡类型 VARCHAR 16  必填  请按照以下优先级顺序填写：1：患者主索引号、2：身份证号、3：医保卡号，如果都没有则填写门诊就诊流水号
+               '1'                                              "KLX",-- 卡类型 VARCHAR 16  必填  请按照以下优先级顺序填写：1：患者主索引号、2：身份证号、3：医保卡号，如果都没有则填写门诊就诊流水号
                p.rid                                            "KH",-- 卡号  VARCHAR 64  必填
                e.item_id                                        "ZJLX",-- 证件类型  VARCHAR 2   参见CV02.01.101-2022修订版 身份证件类别代码  优先使用身份证
                a.CERTNO                                         "ZJHM",-- 证件号码  VARCHAR 32
@@ -168,13 +168,13 @@
                ''                                               "ZCFWJMC",-- 诊察费物价名称 VARCHAR 50  条件必填  有物价码时必填
                nvl(-round(d.totcost, 3), 0)                     "ZLF",-- 诊察费 NUMERIC 10,3  必填
                nvl(-round(d.PAYCOST, 3), 0)                     "ZFZLF",-- 个人支付诊察费用  NUMERIC 10,3  必填  退号的费用以负数表示，通过退号标志进行区分。 若挂号时暂未收费则填入0
-               ''                                               "SFZJH",-- 是否专家号 VARCHAR 1   0：否 1：是
+               '0'                                              "SFZJH",-- 是否专家号 VARCHAR 1   0：否 1：是
                ''                                               "YSBM",-- 专家工号  VARCHAR 64
                ''                                               "ZJXM",-- 专家姓名  VARCHAR 50
                ''                                               "ZJJB",-- 专家级别  VARCHAR 1   1：国特 2：主任 3：副主任 9：其他专家
                ''                                               "ZJSFZHM",-- 专家身份证号码 VARCHAR 18
                nvl(a.ISEMERGENCY, '0')                          "SFJZGH",-- 是否急诊挂号  VARCHAR 1 必填  0：否 1：是
-               nvl(a.REG_RESOURCE, '0')                         "HLWGHBZ",-- 互联网挂号标志 VARCHAR 1 必填  0：否 1：是
+               '0'                                              "HLWGHBZ",-- 互联网挂号标志 VARCHAR 1 必填  0：否 1：是
                '0'                                              "SFPDJH",-- 是否排队叫号  VARCHAR 1 必填  0：否 1：是
                to_char(a.REG_TIME, 'yyyy-mm-dd hh24:mi:ss')     "BDSJ",-- 首次报道时间  DATETIME    条件必填  yyyy-mm-dd hh24:mi:ss  患者到分诊台或通过信息系统（自助机、APP等）报到时的时间
                to_char(a.SEE_TIME, 'yyyy-mm-dd hh24:mi:ss')     "JAOZSJ",-- 首次叫号时间  DATETIME    条件必填  yyyy-mm-dd hh24:mi:ss  患者进入诊室后医生点击叫诊系统的时间

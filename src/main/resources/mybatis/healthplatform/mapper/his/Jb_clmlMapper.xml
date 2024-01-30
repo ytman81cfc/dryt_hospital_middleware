@@ -9,7 +9,7 @@
                ''                                            "FYMC",--	分院名称	VARCHAR	120	条件必填	分院代码不为0时必填
                nvl(replace(f.med_list_codg, '_SI', ''), '-') "PTZXDM",--	平台中心代码	VARCHAR	64		参见《国家医保医用耗材分类编码》
                a.MCSNAME                                     "CLMC",--	材料名称	VARCHAR	100	必填
-               nvl(g.item_id, '未对照')                         "CLFLDM",--	材料分类代码	VARCHAR	36	必填	参见CVA08.50.009卫生材料代码表
+               g.item_id                                     "CLFLDM",--	材料分类代码	VARCHAR	36	必填	参见CVA08.50.009卫生材料代码表
                d.dictname                                    "CLDW",--	材料单位	VARCHAR	32	必填
                nvl(a.HIGHVALMCSFLAG, '0')                    "GZHCBZ",--	高值耗材标志	VARCHAR	1	必填	0：否 1：是
                '0'                                           "YZBXBZ",--	医保报销标志	VARCHAR	1	必填	0：否 1：是

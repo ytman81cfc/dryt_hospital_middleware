@@ -7,7 +7,7 @@
                b.orgname                                                                               "YLJGMC",--	医疗机构名称	VARCHAR	70	必填	医院执业许可第一名称
                '0'                                                                                     "FYDM",--	分院代码	VARCHAR	20	必填	记录分院代码（内码）,如无分院，则传0
                ''                                                                                      "FYMC",--	分院名称	VARCHAR	120	条件必填	分院代码不为0时必填
-               '8'                                                                                     "KLXDM",--	卡类型	VARCHAR	16	必填	请按照以下优先级顺序填写：1：患者主索引号、2：身份证号、3：医保卡号，如果都没有则填写门诊就诊流水号
+               '1'                                                                                     "KLXDM",--	卡类型	VARCHAR	16	必填	请按照以下优先级顺序填写：1：患者主索引号、2：身份证号、3：医保卡号，如果都没有则填写门诊就诊流水号
                c.rid                                                                                   "KHM",--	卡号	VARCHAR	64	必填
                SUBSTR(a.patientname, 0, 5)                                                             "XM",--	姓名	VARCHAR	50	必填
                nvl(to_number(extract(year from a.reg_time)) - to_number(extract(year from a.BRDY)), 0) "NL",--	年龄(岁)	NUMERIC	3	必填	就诊时的年龄，1岁以内填0
@@ -16,7 +16,7 @@
                nvl(decode(a.YNFR, '1', '0', '0', '1'), 0)                                              "CFZBZ",--	初复诊标志	VARCHAR	1	必填	0：初诊 1：复诊
                '100'                                                                                   "JZLXDM",--	就诊类型代码	VARCHAR	3	必填	参见CVA5101_01就诊类型代码
                a.DEPTCODE                                                                              "YNJZKSDM",--	院内就诊科室代码	VARCHAR	50	必填
-               nvl(a.DEPTNAME, '无')                                                                    "YNJZKSMC",--	院内就诊科室名称	VARCHAR	100	必填
+               a.DEPTNAME                                                                              "YNJZKSMC",--	院内就诊科室名称	VARCHAR	100	必填
                i.item_id                                                                               "JZKSDM",--	中心就诊科室代码	VARCHAR	50	必填	参见《全民健康信息平台科室分类代码表》
                i.item_name                                                                             "JZKSMC",--	中心就诊科室名称	VARCHAR	100	必填	参见《全民健康信息平台科室分类代码表》
                to_char(a.reg_time, 'YYYY-MM-DD')                                                       "JZSJ",--	首次就诊时间	DATETIME		必填	时间格式YYYY-MM-DD
@@ -29,8 +29,8 @@
                e.DISE_NAME                                                                             "JBZDMC",--	中心西医主要诊断疾病名称	VARCHAR	2000		参见《疾病分类与代码(ICD-10)》
                f.DISE_CODE                                                                             "YNZYZDJBBM",--	院内中医诊断疾病编码	VARCHAR	64
                f.DISE_NAME                                                                             "YNZYZDJBMC",--	院内中医诊断疾病名称	VARCHAR	256
-               ''                                                                                      "ZYZDJBBM",--	中心中医诊断疾病编码	VARCHAR	64		参见GB/T 15657-2021
-               ''                                                                                      "ZYZDJBMC",--	中心中医诊断疾病名称	VARCHAR	256		参见GB/T 15657-2021
+               f.DISE_CODE                                                                                      "ZYZDJBBM",--	中心中医诊断疾病编码	VARCHAR	64		参见GB/T 15657-2021
+               f.DISE_NAME                                                                                     "ZYZDJBMC",--	中心中医诊断疾病名称	VARCHAR	256		参见GB/T 15657-2021
                f.TCM_DISE_CODE                                                                         "YNZYZDZHBM",--	院内中医诊断证候编码	VARCHAR	64
                f.TCM_DISE_NAME                                                                         "YNZYZDZHMC",--	院内中医诊断证候名称	VARCHAR	256
                ''                                                                                      "ZYZDZHBM",--	中心中医诊断证候编码	VARCHAR	64		参见GB/T 15657-2021
@@ -183,6 +183,7 @@
           and a.DOCCODE = d.usercode
           and d.isvalid = '1'
           and d.is_stop = '0'
+          and a.REGISTSTATE='1'
           and a.orgcode = #{orgcode}
           and to_char(a.reg_time
                   , 'yyyy-mm-dd hh24:mi:ss') &gt;= #{begtime}

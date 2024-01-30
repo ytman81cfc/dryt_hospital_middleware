@@ -7,12 +7,12 @@
                a.REGID                                                         "JZLSH",--	就诊流水号	VARCHAR	32	必填	关联《就诊记录表》
                substr(a.NAME, 0, 6)                                                          "XM",--	姓名	VARCHAR	50	必填
                c.rid                                                           "KH",--	卡号	VARCHAR	64	必填
-               '8'                                                             "KLX",--	卡类型	VARCHAR	16	必填	参见CVA5104就诊卡类型
+               '1'                                                             "KLX",--	卡类型	VARCHAR	16	必填	参见CVA5104就诊卡类型
                f.item_id                                                       "ZJLX",--	证件类型	VARCHAR	2		参见CV02.01.101身份证件类别代码
                b.certno                                                        "ZJHM",--	证件号码	VARCHAR	32
                a.INVOICENO                                                     "FPH",--	发票号	VARCHAR	64	必填
                nvl(decode(a.TRANSTYPE, '1', '1', '2', '3', '3', '4', '8', '2'), '1') "TFBZ",--	收退费标志	VARCHAR	1	必填	1：收费；2：退费
-               substr(d.PAYTYPECODE, 0, 1)                                                   "ZFFSDM",--	支付方式代码	VARCHAR	2	必填	01 现金; 02 银行卡; 03 微信; 04 支付宝; 99 其它
+               decode(d.PAYTYPECODE, '1', '01','2','03','3','04','8','02','99')                                                   "ZFFSDM",--	支付方式代码	VARCHAR	2	必填	01 现金; 02 银行卡; 03 微信; 04 支付宝; 99 其它
                d.totcost                                                       "ZFJE",--	支付金额	NUMERIC	18,3	必填	单位：元； 收费填写正数，退费填写负数
                '人工'                                                            "ZFCK",--	支付窗口	VARCHAR	50		人工、网络、自助机等
                to_char(a.OPTER_TIME, 'YYYY-MM-DD hh24:mi:ss')                  "FYJSSJ",--	费用结算时间	DATETIME		必填	收费为收费结算时间，退费为退费结算时间。  格式：YYYY-MM-DD hh24:mi:ss
