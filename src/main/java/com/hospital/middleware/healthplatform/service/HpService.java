@@ -442,6 +442,9 @@ public class HpService {
             //出院患者收费记录表
             if ("ZYSFJLB".equals(dataType.toUpperCase())) {
                 List<Map> queryResult = hpfDAO.queryZysfjlb(orgCode, begtime, endtime);
+                for (int i = 0; i < queryResult.size(); i++) {
+                    queryResult.get(i).put("YLJGDM", "12370683MB2637101K");
+                }
                 result = gson.toJson(queryResult);
                 if (isTest) {
                     List<Map> rows = queryResult;
@@ -552,7 +555,11 @@ public class HpService {
                     List<Map> rows = queryResult;
                     for (Map row : rows) {
                         ld.deleteBA_SYJBKByPK(row);
-                        ld.insertBA_SYJBK(row);
+                        try {
+                            ld.insertBA_SYJBK(row);
+                        }catch(Exception e){
+                            System.out.println(e.getMessage());
+                        }
                     }
                 }
             }

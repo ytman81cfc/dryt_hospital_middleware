@@ -35,6 +35,10 @@ public class HisSQLDataSourceConfig {
         bean.setDataSource(datasource);
         bean.setMapperLocations(// 设置mybatis的xml所在位置
                 new PathMatchingResourcePatternResolver().getResources("classpath*:mybatis/*/mapper/his/*.xml"));
+
+        org.apache.ibatis.session.Configuration configuration =new org.apache.ibatis.session.Configuration();
+        configuration.setCallSettersOnNulls(true);
+        bean.setConfiguration(configuration);
         return bean.getObject();
     }
 

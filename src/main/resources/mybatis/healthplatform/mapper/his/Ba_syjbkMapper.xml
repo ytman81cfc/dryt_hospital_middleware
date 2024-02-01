@@ -17,7 +17,7 @@
                a.HEALTHCARD                                                       "JKKH ",       --  健康卡号  VARCHAR 64
                a.NAME                                                             "BRXM",        -- 病人姓名  VARCHAR 50  必填
                g.item_id                                                          "BRXB",        -- 病人性别  VARCHAR 4 必填  参见GB/T 2261.1-2003 性别代码表
-               to_char(a.BIRTH_DATE, 'yyyy-mm-dd hh24:mi:ss')                     "CSNY",        -- 出生日期  DATETIME    必填
+               to_char(a.BIRTH_DATE, 'YYYY-MM-DD')                                "CSNY",        -- 出生日期  DATETIME    必填
                decode(d.AGE_UNIT, '1', d.AGE, 0)                                  "XSNL",        -- 年龄  NUMERIC 3 必填  单位：岁，患者入院年龄，指患者入院时按照日历计算的历法年龄，应以实足年龄的相应整数填写。大于或等于0的整数，不足1周岁填0
                decode(d.AGE_UNIT, '2', d.AGE, 0)                                  "NL_BABY",     --  不足1周岁年龄 NUMERIC 3 条件必填  单位：天，不足1周岁的实足天数
                '01'                                                               "SFZLBDM",     --  身份证类别代码 VARCHAR 4   参见CV02.01.101-2022修订版  身份证件类别代码
@@ -25,7 +25,7 @@
                h.item_id                                                          "GJDM",        -- 国籍代码  VARCHAR 4 必填  参见 GB/T 2659-2000
                i.item_id                                                          "MZDM",        -- 民族代码  VARCHAR 4 必填  参见 GB/T 3304-1991-2022修订版 民族代码表
                j.item_id                                                          "ZYDM",        -- 职业（从业）代码  VARCHAR 4 必填  参见 GB/T 2261.4-2003 职业分类与代码
-               decode(a.MARITAL_STATUS_CODE,
+               nvl(decode(a.MARITAL_STATUS_CODE,
                       '1',
                       '10',
                       '2',
@@ -35,11 +35,11 @@
                       '4',
                       '40',
                       '9',
-                      '99')                                                       "HYZK",        -- 婚姻状况  VARCHAR 4 必填  参见 GB/T 2261.2-2003-2022修订版 婚姻状况代码（10：未婚20：已婚 30：丧偶 40：离婚 90：未说明的婚姻状况 99：其他）
-               k.item_id                                                          "XXDM",        -- ABO血型代码 VARCHAR 4 必填  1：A型 2：B型 3：O型 4：AB型 5：不详 6：未查
-               k.item_name                                                        "ABOXX",       --  ABO血型名称 VARCHAR 50  必填
-               d.BLOOD_TYPE_RH                                                    "RHJY",        -- RH血型代码  VARCHAR 4 必填  1：阴性 2：阳性 3：不详 4：未查
-               decode(d.BLOOD_TYPE_RH,
+                      '99'), '90')                                                       "HYZK",        -- 婚姻状况  VARCHAR 4 必填  参见 GB/T 2261.2-2003-2022修订版 婚姻状况代码（10：未婚20：已婚 30：丧偶 40：离婚 90：未说明的婚姻状况 99：其他）
+               nvl(k.item_id, '6')                                                         "XXDM",        -- ABO血型代码 VARCHAR 4 必填  1：A型 2：B型 3：O型 4：AB型 5：不详 6：未查
+               nvl(k.item_name, '未查')                                                        "ABOXX",       --  ABO血型名称 VARCHAR 50  必填
+               nvl(d.BLOOD_TYPE_RH, 4)                                                    "RHJY",        -- RH血型代码  VARCHAR 4 必填  1：阴性 2：阳性 3：不详 4：未查
+               nvl(decode(d.BLOOD_TYPE_RH,
                       '1',
                       '阴性',
                       '2',
@@ -47,38 +47,35 @@
                       '3',
                       '不详',
                       '4',
-                      '未查')                                                       "RHXX",        -- RH血型名称  VARCHAR 50  必填
+                      '未查'),      '未查')                                                  "RHXX",        -- RH血型名称  VARCHAR 50  必填
                a.BABY_BIRTH_WEIGHT                                                "XSECSTZ",     --  新生儿出生体重（1孩） VARCHAR 64  条件必填  新生儿出生后第1小时内第1次称得的体重，产妇病历和新生儿期住院的患儿都写单位（克）
                ''                                                                 "XSECSTZ2",    -- 新生儿出生体重（2孩） VARCHAR 64  条件必填  产妇病历且为多胎时，填写该字段，单位（克）
                ''                                                                 "XSECSTZ3",    -- 新生儿出生体重（3孩） VARCHAR 64  条件必填  产妇病历且为多胎时，填写该字段，单位（克）
                ''                                                                 "XSECSTZ4",    -- 新生儿出生体重（4孩） VARCHAR 64  条件必填  产妇病历且为多胎时，填写该字段，单位（克）
                ''                                                                 "XSECSTZ5",    -- 新生儿出生体重（5孩） VARCHAR 64  条件必填  产妇病历且为多胎时，填写该字段，单位（克）
                a.BABY_ADMIN_WEIGHT                                                "XSERYTZ",     --  新生儿入院体重 VARCHAR 64  条件必填  新生儿患儿入院时称得的体重，新生儿期住院的患儿必填写，单位（克）
-               a.BIRTH_PROVINCE                                                   "CSDSSMC",     --  出生地（省市） VARCHAR 70  必填  患者出生地址中的省、自治区或直辖市名称
-               a.BIRTH_CITY                                                       "CSDDSMC",     --  出生地（地市） VARCHAR 70  必填  患者出生地址中的市、地区或州的名称
-               a.BIRTH_COUNTY                                                     "CSDQXMC",     --  出生地（区县） VARCHAR 70  必填  患者出生地址中的县（区）的名称
-               a.NATIVE_PROVINCE                                                  "JGSSMC",      -- 籍贯（省市）  VARCHAR 70  必填  祖居地或原籍所在地的省、自治区或直辖市名称
-               a.NATIVE_CITY                                                      "JGSMC",       --  籍贯（地市）  VARCHAR 70  必填  祖居地或原籍所在地的市、地区或州的名称
-               a.PRESENT_PROVINCE || a.PRESENT_CITY || a.PRESENT_COUNTY ||
-               a.PRESSENT_TOWN || a.PRESSENT_VILLAGE ||
-               a.PRESENT_OTHER                                                    "XZZ",         --  现住详细地址  VARCHAR 128 必填  现住址中的详细地址
-               a.PRESENT_PROVINCE                                                 "XZZSSMC",     --  现住址（省市） VARCHAR 70  必填  现住址中的省、自治区或直辖市名称
-               a.PRESENT_CITY                                                     "XZZSMC",      -- 现住址（地市） VARCHAR 70  必填  现住址中的市、地区或州的名称
-               a.PRESENT_COUNTY                                                   "XZZQXMC",     --  现住址（区县） VARCHAR 70  必填  现住址中的县（区）的名称
-               a.PRESSENT_TOWN                                                    "XZZXMC",      -- 现住址（乡镇、街道）  VARCHAR 70    现住址中的乡、镇或城市的街道办事处名称
-               a.PRESSENT_VILLAGE                                                 "XZZCMC",      -- 现住址（村、街、路、弄）  VARCHAR 70    现住址中的村或城市街、路、里、弄等名称
-               a.PRESENT_OTHER                                                    "XZZXMCMPH",   --  现住址（门牌号码） VARCHAR 70  必填  现住址的门牌号码
-               a.ZIP_CODE                                                         "XZZYB",       --  现住址邮编 VARCHAR 16  必填  现住址的邮政编码
+               nvl(a.BIRTH_PROVINCE, '-')                                                   "CSDSSMC",     --  出生地（省市） VARCHAR 70  必填  患者出生地址中的省、自治区或直辖市名称
+               nvl(a.BIRTH_CITY, '-')                                                       "CSDDSMC",     --  出生地（地市） VARCHAR 70  必填  患者出生地址中的市、地区或州的名称
+               nvl(a.BIRTH_COUNTY, '-')                                                     "CSDQXMC",     --  出生地（区县） VARCHAR 70  必填  患者出生地址中的县（区）的名称
+               nvl(a.NATIVE_PROVINCE, '-')                                                  "JGSSMC",      -- 籍贯（省市）  VARCHAR 70  必填  祖居地或原籍所在地的省、自治区或直辖市名称
+               nvl(a.NATIVE_CITY, '-')                                                      "JGSMC",       --  籍贯（地市）  VARCHAR 70  必填  祖居地或原籍所在地的市、地区或州的名称
+               nvl(a.PRESENT_PROVINCE || a.PRESENT_CITY || a.PRESENT_COUNTY || a.PRESSENT_TOWN || a.PRESSENT_VILLAGE || a.PRESENT_OTHER , '-')                                                    "XZZ",         --  现住详细地址  VARCHAR 128 必填  现住址中的详细地址
+        nvl(a.PRESENT_PROVINCE, '-')                                                 "XZZSSMC",     --  现住址（省市） VARCHAR 70  必填  现住址中的省、自治区或直辖市名称
+        nvl(a.PRESENT_CITY, '-')                                                       "XZZSMC",      -- 现住址（地市） VARCHAR 70  必填  现住址中的市、地区或州的名称
+        nvl(a.PRESENT_COUNTY , '-')                                                   "XZZQXMC",     --  现住址（区县） VARCHAR 70  必填  现住址中的县（区）的名称
+        nvl(a.PRESSENT_TOWN , '-')                                                     "XZZXMC",      -- 现住址（乡镇、街道）  VARCHAR 70    现住址中的乡、镇或城市的街道办事处名称
+        nvl(a.PRESSENT_VILLAGE, '-')                                                 "XZZCMC",      -- 现住址（村、街、路、弄）  VARCHAR 70    现住址中的村或城市街、路、里、弄等名称
+               nvl(a.PRESENT_OTHER, '-')                                                    "XZZXMCMPH",   --  现住址（门牌号码） VARCHAR 70  必填  现住址的门牌号码
+        nvl(a.ZIP_CODE, '-')                                                         "XZZYB",       --  现住址邮编 VARCHAR 16  必填  现住址的邮政编码
                ''                                                                 "XZZBM",       --  现住址编码 VARCHAR 6   现住址行政区划编码，有现住址的必须填写现住址编码，至少记录到县区级
-               a.HOME_TEL                                                         "XZZDH",       --  现住址电话 VARCHAR 16  必填  现住址电话
-               a.PERMANENT_PROVINCE || a.PERMANENT_CITY || a.PERMANENT_COUNTY ||
-               a.PERMANENT_TOWN || a.PERMANENT_VILLAGE || a.PERMANENT_OTHER       "HKDZ",        -- 户口地址  VARCHAR 128 必填
-               a.PERMANENT_PROVINCE                                               "HJDZSSMC",    -- 户籍地址（省市）  VARCHAR 70  必填  户籍地址中的省、自治区或直辖市名称
-               a.PERMANENT_CITY                                                   "HJDZSMC",     --  户籍地址（地市）  VARCHAR 70  必填  户籍地址中的市、地区或州的名称
-               a.PERMANENT_COUNTY                                                 "HJDZQXMC",    -- 户籍地址（区县）  VARCHAR 70  必填  户籍地址中的县或区名称
-               a.PERMANENT_TOWN                                                   "HJDZDZXMC",   --  户籍地址（乡镇、街道） VARCHAR 70    户籍地址中的乡、镇或城市的街道办事处名称
-               a.PERMANENT_VILLAGE                                                "HJDZDZCMC",   --  户籍地址（村、街、路、弄） VARCHAR 70    户籍地址中的村或城市的街、路、里、弄等名称
-               a.PERMANENT_OTHER                                                  "HJDZDZMPH",   --  户籍地址（门牌号码）  VARCHAR 70  必填  户籍地址中的门牌号码
+        substr(nvl(a.HOME_TEL, '-'), 0, 8)                                                         "XZZDH",       --  现住址电话 VARCHAR 16  必填  现住址电话
+        nvl(a.PERMANENT_PROVINCE || a.PERMANENT_CITY || a.PERMANENT_COUNTY || a.PERMANENT_TOWN || a.PERMANENT_VILLAGE || a.PERMANENT_OTHER, '-')       "HKDZ",        -- 户口地址  VARCHAR 128 必填
+               nvl(a.PERMANENT_PROVINCE, '-')                                               "HJDZSSMC",    -- 户籍地址（省市）  VARCHAR 70  必填  户籍地址中的省、自治区或直辖市名称
+        nvl(a.PERMANENT_CITY, '-')                                                  "HJDZSMC",     --  户籍地址（地市）  VARCHAR 70  必填  户籍地址中的市、地区或州的名称
+        nvl(a.PERMANENT_COUNTY , '-')                                                "HJDZQXMC",    -- 户籍地址（区县）  VARCHAR 70  必填  户籍地址中的县或区名称
+        nvl(a.PERMANENT_TOWN , '-')                                                  "HJDZDZXMC",   --  户籍地址（乡镇、街道） VARCHAR 70    户籍地址中的乡、镇或城市的街道办事处名称
+        nvl(a.PERMANENT_VILLAGE , '-')                                               "HJDZDZCMC",   --  户籍地址（村、街、路、弄） VARCHAR 70    户籍地址中的村或城市的街、路、里、弄等名称
+               nvl(a.PERMANENT_OTHER, '-')                                                  "HJDZDZMPH",   --  户籍地址（门牌号码）  VARCHAR 70  必填  户籍地址中的门牌号码
                a.PERMANENTADDRESS_ZIP_CODE                                        "HKYB",        -- 户籍地邮编 VARCHAR 16    户籍地址的邮政编码
                ''                                                                 "HJDZBM",      -- 户籍地址编码  VARCHAR 6   户籍地行政区划编码，记录到县区级
                a.SERVICE_AGENCY                                                   "GZDW",        -- 单位名称  VARCHAR 128   如单位名称和单位地址可区分则只传单位名称，否则传单位名称及地址
@@ -104,7 +101,7 @@
                a.NEXT_OF_KIN_VILLAGE                                              "LXRDZCMC",    -- 联系人地址（村、街、路、弄）  VARCHAR 70    联系人地址中的乡、镇或城市的街道办事处名称
                a.NEXT_OF_KIN_OTHER                                                "LXRDZMPH",    -- 联系人地址（门牌号码） VARCHAR 70    联系人地址中的村或城市的街、路、里、弄等名称
                a.NEXT_OF_KIN_PHONE                                                "LXDH",        -- 联系人电话 VARCHAR 16  必填
-               l.item_id                                                          "RYTJ",        -- 入院途径  VARCHAR 4 必填  参见 CV09.00.403入院途径 1：急诊 2：门诊 3：其他医疗机构转入 9：其他
+               nvl(l.item_id, '9')                                                          "RYTJ",        -- 入院途径  VARCHAR 4 必填  参见 CV09.00.403入院途径 1：急诊 2：门诊 3：其他医疗机构转入 9：其他
                to_char(d.ADMISSION_DATE_TIME, 'yyyy-mm-dd')                       "RYRQ",        -- 入院日期  DATETIME    必填  YYYY-MM-DD
                m.item_id                                                          "RYBQYZCD",    -- 入院病情严重程度  VARCHAR 1   1：        危 2：急 3：一般
                ''                                                                 "RYBQMS",      -- 入院病情描述  VARCHAR 250 条件必填  入院诊断为空时必填
@@ -115,25 +112,25 @@
                to_char(d.ADMISSION_DATE_TIME, 'yyyy-mm-dd')                       "QZRQ",        -- 入院确诊日期  DATETIME      入院诊断确诊日期，YYYY-MM-DD
                d.DEPT_ADMISSION_TO                                                "YNRYKS",      -- 院内入院科室编码  VARCHAR 64  必填
                d.DEPT_NAME_ADMISSION_TO                                           "YNRYKSMC",    -- 院内入院科室名称  VARCHAR 200 必填
-               o.item_id                                                          "RYKS",        -- 中心入院科室编码  VARCHAR 64  必填  参见《全民健康信息平台科室分类代码表》
-               o.item_name                                                        "RYKSMC",      -- 中心入院科室名称  VARCHAR 200 必填  参见《全民健康信息平台科室分类代码表》
-               d.WARD_NAME_ADMISSION_TO                                           "RYKBBFMC",    -- 入院病房  VARCHAR 50  必填  填写入院时的病区信息
+               nvl(o.item_id, '-')                                                          "RYKS",        -- 中心入院科室编码  VARCHAR 64  必填  参见《全民健康信息平台科室分类代码表》
+               nvl(o.item_name, '-')                                                        "RYKSMC",      -- 中心入院科室名称  VARCHAR 200 必填  参见《全民健康信息平台科室分类代码表》
+               nvl(d.WARD_NAME_ADMISSION_TO, '-')                                           "RYKBBFMC",    -- 入院病房  VARCHAR 50  必填  填写入院时的病区信息
                d.TRANSFER_DEPT                                                    "ZKKS",        -- 转科科别  VARCHAR 512   转科科室集合，多次转科都要列出，类似于“内科-&gt;外科-&gt;骨科”，入院科室和出院科室不一致时必填
                to_char(d.DISCHARGE_DATE_TIME, 'yyyy-mm-dd')                       "CYRQ",        -- 出院日期  DATETIME    必填  YYYY-MM-DD
                d.DEPT_DISCHARGE_FROM                                              "YNCYKS",      -- 院内出院科室编码  VARCHAR 64  必填
                d.DEPT_NAME_DISCHARGE_FROM                                         "YNCYKSMC",    -- 院内出院科室名称  VARCHAR 200 必填
                p.item_id                                                          "CYKS",        -- 中心出院科室编码  VARCHAR 64  必填  参见《全民健康信息平台科室分类代码表》
                p.item_name                                                        "CYKSMC",      -- 中心出院科室名称  VARCHAR 200 必填  参见《全民健康信息平台科室分类代码表》
-               d.WARD_NAME_DISCHARGE_FROM                                         "CYKBBFMC",    -- 出院病房  VARCHAR 100 必填  填写出院时的病区信息
+               nvl(d.WARD_NAME_DISCHARGE_FROM, '-'）                                        "CYKBBFMC",    -- 出院病房  VARCHAR 100 必填  填写出院时的病区信息
                d.IN_HOS_DAYS                                                      "ZYTS",        -- 住院天数  INT   必填
-               u.num                                                              "SSSL",        -- 手术及操作填写数量 INT   必填  含主手术及操作和其他手术及操作   与西医病案首页手术（BA_SYSSK）表关联数据数量
+               nvl(u.num, 0)                                                              "SSSL",        -- 手术及操作填写数量 INT   必填  含主手术及操作和其他手术及操作   与西医病案首页手术（BA_SYSSK）表关联数据数量
                t.num                                                              "CYZDSL",      -- 出院诊断填写数量  INT   必填  含主诊断和其他诊断 与西医病案首页诊断（BA_SYZDK）表关联数据数量
-               s.DIAGNOSIS_CODE                                                   "YNZYZD",      -- 院内出院西医主要诊断编码  VARCHAR 256 必填
-               s.DIAGNOSIS_NAME                                                   "YNZYZDMC",    -- 院内出院西医主要诊断名称  VARCHAR 512 必填
-               s.item_id                                                          "ZYZD",        -- 中心出院西医主要诊断编码  VARCHAR 256 必填  参见《疾病分类与代码(ICD-10)》
-               s.item_name                                                        "ZYZDMC",      -- 中心出院西医主要诊断名称  VARCHAR 512 必填  参见《疾病分类与代码(ICD-10)》
+               nvl(s.DIAGNOSIS_CODE, '-')                                                   "YNZYZD",      -- 院内出院西医主要诊断编码  VARCHAR 256 必填
+        nvl(s.DIAGNOSIS_NAME , '-')                                                  "YNZYZDMC",    -- 院内出院西医主要诊断名称  VARCHAR 512 必填
+        nvl(s.item_id     , '-')                                                     "ZYZD",        -- 中心出院西医主要诊断编码  VARCHAR 256 必填  参见《疾病分类与代码(ICD-10)》
+        nvl(s.item_name    , '-')                                                    "ZYZDMC",      -- 中心出院西医主要诊断名称  VARCHAR 512 必填  参见《疾病分类与代码(ICD-10)》
                '4'                                                                "RYSBQ",       --  入院病情（对应西医主要诊断）  VARCHAR 4 必填  参见CV05.10.019入院病情 1：有 2：临床未确定 3：情况不明 4：无
-               decode(s.DISCHARGE_CONDITIONS_ID,
+               nvl(decode(s.DISCHARGE_CONDITIONS_ID,
                       '1',
                       '1',
                       '2',
@@ -141,11 +138,11 @@
                       '4',
                       '5',
                       '5',
-                      '9')                                                        "CYZGDM",      -- 出院转归（对应西医主要诊断）  VARCHAR 4 必填  参见CV05.10.010病情转归 1：治愈 2：好转 3：稳定 4：恶化 5：死亡 9：其他
+                      '9'), 9)                                                        "CYZGDM",      -- 出院转归（对应西医主要诊断）  VARCHAR 4 必填  参见CV05.10.010病情转归 1：治愈 2：好转 3：稳定 4：恶化 5：死亡 9：其他
                d.OUTPATIENT_DIAGNOSIS_CODE                                        "YNMZZDBM",    -- 院内门急诊西医诊断编码 VARCHAR 256 必填
                d.OUTPATIENT_DIAGNOSIS                                             "YNMJZZDMC",   --  院内门急诊西医诊断名称 VARCHAR 512 必填
                d.OUTPATIENT_DIAGNOSIS_CODE                                        "MZZDBM",      -- 中心门急诊西医诊断编码 VARCHAR 256 必填  参见《疾病分类与代码(ICD-10)》
-               d.OUTPATIENT_DIAGNOSIS_name                                        "MJZZDMC",     --  中心门急诊西医诊断名称 VARCHAR 512 必填  参见《疾病分类与代码(ICD-10)》
+               d.OUTPATIENT_DIAGNOSIS                                               "MJZZDMC",     --  中心门急诊西医诊断名称 VARCHAR 512 必填  参见《疾病分类与代码(ICD-10)》
                d.EXT_INJURY_POISON_CODE                                           "YNSSZD",      -- 院内损伤中毒外部原因编码  VARCHAR 64    多选项，使用“/”（左斜杠）进行分隔
                d.EXT_INJURY_POISON                                                "YNSSZDMC",    -- 院内损伤中毒外部原因  VARCHAR 256   多选项，使用“;”（英文分号）进行分隔
                d.EXT_INJURY_POISON_CODE                                           "SSZD",        -- 中心损伤中毒外部原因编码  VARCHAR 64    多选项，使用“/”（左斜杠）进行分隔 参见《疾病分类与代码(ICD-10)》
@@ -155,7 +152,7 @@
                d.PATHOLOGIC_DIAGNOSIS_CODE                                        "BLZD",        -- 中心病理诊断  VARCHAR 256   多选项，使用“/”（左斜杠）进行分隔 参见《疾病分类与代码(ICD-10)》
                d.PATHOLOGIC_DIAGNOSIS                                             "BLZDMC",      -- 中心病理诊断名称  VARCHAR 512   多选项，使用“;”（英文分号）进行分隔 参见《疾病分类与代码(ICD-10)》
                d.PATHOLOGICAL_NUMBER                                              "BLBH",        -- 病理号 VARCHAR 100 条件必填  多选项，使用“/”（左斜杠）进行分隔，有病理诊断时必填
-               d.IS_ALLERGY                                                       "YWGM",        -- 有无药物过敏  VARCHAR 4 必填  1：无 2：有
+               nvl(d.IS_ALLERGY, '1')                                                       "YWGM",        -- 有无药物过敏  VARCHAR 4 必填  1：无 2：有
                d.ALERGY_DRUGS                                                     "GMYW",        -- 过敏药物名称  VARCHAR 64  条件必填  填写平台药物代码，多项时用英文分号“;”分割 “有无药物过敏”为“有”时必填
                d.AUTOPSY_INDICATOR                                                "SJQK",        -- 死亡患者尸检情况  VARCHAR 4 条件必填  1：是 2：否 死亡患者必填
                ''                                                                 "YXGYBMKY",    -- 乙型肝炎表面抗原（HBsAg） VARCHAR 1   0：未做 1：阴性 2：阳性
@@ -187,21 +184,21 @@
                mm.PRACTICE_DOCTOR_OF_GRADUATE_ID                                  "SXYSBM",      -- 实习医师院内工号  VARCHAR 64
                mm.PRACTICE_DOCTOR_OF_GRADUATE                                     "SXYS2",       --  实习医师姓名  VARCHAR 50
                ae.certno                                                          "SXYSSFZHM",   --  实习医师身份证号码 VARCHAR 18
-               mm.CATALOGER_ID                                                    "BMYBM",       --  编码员院内工号 VARCHAR 64  必填
-               mm.CATALOGER                                                       "BMY",         --  编码员姓名 VARCHAR 50  必填
-               af.certno                                                          "BMYSFZHM",    -- 编码员身份证号码  VARCHAR 18  必填
-               mm.MR_QUALITY                                                      "BAZL",        -- 病案质量  VARCHAR 4 必填  1：甲 2：乙 3：丙
-               mm.DOCTOR_OF_CONTROL_QUALITY_ID                                    "ZKYSBM",      -- 质控医师院内工号  VARCHAR 64  必填
-               mm.DOCTOR_OF_CONTROL_QUALITY                                       "ZKYS",        -- 质控医师姓名  VARCHAR 50  必填
-               ag.certno                                                          "ZKYSSFZHM",   --  质控医师身份证号码 VARCHAR 18  必填
-               mm.NURSE_OF_CONTROL_QUALITY_ID                                     "ZKHSBM",      -- 质控护士院内工号  VARCHAR 64  必填
-               mm.NURSE_OF_CONTROL_QUALITY                                        "ZKHS",        -- 质控护士姓名  VARCHAR 50  必填
-               ah.certno                                                          "ZKHSSFZHM",   --  质控护士身份证号码 VARCHAR 18  必填
+               nvl(mm.CATALOGER_ID, '-')                                                    "BMYBM",       --  编码员院内工号 VARCHAR 64  必填
+        nvl(mm.CATALOGER     , '-')                                                 "BMY",         --  编码员姓名 VARCHAR 50  必填
+        nvl(af.certno   , '-')                                                       "BMYSFZHM",    -- 编码员身份证号码  VARCHAR 18  必填
+               nvl(mm.MR_QUALITY, '甲')                                                      "BAZL",        -- 病案质量  VARCHAR 4 必填  1：甲 2：乙 3：丙
+               nvl(mm.DOCTOR_OF_CONTROL_QUALITY_ID, '-')                                    "ZKYSBM",      -- 质控医师院内工号  VARCHAR 64  必填
+        nvl(mm.DOCTOR_OF_CONTROL_QUALITY, '-')                                       "ZKYS",        -- 质控医师姓名  VARCHAR 50  必填
+        nvl(ag.certno, '-')                                                          "ZKYSSFZHM",   --  质控医师身份证号码 VARCHAR 18  必填
+        nvl(mm.NURSE_OF_CONTROL_QUALITY_ID, '-')                                     "ZKHSBM",      -- 质控护士院内工号  VARCHAR 64  必填
+        nvl(mm.NURSE_OF_CONTROL_QUALITY, '-')                                       "ZKHS",        -- 质控护士姓名  VARCHAR 50  必填
+        nvl(ah.certno, '-')                                                          "ZKHSSFZHM",   --  质控护士身份证号码 VARCHAR 18  必填
                to_char(mm.DATE_OF_CONTROL_QUALITY, 'YYYY-MM-DD')                  "BARQ",        -- 质控日期  DATETIME    必填  YYYY-MM-DD
-               w.item_id                                                          "LYFS",        -- 离院方式  VARCHAR 4 必填  参见 CV06.00.226离院方式 1：医嘱离院 2：医嘱转院 3：医嘱转社区卫生服务机构/乡镇卫生院 4：非医嘱离院 5：死亡 9：其他
+               nvl(w.item_id, '9')                                                          "LYFS",        -- 离院方式  VARCHAR 4 必填  参见 CV06.00.226离院方式 1：医嘱离院 2：医嘱转院 3：医嘱转社区卫生服务机构/乡镇卫生院 4：非医嘱离院 5：死亡 9：其他
                d.TRANSFER_HOSPITAL                                                "JSYLJG1",     --  拟接收机构(医嘱转院) VARCHAR 256 条件必填  “离院方式”为“医嘱转院”时必填
                d.TRANSFER_GRASSROOTS_HOSPITAL                                     "JSYLJG2",     --  拟接收机构(医嘱转社区医院)  VARCHAR 256 条件必填  “离院方式”为“医嘱转社区医院”时必填
-               d.REHOSPITALIZATION_PLAN                                           "ZZYJH",       --  是否有出院31天内再住院计划  VARCHAR 4 必填  1：无 2：有
+               nvl(d.REHOSPITALIZATION_PLAN, '1')                                           "ZZYJH",       --  是否有出院31天内再住院计划  VARCHAR 4 必填  1：无 2：有
                d.RE_ADMISSION_CAUSE                                               "ZZYMD",       --  再住院目的 VARCHAR 256 条件必填  “是否有出院31天内再住院计划”为“有”时必填
                d.FIRST_COMA_DAY                                                   "HMDAY1",      -- 颅脑损伤患者入院前昏迷天数 VARCHAR 16  条件必填  颅脑损伤患者必填，大于等于0整数
                d.FIRST_COMA_HOUR                                                  "HMHOUR1",     --  颅脑损伤患者入院前昏迷小时数  VARCHAR 16  条件必填  颅脑损伤患者必填，大于等于0，小于24整数
@@ -210,7 +207,7 @@
                d.BACK_COMA_HOUR                                                   "HMHOUR2",     --  颅脑损伤患者入院后昏迷小时数  VARCHAR 16  条件必填  颅脑损伤患者必填，大于等于0，小于24整数
                d.BACK_COMA_MINUTE                                                 "HMMIN2",      -- 颅脑损伤患者入院后昏迷分钟数  VARCHAR 16  条件必填  颅脑损伤患者必填，大于等于0，小于60整数
                round(ff.TOTAL_FEE, 2)                                             "ZFY",         --  总费用 NUMERIC 8,2 必填  患者在住院期间所有项目的费用之和
-               round(ff.PAY_FEE, 2)                                               "ZFJE",        -- 其中：自付金额 NUMERIC 8,2 必填  医保范围内由患者负担的医疗费用
+               nvl(round(ff.PAY_FEE, 2), 0)                                               "ZFJE",        -- 其中：自付金额 NUMERIC 8,2 必填  医保范围内由患者负担的医疗费用
                round(ff.GENE_SERVICE_FEE, 2)                                      "YBYLFWF",     --  一般医疗服务费 NUMERIC 8,2   【综合医疗服务】一般医疗服务费
                round(ff.GENE_TREAT_FEE, 2)                                        "YBZLCZF",     --  一般治疗操作费 NUMERIC 8,2   【综合医疗服务】一般治疗操作费
                round(ff.TREAT_FEE, 2)                                             "HLF",         --  护理费 NUMERIC 8,2   【综合医疗服务】护理费
@@ -274,7 +271,7 @@
                '0'                                                                "SFYNBL",      -- 是否疑难病例  VARCHAR 1 必填  0：否 1：是
                '0'                                                                "SFMDTBL",     --  是否MDT病例 VARCHAR 1 必填  0：否 1：是
                '0'                                                                "SFDBZBL",     --  是否单病种病例 VARCHAR 1 必填  0：否 1：是
-               decode(d.DAYOPERATION, '1', '1', '2', '0')                         "SFRJSSBL",    -- 是否日间手术病例  VARCHAR 1 必填  0：否 1：是
+               nvl(decode(d.DAYOPERATION, '1', '1', '2', '0'), 0)                         "SFRJSSBL",    -- 是否日间手术病例  VARCHAR 1 必填  0：否 1：是
                '0'                                                                "SFJXCFBL",    -- 是否教学查房病例  VARCHAR 1 必填  0：否 1：是
                '0'                                                                "CRBBG",       --  是否是传染病病例  VARCHAR 1 必填  0：否 1：是
                '0'                                                                "MZCYZDFHQK",  -- 门诊与出院诊断符合情况 VARCHAR 1 必填  0：未作 1：符合 2：不符合 3：不肯定
@@ -285,7 +282,7 @@
                nvl(d.EMER_TREAT_TIMES, 0)                                         "QJCS",        -- 抢救次数  INT   必填  没有填0
                nvl(d.ESC_EMER_TIMES, 0)                                           "CGCS",        -- 抢救成功次数  INT   必填  没有填0
                '1'                                                                "LCLJGLDM",    -- 临床路径管理代码  VARCHAR 1 必填  1：完成 2：变异 3：退出 4：未入
-               to_char(mm.PAPER_MR_RECEIVE_DATE, 'YYYY-MM-DD HH24:MI:SS')         "GDRQSJ",      -- 归档日期时间  DATETIME    必填  记录（更新）日期时间 YYYY-MM-DD HH:MI:SS
+               nvl(to_char(mm.PAPER_MR_RECEIVE_DATE, 'YYYY-MM-DD'), to_char(sysdate - 2, 'YYYY-MM-DD'))         "GDRQSJ",      -- 归档日期时间  DATETIME    必填  记录（更新）日期时间 YYYY-MM-DD HH:MI:SS
                d.NURSCAREDAYS                                                     "TJHLTS",      -- 特级护理天数  NUMERIC 3   单位（天）
                d.NURSCAREFDAYS                                                    "YJHLTS",      -- 一级护理天数  NUMERIC 3   单位（天）
                d.NURSCARESDAYS                                                    "EJHLTS",      -- 二级护理天数  NUMERIC 3   单位（天）
@@ -507,7 +504,11 @@
           and d.orgcode = ff.orgcode
           and d.visit_id = ff.visit_id
           and e.orgcode = #{orgcode}
-          and a.crte_time &gt;= to_date(#{begtime}, 'yyyy-mm-dd hh24:mi:ss')
+            and d.OUTPATIENT_DIAGNOSIS_CODE is not null
+        and  a.ZIP_CODE is not null
+        and mm.DATE_OF_CONTROL_QUALITY is not null and
+        i.item_id is not null
+        and a.crte_time &gt;= to_date(#{begtime}, 'yyyy-mm-dd hh24:mi:ss')
           and a.crte_time &lt;= to_date(#{endtime}, 'yyyy-mm-dd hh24:mi:ss')
 
     </select>

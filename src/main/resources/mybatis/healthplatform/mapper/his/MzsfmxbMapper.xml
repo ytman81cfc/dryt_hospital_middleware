@@ -36,8 +36,8 @@
                         decode(a.DRUGFLAG, '1', a.GJYPID, '-')           "YPID",--	国家药品ID	VARCHAR	64	条件必填	明细项目类别为“药品”时填写	三级医院必填,二级医院有条件的填 填写国家药管平台药品采购唯一性识别码YPID（V8.3）	V8.3版本中不包含的药品填“-”。
                         a.ITEMCODE                                       "MXXMBM",--	院内明细项目编码	VARCHAR	128	必填
                         a.ITEMNAME                                       "MXXMMC",--	院内明细项目名称	VARCHAR	128	必填
-                        nvl(replace(i.med_list_codg, '_SI', '') '-')     "ZXDM",--	中心明细项目代码	VARCHAR	32	必填	耗材、服务项目参见《全民健康信息平台医疗服务项目价格表》药品参见医保码		草药和自制剂参见《全民健康信息平台制剂、中草药医保编码》。	其他填写999
-                        i.servitem_name                                  "ZXMC",--	中心明细项目名称	VARCHAR	200	必填
+                        nvl(i.med_list_codg,  '-')                       "ZXDM",--	中心明细项目代码	VARCHAR	32	必填	耗材、服务项目参见《全民健康信息平台医疗服务项目价格表》药品参见医保码		草药和自制剂参见《全民健康信息平台制剂、中草药医保编码》。	其他填写999
+                        nvl(i.servitem_name,  '-')                       "ZXMC",--	中心明细项目名称	VARCHAR	200	必填
                         nvl(a.SPECS, '-')                                "MXXMGG",--	明细项目规格	VARCHAR	32	必填
                         a.PRICEUNIT                                      "MXXMDW",--	明细项目单位	VARCHAR	32	必填
                         round(a.UNITPRICE, 3)                            "MXXMDJ",--	明细项目单价	NUMERIC	18,3	必填
@@ -121,8 +121,8 @@
           and a.TRANSTYPE = e.TRANSTYPE
           and a.TRANSTYPE = '1'
           and a.orgcode = #{orgcode}
-          and to_char(a.FEEDATE, 'yyyy-mm-dd hh24:mi:ss') &gt;= #{begtime}
-          and to_char(a.FEEDATE, 'yyyy-mm-dd hh24:mi:ss') &lt;= #{endtime}
+          and a.FEEDATE &gt;= to_date(#{begtime}, 'yyyy-mm-dd hh24:mi:ss')
+          and a.FEEDATE &lt;= to_date(#{endtime}, 'yyyy-mm-dd hh24:mi:ss')
     </select>
 
     <select id="queryMzsfmxbtf" resultType="java.util.HashMap">
@@ -160,8 +160,8 @@
                         decode(a.DRUGFLAG, '1', a.GJYPID, '-')           "YPID",--	国家药品ID	VARCHAR	64	条件必填	明细项目类别为“药品”时填写	三级医院必填,二级医院有条件的填 填写国家药管平台药品采购唯一性识别码YPID（V8.3）	V8.3版本中不包含的药品填“-”。
                         a.ITEMCODE                                       "MXXMBM",--	院内明细项目编码	VARCHAR	128	必填
                         a.ITEMNAME                                       "MXXMMC",--	院内明细项目名称	VARCHAR	128	必填
-                        nvl(replace(i.med_list_codg, '_SI', '') '-')     "ZXDM",--	中心明细项目代码	VARCHAR	32	必填	耗材、服务项目参见《全民健康信息平台医疗服务项目价格表》药品参见医保码		草药和自制剂参见《全民健康信息平台制剂、中草药医保编码》。	其他填写999
-                        i.servitem_name                                  "ZXMC",--	中心明细项目名称	VARCHAR	200	必填
+                        nvl(i.med_list_codg,  '-')                       "ZXDM",--	中心明细项目代码	VARCHAR	32	必填	耗材、服务项目参见《全民健康信息平台医疗服务项目价格表》药品参见医保码		草药和自制剂参见《全民健康信息平台制剂、中草药医保编码》。	其他填写999
+                        nvl(i.servitem_name, '-')                        "ZXMC",--	中心明细项目名称	VARCHAR	200	必填
                         nvl(a.SPECS, '-')                                "MXXMGG",--	明细项目规格	VARCHAR	32	必填
                         a.PRICEUNIT                                      "MXXMDW",--	明细项目单位	VARCHAR	32	必填
                         round(a.UNITPRICE, 3)                            "MXXMDJ",--	明细项目单价	NUMERIC	18,3	必填
@@ -245,8 +245,8 @@
           and a.TRANSTYPE = e.TRANSTYPE
           and a.TRANSTYPE = '2'
           and a.orgcode = #{orgcode}
-          and to_char(a.FEEDATE, 'yyyy-mm-dd hh24:mi:ss') &gt;= #{begtime}
-          and to_char(a.FEEDATE, 'yyyy-mm-dd hh24:mi:ss') &lt;= #{endtime}
+          and a.FEEDATE &gt;= to_date(#{begtime}, 'yyyy-mm-dd hh24:mi:ss')
+          and a.FEEDATE &lt;= to_date(#{endtime}, 'yyyy-mm-dd hh24:mi:ss')
     </select>
 
 </mapper>

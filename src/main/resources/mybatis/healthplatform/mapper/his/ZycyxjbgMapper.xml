@@ -20,7 +20,7 @@
                         f.item_id                                                                    "ZJLX",--	证件类型	VARCHAR	2		参见CV02.01.101-2022修订版 身份证件类别代码 优先使用身份证
                         a.certno                                                                     "ZJHM",--	证件号码	VARCHAR	32
                         a.patientname                                                                "XM",--	姓名 	VARCHAR 	50	必填
-                        nvl(s.SEXCODE, '1')                                                          "XB",--	性别 	VARCHAR	1	必填 	参见 GB/T 2261.1-2003 性别代码表
+                        nvl(s.item_id, '1')                                                          "XB",--	性别 	VARCHAR	1	必填 	参见 GB/T 2261.1-2003 性别代码表
                         trunc(MONTHS_BETWEEN(a.out_date, a.BIRTHDAY) / 12)                           "NL",--	年龄（岁） 	NUMERIC	3	必填
                         nvl(e.item_id, '-')                                                          "HYZK",--	婚姻状况	VARCHAR	4	必填	参见 GB/T 2261.2-2003-2022修订版 婚姻状况代码（10：未婚20：已婚 30：丧偶 40：离婚 90：未说明的婚姻状况 99：其他）
                         j.item_id                                                                    "ZYDM",--	职业（从业）代码	VARCHAR	4	必填	参见 GB/T 2261.4-2003 职业分类与代码
