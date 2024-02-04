@@ -12,8 +12,8 @@
                '0'                                            "SFSDYQTSSJCZ",--	是否是第一其他手术及操作	VARCHAR	1	必填	0：否 1：是
                a.SURGERY_CODE                                 "YNSSDM",--	院内手术代码	VARCHAR	20	必填
                a.SURGERY_DESC                                 "YNSSMC",--	院内手术名称	VARCHAR	256
-               g.item_id                                      "SSDM",--	中心手术代码	VARCHAR	20	必填	参见《手术操作分类代码(ICD-9)》
-               g.item_name                                    "SSMC",--	中心手术名称	VARCHAR	256		参见《手术操作分类代码(ICD-9)》
+               '-'                                            "SSDM",--	中心手术代码	VARCHAR	20	必填	参见《手术操作分类代码(ICD-9)》
+               '-'                                            "SSMC",--	中心手术名称	VARCHAR	256		参见《手术操作分类代码(ICD-9)》
                to_char(ARRANGE_DATE, 'YYYY-MM-DD HH24:MI:SS') "SSRQ",--	手术日期	DATETIME		必填	YYYY-MM-DD HH:MI:SS
                c.item_id                                      "SSJB",--	手术级别	VARCHAR	4		由医院内部手术目录判断手术级别，与病案实际显示保持一致 参见 CV05.10.024 手术级别 "1：一级手术 2：二级手术 3：三级手术 4：四级手术	"
                ''                                             "SSLB",--	手术类别	VARCHAR	1		1：择期 2：急诊

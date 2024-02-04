@@ -283,10 +283,10 @@
                nvl(d.ESC_EMER_TIMES, 0)                                           "CGCS",        -- 抢救成功次数  INT   必填  没有填0
                '1'                                                                "LCLJGLDM",    -- 临床路径管理代码  VARCHAR 1 必填  1：完成 2：变异 3：退出 4：未入
                nvl(to_char(mm.PAPER_MR_RECEIVE_DATE, 'YYYY-MM-DD'), to_char(sysdate - 2, 'YYYY-MM-DD'))         "GDRQSJ",      -- 归档日期时间  DATETIME    必填  记录（更新）日期时间 YYYY-MM-DD HH:MI:SS
-               d.NURSCAREDAYS                                                     "TJHLTS",      -- 特级护理天数  NUMERIC 3   单位（天）
-               d.NURSCAREFDAYS                                                    "YJHLTS",      -- 一级护理天数  NUMERIC 3   单位（天）
-               d.NURSCARESDAYS                                                    "EJHLTS",      -- 二级护理天数  NUMERIC 3   单位（天）
-               d.NURSCARETDAYS                                                    "SJHLTS",      -- 三级护理天数  NUMERIC 3   单位（天）
+               replace(d.NURSCAREDAYS, '-', '0')                                                     "TJHLTS",      -- 特级护理天数  NUMERIC 3   单位（天）
+               replace(d.NURSCAREFDAYS, '-', '0')                                                    "YJHLTS",      -- 一级护理天数  NUMERIC 3   单位（天）
+               replace(d.NURSCARESDAYS, '-', '0')                                                    "EJHLTS",      -- 二级护理天数  NUMERIC 3   单位（天）
+               replace(d.NURSCARETDAYS, '-', '0')                                                   "SJHLTS",      -- 三级护理天数  NUMERIC 3   单位（天）
                ''                                                                 "SXFY",        -- 输血反应  VARCHAR 4   0：未输 1：有 2：无
                ''                                                                 "HXB",         --  红细胞 NUMERIC 4,1   输血患者填写，单位（单位）
                ''                                                                 "XXB",         --  血小板 NUMERIC 4,1   输血患者填写，单位（治疗量）

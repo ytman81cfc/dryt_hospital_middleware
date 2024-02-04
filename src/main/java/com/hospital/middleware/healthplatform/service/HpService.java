@@ -558,7 +558,10 @@ public class HpService {
                         try {
                             ld.insertBA_SYJBK(row);
                         }catch(Exception e){
-                            System.out.println(e.getMessage());
+                            String errorMessage = e.getMessage();
+                            if(errorMessage.indexOf("无效数字") == -1){
+                                throw e;
+                            }
                         }
                     }
                 }
