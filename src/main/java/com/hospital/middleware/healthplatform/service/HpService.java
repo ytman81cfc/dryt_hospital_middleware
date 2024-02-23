@@ -4,7 +4,10 @@ import com.google.gson.Gson;
 import com.hospital.middleware.healthplatform.dao.his.HealthplatfromDAO;
 import com.hospital.middleware.healthplatform.dao.lis.Healthplatform_lisDAO;
 import com.hospital.middleware.healthplatform.dao.yb.LzwjDao;
+import com.hospital.middleware.rationaldruguse.controller.DrugUseController;
 import org.apache.commons.io.output.ByteArrayOutputStream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +27,8 @@ public class HpService {
     private Healthplatform_lisDAO hpf_lisDAO;
     @Autowired
     private LzwjDao ld;
+
+    private Logger log = LoggerFactory.getLogger(HpService.class);
 
     public String queryData(String begtime, String endtime, String dataType) {
         boolean isTest = true;
@@ -286,6 +291,7 @@ public class HpService {
                 for (int i = 0; i < queryResult.size(); i++) {
                     queryResult.get(i).put("YLJGDM", "12370683MB2637101K");
                 }
+                result = gson.toJson(queryResult);
                 if (isTest) {
                     List<Map> rows = queryResult;
                     ld.deleteZYJZJLB(param);
@@ -852,11 +858,15 @@ public class HpService {
                 }
             }
         } catch (Exception e) {
-            System.out.println("-------------------------------------------");
-            System.out.println(dataType);
-            System.out.println("出现异常");
+            System.out.println("----------------莱州卫健接口抽取异常---------------------------");
+            System.out.println(dataType + "   出现异常");
             System.out.println(e.getMessage());
             System.out.println("-------------------------------------------");
+
+            log.info("----------------莱州卫健接口抽取异常---------------------------");
+            log.info(dataType + "   出现异常");
+            log.info(e.getMessage());
+            log.info("-------------------------------------------");
         }
 
         return result;

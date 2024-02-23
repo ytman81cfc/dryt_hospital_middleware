@@ -9,7 +9,7 @@
                a.certno                                                 "ZJHM",--	证件号码	VARCHAR	32
                f.item_id                                                "ZJLX",--	证件类型	VARCHAR	2		参见CV02.01.101身份证件类别代码
                a.patientname                                            "XM",--	姓名	VARCHAR 	50	必填
-               nvl(s.item_id,'1')                                                "XB",--	性别	VARCHAR 	1	必填 	编码。按国标GB/T 2261.1-2003执行
+               nvl(f.item_id,'1')                                       "XB",--	性别	VARCHAR 	1	必填 	编码。按国标GB/T 2261.1-2003执行
                to_char(a.birthday, 'YYYY-MM-DD')                        "CSRQ",--	出生日期	DATETIME 		必填 	格式：YYYY-MM-DD
                a.indeptcode                                             "RYKSBM",--	入院科室编码	VARCHAR	50	必填	填医院系统内部定义的科室编码
                a.indeptname                                             "RYKSMC",--	入院科室名称	VARCHAR	100	必填	填医院系统内部定义的科室名称
@@ -25,7 +25,7 @@
                decode(a.PERSON_AREA_FLAG, '1', '1', '2', '2', '3', '2') "WDBZ",--	外地标志	VARCHAR	1		编码。1：本市；2：外地；3：境外（港澳台）；4：外国；5：未知
                '0'                                                      "TXBZ",--	特需标志	VARCHAR	1	必填	编码。0：非特需；1：特需；
                '1'                                                      "ZFBZ",--	作废标志	VARCHAR	1	必填	编码。1：正常；2：作废；
-               a.INSUTYPE                                               "BXLX",--	保险类型	VARCHAR	4	必填	参见CV07.10.003医疗费用来源类别
+               nvl(a.INSUTYPE, '-')                                               "BXLX",--	保险类型	VARCHAR	4	必填	参见CV07.10.003医疗费用来源类别
                a.inhosno                                                "ZYH",--	住院号	VARCHAR	32	必填	若无则可填住院就诊流水号。
                a.SI_PSN_NO                                              "YBZHBZ",--	医保账户标识	VARCHAR	64		医保卡和社保卡用户写，完全参照医保16位帐户标志
                to_char(sysdate, 'YYYY-MM-DD')                           "TBRQ"   --  填报日期  DATETIME   必填 本条数据采集时间，格式YYYY-MM-DD
@@ -63,22 +63,8 @@
           and a.instate &lt;&gt; '0'
           and a.out_date is not null
           and a.orgcode = #{orgcode}
-          and to_char
-                  (
-                      a
-                          .
-                          out_date
-                  , 'yyyy-mm-dd hh24:mi:ss'
-                  )
-            &gt;= #{begtime}
-          and to_char
-                  (
-                      a
-                          .
-                          out_date
-                  , 'yyyy-mm-dd hh24:mi:ss'
-                  )
-            &lt;= #{endtime}
+          and a.out_date &gt;= to_date(#{begtime}, 'yyyy-mm-dd hh24:mi:ss')
+          and a.out_date &lt;= to_date(#{endtime}, 'yyyy-mm-dd hh24:mi:ss')
 
     </select>
 

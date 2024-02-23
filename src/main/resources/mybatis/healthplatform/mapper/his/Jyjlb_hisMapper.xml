@@ -71,7 +71,7 @@
                c.rid                          "KH",--	卡号	VARCHAR	64	必填
                nvl(f.item_id, '01')           "ZJLX",--	证件类型	VARCHAR	2		参见CV02.01.101-2022修订版 身份证件类别代码  优先填写身份证号
                d.certno                       "ZJHM",--	证件号码	VARCHAR	32
-               d.patientname                  "XM",--	姓名	VARCHAR	50	必填
+               substr(d.patientname, 0, 10)                  "XM",--	姓名	VARCHAR	50	必填
                nvl(s.item_id, '1')            "XB",--	性别	VARCHAR	1	必填	参见 GB/T 2261.1-2003 性别代码表
                regexp_substr(e.nl, '[0-9]+')  "NL",--	年龄	NUMERIC	3	必填
                e.bqmc                         "BQMC",--	申请病区名称	VARCHAR	64	条件必填
@@ -86,8 +86,8 @@
                b.orgname                      "SQYLJGMC",--	申请医疗机构名称	VARCHAR	100	必填
                a.LISTDPCD                     "YNSQKSBM",--	院内申请科室编码	VARCHAR	50	必填
                a.LISTDPNM                     "YNSQKSMC",--	院内申请科室名称	VARCHAR	100	必填
-               g.item_id                      "SQKSBM",--	中心申请科室编码	VARCHAR	50	必填	参见《全民健康信息平台科室分类代码表》
-               g.item_name                    "SQKSMC",--	中心申请科室名称	VARCHAR	100	必填	参见《全民健康信息平台科室分类代码表》
+               nvl(g.item_id, '-')            "SQKSBM",--	中心申请科室编码	VARCHAR	50	必填	参见《全民健康信息平台科室分类代码表》
+               nvl(g.item_name, '-')          "SQKSMC",--	中心申请科室名称	VARCHAR	100	必填	参见《全民健康信息平台科室分类代码表》
                a.DOCTCODE                     "SQYSGH",--	申请医生工号	VARCHAR	64	必填
                a.DOCTNAME                     "SQYSXM",--	申请医生姓名	VARCHAR	50	必填
                j.certno                       "SQYSSFZHM",--	申请医生身份证号码	VARCHAR	18	必填
@@ -100,8 +100,8 @@
                ''                             "BGYLJGMC",--	检验医疗机构名称	VARCHAR	100	条件必填	外送项目必填
                a.EXEDPCD                      "YNBGKSBM",--	院内检验科室编码	VARCHAR	50	必填
                a.EXEDPNM                      "YNBGKSMC",--	院内检验科室名称	VARCHAR	100	必填
-               h.item_id                      "BGKSBM",--	中心检验科室编码	VARCHAR	50	必填	参见《全民健康信息平台科室分类代码表》
-               h.item_name                    "BGKSMC",--	中心检验科室名称	VARCHAR	100	必填	参见《全民健康信息平台科室分类代码表》
+        nvl(h.item_id, '-')                      "BGKSBM",--	中心检验科室编码	VARCHAR	50	必填	参见《全民健康信息平台科室分类代码表》
+        nvl(h.item_name, '-')                    "BGKSMC",--	中心检验科室名称	VARCHAR	100	必填	参见《全民健康信息平台科室分类代码表》
                e.bgysgh                       "BGYSGH",--	检验医师工号	VARCHAR	64	必填
                e.bgysxm                       "BGYSXM",--	检验医师姓名	VARCHAR	50	必填
                e.bgyssfzhm                    "BGYSSFZHM",--	检验医师身份证号	VARCHAR	18	必填
@@ -181,7 +181,7 @@
                c.rid                          "KH",--	卡号	VARCHAR	64	必填
                nvl(f.item_id, '01')           "ZJLX",--	证件类型	VARCHAR	2		参见CV02.01.101-2022修订版 身份证件类别代码  优先填写身份证号
                d.certno                       "ZJHM",--	证件号码	VARCHAR	32
-               d.patientname                  "XM",--	姓名	VARCHAR	50	必填
+               substr(d.patientname, 0, 10)                  "XM",--	姓名	VARCHAR	50	必填
                nvl(s.item_id, '1')            "XB",--	性别	VARCHAR	1	必填	参见 GB/T 2261.1-2003 性别代码表
                regexp_substr(e.nl, '[0-9]+')  "NL",--	年龄	NUMERIC	3	必填
                e.bqmc                         "BQMC",--	申请病区名称	VARCHAR	64	条件必填
@@ -196,8 +196,8 @@
                b.orgname                      "SQYLJGMC",--	申请医疗机构名称	VARCHAR	100	必填
                a.LISTDPCD                     "YNSQKSBM",--	院内申请科室编码	VARCHAR	50	必填
                a.LISTDPNM                     "YNSQKSMC",--	院内申请科室名称	VARCHAR	100	必填
-               g.item_id                      "SQKSBM",--	中心申请科室编码	VARCHAR	50	必填	参见《全民健康信息平台科室分类代码表》
-               g.item_name                    "SQKSMC",--	中心申请科室名称	VARCHAR	100	必填	参见《全民健康信息平台科室分类代码表》
+               nvl(g.item_id, '-')                      "SQKSBM",--	中心申请科室编码	VARCHAR	50	必填	参见《全民健康信息平台科室分类代码表》
+               nvl(g.item_name, '-')                    "SQKSMC",--	中心申请科室名称	VARCHAR	100	必填	参见《全民健康信息平台科室分类代码表》
                a.DOCTCODE                     "SQYSGH",--	申请医生工号	VARCHAR	64	必填
                a.DOCTNAME                     "SQYSXM",--	申请医生姓名	VARCHAR	50	必填
                j.certno                       "SQYSSFZHM",--	申请医生身份证号码	VARCHAR	18	必填
@@ -210,8 +210,8 @@
                ''                             "BGYLJGMC",--	检验医疗机构名称	VARCHAR	100	条件必填	外送项目必填
                a.EXEDPCD                      "YNBGKSBM",--	院内检验科室编码	VARCHAR	50	必填
                a.EXEDPNM                      "YNBGKSMC",--	院内检验科室名称	VARCHAR	100	必填
-               h.item_id                      "BGKSBM",--	中心检验科室编码	VARCHAR	50	必填	参见《全民健康信息平台科室分类代码表》
-               h.item_name                    "BGKSMC",--	中心检验科室名称	VARCHAR	100	必填	参见《全民健康信息平台科室分类代码表》
+        nvl(h.item_id, '-')                      "BGKSBM",--	中心检验科室编码	VARCHAR	50	必填	参见《全民健康信息平台科室分类代码表》
+        nvl(h.item_name, '-')                    "BGKSMC",--	中心检验科室名称	VARCHAR	100	必填	参见《全民健康信息平台科室分类代码表》
                e.bgysgh                       "BGYSGH",--	检验医师工号	VARCHAR	64	必填
                e.bgysxm                       "BGYSXM",--	检验医师姓名	VARCHAR	50	必填
                e.bgyssfzhm                    "BGYSSFZHM",--	检验医师身份证号	VARCHAR	18	必填
