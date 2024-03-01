@@ -170,8 +170,8 @@
                mm.ATTENDING_DOCTOR                                                "ZZYS",        -- 主治医师姓名  VARCHAR 50  必填
                z.certno                                                           "ZZYSSFZHM",   --  主治医师身份证号码 VARCHAR 18  必填
                z.praccertino                                                      "ZZYSZYZSBM",  -- 主治医师执业证书编码  VARCHAR 30  必填
-               mm.DOCTOR_IN_CHARGE_ID                                             "ZYYSBM",      -- 住院医师院内工号  VARCHAR 64  必填
-               mm.DOCTOR_IN_CHARGE                                                "ZYYS",        -- 住院医师姓名  VARCHAR 50  必填
+               nvl(mm.DOCTOR_IN_CHARGE_ID, '-')                                             "ZYYSBM",      -- 住院医师院内工号  VARCHAR 64  必填
+               nvl(mm.DOCTOR_IN_CHARGE, '-')                                                "ZYYS",        -- 住院医师姓名  VARCHAR 50  必填
                ab.certno                                                          "ZYYSSFZHM",   --  住院医师身份证号码 VARCHAR 18  必填
                ab.praccertino                                                     "ZYYSZYZSBM",  -- 住院医师执业证书编码  VARCHAR 30  必填
                mm.LIABILITY_NURSE_ID                                              "ZRHSBM",      -- 责任护士院内工号  VARCHAR 64  必填
