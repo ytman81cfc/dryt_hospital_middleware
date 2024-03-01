@@ -225,7 +225,7 @@
                    end                                        "YWSYZSLDWDM", -- 药物使用总剂量单位代码 VARCHAR 64  条件必填  (西药/中药填写)参见 CVA08.03.014 药物使用剂量单位
                case
                    when a.BUSITYPE = '1' then
-                       w.item_name
+                       substr(w.item_name, 0, 4)
                    else
                        ''
                    end                                        "YWSYZSLDW",   -- 药物使用总剂量单位名称 VARCHAR 20  条件必填  (西药/中药填写)
@@ -371,7 +371,7 @@
                        null
                    end                                        "XMJE",        -- 项目金额  NUMERIC 18,3
                nvl(replace(yy.med_list_codg, '_SI', ''), '-') "ZXDM",        --  中心药品/项目代码 VARCHAR 32  必填  "药品类填写药品医保编码，如非医保药品，则传999检查类参见《全民健康信息平台检查分类编码标准》检验类参见《全民健康信息平台检验分类编码标准》手术类参见《手术操作分类代码(ICD-9)》处置类医嘱填写《全民健康信息平台医疗服务项目价格表》材料类参见《国家医保医用耗材分类编码》嘱托类填写888"
-               yy.servitem_name                               "ZXXMMC",      --  中心药品/项目名称 VARCHAR 200 必填
+               nvl(yy.servitem_name, '-')                               "ZXXMMC",      --  中心药品/项目名称 VARCHAR 200 必填
                to_char(a.UPDT_TIME, 'yyyy-mm-dd hh24:mi:ss')  "SJGXSJ",      --  数据更新时间  DATETIME    必填  院内处方数据更新时间。YYYY-MM-DD HH24:MI:SS格式
                to_char(sysdate, 'YYYY-MM-DD')                 "TBRQ"         --  填报日期  DATETIME   必填 本条数据采集时间，格式YYYY-MM-DD
         from OPM_RECIPE_INFO i
@@ -695,7 +695,7 @@
                    end                                        "YWSYZSLDWDM", -- 药物使用总剂量单位代码 VARCHAR 64  条件必填  (西药/中药填写)参见 CVA08.03.014 药物使用剂量单位
                case
                    when a.BUSITYPE = '2' then
-                       w.item_name
+                       substr(w.item_name, 0, 4)
                    else
                        ''
                    end                                        "YWSYZSLDW",   -- 药物使用总剂量单位名称 VARCHAR 20  条件必填  (西药/中药填写)
