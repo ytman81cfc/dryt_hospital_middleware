@@ -11,8 +11,8 @@
                a.inhosno                                    "BAH",--	病案号	VARCHAR	32	必填	病案首页中的病案号
                '1'                                          "KLX",--	卡类型	VARCHAR	16	必填	请按照以下优先级顺序填写：1：患者主索引号、2：身份证号、3：医保卡号，如果都没有则填写住院就诊流水号
                c.rid                                        "KH",--	卡号	VARCHAR	64	必填
-               f.item_id                                    "ZJLX",--	证件类型	VARCHAR	2		参见CV02.01.101-2022修订版 身份证件类别代码 优先使用身份证
-               a.certno                                     "ZJHM",--	证件号码	VARCHAR	32
+               nvl(f.item_id, 9)                                    "ZJLX",--	证件类型	VARCHAR	2		参见CV02.01.101-2022修订版 身份证件类别代码 优先使用身份证
+               nvl(a.certno, a.inid)                                     "ZJHM",--	证件号码	VARCHAR	32
                a.PATIENTNAME                                "HZXM",--	患者姓名	VARCHAR	50	必填
                nvl(a.INAVENUE, '2')                                   "RYLYDM",--	入院来源代码	VARCHAR	1	必填	1：急诊 2：门诊 3：其他医疗机构转入 9：其他
                a.INDEPTCODE                                 "YNJZKSBM",--	院内入院科室编码	VARCHAR	50	必填
