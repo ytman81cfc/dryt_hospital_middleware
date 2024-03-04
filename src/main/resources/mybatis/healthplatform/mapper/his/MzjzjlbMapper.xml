@@ -17,8 +17,8 @@
                '100'                                                                                   "JZLXDM",--	就诊类型代码	VARCHAR	3	必填	参见CVA5101_01就诊类型代码
                a.DEPTCODE                                                                              "YNJZKSDM",--	院内就诊科室代码	VARCHAR	50	必填
                a.DEPTNAME                                                                              "YNJZKSMC",--	院内就诊科室名称	VARCHAR	100	必填
-               i.item_id                                                                               "JZKSDM",--	中心就诊科室代码	VARCHAR	50	必填	参见《全民健康信息平台科室分类代码表》
-               i.item_name                                                                             "JZKSMC",--	中心就诊科室名称	VARCHAR	100	必填	参见《全民健康信息平台科室分类代码表》
+               nvl(i.item_id, '-')                                                                               "JZKSDM",--	中心就诊科室代码	VARCHAR	50	必填	参见《全民健康信息平台科室分类代码表》
+               nvl(i.item_name, '-')                                                                             "JZKSMC",--	中心就诊科室名称	VARCHAR	100	必填	参见《全民健康信息平台科室分类代码表》
                to_char(a.reg_time, 'YYYY-MM-DD')                                                       "JZSJ",--	首次就诊时间	DATETIME		必填	时间格式YYYY-MM-DD
                a.DOCCODE                                                                               "ZDYSDM",--	就诊医师工号	VARCHAR	64	必填
                nvl(a.DOCNAME, '-')                                                                     "ZDYSXM",--	就诊医师姓名	VARCHAR	50	必填
@@ -184,6 +184,7 @@
           and d.isvalid = '1'
           and d.is_stop = '0'
           and a.REGISTSTATE='1'
+          and a.DEPTNAME is not null
           and a.orgcode = #{orgcode}
           and to_char(a.reg_time
                   , 'yyyy-mm-dd hh24:mi:ss') &gt;= #{begtime}

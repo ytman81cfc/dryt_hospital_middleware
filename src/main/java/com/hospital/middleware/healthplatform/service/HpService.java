@@ -17,6 +17,8 @@ import java.nio.charset.StandardCharsets;
 import java.sql.Clob;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
 
 @Service
@@ -25,13 +27,13 @@ public class HpService {
     private HealthplatfromDAO hpfDAO;
     @Autowired
     private Healthplatform_lisDAO hpf_lisDAO;
-    @Autowired
+    //@Autowired
     private LzwjDao ld;
 
     private Logger log = LoggerFactory.getLogger(HpService.class);
 
     public String queryData(String begtime, String endtime, String dataType) {
-        boolean isTest = true;
+        boolean isTest = false;
         String orgCode = "H37068300546";
         Gson gson = new Gson();
         String result = "";
@@ -204,6 +206,21 @@ public class HpService {
                 List<Map> queryResult = hpfDAO.queryMzjzjlb(orgCode, begtime, endtime);
                 for (int i = 0; i < queryResult.size(); i++) {
                     queryResult.get(i).put("YLJGDM", "12370683MB2637101K");
+                    //处理门诊主诉和现病史
+                    Object regId = queryResult.get(i).get("JZLSH");
+                    if(regId != null){
+                        Map<String, String> emrResult = this.queryMzEMRByRegId("H37068300546", regId.toString());
+                        String zs = emrResult.get("zs");
+                        String xbs = emrResult.get("xbs");
+                        if(zs == null || zs.trim().equals("")){
+                            zs = "-";
+                        }
+                        if(xbs == null || xbs.trim().equals("")){
+                            xbs = "-";
+                        }
+                        queryResult.get(i).put("ZS", zs);
+                        queryResult.get(i).put("XBS", xbs);
+                    }
                 }
                 result = gson.toJson(queryResult);
                 if (isTest) {
@@ -954,6 +971,50 @@ public class HpService {
             e.printStackTrace();
         }
         return out;
+    }
+
+    public Map<String,String> queryMzEMRByRegId(String orgCode, String regId){
+        Map<String,String> result = new HashMap<String,String>();
+        List<Map> emrList = hpfDAO.queryMzEMRByRegId(orgCode, regId);
+        if(emrList.size() > 0){
+            try {
+                Clob clob = (Clob) emrList.get(0).get("TEXT");
+                String text = clob.getSubString(1, (int) clob.length());
+                String info = this.decodeBase64AndGZip(text);
+                int zsIndex = info.indexOf(">主诉");
+                int xbsIndex = info.indexOf(">现病史");
+                int jwsIndex = info.indexOf(">既往史");
+
+                String zsString = info.substring(zsIndex, xbsIndex);
+                String xbsString = info.substring(xbsIndex, jwsIndex);
+
+                Pattern zsPattern = Pattern.compile("[\\u4e00-\\u9fa5,]"); // 定义中文字符范围的正则表达式
+                Matcher zsMatcher = zsPattern.matcher(zsString); // 创建Matcher对象
+
+                String zs = "";
+                while (zsMatcher.find()) { // 查找并输出所有匹配到的中文字符
+                    zs = zs + zsMatcher.group();
+                }
+
+                Pattern xbsPattern = Pattern.compile("[\\u4e00-\\u9fa5,]"); // 定义中文字符范围的正则表达式
+                Matcher xbsMatcher = xbsPattern.matcher(xbsString); // 创建Matcher对象
+
+                String xbs = "";
+                while (xbsMatcher.find()) { // 查找并输出所有匹配到的中文字符
+                    xbs = xbs + xbsMatcher.group();
+                }
+                zs = zs.replaceAll("主诉", "");
+                zs = zs.replaceAll("宋体", "");
+                xbs = xbs.replaceAll("现病史", "");
+                xbs = xbs.replaceAll("宋体", "");
+
+                result.put("zs", zs);
+                result.put("xbs", xbs);
+            }catch(Exception e){
+            }
+        }
+        return result;
+
     }
 
     public List<Map> queryScbc(String orgcode, String begtime, String endtime) {

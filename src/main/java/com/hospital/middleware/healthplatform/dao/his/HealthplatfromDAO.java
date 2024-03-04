@@ -127,6 +127,8 @@ public interface HealthplatfromDAO {
     List<Map> queryEmr_scbcjl(String orgcode);
     //EMR_RCBCJL 日常病程记录
     List<Map> queryEmr_rcbcjl (String orgcode,String begtime,String endtime);
+    //按照regId查询某个患者的门诊病历
+    List<Map> queryMzEMRByRegId (String orgcode,String regId);
 
 
     //查询莱州卫健科室对应关系

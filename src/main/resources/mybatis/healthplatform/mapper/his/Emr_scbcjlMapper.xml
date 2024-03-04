@@ -168,5 +168,17 @@
 
     </select>
 
+    <select id="queryMzEMRByRegId" resultType="java.util.HashMap">
+        select
+            b.content as TEXT
+        from
+            emr_document a, emr_resources b
+        where   a.rid_body = b.rid
+                and a.dtype = 2                           --文档类别：1-住院病历，2-门诊病历，3-门诊留观病历
+                and a.isfinished='1'
+                and a.isvalid = '1'
+                and a.registerno = #{regId}
+                and a.orgcode = #{orgcode}
+    </select>
 
 </mapper>
