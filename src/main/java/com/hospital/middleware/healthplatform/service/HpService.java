@@ -27,13 +27,13 @@ public class HpService {
     private HealthplatfromDAO hpfDAO;
     @Autowired
     private Healthplatform_lisDAO hpf_lisDAO;
-    //@Autowired
+    @Autowired
     private LzwjDao ld;
 
     private Logger log = LoggerFactory.getLogger(HpService.class);
 
     public String queryData(String begtime, String endtime, String dataType) {
-        boolean isTest = false;
+        boolean isTest = true;
         String orgCode = "H37068300546";
         Gson gson = new Gson();
         String result = "";
@@ -131,7 +131,11 @@ public class HpService {
                     List<Map> rows = queryResult;
                     ld.deleteJB_ZDML(param);
                     for (Map row : rows) {
-                        ld.insertJB_ZDML(row);
+                        try {
+                            ld.insertJB_ZDML(row);
+                        }catch(Exception e){
+                            System.out.println(e.getMessage());
+                        }
                     }
                 }
             }
@@ -248,13 +252,133 @@ public class HpService {
             }
             //门诊收费记录表
             if ("MZSFJLB".equals(dataType.toUpperCase())) {
-                List<Map> queryResult_sf = hpfDAO.queryMzsfjlbsf(orgCode, begtime, endtime);
-                List<Map> queryResult_tf = hpfDAO.queryMzsfjlbtf(orgCode, begtime, endtime);
-                List<Map> queryResult = new ArrayList<Map>();
-                queryResult.addAll(queryResult_sf);
-                queryResult.addAll(queryResult_tf);
+                List<Map> queryResult = hpfDAO.queryMzsfjlb(orgCode, begtime, endtime);
+                //生成收款记录的明细项集合
+                List<Map> queryFxfyList = hpfDAO.queryMzsfjlbFxfy(orgCode, begtime, endtime);
+                Map queryFxfyMap = new HashMap();
+                for(int i = 0; i < queryFxfyList.size(); i++){
+                    Map row = queryFxfyList.get(i);
+                    String regId = row.get("regid").toString();
+                    String transType = row.get("transtype").toString();
+                    String invoiceno = row.get("invoiceno").toString();
+                    String feecode = row.get("feecode").toString();
+                    String totcost = row.get("totcost").toString();
+                    String key = regId + "+-*/" + transType + "+-*/" + invoiceno;
+
+                    if(queryFxfyMap.containsKey(key)){
+                        ArrayList al = (ArrayList)queryFxfyMap.get(key);
+                        HashMap alElement = new HashMap();
+                        alElement.put("feecode", feecode);
+                        alElement.put("totcost", totcost);
+                        al.add(alElement);
+                    }else{
+                        ArrayList al = new ArrayList();
+                        HashMap alElement = new HashMap();
+                        alElement.put("feecode", feecode);
+                        alElement.put("totcost", totcost);
+                        al.add(alElement);
+                        queryFxfyMap.put(key, al);
+                    }
+
+                }
+
+                //查询莱州卫健科室对应关系
+                List<Map> DicDeptCompareList = hpfDAO.queryDicDeptCompare(orgCode);
+                HashMap<String, Map> DicDeptCompareHM = new HashMap<String, Map>();
+                for(int a = 0; a < DicDeptCompareList.size(); a++){
+                    DicDeptCompareHM.put(DicDeptCompareList.get(a).get("his_item_id").toString(), DicDeptCompareList.get(a));
+                }
+
                 for (int i = 0; i < queryResult.size(); i++) {
-                    queryResult.get(i).put("YLJGDM", "12370683MB2637101K");
+                    Map row = queryResult.get(i);
+                    row.put("YLJGDM", "12370683MB2637101K");
+
+                    //处理莱州卫健科室对应关系
+                    //院内费用发生科室
+                    Object YNJZKSDM = row.get("YNJZKSDM");
+                    if (YNJZKSDM != null) {
+                        if (DicDeptCompareHM.containsKey(YNJZKSDM.toString())) {
+                            Map ddc = DicDeptCompareHM.get(YNJZKSDM.toString());
+                            String his_item_name = ddc.get("his_item_name").toString();
+                            String item_id = ddc.get("item_id").toString();
+                            String item_name = ddc.get("item_name").toString();
+                            row.put("YNJZKSMC", his_item_name);
+                            row.put("JZKSDM", item_id);
+                            row.put("JZKSMC", item_name);
+                        } else {
+                            row.put("YNJZKSMC", "-");
+                            row.put("JZKSMC", "-");
+                            row.put("JZKSMC", "-");
+                        }
+                    }
+
+                    String regId = row.get("JZLSH").toString();
+                    String transType = row.get("TFBZ").toString();
+                    String invoiceno = row.get("SFLSH").toString();
+                    String key = regId + "+-*/" + transType + "+-*/" + invoiceno;
+
+                    Object fxfyAL = queryFxfyMap.get(key);
+                    if (fxfyAL != null) {
+                        ArrayList<Map> al = (ArrayList<Map>) fxfyAL;
+                        for(int n = 0; n < al.size(); n++){
+                            String feecode = al.get(n).get("feecode").toString();
+                            String totcost = al.get(n).get("totcost").toString();
+                            //挂号费
+                            if ("00".equals(feecode)) {
+                                row.put("GHF", totcost);
+                            }
+                            //诊察费
+                            if ("19".equals(feecode)) {
+                                row.put("ZCF", totcost);
+                            }
+                            //检查费
+                            if ("06".equals(feecode)) {
+                                row.put("JCF", totcost);
+                            }
+                            //化验费
+                            if ("07".equals(feecode)) {
+                                row.put("HYF", totcost);
+                            }
+                            //治疗费
+                            if ("03".equals(feecode)) {
+                                row.put("ZHILF", totcost);
+                            }
+                            //手术费
+                            if ("22".equals(feecode)) {
+                                row.put("SSF", totcost);
+                            }
+                            //卫生材料费
+                            if ("28".equals(feecode)) {
+                                row.put("WSCLF", totcost);
+                            }
+                            //西药费
+                            if ("12".equals(feecode)) {
+                                row.put("XYF", totcost);
+                            }
+                            //疫苗费
+                            if ("29".equals(feecode)) {
+                                row.put("YMF", totcost);
+                            }
+                            //中药饮片费
+                            if ("30".equals(feecode)) {
+                                row.put("ZYYPF", totcost);
+                            }
+                            //中成药费
+                            if ("13".equals(feecode)) {
+                                row.put("ZCHYF", totcost);
+                            }
+                            //一般诊疗费
+                            if ("02".equals(feecode)) {
+                                row.put("ZHENLF", totcost);
+                            }
+                            //其他费用
+                            if ("15".equals(feecode)) {
+                                row.put("QTF", totcost);
+                            }
+
+                        }
+
+                    }
                 }
                 result = gson.toJson(queryResult);
                 if (isTest) {
@@ -268,15 +392,95 @@ public class HpService {
             }
             //门诊收费明细表
             if ("MZSFMXB".equals(dataType.toUpperCase())) {
-                List<Map> queryResult_sf = hpfDAO.queryMzsfmxbsf(orgCode, begtime, endtime);
-                List<Map> queryResult_tf = hpfDAO.queryMzsfmxbtf(orgCode, begtime, endtime);
-                List<Map> queryResult = new ArrayList<Map>();
-                queryResult.addAll(queryResult_sf);
-                queryResult.addAll(queryResult_tf);
+                List<Map> queryResult = hpfDAO.queryMzsfmxb(orgCode, begtime, endtime);
+                //查询莱州卫健科室对应关系
+                List<Map> DicDeptCompareList = hpfDAO.queryDicDeptCompare(orgCode);
+                HashMap<String, Map> DicDeptCompareHM = new  HashMap<String, Map>();
+                for(int a = 0; a < DicDeptCompareList.size(); a++){
+                    DicDeptCompareHM.put(DicDeptCompareList.get(a).get("his_item_id").toString(), DicDeptCompareList.get(a));
+                }
+                //查询医院药品编码与医保药品编码对应关系
+                List<Map> SiDrugList = hpfDAO.querySiDrug(orgCode);
+                HashMap<String, Map> SiDrugCompareHM = new  HashMap<String, Map>();
+                for(int a = 0; a < SiDrugList.size(); a++){
+                    SiDrugCompareHM.put(SiDrugList.get(a).get("itemcode").toString(), SiDrugList.get(a));
+                }
+
+                //查询健康平台_门诊明细费用类型
+                List<Map> MzmxfylxList = hpfDAO.queryMzmxfylx(orgCode);
+                HashMap<String, Map> MzmxfylxHM = new  HashMap<String, Map>();
+                for(int a = 0; a < MzmxfylxList.size(); a++){
+                    MzmxfylxHM.put(MzmxfylxList.get(a).get("his_item_id").toString(), MzmxfylxList.get(a));
+                }
+
                 for (int i = 0; i < queryResult.size(); i++) {
-                    queryResult.get(i).put("YLJGDM", "12370683MB2637101K");
+                    Map row = queryResult.get(i);
+                    row.put("YLJGDM", "12370683MB2637101K");
+
+                    //处理莱州卫健科室对应关系
+                    //院内费用发生科室
+                    Object YNJZKSDM = row.get("YNJZKSDM");
+                    if(YNJZKSDM != null){
+                        if(DicDeptCompareHM.containsKey(YNJZKSDM.toString())){
+                            Map ddc = DicDeptCompareHM.get(YNJZKSDM.toString());
+                            String his_item_name = ddc.get("his_item_name").toString();
+                            String item_id = ddc.get("item_id").toString();
+                            String item_name = ddc.get("item_name").toString();
+                            row.put("YNJZKSMC", his_item_name);
+                            row.put("JZKSDM", item_id);
+                            row.put("JZKSMC", item_name);
+                        }else{
+                            row.put("YNJZKSMC", "-");
+                            row.put("JZKSDM", "-");
+                            row.put("JZKSMC", "-");
+                        }
+                    }
+                    //院内执行科室
+                    Object YNZXKSBM = row.get("YNZXKSBM");
+                    if(YNZXKSBM != null) {
+                        if(DicDeptCompareHM.containsKey(YNZXKSBM.toString())){
+                            Map ddc = DicDeptCompareHM.get(YNZXKSBM.toString());
+                            String item_id = ddc.get("item_id").toString();
+                            String item_name = ddc.get("item_name").toString();
+                            row.put("ZXKSBM", item_id);
+                            row.put("ZXKSMC", item_name);
+                        }else{
+                            row.put("ZXKSBM", "-");
+                            row.put("ZXKSMC", "-");
+                        }
+                    }
+
+                    //处理药品编码对应
+                    Object MXXMBM = row.get("MXXMBM");
+                    if(MXXMBM != null) {
+                        if(SiDrugCompareHM.containsKey(MXXMBM.toString())){
+                            Map sdc = SiDrugCompareHM.get(MXXMBM.toString());
+                            String med_list_codg = sdc.get("med_list_codg").toString();
+                            String name = sdc.get("name").toString();
+
+                            row.put("ZXDM", med_list_codg);
+                            row.put("ZXMC", name);
+
+                        }else{
+                            row.put("ZXDM", "999");
+                            row.put("ZXMC", "其它");
+                        }
+                    }
+
+                    //门诊明细费用类型对应
+                    Object MXFYLB = row.get("MXFYLB");
+                    if(MXFYLB != null) {
+                        if(MzmxfylxHM.containsKey(MXFYLB.toString())){
+                            Map m = MzmxfylxHM.get(MXFYLB.toString());
+                            String item_id = m.get("item_id").toString();
+                            row.put("MXFYLB", item_id);
+                        }
+                    }
+
                 }
                 result = gson.toJson(queryResult);
+
+
                 if (isTest) {
                     List<Map> rows = queryResult;
                     ld.deleteMZSFMXB(param);

@@ -2,6 +2,7 @@ package com.hospital.middleware.healthplatform.dao.his;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import javax.persistence.MapKey;
 import java.util.List;
 import java.util.Map;
 
@@ -40,15 +41,12 @@ public interface HealthplatfromDAO {
 
     //MZSFJLB 门诊收费记录表
     //收费
-    List<Map> queryMzsfjlbsf(String orgcode,String begtime,String endtime);
-    //退费
-    List<Map> queryMzsfjlbtf(String orgcode,String begtime,String endtime);
+    List<Map> queryMzsfjlb(String orgcode,String begtime,String endtime);
+    //门诊收费记录表中的分项处理
+    List<Map> queryMzsfjlbFxfy(String orgcode, String begtime, String endtime);
 
     //MZSFMXB 门诊收费明细表
-    //收费
-    List<Map> queryMzsfmxbsf(String orgcode,String begtime,String endtime);
-    //退费
-    List<Map> queryMzsfmxbtf(String orgcode,String begtime,String endtime);
+    List<Map> queryMzsfmxb(String orgcode,String begtime,String endtime);
 
     //MZFYJSXX 门诊费用结算信息
     List<Map> queryMzfyjsxx(String orgcode,String begtime,String endtime);
@@ -141,6 +139,10 @@ public interface HealthplatfromDAO {
     List<Map> queryDicDrugPdInfor(String orgcode);
     //查询药品 中心药品用法代码 中心药品用法名称
     List<Map> queryDicDrugYfInfor(String orgcode);
+    //查询医院药品编码与医保药品编码对应关系
+    List<Map> querySiDrug(String orgcode);
+    //查询健康平台_门诊明细费用类型
+    List<Map> queryMzmxfylx(String orgcode);
 
 
 
