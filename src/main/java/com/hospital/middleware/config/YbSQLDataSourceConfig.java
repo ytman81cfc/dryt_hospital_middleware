@@ -16,8 +16,8 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.sql.DataSource;
 
-@Configuration
-@MapperScan(basePackages = "com.hospital.middleware.*.dao.yb", sqlSessionFactoryRef = "YbSqlSessionFactory")
+//@Configuration
+//@MapperScan(basePackages = "com.hospital.middleware.*.dao.yb", sqlSessionFactoryRef = "YbSqlSessionFactory")
 public class YbSQLDataSourceConfig {
     @Bean(name = "YbDataSource")
     @Primary

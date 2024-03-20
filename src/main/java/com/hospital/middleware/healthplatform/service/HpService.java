@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.hospital.middleware.healthplatform.dao.his.HealthplatfromDAO;
 import com.hospital.middleware.healthplatform.dao.lis.Healthplatform_lisDAO;
 import com.hospital.middleware.healthplatform.dao.yb.LzwjDao;
-import com.hospital.middleware.rationaldruguse.controller.DrugUseController;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,13 +26,13 @@ public class HpService {
     private HealthplatfromDAO hpfDAO;
     @Autowired
     private Healthplatform_lisDAO hpf_lisDAO;
-    @Autowired
+    //@Autowired
     private LzwjDao ld;
 
     private Logger log = LoggerFactory.getLogger(HpService.class);
 
     public String queryData(String begtime, String endtime, String dataType) {
-        boolean isTest = true;
+        boolean isTest = false;
         String orgCode = "H37068300546";
         Gson gson = new Gson();
         String result = "";

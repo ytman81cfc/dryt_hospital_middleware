@@ -12,10 +12,10 @@ import org.springframework.context.ConfigurableApplicationContext;
 public class HmApplication {
     public static void main(String[] args) {
         //用于测试
-        ConfigurableApplicationContext cac = SpringApplication.run(HmApplication.class, args);
-        HpService hpS = cac.getBean(HpService.class);
-        hpS.queryData("2023-09-01", "2024-01-27", "BA_SYJBK");
+        //ConfigurableApplicationContext cac = SpringApplication.run(HmApplication.class, args);
+        //HpService hpS = cac.getBean(HpService.class);
+        //hpS.queryData("2023-09-01", "2024-01-27", "BA_SYJBK");
 
-        //SpringApplication.run(HmApplication.class, args);
+        SpringApplication.run(HmApplication.class, args);
     }
 }
